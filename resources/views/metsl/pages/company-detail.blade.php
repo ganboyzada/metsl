@@ -66,6 +66,10 @@
                         <!-- Font Awesome Search Icon -->
                         <i class="fas fa-search absolute left-3 text-gray-500"></i>
                     </div>
+
+                    <div class="relative flex items-center">
+                        <a href="{{ route('project.create') }}">Create Project</a>
+                    </div>
                 </div>
 
                 <!-- Project Cards -->

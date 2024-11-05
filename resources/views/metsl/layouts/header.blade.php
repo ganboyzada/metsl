@@ -1,4 +1,4 @@
-<header class="bg-white shadow p-4">
+<header class="bg-white dark:bg-slate:800 shadow p-4">
     <div class="flex justify-between">
         <h1 class="text-xl font-bold">@yield('header')</h1>
         <!-- Add user info or notifications here if needed -->
@@ -67,10 +67,25 @@
             }
         }
 
-        // Dark/Light Mode Toggle Function
+        // Add this in a <script> tag or a separate JS file
         function toggleDarkMode() {
-            document.documentElement.classList.toggle('dark');
+            const htmlElement = document.documentElement;
+            const isDarkMode = htmlElement.classList.toggle('dark');
+            
+            // Save the user preference in localStorage
+            localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
         }
+
+        // Check user preference on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const userPreference = localStorage.getItem('theme');
+            
+            if (userPreference === 'dark' || (!userPreference && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
 
         // Notifications Toggle Function
         function toggleNotifications() {

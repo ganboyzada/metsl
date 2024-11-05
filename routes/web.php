@@ -25,5 +25,6 @@ Route::middleware([
         return view('metsl.pages.company-detail'); // The view file for the company detail page
     })->name('company.detail');
 
-    Route::view('/project/{id}', 'metsl.pages.project')->name('project');
+    Route::view('/project/{id}', 'metsl.pages.projects.project')->name('project');
+    Route::view('/create-project', 'metsl.pages.projects.create_project')->name('project.create');
 });
