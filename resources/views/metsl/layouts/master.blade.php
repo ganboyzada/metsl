@@ -6,11 +6,10 @@
     <title>@yield('title')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="bg-gray-100">
+<body class="bg-gray-100 dark:bg-gray-800">
 
     <div class="flex h-screen">
         <!-- Sidebar -->
-        @include('metsl.layouts.sidebar')
 
         <!-- Main Content -->
         <div class="flex-1 flex flex-col">
@@ -24,5 +23,6 @@
         </div>
     </div>
 
+    @stack('js')
 </body>
 </html>

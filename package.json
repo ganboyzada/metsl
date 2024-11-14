@@ -6,6 +6,7 @@
         "dev": "vite"
     },
     "devDependencies": {
+        "@rollup/plugin-inject": "^5.0.5",
         "@tailwindcss/forms": "^0.5.7",
         "@tailwindcss/typography": "^0.5.10",
         "autoprefixer": "^10.4.16",
@@ -20,6 +21,8 @@
         "@fontsource-variable/dm-sans": "^5.1.0",
         "@fortawesome/fontawesome-free": "^6.6.0",
         "@heroicons/react": "^2.1.5",
+        "feather-icons": "^4.29.2",
+        "jquery": "^3.7.1",
         "typeface-dm-sans": "^1.1.13"
     }
 }

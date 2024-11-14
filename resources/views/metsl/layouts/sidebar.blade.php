@@ -1,4 +1,4 @@
-<aside class="w-64 bg-gray-800 text-white flex flex-col">
+<aside class="w-64 bg-gray-800 dark:bg-gray-900 text-white flex flex-col">
     <div class="py-4 px-5 w-100">
         <img src="{{ asset('images/logo-light.png') }}" class="object-contain h-10" alt="">
     </div>

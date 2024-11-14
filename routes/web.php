@@ -2,29 +2,25 @@
 
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::view('/', 'metsl.pages.dashboard')->name('home');
+
+    Route::get('/', function () {
+        return view('metsl.pages.projects.project'); // The view file for the company detail page
+    })->name('home');
 
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
 
-    
+    Route::view('/projects', 'metsl.pages.projects.projects')->name('projects');
 
-    Route::view('/companies', 'metsl.pages.companies')->name('companies');
+    Route::get('/project/{id}', function ($id) {
+        return view('metsl.pages.projects.project'); // The view file for the company detail page
+    })->name('projects.find');
 
-    Route::get('/companies/{id}', function ($id) {
-        return view('metsl.pages.company-detail'); // The view file for the company detail page
-    })->name('company.detail');
-
-    Route::view('/project/{id}', 'metsl.pages.projects.project')->name('project');
-    Route::view('/create-project', 'metsl.pages.projects.create_project')->name('project.create');
+    Route::view('/create-project', 'metsl.pages.projects.create_project')->name('projects.create');
 });
