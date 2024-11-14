@@ -158,67 +158,60 @@
             <h2 class="text-2xl font-semibold mb-4">Role Assignment</h2>
             <p class="mb-2 text-gray-700 dark:text-gray-200">Assign specific roles to the stakeholders selected in the previous step.</p>
 
-            <!-- Role Assignment Fields -->
-            <div id="roleAssignmentFields" class="space-y-4">
-                <!-- Placeholder for dynamic role assignment fields -->
-                <!-- Example format:
-                <div class="mb-4">
-                    <label class="block font-medium text-gray-700 dark:text-gray-200">[Stakeholder Name]</label>
-                    <select class="w-full px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-gray-200">
-                        <option value="">Select Role</option>
-                        <option value="role1">Role 1</option>
-                        <option value="role2">Role 2</option>
-                        <option value="role3">Role 3</option>
-                    </select>
-                </div>
-                -->
+            <!-- Stakeholder Grid -->
+            <div id="stakeholderGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Stakeholder cards will be generated here -->
             </div>
-
-            <!-- Button to open role creation modal -->
-            <button type="button" onclick="openRoleCreationModal()" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded flex items-center">
-                <i data-feather="plus" class="mr-2"></i> Add New Role
-            </button>
 
             <!-- Navigation Buttons -->
             <button type="button" onclick="showStep(2)" class="bg-gray-500 text-white px-4 py-2 rounded mt-4 mr-2">Back</button>
             <button type="button" onclick="showStep(4)" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Next</button>
         </div>
 
-        <!-- Overlay Modal for Creating New Role -->
-        <div id="createRoleModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
-                <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Create New Role</h3>
-                
-                <!-- Role Creation Form -->
-                <form id="createRoleForm" onsubmit="createNewRole(event)">
+        <!-- Role Assignment Modal -->
+        <div id="roleAssignmentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg">
+                <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200" id="modalStakeholderName">Assign Role to Stakeholder</h3>
+
+                <!-- Role Assignment Form -->
+                <form id="roleAssignmentForm" onsubmit="saveRoleAssignment(event)">
                     <div class="mb-4">
-                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Role Name</label>
-                        <input type="text" id="roleName" class="w-full px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-gray-200" required>
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Custom Role Name</label>
+                        <input type="text" id="customRoleName" class="w-full px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-gray-200" placeholder="Enter custom role name (optional)" disabled>
                     </div>
 
                     <div class="mb-4">
-                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Permissions</label>
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Select Preset Role</label>
+                        <select id="presetRoleSelect" class="w-full px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-gray-200" onchange="applyPresetRole()">
+                            <option value="">Choose a preset role...</option>
+                            <option value="viewer">Viewer</option>
+                            <option value="editor">Editor</option>
+                            <option value="approver">Approver</option>
+                            <!-- Add more roles as needed -->
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Custom Permissions</label>
                         <div class="grid grid-cols-2 gap-2">
-                            <!-- Replace these options with your actual permissions -->
                             <label class="inline-flex items-center">
-                                <input type="checkbox" value="view" class="form-checkbox text-blue-600 dark:text-blue-300 mr-2"> View
+                                <input type="checkbox" value="view" class="form-checkbox text-blue-600 dark:text-blue-300 mr-2" onchange="handleCustomPermissions()"> View
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="checkbox" value="edit" class="form-checkbox text-blue-600 dark:text-blue-300 mr-2"> Edit
+                                <input type="checkbox" value="edit" class="form-checkbox text-blue-600 dark:text-blue-300 mr-2" onchange="handleCustomPermissions()"> Edit
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="checkbox" value="delete" class="form-checkbox text-blue-600 dark:text-blue-300 mr-2"> Delete
+                                <input type="checkbox" value="delete" class="form-checkbox text-blue-600 dark:text-blue-300 mr-2" onchange="handleCustomPermissions()"> Delete
                             </label>
                             <label class="inline-flex items-center">
-                                <input type="checkbox" value="approve" class="form-checkbox text-blue-600 dark:text-blue-300 mr-2"> Approve
+                                <input type="checkbox" value="approve" class="form-checkbox text-blue-600 dark:text-blue-300 mr-2" onchange="handleCustomPermissions()"> Approve
                             </label>
-                            <!-- Add more permissions as needed -->
                         </div>
                     </div>
 
                     <div class="flex justify-end mt-6">
-                        <button type="button" onclick="closeRoleCreationModal()" class="text-gray-600 dark:text-gray-300 mr-3">Cancel</button>
-                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save Role</button>
+                        <button type="button" onclick="closeRoleAssignmentModal()" class="text-gray-600 dark:text-gray-300 mr-3">Cancel</button>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
                     </div>
                 </form>
             </div>
@@ -301,96 +294,120 @@
     }
 
 
-    const roles = [
-    { name: "Viewer", permissions: ["view"] },
-    { name: "Editor", permissions: ["view", "edit"] },
-    { name: "Manager", permissions: ["view", "edit", "approve"] }
-];
-
+// Sample stakeholder data; replace with actual data as needed
 const stakeholders = [
-    { id: 1, name: "Client: John Doe" },
-    { id: 2, name: "Project Manager: Sarah Smith" }
+    { id: 1, name: "John Doe", role: "", permissions: [] },
+    { id: 2, name: "Sarah Smith", role: "", permissions: [] }
 ];
 
-// Open and close role creation modal
-function openRoleCreationModal() {
-    document.getElementById("createRoleModal").classList.remove("hidden");
-}
-
-function closeRoleCreationModal() {
-    document.getElementById("createRoleModal").classList.add("hidden");
-}
-
-// Create a new role and add it to the dropdown
-function createNewRole(event) {
-    event.preventDefault(); // Prevent form submission
-
-    const roleName = document.getElementById("roleName").value;
-    const selectedPermissions = Array.from(document.querySelectorAll("#createRoleForm input[type='checkbox']:checked"))
-        .map(checkbox => checkbox.value);
-
-    // Create new role object and add to roles array
-    const newRole = { name: roleName, permissions: selectedPermissions };
-    roles.push(newRole);
-
-    // Close modal
-    closeRoleCreationModal();
-
-    // Update dropdowns with the new role
-    updateRoleDropdowns(newRole);
-}
-
-// Function to dynamically populate role dropdowns for each stakeholder
-function generateRoleAssignmentFields() {
-    const roleAssignmentFields = document.getElementById("roleAssignmentFields");
+// Function to render stakeholder grid
+function renderStakeholderGrid() {
+    const grid = document.getElementById("stakeholderGrid");
+    grid.innerHTML = ""; // Clear existing content
 
     stakeholders.forEach(stakeholder => {
-        const stakeholderDiv = document.createElement("div");
-        stakeholderDiv.classList.add("mb-4");
+        // Create stakeholder card
+        const card = document.createElement("div");
+        card.classList.add("bg-gray-100", "dark:bg-gray-700", "rounded-lg", "p-4", "shadow-md", "cursor-pointer");
+        card.onclick = () => openRoleAssignmentModal(stakeholder);
 
-        const label = document.createElement("label");
-        label.classList.add("block", "font-medium", "text-gray-700", "dark:text-gray-200");
-        label.textContent = stakeholder.name;
+        // Stakeholder info
+        const name = document.createElement("h4");
+        name.classList.add("text-lg", "font-semibold", "text-gray-800", "dark:text-gray-200");
+        name.textContent = stakeholder.name;
 
-        const select = document.createElement("select");
-        select.classList.add("w-full", "px-4", "py-2", "border", "rounded-md", "dark:bg-gray-700", "dark:text-gray-200");
-        select.name = `role_${stakeholder.id}`;
+        const role = document.createElement("p");
+        role.classList.add("text-sm", "text-gray-600", "dark:text-gray-400");
+        role.textContent = stakeholder.role || "No role assigned";
 
-        // Add default option
-        const defaultOption = document.createElement("option");
-        defaultOption.value = "";
-        defaultOption.textContent = "Select Role";
-        select.appendChild(defaultOption);
+        const permissions = document.createElement("p");
+        permissions.classList.add("text-sm", "text-gray-600", "dark:text-gray-400");
+        permissions.textContent = stakeholder.permissions.length ? `Permissions: ${stakeholder.permissions.join(", ")}` : "No permissions assigned";
 
-        // Populate predefined roles
-        roles.forEach(role => {
-            const option = document.createElement("option");
-            option.value = role.name;
-            option.textContent = role.name;
-            select.appendChild(option);
-        });
+        // Append elements to card
+        card.appendChild(name);
+        card.appendChild(role);
+        card.appendChild(permissions);
 
-        stakeholderDiv.appendChild(label);
-        stakeholderDiv.appendChild(select);
-        roleAssignmentFields.appendChild(stakeholderDiv);
+        // Append card to grid
+        grid.appendChild(card);
     });
 }
 
-// Function to add new role to existing dropdowns
-function updateRoleDropdowns(newRole) {
-    const selects = document.querySelectorAll("#roleAssignmentFields select");
-    selects.forEach(select => {
-        const option = document.createElement("option");
-        option.value = newRole.name;
-        option.textContent = newRole.name;
-        select.appendChild(option);
+// Role presets with associated permissions
+const rolePresets = {
+    viewer: ["view"],
+    editor: ["view", "edit"],
+    approver: ["view", "edit", "approve"]
+};
+
+// Open modal for role assignment
+let currentStakeholder = null;
+
+function openRoleAssignmentModal(stakeholder) {
+    currentStakeholder = stakeholder;
+    document.getElementById("modalStakeholderName").textContent = `Assign Role to ${stakeholder.name}`;
+    document.getElementById("customRoleName").value = stakeholder.role || "";
+    document.getElementById("presetRoleSelect").value = ""; // Clear preset selection
+    document.getElementById("customRoleName").disabled = true; // Initially disable custom role input
+
+    // Reset permissions based on existing role
+    document.querySelectorAll("#roleAssignmentForm input[type='checkbox']").forEach(checkbox => {
+        checkbox.checked = stakeholder.permissions.includes(checkbox.value);
     });
+
+    document.getElementById("roleAssignmentModal").classList.remove("hidden");
 }
 
-// Call this when displaying the role assignment step
-document.addEventListener("DOMContentLoaded", function() {
-    generateRoleAssignmentFields();
-});
+// Apply the selected preset role and its permissions
+function applyPresetRole() {
+    const selectedRole = document.getElementById("presetRoleSelect").value;
+    const permissions = rolePresets[selectedRole] || [];
+
+    // Check the appropriate permissions and disable custom role input
+    document.querySelectorAll("#roleAssignmentForm input[type='checkbox']").forEach(checkbox => {
+        checkbox.checked = permissions.includes(checkbox.value);
+    });
+    document.getElementById("customRoleName").value = selectedRole ? capitalize(selectedRole) : "";
+    document.getElementById("customRoleName").disabled = true;
+}
+
+// Detect changes in custom permissions and enforce custom role input
+function handleCustomPermissions() {
+    // Clear preset selection and enable custom role input
+    document.getElementById("presetRoleSelect").value = "";
+    document.getElementById("customRoleName").value = ""; // Clear custom role name field
+    document.getElementById("customRoleName").disabled = false;
+}
+
+// Save the role and permissions for the stakeholder
+function saveRoleAssignment(event) {
+    event.preventDefault();
+
+    const role = document.getElementById("customRoleName").value || document.getElementById("presetRoleSelect").value;
+    const permissions = Array.from(document.querySelectorAll("#roleAssignmentForm input[type='checkbox']:checked")).map(checkbox => checkbox.value);
+
+    if (currentStakeholder) {
+        // Save custom role and permissions to the stakeholder
+        currentStakeholder.role = role || "Custom Role";
+        currentStakeholder.permissions = permissions;
+    }
+
+    closeRoleAssignmentModal();
+    renderStakeholderGrid(); // Update the grid display
+}
+
+// Helper functions
+function closeRoleAssignmentModal() {
+    document.getElementById("roleAssignmentModal").classList.add("hidden");
+}
+
+function capitalize(word) {
+    return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
+// Initialize the grid on page load
+document.addEventListener("DOMContentLoaded", renderStakeholderGrid);
 </script>
 
 @endpush
