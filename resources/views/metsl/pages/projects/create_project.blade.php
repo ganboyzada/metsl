@@ -11,26 +11,26 @@
 @section('content')
 <div class="container mx-auto p-6 bg-white dark:bg-gray-900 dark:text-gray-100 rounded-lg shadow-md">
     <!-- Progress Indicator -->
-    <div class="flex justify-between mb-6">
-    <div class="w-1/5 text-center">
+    <div class="grid grid-cols-4 justify-between mb-6">
+    <div class="text-center">
             <div class="text-sm font-semibold">1. Project Basics</div>
             <div id="progress-step-1" class="progress-step active h-2 rounded-full mt-2"></div>
         </div>
-        <div class="w-1/5 text-center">
+        <div class="text-center">
             <div class="text-sm font-semibold">2. Stakeholder Selection</div>
             <div id="progress-step-2" class="progress-step h-2 rounded-full mt-2"></div>
         </div>
-        <div class="w-1/5 text-center">
+        <div class="text-center">
             <div class="text-sm font-semibold">3. Role Assignment</div>
             <div id="progress-step-3" class="progress-step h-2 rounded-full mt-2"></div>
         </div>
-        <div class="w-1/5 text-center">
+        {{--<div class="text-center">
             <div class="text-sm font-semibold">4. Workflow Setup</div>
             <div id="progress-step-4" class="progress-step h-2 rounded-full mt-2"></div>
-        </div>
-        <div class="w-1/5 text-center">
-            <div class="text-sm font-semibold">5. Review & Submit</div>
-            <div id="progress-step-5" class="progress-step h-2 rounded-full mt-2"></div>
+        </div>--}}
+        <div class="text-center">
+            <div class="text-sm font-semibold">4. Review & Submit</div>
+            <div id="progress-step-4" class="progress-step h-2 rounded-full mt-2"></div>
         </div>
     </div>
 
@@ -40,24 +40,50 @@
 
         <div id="step1" class="wizard-step">
             <h2 class="text-2xl font-semibold mb-4">Project Basics</h2>
-            <div class="mb-4">
-                <label for="projectName" class="block font-medium text-gray-700 dark:text-gray-200">Project Name</label>
-                <input type="text" name="projectName" id="projectName" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm dark:bg-gray-800 dark:text-gray-200" required>
-            </div>
-            <div class="mb-4">
-                <label for="description" class="block font-medium text-gray-700 dark:text-gray-200">Project Description</label>
-                <textarea name="description" id="description" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm dark:bg-gray-800 dark:text-gray-200"></textarea>
-            </div>
-            <div class="flex mb-4">
-                <div class="w-1/2 mr-2">
-                    <label for="startDate" class="block font-medium text-gray-700 dark:text-gray-200">Start Date</label>
-                    <input type="date" name="startDate" id="startDate" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm dark:bg-gray-800 dark:text-gray-200" required>
+            <div class="gap-6 grid md:grid-cols-2 lg:grid-cols-3">
+                <div>
+                    <div class="mb-4">
+                        <label for="projectName" class="block font-medium text-gray-700 dark:text-gray-200">Project Name</label>
+                        <input type="text" name="projectName" id="projectName" class="mt-1 block w-full rounded-md shadow-sm dark:bg-gray-800 dark:text-gray-200" required>
+                    </div>
+                    <div class="mb-4">
+                        <label for="description" class="block font-medium text-gray-700 dark:text-gray-200">Project Description</label>
+                        <textarea name="description" id="description" class="mt-1 block w-full  rounded-md shadow-sm dark:bg-gray-800 dark:text-gray-200"></textarea>
+                    </div>
                 </div>
-                <div class="w-1/2 ml-2">
-                    <label for="endDate" class="block font-medium text-gray-700 dark:text-gray-200">End Date</label>
-                    <input type="date" name="endDate" id="endDate" class="mt-1 block w-full border-gray-300 rounded-md shadow-sm dark:bg-gray-800 dark:text-gray-200">
+                
+                <div>
+                    <div class="grid lg:grid-cols-2 gap-4">
+                        <div class="mb-4">
+                            <label for="startDate" class="block font-medium text-gray-700 dark:text-gray-200">Start Date</label>
+                            <input type="date" name="startDate" id="startDate" class="mt-1 block w-full rounded-md shadow-sm dark:bg-gray-800 dark:text-gray-200" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="endDate" class="block font-medium text-gray-700 dark:text-gray-200">End Date</label>
+                            <input type="date" name="endDate" id="endDate" class="mt-1 block w-full  rounded-md shadow-sm dark:bg-gray-800 dark:text-gray-200">
+                        </div>
+                    </div>
+                
+                    <div class="flex flex-col w-full">
+                        <label for="startDate" class="block mb-2 font-medium text-gray-700 dark:text-gray-200">Project Official Documents</label>
+                        <!-- Drag-and-Drop Zone -->
+                        <label for="file-upload" id="drop-zone" class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-lg cursor-pointer bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700">
+                            <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                                <i data-feather="upload" class="w-10 h-10 text-gray-500 dark:text-gray-400"></i>
+                                <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
+                                <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG, GIF (max. 5MB)</p>
+                            </div>
+                            <input id="file-upload" type="file" class="hidden" multiple>
+                        </label>
+
+                        <!-- File List -->
+                        <ul id="file-list" class="mt-4 text-sm text-gray-600 dark:text-gray-300"></ul>
+                    </div>
+                    
                 </div>
+                
             </div>
+        
             <button type="button" onclick="showStep(2)" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Next</button>
         </div>
 
@@ -72,8 +98,8 @@
                     <div id="clientList">
                         <!-- Client selection template will be inserted here -->
                     </div>
-                    <button type="button" onclick="addStakeholder('client')" class="flex items-center bg-blue-500 text-white px-4 py-2 rounded mt-2">
-                        <i data-feather="plus" class="mr-2"></i> Add User
+                    <button type="button" onclick="addStakeholder('client')" class="flex items-center bg-gray-200 dark:bg-gray-600 dark:text-white px-3 py-1 rounded-full mt-2">
+                        <i data-feather="user-plus" class="mr-2"></i> Add User
                     </button>
                 </div>
 
@@ -83,8 +109,8 @@
                     <div id="projectManagerList">
                         <!-- Project Manager selection template will be inserted here -->
                     </div>
-                    <button type="button" onclick="addStakeholder('projectManager')" class="flex items-center bg-blue-500 text-white px-4 py-2 rounded mt-2">
-                        <i data-feather="plus" class="mr-2"></i> Add User
+                    <button type="button" onclick="addStakeholder('projectManager')" class="flex items-center bg-gray-200 dark:bg-gray-600 dark:text-white px-3 py-1 rounded-full mt-2">
+                        <i data-feather="user-plus" class="mr-2"></i> Add User
                     </button>
                 </div>
 
@@ -94,8 +120,8 @@
                     <div id="designTeamList">
                         <!-- Design Team selection template will be inserted here -->
                     </div>
-                    <button type="button" onclick="addStakeholder('designTeam')" class="flex items-center bg-blue-500 text-white px-4 py-2 rounded mt-2">
-                        <i data-feather="plus" class="mr-2"></i> Add User
+                    <button type="button" onclick="addStakeholder('designTeam')" class="flex items-center bg-gray-200 dark:bg-gray-600 dark:text-white px-3 py-1 rounded-full mt-2">
+                        <i data-feather="user-plus" class="mr-2"></i> Add User
                     </button>
                 </div>
 
@@ -105,8 +131,8 @@
                     <div id="contractorList">
                         <!-- Contractor selection template will be inserted here -->
                     </div>
-                    <button type="button" onclick="addStakeholder('contractor')" class="flex items-center bg-blue-500 text-white px-4 py-2 rounded mt-2">
-                        <i data-feather="plus" class="mr-2"></i> Add User
+                    <button type="button" onclick="addStakeholder('contractor')" class="flex items-center bg-gray-200 dark:bg-gray-600 dark:text-white px-3 py-1 rounded-full mt-2">
+                        <i data-feather="user-plus" class="mr-2"></i> Add User
                     </button>
                 </div>
             </div>
@@ -216,7 +242,8 @@
                 </form>
             </div>
         </div>
-
+        
+        {{--
         <!-- Step 4: Additional Settings -->
         <div id="step4" class="wizard-step hidden">
             <h2 class="text-2xl font-semibold mb-4">Workflow Setup</h2>
@@ -224,13 +251,15 @@
             <button type="button" onclick="showStep(3)" class="bg-gray-500 text-white px-4 py-2 rounded mt-4 mr-2">Back</button>
             <button type="button" onclick="showStep(5)" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Next</button>
         </div>
+        --}}
 
         <!-- Step 5: Review & Submit -->
-        <div id="step5" class="wizard-step hidden">
-            <h2 class="text-2xl font-semibold mb-4">Review & Submit</h2>
-            <p class="text-gray-700 dark:text-gray-200">Review all your information before submitting.</p>
+        <div id="step4" class="wizard-step hidden">
+        
+            @include('metsl.pages.projects.wizard.review_step')
+
             <!-- Display summary of project details -->
-            <button type="button" onclick="showStep(4)" class="bg-gray-500 text-white px-4 py-2 rounded mt-4 mr-2">Back</button>
+            <button type="button" onclick="showStep(3)" class="bg-gray-500 text-white px-4 py-2 rounded mt-4 mr-2">Back</button>
             <button type="submit" class="bg-green-500 text-white px-4 py-2 rounded mt-4">Submit Project</button>
         </div>
     </form>

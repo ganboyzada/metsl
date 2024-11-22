@@ -6,15 +6,15 @@
                 <img src="{{ asset('images/logo-light.png') }}" class="h-8 hidden dark:block" alt="">
             </div>
 
-            <div class="relative inline-block text-left z-10">
+            <div class="has-dropdown relative inline-block text-left z-10">
                 <!-- Dropdown Toggle Button -->
-                <button onclick="toggleDropdown()" class="flex items-center px-4 py-2 bg-gray-200 dark:bg-white/5 rounded-md">
+                <button class="dropdown-toggle flex items-center px-4 py-2 bg-gray-200 dark:bg-white/5 rounded-md">
                     <span id="selected-project" class="mr-2 font-medium">Project: Bridgex Construction</span>
                     <i class="fas fa-chevron-down"></i>
                 </button>
 
                 <!-- Dropdown Menu -->
-                <div id="dropdown" class="absolute left-0 mt-2 w-full bg-gray-800 text-gray-200 rounded-md shadow-lg hidden">
+                <div class="dropdown absolute left-0 mt-2 w-full bg-gray-800 text-gray-200 rounded-md shadow-lg hidden">
                     <ul class="py-2">
                         <!-- List of Projects (Replace these with dynamic content) -->
                         <li>
@@ -50,6 +50,9 @@
         <!-- Right side icons -->
     <div class="flex items-center space-x-6">
         <!-- Language Switcher -->
+        <button onclick="toggleModal('user-circle-modal', 'open');" id="people-button" class="relative p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700">
+            <i data-feather="users" class="w-6 h-6 text-gray-700 dark:text-gray-300"></i>
+        </button>
         <button>
         <i data-feather="globe"></i>
         </button>
@@ -170,10 +173,6 @@
             }
         });
 
-        function toggleDropdown() {
-            const dropdown = document.getElementById("dropdown");
-            dropdown.classList.toggle("hidden"); // Toggle the visibility of the dropdown
-        }
 
         function selectProject(projectName) {
             const selectedProjectElement = document.getElementById("selected-project");

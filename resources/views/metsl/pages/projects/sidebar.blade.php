@@ -5,7 +5,7 @@
 
     <!-- Project Categories -->
     <!-- Tabs -->
-    <div data-tabs="company-details" class="tab-links mt-8 space-y-4 text-gray-700 dark:text-gray-200">
+    <div data-tabs="project-tools" class="tab-links mt-8 space-y-4 text-gray-700 dark:text-gray-200">
         <button data-tab="correspondence" class="active w-full bg-gray-100 dark:bg-gray-800 py-2 px-4 rounded-lg text-left flex items-center">
             <i data-feather="repeat" class="mr-2"></i> Correspondence
         </button>

@@ -22,5 +22,9 @@ Route::middleware([
         return view('metsl.pages.projects.project'); // The view file for the company detail page
     })->name('projects.find');
 
+    Route::view('/project/correspondence', 'metsl.pages.correspondence.index')->name('projects.correspondence');
+    Route::view('/project/correspondence/create', 'metsl.pages.correspondence.create')->name('projects.correspondence.create');
+    Route::view('/project/correspondence/view', 'metsl.pages.correspondence.view')->name('projects.correspondence.view');
+
     Route::view('/create-project', 'metsl.pages.projects.create_project')->name('projects.create');
 });

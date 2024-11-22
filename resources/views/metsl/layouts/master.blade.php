@@ -19,6 +19,8 @@
             <!-- Content -->
             <main class="flex-1 p-6">
                 @yield('content')
+
+                @include('metsl.modals.members')
             </main>
         </div>
     </div>
