@@ -3,13 +3,13 @@
 @section('title', 'Project Creation Wizard')
 
 @section('header')
-    <a href="{{ route('projects.find', 1) }}" class="flex items-center text-gray-600 hover:text-gray-800 bg-gray-200 hover:bg-gray-300 px-4 py-2 rounded-lg font-medium">
+    <a href="{{ route('projects.find', 1) }}" class="flex items-center text-gray-600 hover:text-gray-800 bg-gray-200 hover:bg-gray-300 px-4 py-2  font-medium">
     <i class="fas fa-arrow-left mr-2 text-gray-500"></i> Back to Project
 </a>
 @endsection
 
 @section('content')
-<div class="container mx-auto p-6 bg-white dark:bg-gray-900 dark:text-gray-100 rounded-lg shadow-md">
+<div class="container mx-auto p-6 bg-white dark:bg-gray-900 dark:text-gray-100  shadow-md">
     <!-- Progress Indicator -->
     <div class="grid grid-cols-4 justify-between mb-6">
     <div class="text-center">
@@ -44,11 +44,11 @@
                 <div>
                     <div class="mb-4">
                         <label for="projectName" class="block font-medium text-gray-700 dark:text-gray-200">Project Name</label>
-                        <input type="text" name="projectName" id="projectName" class="mt-1 block w-full rounded-md shadow-sm dark:bg-gray-800 dark:text-gray-200" required>
+                        <input type="text" name="projectName" id="projectName" class="mt-1 block w-full  shadow-sm dark:bg-gray-800 dark:text-gray-200" required>
                     </div>
                     <div class="mb-4">
                         <label for="description" class="block font-medium text-gray-700 dark:text-gray-200">Project Description</label>
-                        <textarea name="description" id="description" class="mt-1 block w-full  rounded-md shadow-sm dark:bg-gray-800 dark:text-gray-200"></textarea>
+                        <textarea name="description" id="description" class="mt-1 block w-full   shadow-sm dark:bg-gray-800 dark:text-gray-200"></textarea>
                     </div>
                 </div>
                 
@@ -56,18 +56,18 @@
                     <div class="grid lg:grid-cols-2 gap-4">
                         <div class="mb-4">
                             <label for="startDate" class="block font-medium text-gray-700 dark:text-gray-200">Start Date</label>
-                            <input type="date" name="startDate" id="startDate" class="mt-1 block w-full rounded-md shadow-sm dark:bg-gray-800 dark:text-gray-200" required>
+                            <input type="date" name="startDate" id="startDate" class="mt-1 block w-full  shadow-sm dark:bg-gray-800 dark:text-gray-200" required>
                         </div>
                         <div class="mb-4">
                             <label for="endDate" class="block font-medium text-gray-700 dark:text-gray-200">End Date</label>
-                            <input type="date" name="endDate" id="endDate" class="mt-1 block w-full  rounded-md shadow-sm dark:bg-gray-800 dark:text-gray-200">
+                            <input type="date" name="endDate" id="endDate" class="mt-1 block w-full   shadow-sm dark:bg-gray-800 dark:text-gray-200">
                         </div>
                     </div>
                 
                     <div class="flex flex-col w-full">
                         <label for="startDate" class="block mb-2 font-medium text-gray-700 dark:text-gray-200">Project Official Documents</label>
                         <!-- Drag-and-Drop Zone -->
-                        <label for="file-upload" id="drop-zone" class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-lg cursor-pointer bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700">
+                        <label for="file-upload" id="drop-zone" class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed  cursor-pointer bg-gray-100 hover:bg-gray-200 dark:bg-gray-800 dark:border-gray-600 dark:hover:bg-gray-700">
                             <div class="flex flex-col items-center justify-center pt-5 pb-6">
                                 <i data-feather="upload" class="w-10 h-10 text-gray-500 dark:text-gray-400"></i>
                                 <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
@@ -144,32 +144,32 @@
 
         <!-- Overlay Modal for Creating New User -->
         <div id="createUserModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-md">
+            <div class="bg-white dark:bg-gray-800  p-6 w-full max-w-md">
                 <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Create New User</h3>
                 <form id="createUserForm">
                     <div class="mb-4">
                         <label class="block text-gray-700 dark:text-gray-200 mb-1">Name</label>
-                        <input type="text" class="w-full px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-gray-200" required>
+                        <input type="text" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 dark:text-gray-200 mb-1">Surname</label>
-                        <input type="text" class="w-full px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-gray-200" required>
+                        <input type="text" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 dark:text-gray-200 mb-1">Mobile Phone</label>
-                        <input type="text" class="w-full px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-gray-200" required>
+                        <input type="text" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 dark:text-gray-200 mb-1">Office Phone</label>
-                        <input type="text" class="w-full px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-gray-200" required>
+                        <input type="text" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 dark:text-gray-200 mb-1">Email (Login Credential)</label>
-                        <input type="email" class="w-full px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-gray-200" required>
+                        <input type="email" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
                     </div>
                     <div class="mb-4">
                         <label class="block text-gray-700 dark:text-gray-200 mb-1">Specialty</label>
-                        <input type="text" class="w-full px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-gray-200" required>
+                        <input type="text" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
                     </div>
                     <div class="flex justify-end mt-6">
                         <button type="button" onclick="closeCreateUserModal()" class="text-gray-600 dark:text-gray-300 mr-3">Cancel</button>
@@ -196,19 +196,19 @@
 
         <!-- Role Assignment Modal -->
         <div id="roleAssignmentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg">
+            <div class="bg-white dark:bg-gray-800  p-6 w-full max-w-lg">
                 <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200" id="modalStakeholderName">Assign Role to Stakeholder</h3>
 
                 <!-- Role Assignment Form -->
                 <form id="roleAssignmentForm" onsubmit="saveRoleAssignment(event)">
                     <div class="mb-4">
                         <label class="block text-gray-700 dark:text-gray-200 mb-1">Custom Role Name</label>
-                        <input type="text" id="customRoleName" class="w-full px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-gray-200" placeholder="Enter custom role name (optional)" disabled>
+                        <input type="text" id="customRoleName" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" placeholder="Enter custom role name (optional)" disabled>
                     </div>
 
                     <div class="mb-4">
                         <label class="block text-gray-700 dark:text-gray-200 mb-1">Select Preset Role</label>
-                        <select id="presetRoleSelect" class="w-full px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-gray-200" onchange="applyPresetRole()">
+                        <select id="presetRoleSelect" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" onchange="applyPresetRole()">
                             <option value="">Choose a preset role...</option>
                             <option value="viewer">Viewer</option>
                             <option value="editor">Editor</option>
@@ -308,12 +308,12 @@
         newStakeholder.classList.add("flex", "items-center", "mb-2");
 
         newStakeholder.innerHTML = `
-            <select name="${type}[]" class="block w-96 px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-gray-200 mr-2">
+            <select name="${type}[]" class="block w-96 px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200 mr-2">
                 <option value="" disabled selected>Select ${type.charAt(0).toUpperCase() + type.slice(1)}</option>
                 <option value="user1">User 1</option>
                 <option value="user2">User 2</option>
             </select>
-            <button type="button" onclick="openCreateUserModal()" class="p-2 rounded-md bg-orange-600 inline-flex text-white">
+            <button type="button" onclick="openCreateUserModal()" class="p-2  bg-orange-600 inline-flex text-white">
                 <i data-feather="user-plus"></i>
             </button>
         `;
@@ -337,7 +337,7 @@ function renderStakeholderGrid() {
     stakeholders.forEach(stakeholder => {
         // Create stakeholder card
         const card = document.createElement("div");
-        card.classList.add("bg-gray-100", "dark:bg-gray-700", "rounded-lg", "p-4", "shadow-md", "cursor-pointer");
+        card.classList.add("bg-gray-100", "dark:bg-gray-700", "", "p-4", "shadow-md", "cursor-pointer");
         card.onclick = () => openRoleAssignmentModal(stakeholder);
 
         // Stakeholder info

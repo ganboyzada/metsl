@@ -1,4 +1,4 @@
-<header class="bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-200 shadow px-6 py-4">
+<header class="bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-200 shadow px-6 py-2">
     <div class="flex justify-between items-center">
         <div class="flex items-center space-x-3">
             <div class="relative mt-[-6px]">
@@ -8,39 +8,40 @@
 
             <div class="has-dropdown relative inline-block text-left z-10">
                 <!-- Dropdown Toggle Button -->
-                <button class="dropdown-toggle flex items-center px-4 py-2 bg-gray-200 dark:bg-white/5 rounded-md">
-                    <span id="selected-project" class="mr-2 font-medium">Project: Bridgex Construction</span>
-                    <i class="fas fa-chevron-down"></i>
+                <button class="dropdown-toggle flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-800">
+                    <span id="selected-project" class="flex flex-col items-start text-xs mr-2 font-medium">Projects <b>Bridgex Construction</b></span>
+                    <i data-feather="chevron-down"></i>
                 </button>
 
                 <!-- Dropdown Menu -->
-                <div class="dropdown absolute left-0 mt-2 w-full bg-gray-800 text-gray-200 rounded-md shadow-lg hidden">
+                <div class="dropdown absolute left-0 mt-2 w-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg hidden">
                     <ul class="py-2">
                         <!-- List of Projects (Replace these with dynamic content) -->
                         <li>
-                            <button onclick="selectProject('Project A')" class="block w-full text-left px-4 py-2 hover:bg-black/10">Project A</button>
+                            <button class="block w-full text-left px-4 py-2 hover:bg-black/10">Project A</button>
                         </li>
                         <li>
-                            <button onclick="selectProject('Project B')" class="block w-full text-left px-4 py-2 hover:bg-black/10">Project B</button>
+                            <button class="block w-full text-left px-4 py-2 hover:bg-black/10">Project B</button>
                         </li>
                         <li>
-                            <button onclick="selectProject('Project C')" class="block w-full text-left px-4 py-2 hover:bg-black/10">Project C</button>
+                            <button class="block w-full text-left px-4 py-2 hover:bg-black/10">Project C</button>
                         </li>
 
                         <li class="px-3 pt-2">
-                        <a href="{{ route('projects.create') }}" class="inline-flex w-full text-center px-4 py-1 bg-blue-600 hover:bg-blue-700 text-white rounded-md font-medium">
-                            <i data-feather="plus" class="inline-block mr-1"></i> Create New Project
+                        <a href="{{ route('projects') }}" class="inline-flex w-full text-center px-3 py-1 bg-gray-600 hover:bg-blue-700 text-white font-medium">
+                            All Projects
+                        </a>
+                        </li>
+                        <li class="px-3 pt-2">
+                        <a href="{{ route('projects.create') }}" class="inline-flex w-full text-center px-3 py-1 bg-blue-900 hover:bg-blue-700 text-white">
+                            <i data-feather="plus" class="mr-1"></i> New Project
                         </a>
                         </li>
                         <!-- Add more projects as needed -->
                     </ul>
-                    
-                    <!-- Create New Project Button -->
-                    
                 </div>
-
-                
             </div>
+            @include('metsl.pages.projects.tools')
 
             @yield('header')
         </div>
@@ -50,11 +51,12 @@
         <!-- Right side icons -->
     <div class="flex items-center space-x-6">
         <!-- Language Switcher -->
-        <button onclick="toggleModal('user-circle-modal', 'open');" id="people-button" class="relative p-2 rounded-full bg-gray-200 hover:bg-gray-300 dark:bg-gray-800 dark:hover:bg-gray-700">
-            <i data-feather="users" class="w-6 h-6 text-gray-700 dark:text-gray-300"></i>
+        <button onclick="toggleModal('user-circle-modal', 'open');" id="people-button">
+            <i data-feather="users" class="w-6 h-6"></i>
         </button>
+
         <button>
-        <i data-feather="globe"></i>
+            <i data-feather="globe"></i>
         </button>
 
         <!-- Full Screen Toggle -->
@@ -75,7 +77,7 @@
                 <span class="absolute bottom-4 left-2 bg-red-500 text-white text-xs font-bold px-1.5 py-0.5 rounded-full">3</span>
             </button>
             <!-- Notification Popup -->
-            <div id="notificationPopup" class="hidden absolute right-0 mt-2 w-64 bg-white shadow-lg rounded-lg p-4 z-10">
+            <div id="notificationPopup" class="hidden absolute right-0 mt-2 w-64 bg-white shadow-lg  p-4 z-10">
                 <p class="font-semibold mb-2">Notifications</p>
                 <div class="space-y-2">
                     <p class="text-gray-600 text-sm">Notification 1</p>
@@ -87,19 +89,17 @@
 
         <!-- User Profile and Dropdown -->
         <div class="relative pl-5">
-            <button onclick="toggleUserDropdown()" class="flex items-center space-x-2">
+            <button onclick="toggleUserDropdown()" class="rounded-full flex items-center pl-1 py-1 pr-4 bg-gray-200 dark:bg-gray-800">
                 <!-- User Image -->
-                <img src="https://via.placeholder.com/32" alt="User" class="w-9 h-9 rounded-full">
+                <img src="https://via.placeholder.com/32" alt="User" class="w-9 h-9 mr-2 rounded-full">
                 <!-- User Name -->
-                <div class="flex flex-col items-start">
-                    <span class="text-sm">Welcome,</span>
-                    <span class="">{{ auth()->user()->name }}</span>
-                </div>
-                
-                
+                <div class="text-xs flex flex-col items-start">
+                    <span>Welcome,</span>
+                    <span class="font-bold">{{ auth()->user()->name }}</span>
+                </div>   
             </button>
             <!-- User Dropdown Menu -->
-            <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 shadow-lg rounded-lg py-2 z-10">
+            <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 shadow-lg  py-2 z-10">
                 <a href="#" class="block px-4 py-2 hover:bg-gray-100/25"><i data-feather="user" class="mr-3"></i>Profile</a>
                 <a href="#" class="block px-4 py-2 hover:bg-gray-100/25"><i data-feather="settings" class="mr-3"></i>Settings</a>
                 <form method="POST" action="{{ route('logout') }}" class="block">

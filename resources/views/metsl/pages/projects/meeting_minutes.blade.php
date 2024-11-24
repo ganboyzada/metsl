@@ -1,6 +1,6 @@
 <div class="mt-8 space-y-4">
     <!-- meeting Card -->
-    <div class="relative bg-gray-100 rounded-lg py-4 px-5 flex items-center">
+    <div class="relative bg-gray-100  py-4 px-5 flex items-center">
         <div class="flex items-center space-x-4"> 
             <i class="text-lg text-gray-500 fa fa-users"></i>           
             <div class="text-gray-700">
@@ -23,7 +23,7 @@
     
             
     <!-- meeting Card -->
-    <div class="relative bg-gray-100 rounded-lg py-4 px-5 flex items-center">
+    <div class="relative bg-gray-100  py-4 px-5 flex items-center">
         <div class="flex items-center space-x-4"> 
             <i class="text-lg text-gray-500 fa fa-users"></i>              
             <div class="text-gray-700">
@@ -46,8 +46,8 @@
 </div>
 
 <!-- Create New Button -->
-<div class="flex p-6 bg-green-50 justify-center mt-4 rounded-lg">
-    <button class="bg-green-200 text-green-800 font-bold px-5 py-3 rounded-lg hover:bg-green-400 hover:text-white">
+<div class="flex p-6 bg-green-50 justify-center mt-4 ">
+    <button class="bg-green-200 text-green-800 font-bold px-5 py-3  hover:bg-green-400 hover:text-white">
     <i class="fa fa-plus"></i>     
     Create new</button>
 </div>

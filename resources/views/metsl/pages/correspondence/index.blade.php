@@ -1,19 +1,29 @@
 
-<div class="dark:bg-gray-900 dark:text-gray-200">
+<div>
     <!-- Page Header -->
-    <div class="flex justify-between items-center mb-6">
-        <h2 class="text-2xl font-semibold">Correspondence</h2>
+    <div class="flex items-center gap-4 mb-4">
+        <div class="flex items-center gap-4 mr-auto">
+            <div class="relative">
+                <i data-feather="search" class="absolute left-2 top-2 text-gray-500"></i>
+                <input
+                    type="text"
+                    placeholder="Search"
+                    class="pl-10 pr-4 py-2 border dark:bg-gray-800 dark:text-gray-200"
+                />
+            </div>
+            <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-200">Add Filter</button>
+        </div>
         <!-- Create Button with Dropdown -->
         <div class="has-dropdown relative">
             <button
-                class="dropdown-toggle flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
+                class="dropdown-toggle flex items-center px-4 py-2 bg-blue-500 text-white  hover:bg-blue-600 focus:outline-none"
             >
                 <i data-feather="plus" class="w-5 h-5 mr-2"></i>
                 Create
             </button>
             <!-- Dropdown Menu -->
             <div
-                class="dropdown absolute right-0 mt-2 w-32 bg-gray-800 text-gray-200 rounded-md shadow-lg hidden"
+                class="dropdown absolute right-0 mt-2 w-32 bg-gray-800 text-gray-200  shadow-lg hidden"
             >
                 <a href="{{ route('projects.correspondence.create') }}" class="flex px-4 py-2 hover:bg-gray-700"><i class="mr-2" data-feather="info"></i>RFI</a>
                 <a href="{{ route('projects.correspondence.create') }}" class="flex px-4 py-2 hover:bg-gray-700"><i class="mr-2" data-feather="copy"></i>RFV</a>
@@ -24,17 +34,17 @@
 
     <!-- Correspondence Table -->
     <div class="overflow-x-auto">
-        <table class="min-w-full border-collapse dark:bg-gray-800 border dark:border-gray-700">
-            <thead class="bg-gray-200 dark:bg-gray-700 dark:text-gray-400">
+        <table class="min-w-full border-collapse border dark:border-gray-800">
+            <thead class="bg-gray-100 dark:bg-gray-800 text-sm text-left">
                 <tr>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Number</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Subject</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Last Activity</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Assignees</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Created By</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Issued On</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Due Date</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Status</th>
+                    <th class="px-6 py-3 font-light">Number</th>
+                    <th class="px-6 py-3 font-light">Subject</th>
+                    <th class="px-6 py-3 font-light">Last Activity</th>
+                    <th class="px-6 py-3 font-light">Assignees</th>
+                    <th class="px-6 py-3 font-light">Created By</th>
+                    <th class="px-6 py-3 font-light">Issued On</th>
+                    <th class="px-6 py-3 font-light">Due Date</th>
+                    <th class="px-6 py-3 font-light">Status</th>
                 </tr>
             </thead>
             <tbody id="table-body">
@@ -73,7 +83,7 @@
         for (let i = loadedRows; i < Math.min(loadedRows + rowsToLoad, correspondenceData.length); i++) {
             const row = correspondenceData[i];
             const tr = document.createElement('tr');
-            tr.classList.add('hover:shadow-lg','hover:bg-gray-100','hover:dark:bg-gray-700');
+            tr.classList.add('border-b','dark:border-gray-800','hover:shadow-lg','hover:bg-gray-100','hover:dark:bg-gray-700');
 
             tr.innerHTML = `
                 <td class="px-6 py-3">${row.number}</td>
@@ -111,10 +121,4 @@
 
     // Initial load
     loadRows();
-
-    // Dropdown toggle logic
-    function toggleDropdown(dropdownId) {
-        const dropdown = document.getElementById(dropdownId);
-        dropdown.classList.toggle('hidden');
-    }
 </script>

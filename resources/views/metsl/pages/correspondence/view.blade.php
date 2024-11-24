@@ -7,14 +7,14 @@
     <h1 class="text-lg dark:text-gray-200"><a href="{{ route('projects.correspondence') }}">Correspondence</a> / <b>RFI-001</b></h1>
     <div class="ml-auto relative has-dropdown">
         <button type="button"
-            class="dropdown-toggle flex items-center px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 focus:outline-none"
+            class="dropdown-toggle flex items-center px-4 py-2 bg-blue-500 text-white  hover:bg-blue-600 focus:outline-none"
             >
             <i data-feather="loader" class="mr-2"></i>
             Action
         </button>
         <!-- Dropdown Menu -->
         <div
-            class="dropdown absolute right-0 mt-2 w-48 bg-gray-800 text-gray-200 rounded-md shadow-lg hidden"
+            class="dropdown absolute right-0 mt-2 w-48 bg-gray-800 text-gray-200  shadow-lg hidden"
         >
             <a href="{{ route('projects.correspondence.create') }}" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Reply</a>
             <a href="{{ route('projects.correspondence.create') }}" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-right" class="mr-2"></i>RFI </a>
@@ -24,7 +24,7 @@
 
 
 <!-- Correspondence Information -->
- <div class="p-6 bg-white dark:bg-gray-900 rounded-lg">
+ <div class="p-6 bg-white dark:bg-gray-900 ">
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
         <!-- Number -->
@@ -110,14 +110,14 @@
     <div>
         <h3 class="text-sm font-medium dark:text-gray-400 mb-2">Attachments</h3>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg flex items-center justify-between">
+            <div class="bg-gray-100 dark:bg-gray-800 p-4  flex items-center justify-between">
                 <div class="flex items-center">
                     <i data-feather="file" class="w-6 h-6 mr-3 dark:text-gray-400"></i>
                     <p class="text-sm dark:text-gray-200">Attachment1.pdf</p>
                 </div>
                 <a href="/path/to/attachment1.pdf" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
             </div>
-            <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg flex items-center justify-between">
+            <div class="bg-gray-100 dark:bg-gray-800 p-4  flex items-center justify-between">
                 <div class="flex items-center">
                     <i data-feather="file" class="w-6 h-6 mr-3 dark:text-gray-400"></i>
                     <p class="text-sm dark:text-gray-200">Attachment2.pdf</p>

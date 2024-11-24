@@ -12,6 +12,7 @@ window.feather = feather;
 
 $(document).ready(function() {
     feather.replace({ 'stroke-width': 1 });
+
     $('.tab-links button').click(function() {
         // Remove .active class from all buttons
         let tablinks = $(this).closest('.tab-links');
@@ -20,6 +21,8 @@ $(document).ready(function() {
         // Add .active class to the clicked button
         $(this).addClass('active');
 
+        $(this).closest('.dropdown').toggleClass('hidden');
+        $(this).closest('.has-dropdown').find('.current-selected').text($(this).text());
         // Hide all tab contents
         $(`.tab-view[data-tabs=${tablinks.data('tabs')}] .tab-content`).addClass('hidden');
 
@@ -31,8 +34,12 @@ $(document).ready(function() {
 
     
     $(document).on('click', 'button.dropdown-toggle', function(){
-        console.log('saalm');
         $(this).closest('.has-dropdown').find('.dropdown').toggleClass('hidden');
+    });
+
+    $(document).on('click', 'button.modal-toggler', function(){
+        let modal_name = $(this).data('modal');
+        $(`#${modal_name}`).toggleClass('hidden');
     });
 
     tinymce.init({

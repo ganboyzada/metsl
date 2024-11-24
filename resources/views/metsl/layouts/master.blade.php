@@ -17,7 +17,7 @@
             @include('metsl.layouts.header')
 
             <!-- Content -->
-            <main class="flex-1 p-6">
+            <main class="p-6 bg-white dark:bg-gray-900 dark:text-gray-200">
                 @yield('content')
 
                 @include('metsl.modals.members')

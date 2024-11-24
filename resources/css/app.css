@@ -7,6 +7,16 @@
     display: none;
 }
 
+button{
+    svg{
+        display: inline;
+    }
+}
+
+.text-left > *{
+    text-align: left;
+}
+
 .company-card{
     img{
         height: 100px;
@@ -18,8 +28,13 @@
 .tab-links{
     button, a{
         &.active{
-            border-bottom: 2px solid red;
-            color: rgb(112, 0, 0);
+            background-color: #fff;
+            color: #ff8800 !important;
+            font-weight: 600;
+
+            svg{
+                stroke-width: 2;
+            }
         }
     }
 }
@@ -48,8 +63,7 @@ h1{
     .tab-links{
         button, a{
             &.active{
-                border-bottom: 2px solid rgb(255, 87, 87);
-                color: rgb(255, 87, 87);
+                background-color: #f7921e27;
             }
         }
     }

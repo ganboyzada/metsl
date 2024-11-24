@@ -29,7 +29,7 @@
     </h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
         <!-- Stakeholder Card -->
-        <div class="p-4 border rounded-lg bg-gray-800 border-gray-700">
+        <div class="p-4 border  bg-gray-800 border-gray-700">
             <div class="flex items-center mb-4">
                 <i data-feather="user" class="w-6 h-6 mr-2 text-gray-500"></i>
                 <div>
@@ -47,7 +47,7 @@
         </div>
 
         <!-- Repeat for Other Stakeholders -->
-        <div class="p-4 border rounded-lg bg-gray-800 border-gray-700">
+        <div class="p-4 border  bg-gray-800 border-gray-700">
             <div class="flex items-center mb-4">
                 <i data-feather="user" class="w-6 h-6 mr-2 text-gray-500"></i>
                 <div>
@@ -74,7 +74,7 @@
         Project Documents
     </h2>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-        <div class="p-4 border rounded-lg bg-gray-800 border-gray-700 flex items-center justify-between">
+        <div class="p-4 border  bg-gray-800 border-gray-700 flex items-center justify-between">
             <div>
                 <p class="text-lg font-medium">Blueprint.pdf</p>
                 <p class="text-sm text-gray-400">2.3 MB</p>
@@ -83,7 +83,7 @@
                 <i data-feather="download" class="w-5 h-5 mr-1"></i> Download
             </a>
         </div>
-        <div class="p-4 border rounded-lg bg-gray-800 border-gray-700 flex items-center justify-between">
+        <div class="p-4 border  bg-gray-800 border-gray-700 flex items-center justify-between">
             <div>
                 <p class="text-lg font-medium">Budget.xlsx</p>
                 <p class="text-sm text-gray-400">1.2 MB</p>

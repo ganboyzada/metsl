@@ -1,5 +1,5 @@
 <div id="user-circle-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-    <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-2xl relative">
+    <div class="bg-white dark:bg-gray-800  p-6 w-full max-w-2xl relative">
         <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Your Circle</h3>
         
         <!-- User List -->
@@ -35,7 +35,7 @@ function renderUserList() {
 
     userCircle.forEach(user => {
         const li = document.createElement('li');
-        li.classList.add('flex', 'items-center', 'space-x-4', 'p-4', 'border', 'rounded-lg', 'bg-gray-100', 'dark:bg-gray-700');
+        li.classList.add('flex', 'items-center', 'space-x-4', 'p-4', 'border', '', 'bg-gray-100', 'dark:bg-gray-700');
 
         const avatar = document.createElement('div');
         avatar.classList.add('w-10', 'h-10', 'rounded-full', 'bg-blue-500', 'flex', 'items-center', 'justify-center', 'text-white', 'font-semibold');

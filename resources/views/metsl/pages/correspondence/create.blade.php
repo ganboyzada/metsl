@@ -3,7 +3,7 @@
 @section('title', 'Correspondence - Create')
 
 @section('content')
-<div class="p-6 bg-white dark:bg-gray-900 dark:text-gray-200 rounded-lg shadow-md">
+<div class="p-6 bg-white dark:bg-gray-900 dark:text-gray-200  shadow-md">
     <h2 class="text-2xl font-semibold mb-6">Create Correspondence</h2>
 
     <!-- Form -->
@@ -17,7 +17,7 @@
                     id="correspondence-number"
                     type="text"
                     placeholder="RFI-001"
-                    class="w-full px-4 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
+                    class="w-full px-4 py-2 border  dark:bg-gray-800 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
                 />
             </div>
 
@@ -28,7 +28,7 @@
                     id="subject"
                     type="text"
                     placeholder="Enter subject"
-                    class="w-full px-4 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
+                    class="w-full px-4 py-2 border  dark:bg-gray-800 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
                 />
             </div>
 
@@ -37,7 +37,7 @@
                 <label for="status" class="block text-sm font-medium mb-1">Status</label>
                 <select
                     id="status"
-                    class="w-full px-4 py-2 border rounded-md dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
+                    class="w-full px-4 py-2 border  dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
                 >
                     <option value="Draft">Draft</option>
                     <option value="Issued">Issued</option>
@@ -51,7 +51,7 @@
                 <label for="programme-impact" class="block text-sm font-medium mb-1">Programme Impact</label>
                 <select
                     id="programme-impact"
-                    class="w-full px-4 py-2 border rounded-md dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
+                    class="w-full px-4 py-2 border  dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
                 >
                     <option value="Yes">Yes</option>
                     <option value="No">No</option>
@@ -65,7 +65,7 @@
                 <label for="cost-impact" class="block text-sm font-medium mb-1">Cost Impact</label>
                 <select
                     id="cost-impact"
-                    class="w-full px-4 py-2 border rounded-md dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
+                    class="w-full px-4 py-2 border  dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
                 >
                     <option value="Yes">Yes</option>
                     <option value="No">No</option>
@@ -99,12 +99,12 @@
                 <textarea
                     id="description"
                     placeholder="Enter correspondence description"
-                    class="w-full px-4 py-2 border rounded-md dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
+                    class="w-full px-4 py-2 border  dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
                 ></textarea>
             </div>
             <div>
                 <label class="block mb-1">Attachments (PDF only)</label>
-                <div id="drop-zone" class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed rounded-lg dark:bg-gray-800 dark:border-gray-700 border-gray-300">
+                <div id="drop-zone" class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed  dark:bg-gray-800 dark:border-gray-700 border-gray-300">
                     <div class="flex flex-col items-center justify-center">
                         <i data-feather="upload" class="w-10 h-10 text-gray-500"></i>
                         <p class="text-sm text-gray-500">Click to upload or drag and drop</p>
@@ -120,7 +120,7 @@
 
         <!-- Submit Button -->
         <div class="flex justify-end">
-            <button type="submit" class="px-6 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600">Create Correspondence</button>
+            <button type="submit" class="px-6 py-2 bg-blue-500 text-white  hover:bg-blue-600">Create Correspondence</button>
         </div>
     </form>
 </div>
