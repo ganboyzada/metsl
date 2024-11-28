@@ -21,6 +21,7 @@ $(document).ready(function() {
         // Add .active class to the clicked button
         $(this).addClass('active');
 
+        console.log($(this).closest('.dropdown'));
         $(this).closest('.dropdown').toggleClass('hidden');
         $(this).closest('.has-dropdown').find('.current-selected').text($(this).text());
         // Hide all tab contents
@@ -121,18 +122,19 @@ function toggleModal(modalId, action) {
 window.toggleModal = toggleModal;
 
 // Use Choices.js for dropdowns
-const populateChoices = (selector, options, multiple=false) => {
-    const element = document.getElementById(selector);
+const populateChoices = (selector, options, multiple=false, placeholder=null) => {
+    let element = document.getElementById(selector);
     options.forEach(option => {
-        const opt = document.createElement('option');
+        let opt = document.createElement('option');
         opt.value = option.value;
         opt.textContent = option.label;
         element.appendChild(opt);
     });
     new Choices(`#${selector}`, {
         searchEnabled: true,
+        itemSelectText: '',
         removeItemButton: multiple, // Allow multiple for Assignees & Distribution, single for Received From
-        placeholderValue: `Select ${selector.replace('-', ' ')}`,
+        placeholderValue: placeholder ? placeholder : `Select ${selector.replace('-', ' ')}`,
     });
 };
 

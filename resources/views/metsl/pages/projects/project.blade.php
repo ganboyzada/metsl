@@ -13,8 +13,11 @@
             <div class="tab-content hidden" id="documents">
                 @include('metsl.pages.documents.index')
             </div>
-            <div class="tab-content" id="snag-list">
-                @include('metsl.pages.snag-list.index')
+            <div class="tab-content hidden" id="punch-list">
+                @include('metsl.pages.punch-list.index')
+            </div>
+            <div class="tab-content" id="meetings">
+                @include('metsl.pages.meeting-minutes.index')
             </div>
         </div>
     </div>

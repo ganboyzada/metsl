@@ -27,6 +27,9 @@ Route::middleware([
     Route::view('/project/correspondence/view', 'metsl.pages.correspondence.view')->name('projects.correspondence.view');
 
     Route::view('/project/documents', 'metsl.pages.documents.index')->name('projects.documents');
+    Route::view('/project/punch-list/create', 'metsl.pages.punch-list.create')->name('projects.punch-list.create');
+    Route::view('/project/meetings/create', 'metsl.pages.meeting-minutes.create')->name('projects.meetings.create');
+    Route::view('/project/meetings/view', 'metsl.pages.meeting-minutes.view')->name('projects.meetings.view');
 
-    Route::view('/create-project', 'metsl.pages.projects.create_project')->name('projects.create');
+    Route::view('/create-project', 'metsl.pages.projects.wizard.project-wizard')->name('projects.create');
 });

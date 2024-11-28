@@ -1,10 +1,10 @@
 <header class="bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-200 shadow px-6 py-2">
     <div class="flex justify-between items-center">
         <div class="flex items-center space-x-3">
-            <div class="relative mt-[-6px]">
+            <a href="{{ route('projects.find', 0) }}" class="block relative mt-[-6px]">
                 <img src="{{ asset('images/logo-dark.png') }}" class="h-8 dark:hidden" alt="">
                 <img src="{{ asset('images/logo-light.png') }}" class="h-8 hidden dark:block" alt="">
-            </div>
+            </a>
 
             <div class="has-dropdown relative inline-block text-left z-10">
                 <!-- Dropdown Toggle Button -->

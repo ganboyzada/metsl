@@ -4,11 +4,11 @@
     <div class="flex items-center gap-4 mb-4">
         <div class="flex items-center gap-4 mr-auto">
             <div class="relative">
-                <i data-feather="search" class="absolute left-2 top-2 text-gray-500"></i>
+                <i data-feather="search" stroke-width=2 class="absolute left-2 top-2 text-gray-700 dark:text-gray-300"></i>
                 <input
                     type="text"
                     placeholder="Search"
-                    class="pl-10 pr-4 py-2 border dark:bg-gray-800 dark:text-gray-200"
+                    class="pl-10 pr-4 py-2 border-0 bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
                 />
             </div>
             <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-200">Add Filter</button>

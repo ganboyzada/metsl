@@ -1,18 +1,103 @@
 <div class="flex gap-4 items-center mb-4">
     <!-- Search and Actions -->
-    <div class="flex items-center gap-4 mr-auto">
-        <div class="relative">
-            <i data-feather="search" class="absolute left-2 top-2 text-gray-500"></i>
+    <div class="flex items-center mr-auto">
+        <div class="relative mr-4">
+            <i data-feather="search" stroke-width=2 class="absolute left-2 top-2 text-gray-700 dark:text-gray-300"></i>
             <input
                 type="text"
                 placeholder="Search"
-                class="pl-10 pr-4 py-2 border dark:bg-gray-800 dark:text-gray-200"
+                class="pl-10 pr-4 py-2 border-0 bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
             />
         </div>
-        <button class="p-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-200"><i data-feather="filter" class="mr-2"></i>Filters</button>
+        
+        <div class="has-dropdown relative inline-block mr-2">
+            <button class="dropdown-toggle p-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-200 flex items-center">
+                <i data-feather="filter" class="mr-2"></i>Filters
+            </button>
+
+            <!-- Dropdown -->
+            <div id="filter-dropdown" class="dropdown hidden absolute mt-2 z-10 bg-white dark:bg-gray-800 shadow-lg w-52">
+                <ul class="divide-y divide-gray-200 dark:divide-gray-700">
+                    <li>
+                        <button
+                            class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            data-filter="assignee" data-filter-type="multi-select"
+                        >
+                            Assignee
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            data-filter="closed_by" data-filter-type="multi-select"
+                        >
+                            Closed by
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            data-filter="creator" data-filter-type="multi-select"
+                        >
+                            Creator
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            data-filter="resolution_date" data-filter-type="date"
+                        >
+                            Resolution Date
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            data-filter="creation_date" data-filter-type="date"
+                        >
+                            Creation Date
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            data-filter="date_notified" data-filter-type="date"
+                        >
+                            Date Notified
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            data-filter="due_date" data-filter-type="date"
+                        >
+                            Due Date
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            data-filter="priority" data-filter-type="select"
+                        >
+                            Priority
+                        </button>
+                    </li>
+                    <li>
+                        <button
+                            class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            data-filter="status" data-filter-type="multi-select"
+                        >
+                            Status
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- Placeholder for Filters -->
+        <div id="filters-container" class="flex items-center space-x-2"></div>
     </div>
 
-    <button class="px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"><i data-feather="plus" class="mr-2"></i> Create</button>
+    <a href="{{ route('projects.punch-list.create') }}" class="inline-flex px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"><i data-feather="plus" class="mr-2"></i> Create</a>
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 text-gray-600 dark:text-gray-300">
@@ -154,7 +239,7 @@
             datasets: [
                 {
                     data: [1, 1, 10],
-                    backgroundColor: ['#7ade45', '#eab308', '#ff5a5a'],
+                    backgroundColor: ['#374151', '#eab308', '#ff5a5a'],
                 },
             ],
         },
@@ -189,18 +274,21 @@
                 {
                     label: 'Open',
                     data: [4, 2, 5],
-                    backgroundColor: '#eab308', // Orange
+                    backgroundColor: '#3b82f6', // blue
                 },
                 {
                     label: 'Closed',
                     data: [1, 3, 2],
-                    backgroundColor: '#7ade45', // Green
+                    backgroundColor: '#374151', // gray
                 },
             ],
         },
         options: {
             responsive: true,
             maintainAspectRatio: false, // Disable aspect ratio for height control
+            borderRadius: 9999,
+            barThickness: 20,
+            barPercentage: 0.6,
             plugins: {
                 legend: {
                     labels: {
@@ -222,4 +310,77 @@
             },
         },
     });
+
+    document.addEventListener('DOMContentLoaded', () => {
+        const filterDropdown = document.getElementById('filter-dropdown');
+        const filtersContainer = document.getElementById('filters-container');
+
+        // Add Choices.js Component Dynamically
+        filterDropdown.addEventListener('click', (event) => {
+            const target = event.target.closest('button[data-filter]');
+            if (target) {
+                $(target).closest('.dropdown').toggleClass('hidden');
+
+                const filterName = target.getAttribute('data-filter');
+                const filterType = target.getAttribute('data-filter-type');
+
+                // Create a new filter block
+                const filterBlock = document.createElement('div');
+                filterBlock.className = 'w-52';
+
+                let input = null
+                let options = null;
+
+                switch (filterType) {
+                    case 'multi-select':
+                        input = document.createElement('select');
+                        input.className = 'choices dark:bg-gray-700 dark:text-gray-200';
+                        input.setAttribute('multiple', true);
+                        input.setAttribute('id', `filterby_${filterName}`);
+
+                        options = [
+                            {value: 'option_1', label: 'First Option'},
+                            {value: 'option_2', label: 'Second Option'},
+                            {value: 'option_3', label: 'Third Option'},
+                        ];
+
+                        filterBlock.appendChild(input);
+                        filtersContainer.appendChild(filterBlock);
+                        populateChoices(`filterby_${filterName}`, options, true, `Select ${filterName}s`);
+                        break;
+                    
+                    case 'select':
+                        input = document.createElement('select');
+                        input.className = 'choices dark:bg-gray-700 dark:text-gray-200';
+                        input.setAttribute('id', `filterby_${filterName}`);
+
+                        options = [
+                            {value: 'option_1', label: 'First Option'},
+                            {value: 'option_2', label: 'Second Option'},
+                            {value: 'option_3', label: 'Third Option'},
+                        ];
+
+                        filterBlock.appendChild(input);
+                        filtersContainer.appendChild(filterBlock);
+                        populateChoices(`filterby_${filterName}`, options, false, `Select a ${filterName}`);
+                        break;
+
+                    case 'date':
+                        input = document.createElement('input');
+                        input.className = 'w-full border-0 dark:bg-gray-700 dark:text-gray-200';
+                        input.setAttribute('id', `filterby_${filterName}`);
+                        input.setAttribute('type', 'date');
+
+                        filterBlock.appendChild(input);
+                        filtersContainer.appendChild(filterBlock);
+                        break;
+                
+                    default:
+                        break;
+                }
+                
+                
+            }
+        });
+});
 </script>
