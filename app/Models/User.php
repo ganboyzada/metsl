@@ -4,17 +4,22 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Collection;
 use Laravel\Fortify\TwoFactorAuthenticatable;
 use Laravel\Jetstream\HasProfilePhoto;
 use Laravel\Sanctum\HasApiTokens;
+use Spatie\Permission\Traits\HasRoles;
+use Illuminate\Database\Eloquent\Relations\belongsToMany;
+use App\Models\Permission;
+use App\Models\Role;
 
 class User extends Authenticatable
 {
     use HasApiTokens;
-
-    /** @use HasFactory<\Database\Factories\UserFactory> */
+    use HasRoles;
     use HasFactory;
     use HasProfilePhoto;
     use Notifiable;
@@ -30,6 +35,8 @@ class User extends Authenticatable
         'email',
         'password',
     ];
+
+protected $guard_name = 'sanctum';
 
     /**
      * The attributes that should be hidden for serialization.
@@ -64,4 +71,36 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    /**
+     *
+     * @return collection
+     */
+    public function userable(): MorphTo
+    {
+        return $this->morphTo();
+    }
+
+    public function projects(): BelongsToMany
+    {
+         return $this->belongsToMany(Project::class, 'projects_users', 'user_id', 'project_id');
+    } 
+
+    public function allRoles()
+    {
+        return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id','role_id')
+            ->withPivot('project_id')
+            ->using(ModelHasRoles::class);
+    }
+
+    public function allPermissions()
+    {
+        return $this->belongsToMany(Permission::class, 'model_has_roles', 'model_id','permission_id')
+            ->withPivot('project_id')
+            ->using(ModelHasRoles::class);
+    }
+
+    protected function getDefaultGuardName(): string { return 'sanctum'; }
+
+
 }

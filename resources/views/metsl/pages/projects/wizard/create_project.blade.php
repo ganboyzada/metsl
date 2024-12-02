@@ -11,6 +11,7 @@
 @section('content')
 <div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
 <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
+<div class="container mx-auto p-6 bg-white dark:bg-gray-900 dark:text-gray-100 rounded-lg shadow-md">
 
 <div class="container mx-auto p-6 bg-white dark:bg-gray-900 dark:text-gray-100  shadow-md">
     <!-- Progress Indicator -->
@@ -47,7 +48,7 @@
                 <div>
                     <div class="mb-4">
                         <label for="projectName" class="block font-medium text-gray-700 dark:text-gray-200">Project Name</label>
-                        <input type="text" name="name" id="projectName" class="mt-1 block w-full  shadow-sm dark:bg-gray-800 dark:text-gray-200" required>
+                        <input type="text" name="name" id="name" class="mt-1 block w-full  shadow-sm dark:bg-gray-800 dark:text-gray-200" required>
                     </div>
                     <div class="mb-4">
                         <label for="description" class="block font-medium text-gray-700 dark:text-gray-200">Project Description</label>
@@ -76,7 +77,7 @@
                                 <p class="mb-2 text-sm text-gray-500 dark:text-gray-400"><span class="font-semibold">Click to upload</span> or drag and drop</p>
                                 <p class="text-xs text-gray-500 dark:text-gray-400">SVG, PNG, JPG, GIF (max. 5MB)</p>
                             </div>
-                            <input id="file-upload" name="docs[]" accept="image/*" type="file" class="hidden" multiple  onchange="loadFiles(event)">
+                            <input id="file-upload" name="docs[]" accept="image/*" type="file" class="hidden" multiple>
                         </label>
 
                         <!-- File List -->
@@ -107,7 +108,7 @@
                 </div>
                 
             </div>
-        
+
             <button type="button" onclick="showStep(2); sendValueToReviewTab();" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Next</button>
         </div>
 
@@ -166,7 +167,7 @@
             <button type="button" onclick="showStep(3)" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Next</button>
         </div>
 
-       
+
         <!-- Step 3: Role Assignment -->
         <div id="step3" class="wizard-step hidden">
             <h2 class="text-2xl font-semibold mb-4">Role Assignment</h2>
@@ -183,7 +184,7 @@
 
         </div>
 
-      
+        
         {{--
         <!-- Step 4: Additional Settings -->
         <div id="step4" class="wizard-step hidden">
@@ -201,108 +202,108 @@
 
             <!-- Display summary of project details -->
             <button type="button" onclick="showStep(3)" class="bg-gray-500 text-white px-4 py-2 rounded mt-4 mr-2">Back</button>
-            <button type="submit"id="submit_project_form" class="bg-green-500 text-white px-4 py-2 rounded mt-4">Submit Project</button>
+            <button type="submit"  class="bg-green-500 text-white px-4 py-2 rounded mt-4">Submit Project</button>
         </div>
-    </form>
-            <!-- Overlay Modal for Creating New User -->
-            <div id="createUserModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-                <div class="bg-white dark:bg-gray-800  p-6 w-full max-w-md">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Create New User</h3>
-                    <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
-    
-    
-                    <form id="createUserForm"   enctype="multipart/form-data">
-                        @csrf
-                        <input type="hidden" id="user_type" name="user_type">
-                        <input type="hidden" id="user_index" name="user_index">
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">image</label>
-                            <input type="file" name="image" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" >
-                        </div>                    
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Name</label>
-                            <input type="text" name="first_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Surname</label>
-                            <input type="text" name="last_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Mobile Phone</label>
-                            <input type="text" name="mobile_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Office Phone</label>
-                            <input type="text" name="office_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Email (Login Credential)</label>
-                            <input type="email" name="email" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Specialty</label>
-                            <input type="text" name="specialty" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                        </div>
-                        <div class="flex justify-end mt-6">
-                            <button type="button" onclick="closeCreateUserModal()" class="text-gray-600 dark:text-gray-300 mr-3">Cancel</button>
-                            <button type="submit" id="submitBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Create User</button>
-                        </div>
-                    </form>
-                </div>
+    </form> 
+        <!-- Overlay Modal for Creating New User -->
+        <div id="createUserModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+            <div class="bg-white dark:bg-gray-800  p-6 w-full max-w-md">
+                <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Create New User</h3>
+                <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
+
+
+                <form id="createUserForm"   enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" id="user_type" name="user_type">
+                    <input type="hidden" id="user_index" name="user_index">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">image</label>
+                        <input type="file" name="image" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" >
+                    </div>                    
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Name</label>
+                        <input type="text" name="first_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Surname</label>
+                        <input type="text" name="last_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Mobile Phone</label>
+                        <input type="text" name="mobile_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Office Phone</label>
+                        <input type="text" name="office_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Email (Login Credential)</label>
+                        <input type="email" name="email" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Specialty</label>
+                        <input type="text" name="specialty" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                    </div>
+                    <div class="flex justify-end mt-6">
+                        <button type="button" onclick="closeCreateUserModal()" class="text-gray-600 dark:text-gray-300 mr-3">Cancel</button>
+                        <button type="submit" id="submitBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Create User</button>
+                    </div>
+                </form>
             </div>
-    
-    
-            
-            <!-- Role Assignment Modal -->
-            <div id="roleAssignmentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-                <div class="bg-white dark:bg-gray-800  p-6 w-full max-w-lg">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200" id="modalStakeholderName">Assign Role to Stakeholder</h3>
-    
-                    <!-- Role Assignment Form -->
-                    <form id="roleAssignmentForm" onsubmit="saveRoleAssignment(event)">
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Custom Role Name</label>
-                            <input type="text" id="customRoleName" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" placeholder="Enter custom role name (optional)" disabled>
-                        </div>
-    
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Select Preset Role</label>
-                            <select id="presetRoleSelect" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" onchange="applyPresetRole()">
-                                <option value="">Choose a preset role...</option>
-                                @if($roles->count() > 0)
-                                    @foreach($roles as $role)                               
-                                        <option value="{{ $role->name }}">{{ $role->name }}</option>                                                      
-                                    @endforeach
-                                @endif
-    
-                                <!-- Add more roles as needed -->
-                            </select>
-                        </div>
-    
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Custom Permissions</label>
-                            <div class="grid grid-cols-2 gap-2">
-                                @if($permissions->count() > 0)
-                                @foreach($permissions as $permission)   
-                                    <label class="inline-flex items-center">
-                                        <input type="checkbox" value="{{  $permission->name }}" class="form-checkbox text-blue-600 dark:text-blue-300 mr-2" 
-                                        onchange="handleCustomPermissions()"> {{  $permission->name }}
-                                    </label>                                                        
+        </div>
+
+
+        
+        <!-- Role Assignment Modal -->
+        <div id="roleAssignmentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+            <div class="bg-white dark:bg-gray-800 rounded-lg p-6 w-full max-w-lg">
+                <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200" id="modalStakeholderName">Assign Role to Stakeholder</h3>
+
+                <!-- Role Assignment Form -->
+                <form id="roleAssignmentForm" onsubmit="saveRoleAssignment(event)">
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Custom Role Name</label>
+                        <input type="text" id="customRoleName" class="w-full px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-gray-200" placeholder="Enter custom role name (optional)" disabled>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Select Preset Role</label>
+                        <select id="presetRoleSelect" class="w-full px-4 py-2 border rounded-md dark:bg-gray-700 dark:text-gray-200" onchange="applyPresetRole()">
+                            <option value="">Choose a preset role...</option>
+                            @if($roles->count() > 0)
+                                @foreach($roles as $role)                               
+                                    <option value="{{ $role->name }}">{{ $role->name }}</option>                                                      
                                 @endforeach
-                                @endif
-    
-    
-                            
-                            </div>
+                            @endif
+
+                            <!-- Add more roles as needed -->
+                        </select>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Custom Permissions</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            @if($permissions->count() > 0)
+                            @foreach($permissions as $permission)   
+                                <label class="inline-flex items-center">
+                                    <input type="checkbox" value="{{  $permission->name }}" class="form-checkbox text-blue-600 dark:text-blue-300 mr-2" 
+                                    onchange="handleCustomPermissions()"> {{  $permission->name }}
+                                </label>                                                        
+                            @endforeach
+                            @endif
+
+
+                        
                         </div>
-    
-                        <div class="flex justify-end mt-6">
-                            <button type="button" onclick="closeRoleAssignmentModal()" class="text-gray-600 dark:text-gray-300 mr-3">Cancel</button>
-                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
-                        </div>
-                    </form>
-                </div>
+                    </div>
+
+                    <div class="flex justify-end mt-6">
+                        <button type="button" onclick="closeRoleAssignmentModal()" class="text-gray-600 dark:text-gray-300 mr-3">Cancel</button>
+                        <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+                    </div>
+                </form>
             </div>
+        </div>
 </div>
 
 @endsection
@@ -313,27 +314,8 @@
 
 <!-- JavaScript for Wizard Step Navigation -->
 <script>
-    function loadFiles(event) {
-	    var html = '';
-	    if(event.target.files.length > 0){
-		    for(var i =0; i < event.target.files.length; i++){
-			    var img = URL.createObjectURL(event.target.files[i]);
-                html+=`        <div class="p-4 border  bg-gray-800 border-gray-700 flex items-center justify-between">
-                    <div>
-                        <p class="text-lg font-medium">${event.target.files[i].name}</p>
-                        <p class="text-sm text-gray-400">${(event.target.files[i].size /1024 / 1024).toFixed(2) } MB</p>
-                    </div>
-                    <a href="${img}" target="__blank" class="text-blue-400 hover:underline flex items-center">
-                        <i data-feather="download" class="w-5 h-5 mr-1"></i> Download
-                    </a>
-                </div>`;
-            }
-        }
-        $('#docs').html(html);
-
-    }
     function sendValueToReviewTab(){
-        $('#projectNameReview').html($("[name='name']").val());
+        $('#projectName').html($("[name='name']").val());
         $('#startEndDateLbl').html($("[name='start_date']").val()+' / '+$("[name='end_date']").val());
         $('#ProjectDescription').html(tinyMCE.get('description').getContent());
     }
@@ -386,10 +368,6 @@
 						$('#contractorList').html('');
 						$('#designTeamList').html('');
 						$('#clientList').html('');
-                        $('#projectNameReview').html();
-                        $('#startEndDateLbl').html();
-                        $('#ProjectDescription').html();
-
                     }
                     else if(data.error){
                         $("#submit_project_form").prop('disabled', false);
@@ -663,6 +641,7 @@ const stakeholders = [
 
 ];
 
+
 // Function to render stakeholder grid
 function renderStakeholderGrid() {
     const grid = document.getElementById("stakeholderGrid");
@@ -894,7 +873,6 @@ function renderStakeholderGrid() {
         card.classList.add("bg-gray-100", "dark:bg-gray-700", "", "p-4", "shadow-md", "cursor-pointer");
         card.onclick = () => openRoleAssignmentModal(stakeholder);
 
-        // Stakeholder info
         const name = document.createElement("h4");
         name.classList.add("text-lg", "font-semibold", "text-gray-800", "dark:text-gray-200");
         name.textContent = stakeholder.name;
@@ -907,12 +885,10 @@ function renderStakeholderGrid() {
         permissions.classList.add("text-sm", "text-gray-600", "dark:text-gray-400");
         permissions.textContent = stakeholder.permissions.length ? `Permissions: ${stakeholder.permissions.join(", ")}` : "No permissions assigned";
 
-        // Append elements to card
         card.appendChild(name);
         card.appendChild(role);
         card.appendChild(permissions);
 
-        // Append card to grid
         grid.appendChild(card);
     });
     */
@@ -976,6 +952,7 @@ function saveRoleAssignment(event) {
         // Save custom role and permissions to the stakeholder
         currentStakeholder.role = role || "Custom Role";
         currentStakeholder.permissions = permissions;
+  
     }
 
     closeRoleAssignmentModal();
@@ -993,6 +970,10 @@ function capitalize(word) {
 
 // Initialize the grid on page load
 document.addEventListener("DOMContentLoaded", renderStakeholderGrid);
+
+
+
+
 </script>
 
 @endpush

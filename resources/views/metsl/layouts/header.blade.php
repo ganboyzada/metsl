@@ -9,7 +9,7 @@
             <div class="has-dropdown relative inline-block text-left z-10">
                 <!-- Dropdown Toggle Button -->
                 <button class="dropdown-toggle flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-800">
-                    <span id="selected-project" class="flex flex-col items-start text-xs mr-2 font-medium">Projects <b>Bridgex Construction</b></span>
+                    <span id="selected-project" class="flex flex-col items-start text-xs mr-2 font-medium">{{  $projects[($projects->count() - 1)]?->name ?? ''  }}</span>
                     <i data-feather="chevron-down"></i>
                 </button>
 
@@ -17,15 +17,14 @@
                 <div class="dropdown absolute left-0 mt-2 w-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg hidden">
                     <ul class="py-2">
                         <!-- List of Projects (Replace these with dynamic content) -->
-                        <li>
-                            <button class="block w-full text-left px-4 py-2 hover:bg-black/10">Project A</button>
-                        </li>
-                        <li>
-                            <button class="block w-full text-left px-4 py-2 hover:bg-black/10">Project B</button>
-                        </li>
-                        <li>
-                            <button class="block w-full text-left px-4 py-2 hover:bg-black/10">Project C</button>
-                        </li>
+						 @if($projects->count() > 0) 
+                            @foreach($projects as $project)
+
+                                <li>
+                                    <button onclick="selectProject('{{ $project->name }}')" class="block w-full text-left px-4 py-2 hover:bg-black/10">{{ $project->name }}</button>
+                                </li>
+                            @endforeach
+                        @endif
 
                         <li class="px-3 pt-2">
                         <a href="{{ route('projects') }}" class="inline-flex w-full text-center px-3 py-1 bg-gray-600 hover:bg-blue-700 text-white font-medium">

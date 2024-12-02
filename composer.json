@@ -6,13 +6,18 @@
     "license": "MIT",
     "require": {
         "php": "^8.2",
+        "ajcastro/eager-load-pivot-relations": "^0.3.0",
+        "genealabs/laravel-pivot-events": "*",		
         "laravel/framework": "^11.9",
         "laravel/jetstream": "^5.3",
         "laravel/sanctum": "^4.0",
         "laravel/tinker": "^2.9",
-        "livewire/livewire": "^3.0"
+        "livewire/livewire": "^3.0",
+        "spatie/laravel-permission": "^6.10"		
     },
     "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.14",
+        "beyondcode/laravel-query-detector": "^2.0",		
         "fakerphp/faker": "^1.23",
         "laravel/pail": "^1.1",
         "laravel/pint": "^1.13",

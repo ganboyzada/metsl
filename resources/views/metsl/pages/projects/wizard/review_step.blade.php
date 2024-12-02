@@ -7,15 +7,15 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         <div>
             <p class="text-sm text-gray-400">Project Name</p>
-            <p class="text-lg font-medium">New Building Construction</p>
+            <p class="text-lg font-medium" id="projectNameReview">New Building Construction</p>
         </div>
         <div>
             <p class="text-sm text-gray-400">Project Timeline</p>
-            <p class="text-lg font-medium">01/01/2024 - 12/31/2024</p>
+            <p class="text-lg font-medium" id="startEndDateLbl">01/01/2024 - 12/31/2024</p>
         </div>
         <div class="md:col-span-2">
             <p class="text-sm text-gray-400">Project Description</p>
-            <p class="text-lg font-medium">
+            <p class="text-lg font-medium" id="ProjectDescription">
                 This project involves the construction of a multi-story commercial building with
                 advanced features and facilities.
             </p>
@@ -27,7 +27,7 @@
         <i data-feather="users" class="w-6 h-6 mr-2 text-green-500"></i>
         Stakeholders
     </h2>
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
+    <div  id="Stakeholders" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
         <!-- Stakeholder Card -->
         <div class="p-4 border  bg-gray-800 border-gray-700">
             <div class="flex items-center mb-4">
@@ -73,24 +73,7 @@
         <i data-feather="file-text" class="w-6 h-6 mr-2 text-orange-500"></i>
         Project Documents
     </h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8">
-        <div class="p-4 border  bg-gray-800 border-gray-700 flex items-center justify-between">
-            <div>
-                <p class="text-lg font-medium">Blueprint.pdf</p>
-                <p class="text-sm text-gray-400">2.3 MB</p>
-            </div>
-            <a href="#" class="text-blue-400 hover:underline flex items-center">
-                <i data-feather="download" class="w-5 h-5 mr-1"></i> Download
-            </a>
-        </div>
-        <div class="p-4 border  bg-gray-800 border-gray-700 flex items-center justify-between">
-            <div>
-                <p class="text-lg font-medium">Budget.xlsx</p>
-                <p class="text-sm text-gray-400">1.2 MB</p>
-            </div>
-            <a href="#" class="text-blue-400 hover:underline flex items-center">
-                <i data-feather="download" class="w-5 h-5 mr-1"></i> Download
-            </a>
-        </div>
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8" id="docs">
+
     </div>
 </div>

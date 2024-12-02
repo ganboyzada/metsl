@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ProjectController;
+
 
 Route::middleware([
     'auth:sanctum',
@@ -16,7 +18,6 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
-    Route::view('/projects', 'metsl.pages.projects.projects')->name('projects');
 
     Route::get('/project/{id}', function ($id) {
         return view('metsl.pages.projects.project'); // The view file for the company detail page
@@ -31,5 +32,7 @@ Route::middleware([
     Route::view('/project/meetings/create', 'metsl.pages.meeting-minutes.create')->name('projects.meetings.create');
     Route::view('/project/meetings/view', 'metsl.pages.meeting-minutes.view')->name('projects.meetings.view');
 
-    Route::view('/create-project', 'metsl.pages.projects.wizard.project-wizard')->name('projects.create');
-});
+    Route::post('/project/store', action: [ProjectController::class, "store"])->name('projects.store');
+    Route::get('/projects',action: [ProjectController::class, "allProjects"] )->name('projects');
+    Route::get('/create-project',action: [ProjectController::class, "create"] )->name('projects.create');
+    Route::post('/project/users/store', action: [ProjectController::class, "store_user"])->name('projects.users.store');});

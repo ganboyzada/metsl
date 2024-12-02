@@ -23,55 +23,18 @@
 
     <!-- Responsive Grid for Companies -->
     <div id="companyGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
+	    @if($projects->count() > 0) 
+			@foreach($projects as $project)
+			<a href="{{ route('projects.find', ['id' => $project->id]) }}" class="company-card bg-gray-100 dark:bg-gray-800 dark:text-gray-100 shadow  p-5 flex flex-col">
+				<img src="{{ $project->logo }}" alt="Company Logo" class="mb-4">
+				<h3 class="text-lg font-semibold">{{ $project->name }}</h3>
+				<p class="text-sm text-gray-600 dark:text-gray-300">{{ $project->description }}</p>
+			</a>
+			@endforeach
+		@endif
         <!-- Company Cards -->
-        <a href="{{ route('projects.find', ['id' => 1]) }}" class="company-card bg-gray-100 dark:bg-gray-800 dark:text-gray-100 shadow  p-5 flex flex-col">
-            <img src="https://via.placeholder.com/100" alt="Company Logo" class="mb-4">
-            <h3 class="text-lg font-semibold">Alpha Builders</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300">Construction & Engineering</p>
-        </a>
-        
-        <a href="{{ route('projects.find', ['id' => 2]) }}" class="company-card bg-gray-100 dark:bg-gray-800 dark:text-gray-100 shadow  p-5 flex flex-col">
-            <img src="https://via.placeholder.com/100" alt="Company Logo" class="mb-4">
-            <h3 class="text-lg font-semibold">Skyline Architects</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300">Architectural Design</p>
-        </a>
-        
-        <a href="{{ route('projects.find', ['id' => 3]) }}" class="company-card bg-gray-100 dark:bg-gray-800 dark:text-gray-100 shadow  p-5 flex flex-col">
-            <img src="https://via.placeholder.com/100" alt="Company Logo" class="mb-4">
-            <h3 class="text-lg font-semibold">GreenEarth Solutions</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300">Environmental Consulting</p>
-        </a>
-        
-        <a href="{{ route('projects.find', ['id' => 4]) }}" class="company-card bg-gray-100 dark:bg-gray-800 dark:text-gray-100 shadow  p-5 flex flex-col">
-            <img src="https://via.placeholder.com/100" alt="Company Logo" class="mb-4">
-            <h3 class="text-lg font-semibold">Urban Developers</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300">Real Estate Development</p>
-        </a>
-        
-        <a href="{{ route('projects.find', ['id' => 5]) }}" class="company-card bg-gray-100 dark:bg-gray-800 dark:text-gray-100 shadow  p-5 flex flex-col">
-            <img src="https://via.placeholder.com/100" alt="Company Logo" class="mb-4">
-            <h3 class="text-lg font-semibold">Steelworks Ltd.</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300">Structural Engineering</p>
-        </a>
-        
-        <a href="{{ route('projects.find', ['id' => 6]) }}" class="company-card bg-gray-100 dark:bg-gray-800 dark:text-gray-100 shadow  p-4 flex flex-col">
-            <img src="https://via.placeholder.com/100" alt="Company Logo" class="mb-4">
-            <h3 class="text-lg font-semibold">SolarRise Energy</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300">Renewable Energy</p>
-        </a>
-        
-        <a href="{{ route('projects.find', ['id' => 7]) }}" class="company-card bg-gray-100 dark:bg-gray-800 dark:text-gray-100 shadow  p-4 flex flex-col">
-            <img src="https://via.placeholder.com/100" alt="Company Logo" class="mb-4">
-            <h3 class="text-lg font-semibold">Precision Surveyors</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300">Land Surveying</p>
-        </a>
-        
-        <a href="{{ route('projects.find', ['id' => 8]) }}" class="company-card bg-gray-100 dark:bg-gray-800 dark:text-gray-100 shadow  p-4 flex flex-col">
-            <img src="https://via.placeholder.com/100" alt="Company Logo" class="mb-4">
-            <h3 class="text-lg font-semibold">EcoConstruct</h3>
-            <p class="text-sm text-gray-600 dark:text-gray-300">Sustainable Construction</p>
-        </a>
-    </div>
+      
+	  </div>
 
     <!-- JavaScript for Filtering -->
     <script>
