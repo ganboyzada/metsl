@@ -8,10 +8,11 @@
                 <input
                     type="text"
                     placeholder="Search"
+					name="search"
                     class="pl-10 pr-4 py-2 border-0 bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
                 />
             </div>
-            <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-200">Add Filter</button>
+            <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-200" onclick="return search()">Add Filter</button>
         </div>
         <!-- Create Button with Dropdown -->
         <div class="has-dropdown relative">
@@ -25,9 +26,17 @@
             <div
                 class="dropdown absolute right-0 mt-2 w-32 bg-gray-800 text-gray-200  shadow-lg hidden"
             >
-                <a href="{{ route('projects.correspondence.create') }}" class="flex px-4 py-2 hover:bg-gray-700"><i class="mr-2" data-feather="info"></i>RFI</a>
-                <a href="{{ route('projects.correspondence.create') }}" class="flex px-4 py-2 hover:bg-gray-700"><i class="mr-2" data-feather="copy"></i>RFV</a>
-                <a href="{{ route('projects.correspondence.create') }}" class="flex px-4 py-2 hover:bg-gray-700"><i class="mr-2" data-feather="refresh-cw"></i>RFC</a>
+                @php
+                $enums_list = \App\Enums\CorrespondenceTypeEnum::cases();
+               // dd($enums_list);
+                @endphp
+                @foreach ($enums_list as $enum)
+                    <a href="{{ url('project/correspondence/create?type='.$enum->value) }}"
+                         class="flex px-4 py-2 hover:bg-gray-700"><i class="mr-2" data-feather="{{$enum->dataFeather()}}"></i>{{$enum->name}}</a>
+
+                @endforeach
+
+          
             </div>
         </div>
     </div>
@@ -55,23 +64,61 @@
 </div>
 
 <script>
+	$(".projectButton").on('click',function(event) {
+		loadedRows = 0;
+		get_correspondences();
+	});
+	
+	async function search(e){
+		loadedRows = 0;
+		const search = $('[name="search"]').val();
+		let fetchRes = await fetch(`{{url('project/correspondence/all?search=${search}')}}`);
+		const all_correspondes = await fetchRes.json();
+		 correspondenceData = all_correspondes.map(function(item) {
+			let namesString = item.assignees.map((user) => `${user.name}`).join(", ");
+			item.assignees = namesString;
+			  return item;
+			});
+			
+		console.log(correspondenceData);
+		await loadRows();
+	}
+        // Populate Assignees, Distribution Members, and Received From
+	let correspondenceData = [];
+	async  function get_correspondences(){
+		const type = $('[name="type"]').val();
+		let fetchRes = await fetch(`{{url('project/correspondence/all')}}`);
+		const all_correspondes = await fetchRes.json();
+		 correspondenceData = all_correspondes.map(function(item) {
+			let namesString = item.assignees.map((user) => `${user.name}`).join(", ");
+			item.assignees = namesString;
+			  return item;
+			});
+			
+		console.log(correspondenceData);
+		await loadRows();
+
+			
+    }
     // Sample data for demonstration
-    const correspondenceData = Array.from({ length: 100 }).map((_, i) => ({
-        number: `CR${i + 1}`,
-        subject: `Subject of Correspondence ${i + 1}`,
-        lastActivity: `2024-0${Math.ceil(Math.random() * 9)}-${Math.ceil(Math.random() * 28)
-            .toString()
-            .padStart(2, '0')}`,
-        assignees: ['John Doe', 'Jane Smith', 'Alice Johnson'][Math.floor(Math.random() * 3)],
-        createdBy: ['Project Manager', 'Contractor'][Math.floor(Math.random() * 2)],
-        issuedOn: `2024-0${Math.ceil(Math.random() * 9)}-${Math.ceil(Math.random() * 28)
-            .toString()
-            .padStart(2, '0')}`,
-        dueDate: `2024-1${Math.ceil(Math.random() * 2)}-${Math.ceil(Math.random() * 28)
-            .toString()
-            .padStart(2, '0')}`,
-        status: ['DRAFT', 'ISSUED', 'OPEN', 'CLOSED'][Math.floor(Math.random() * 4)],
-    }));
+    // const correspondenceData = Array.from({ length: 100 }).map((_, i) => ({
+        // number: `CR${i + 1}`,
+        // subject: `Subject of Correspondence ${i + 1}`,
+        // lastActivity: `2024-0${Math.ceil(Math.random() * 9)}-${Math.ceil(Math.random() * 28)
+            // .toString()
+            // .padStart(2, '0')}`,
+        // assignees: ['John Doe', 'Jane Smith', 'Alice Johnson'][Math.floor(Math.random() * 3)],
+        // createdBy: ['Project Manager', 'Contractor'][Math.floor(Math.random() * 2)],
+        // issuedOn: `2024-0${Math.ceil(Math.random() * 9)}-${Math.ceil(Math.random() * 28)
+            // .toString()
+            // .padStart(2, '0')}`,
+        // dueDate: `2024-1${Math.ceil(Math.random() * 2)}-${Math.ceil(Math.random() * 28)
+            // .toString()
+            // .padStart(2, '0')}`,
+        // status: ['DRAFT', 'ISSUED', 'OPEN', 'CLOSED'][Math.floor(Math.random() * 4)],
+    // }));
+
+// console.log(correspondenceData);
 
     const tableBody = document.getElementById('table-body');
     let loadedRows = 0;
@@ -80,33 +127,35 @@
     function loadRows() {
         const rowsToLoad = 20;
         const fragment = document.createDocumentFragment();
-        for (let i = loadedRows; i < Math.min(loadedRows + rowsToLoad, correspondenceData.length); i++) {
-            const row = correspondenceData[i];
-            const tr = document.createElement('tr');
-            tr.classList.add('border-b','dark:border-gray-800','hover:shadow-lg','hover:bg-gray-100','hover:dark:bg-gray-700');
+		//alert(correspondenceData.length);
+		if(correspondenceData.length > 0){
+			document.getElementById('table-body').innerHTML='';
+			for (let i = loadedRows; i < Math.min(loadedRows + rowsToLoad, correspondenceData.length); i++) {
+				
+				const row = correspondenceData[i];
+				const tr = document.createElement('tr');
+				tr.classList.add('border-b','dark:border-gray-800','hover:shadow-lg','hover:bg-gray-100','hover:dark:bg-gray-700');
+				let url = "{{ route('projects.correspondence.view', [':id']) }}".replace(':id', row.id);
 
-            tr.innerHTML = `
-                <td class="px-6 py-3">${row.number}</td>
-                <td class="px-6 py-3"><a class="underline" href="{{ route('projects.correspondence.view') }}">${row.subject}</a></td>
-                <td class="px-6 py-3">${row.lastActivity}</td>
-                <td class="px-6 py-3">${row.assignees}</td>
-                <td class="px-6 py-3">${row.createdBy}</td>
-                <td class="px-6 py-3">${row.issuedOn}</td>
-                <td class="px-6 py-3">${row.dueDate}</td>
-                <td class="px-6 py-3">
-                    <span class="px-3 py-1 rounded-full text-xs ${
-                        row.status === 'OPEN'
-                            ? 'bg-blue-500 text-white'
-                            : row.status === 'CLOSED'
-                            ? 'bg-green-500 text-white'
-                            : row.status === 'DRAFT'
-                            ? 'bg-gray-300 text-black'
-                            : 'bg-yellow-500 text-black'
-                    }">${row.status}</span>
-                </td>
-            `;
-            fragment.appendChild(tr);
-        }
+				tr.innerHTML = `
+					<td class="px-6 py-3">${row.number}</td>
+					<td class="px-6 py-3"><a class="underline" href="${url}">${row.subject}</a></td>
+					<td class="px-6 py-3"></td>
+					<td class="px-6 py-3">${row.assignees}</td>
+					<td class="px-6 py-3">${(row.created_by != null) ? row.created_by.name : ''}</td>
+					<td class="px-6 py-3">${row.created_date}</td>
+					<td class="px-6 py-3">${row.recieved_date ?? ''}</td>
+					<td class="px-6 py-3">
+						<span class="px-3 py-1 rounded-full text-xs  ${row.status_color[1]}">${row.status_color[0]}</span>
+					</td>
+				`;
+				fragment.appendChild(tr);
+			}
+		}else{
+			document.getElementById('table-body').innerHTML='';
+		}
+			console.log(fragment);
+		
         tableBody.appendChild(fragment);
         loadedRows += rowsToLoad;
     }
@@ -120,5 +169,5 @@
     });
 
     // Initial load
-    loadRows();
+    //loadRows();
 </script>

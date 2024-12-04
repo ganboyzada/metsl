@@ -9,19 +9,19 @@
             <div class="has-dropdown relative inline-block text-left z-10">
                 <!-- Dropdown Toggle Button -->
                 <button class="dropdown-toggle flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-800">
-                    <span id="selected-project" class="flex flex-col items-start text-xs mr-2 font-medium">{{  $projects[($projects->count() - 1)]?->name ?? ''  }}</span>
+                    <span id="selected-project" class="flex flex-col items-start text-xs mr-2 font-medium">{{  session('projectName')  }}</span>
                     <i data-feather="chevron-down"></i>
                 </button>
 
                 <!-- Dropdown Menu -->
-                <div class="dropdown absolute left-0 mt-2 w-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg hidden">
+                <div  id="dropdown-toggle" class="dropdown absolute left-0 mt-2 w-full bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg hidden">
                     <ul class="py-2">
                         <!-- List of Projects (Replace these with dynamic content) -->
 						 @if($projects->count() > 0) 
                             @foreach($projects as $project)
 
                                 <li>
-                                    <button onclick="selectProject('{{ $project->name }}')" class="block w-full text-left px-4 py-2 hover:bg-black/10">{{ $project->name }}</button>
+                                    <button onclick="selectProject('{{ $project->name }}' , '{{ $project->id }}')" class="block w-full text-left px-4 py-2 hover:bg-black/10 projectButton">{{ $project->name }}</button>
                                 </li>
                             @endforeach
                         @endif
@@ -111,7 +111,6 @@
             </div>
         </div>
     </div>
-
     <script>
         // Full Screen Toggle Function
         function toggleFullScreen() {
@@ -172,12 +171,22 @@
             }
         });
 
-
-        function selectProject(projectName) {
+ 
+        function selectProject(projectName , projectId) {
             const selectedProjectElement = document.getElementById("selected-project");
             selectedProjectElement.textContent = projectName; // Update the displayed project name
-            toggleDropdown(); // Close the dropdown after selection
+            const dropdown = document.getElementById('dropdown-toggle');
+            dropdown.classList.toggle('hidden');
+            //alert(projectId);
+            $.ajax({
+                url: "{{ route('projects.store_id_session') }}",
+                data: { projectID: projectId ,  projectName:projectName}
+            });  
+            //toggleDropdown(); // Close the dropdown after selection
         }
+		
+ 	
+		
     </script>
     </div>
 </header>

@@ -11,7 +11,7 @@ class ModelHasPermissions extends Pivot
 
     public function permission()
     {
-        return $this->belongsTo(Permission::class, 'role_id');
+        return $this->belongsTo(Permission::class, 'permission_id');
     }
 
     public function project()

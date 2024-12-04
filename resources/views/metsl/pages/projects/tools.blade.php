@@ -9,7 +9,7 @@
     <!-- Dropdown Menu -->
     <div class="dropdown absolute left-0 mt-2 w-max bg-gray-800 text-gray-200 shadow-lg hidden">
         <div data-tabs="project-tools" class="grid grid-cols-1 tab-links bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg text-left">
-            <button data-tab="correspondence" class="py-3 px-4">
+            <button data-tab="correspondence" class="py-3 px-4" onclick="get_correspondences()">
                 <i data-feather="repeat" class="mr-2"></i> Correspondence
             </button>
             <button data-tab="documents" class="py-3 px-4">

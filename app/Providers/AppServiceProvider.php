@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
-use Illuminate\Support\ServiceProvider;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Response;
+use Illuminate\Support\Facades\Cookie;
+use Illuminate\Support\ServiceProvider;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -21,8 +24,18 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        \View::share('projects', \App\Models\Project::all());
-        Model::preventLazyLoading();
+
+
+        $all_projects = \App\Models\Project::get(['id' , 'name']);
+        if(isset($all_projects[($all_projects->count() - 1)]->id)){
+            $id= $all_projects[($all_projects->count() - 1)]->id;
+
+        }
+
+      
+        
+        \View::share('projects', $all_projects);
+       // Model::preventLazyLoading();
 
         //
     }

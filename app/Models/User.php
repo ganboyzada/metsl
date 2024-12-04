@@ -15,6 +15,7 @@ use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Database\Eloquent\Relations\belongsToMany;
 use App\Models\Permission;
 use App\Models\Role;
+use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
 
 class User extends Authenticatable
 {
@@ -24,6 +25,7 @@ class User extends Authenticatable
     use HasProfilePhoto;
     use Notifiable;
     use TwoFactorAuthenticatable;
+    use EagerLoadPivotTrait;
 
     /**
      * The attributes that are mass assignable.
@@ -95,9 +97,9 @@ protected $guard_name = 'sanctum';
 
     public function allPermissions()
     {
-        return $this->belongsToMany(Permission::class, 'model_has_roles', 'model_id','permission_id')
+        return $this->belongsToMany(Permission::class, 'model_has_permissions', 'model_id','permission_id')
             ->withPivot('project_id')
-            ->using(ModelHasRoles::class);
+            ->using(ModelHasPermissions::class);
     }
 
     protected function getDefaultGuardName(): string { return 'sanctum'; }

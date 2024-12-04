@@ -19,10 +19,6 @@ class ProjectService
     {
         \DB::beginTransaction();
         try {
-
-
-
-
             if(isset($data['logo']) && $data['logo'] != NULL){
                 $file = $data['logo'];
                 $fileName = md5(time()).'.'.$file->extension();            
@@ -44,7 +40,7 @@ class ProjectService
             }
 
 
-            if($data['docs']){
+            if(isset($data['docs'])){
                 $this->projectFileService->createBulkFiles($model->id , $data);
 
 

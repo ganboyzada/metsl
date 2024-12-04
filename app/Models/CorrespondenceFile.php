@@ -10,7 +10,7 @@ use App\Models\Role;
 
 class CorrespondenceFile extends Model
 {
-    protected $table = 'projects_users';
+    protected $table = 'correspondence_files';
 
 
     public function correspondence(): BelongsTo

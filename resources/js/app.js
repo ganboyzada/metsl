@@ -138,7 +138,42 @@ const populateChoices = (selector, options, multiple=false, placeholder=null) =>
     });
 };
 
+let assignees_obj = {};
+let distribution_obj = {};
+let received_obj = {};
+
+const populateChoices2 = (selector, options, multiple=false, placeholder=null) => {
+    let  obj = new Choices(`#${selector}`, {
+        searchEnabled: true,
+        //choices:options,
+        itemSelectText: '',
+        removeItemButton: multiple, // Allow multiple for Assignees & Distribution, single for Received From
+        placeholderValue: placeholder ? placeholder : `Select ${selector.replace('-', ' ')}`,
+    });	
+    if(selector == 'assignees'){
+        assignees_obj = obj;
+        assignees_obj.setChoices(options);
+        return assignees_obj;
+     
+    }else if(selector == 'distribution'){
+        distribution_obj = obj;
+        distribution_obj.setChoices(options);
+        return distribution_obj;
+    }else{  
+        received_obj = obj;
+        received_obj.setChoices(options);
+        return received_obj;
+    }    
+  
+
+};
+
+
 window.populateChoices = populateChoices;
+window.populateChoices2 = populateChoices2;
+window.assignees_obj = assignees_obj;
+window.distribution_obj = distribution_obj;
+window.received_obj = received_obj;
 
 
 

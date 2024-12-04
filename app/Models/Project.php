@@ -15,11 +15,14 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use App\Mail\StakholderEmail;
 use GeneaLabs\LaravelPivotEvents\Traits\PivotEventTrait;
+use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
+
 
 
 class Project extends Model
 {
     use PivotEventTrait;
+    use EagerLoadPivotTrait;
     protected $table = 'projects';
    // protected $with = ['contractors']; 
 
@@ -89,39 +92,40 @@ class Project extends Model
 
     public function stakholders(): BelongsToMany
     {
-         return $this->belongsToMany(User::class, 'projects_users', 'project_id', 'user_id');
-    }     
+        return $this->belongsToMany(User::class, 'projects_users', 'project_id', 'user_id');
+    }  
 
-    public function clients(): MorphToMany
+	public function clients(): BelongsToMany
     {
-        return $this->morphedByMany(Client::class, 'projectable');
-    }
- 
-    /**
-     * Get all of the videos that are assigned this tag.
-     */
-	public function contractors(): MorphToMany
+        return $this->belongsToMany(User::class, 'projects_users', 'project_id', 'user_id')->where('userable_type','App\Models\Client');
+    } 
+		
+	public function contractors(): BelongsToMany
     {
-        return $this->morphedByMany(Contractor::class, 'projectable');
+        return $this->belongsToMany(User::class, 'projects_users', 'project_id', 'user_id')->where('userable_type','App\Models\Contractor');
+    } 	
+    
+    public function files(): HasMany
+    {
+        return $this->hasMany(ProjectFile::class);
     }
 
-    public function designTeams(): MorphToMany
+    public function correspondences(): HasMany
     {
-        return $this->morphedByMany(DesignTeam::class, 'projectable');
-    }
- 
-    /**
-     * Get all of the videos that are assigned this tag.
-     */
-	public function projectMangers(): MorphToMany
+        return $this->hasMany(Correspondence::class);
+    } 
+
+
+    public function designTeams(): BelongsToMany
     {
-        return $this->morphedByMany(ProjectManager::class, 'projectable');
-    }
+        return $this->belongsToMany(User::class, 'projects_users', 'project_id', 'user_id')->where('userable_type','App\Models\DesignTeam');
+    } 
+
+	public function projectMangers(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'projects_users', 'project_id', 'user_id')->where('userable_type','App\Models\ProjectManager');
+    } 
 	
-	public function projectables(): HasMany
-	{
-		return $this->HasMany(Projectable::class, 'project_id');
-	}
 	
 	 public function usersViaRole() {
         return $this->belongsToMany(User::class, 'model_has_roles', 'project_id','model_id')

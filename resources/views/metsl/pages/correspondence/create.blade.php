@@ -3,11 +3,19 @@
 @section('title', 'Correspondence - Create')
 
 @section('content')
+<div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
+<div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
+
 <div class="p-6 bg-white dark:bg-gray-900 dark:text-gray-200  shadow-md">
     <h2 class="text-2xl font-semibold mb-6">Create Correspondence</h2>
 
     <!-- Form -->
-    <form id="correspondence-form" class="space-y-6">
+    <form id="correspondence-form" class="space-y-6"  method="POST" enctype="multipart/form-data">
+	@csrf
+		<input type="hidden" value="{{$id}}" name="project_id"/>
+		<input type="hidden" value="{{$type}}" name="type"/>
+		<input type="hidden" value="{{$reply_correspondence_id}}" name="reply_correspondence_id"/>
+		
         <!-- Grid Layout for Fields -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <!-- Number -->
@@ -16,6 +24,7 @@
                 <input
                     id="correspondence-number"
                     type="text"
+					name="number"
                     placeholder="RFI-001"
                     class="w-full px-4 py-2 border  dark:bg-gray-800 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
                 />
@@ -26,6 +35,7 @@
                 <label for="subject" class="block text-sm font-medium mb-1">Subject</label>
                 <input
                     id="subject"
+					name="subject"
                     type="text"
                     placeholder="Enter subject"
                     class="w-full px-4 py-2 border  dark:bg-gray-800 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
@@ -36,13 +46,15 @@
             <div>
                 <label for="status" class="block text-sm font-medium mb-1">Status</label>
                 <select
-                    id="status"
+                    id="status" name="status"
                     class="w-full px-4 py-2 border  dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
                 >
-                    <option value="Draft">Draft</option>
-                    <option value="Issued">Issued</option>
-                    <option value="Open">Open</option>
-                    <option value="Closed">Closed</option>
+					@php
+					$status_list = \App\Enums\CorrespondenceStatusEnum::cases();
+					@endphp
+					@foreach ($status_list as $status)
+						<option value="{{$status->value}}">{{$status->name}}</option>
+					@endforeach
                 </select>
             </div>
 
@@ -51,12 +63,16 @@
                 <label for="programme-impact" class="block text-sm font-medium mb-1">Programme Impact</label>
                 <select
                     id="programme-impact"
+					name="program_impact"
                     class="w-full px-4 py-2 border  dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
                 >
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                    <option value="TBD">TBD</option>
-                    <option value="N/A">N/A</option>
+					@php
+					$enums_list = \App\Enums\CorrespondenceProgrammImpactEnum::cases();
+					@endphp
+					@foreach ($enums_list as $enum)
+						<option value="{{$enum->value}}">{{$enum->name}}</option>
+					@endforeach
+
                 </select>
             </div>
 
@@ -65,32 +81,42 @@
                 <label for="cost-impact" class="block text-sm font-medium mb-1">Cost Impact</label>
                 <select
                     id="cost-impact"
+					name="cost_impact"
                     class="w-full px-4 py-2 border  dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
                 >
-                    <option value="Yes">Yes</option>
-                    <option value="No">No</option>
-                    <option value="TBD">TBD</option>
-                    <option value="N/A">N/A</option>
+					@php
+					$enums_list = \App\Enums\CorrespondenceCostImpactEnum::cases();
+					@endphp
+					@foreach ($enums_list as $enum)
+						<option value="{{$enum->value}}">{{$enum->name}}</option>
+					@endforeach
                 </select>
             </div>
 
             <!-- Assignees -->
             <div class="relative">
                 <label for="assignees" class="block text-sm font-medium mb-1">Assignees</label>
-                <select id="assignees" multiple class="w-full"></select>
+                <select id="assignees" name="assignees[]" multiple class="w-full"></select>
             </div>
 
             <!-- Distribution Members -->
             <div class="relative">
                 <label for="distribution" class="block text-sm font-medium mb-1">Distribution Members</label>
-                <select id="distribution" multiple class="w-full"></select>
+                <select id="distribution" name="distribution[]" multiple class="w-full"></select>
             </div>
 
             <!-- Received From -->
             <div class="relative">
                 <label for="received-from" class="block text-sm font-medium mb-1">Received From</label>
-                <select id="received-from" class="w-full"></select>
+                <select id="received-from" name="recieved_from" class="w-full"></select>
             </div>
+			
+            <div class="relative">
+                <label for="received-date" class="block text-sm font-medium mb-1">Received Date</label>
+                <input type="date" id="received-date" name="recieved_date" 
+				class="w-full px-4 py-2 border  dark:bg-gray-800 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
+				>
+            </div>			
         </div>
 
         <div class="grid md:grid-cols-2 gap-6">
@@ -98,6 +124,7 @@
                 <label for="description" class="block mb-1">Description</label>
                 <textarea
                     id="description"
+					name="description"
                     placeholder="Enter correspondence description"
                     class="w-full px-4 py-2 border  dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
                 ></textarea>
@@ -110,7 +137,7 @@
                         <p class="text-sm text-gray-500">Click to upload or drag and drop</p>
                         <p class="text-xs text-gray-500">PDF only (max. 5MB)</p>
                     </div>
-                    <input id="file-upload" type="file" class="hidden" accept=".pdf" multiple>
+                    <input id="file-upload"  name="docs[]"  type="file" name="" class="docs hidden" accept=".pdf" multiple>
                 </div>
                 <ul id="file-list" class="mt-4 space-y-2">
                     <!-- Uploaded files will appear here -->
@@ -120,31 +147,158 @@
 
         <!-- Submit Button -->
         <div class="flex justify-end">
-            <button type="submit" class="px-6 py-2 bg-blue-500 text-white  hover:bg-blue-600">Create Correspondence</button>
+            <button type="submit"  id="submit_correspondence_form" class="px-6 py-2 bg-blue-500 text-white  hover:bg-blue-600">Create Correspondence</button>
         </div>
     </form>
 </div>
 
 <script>
+ $("#correspondence-form").on("submit", function(event) {
+        const form = document.getElementById("correspondence-form");
+        const formData = new FormData(form); 
+    
+            $('.error').hide();
+            $('.success').hide();
+            $('.err-msg').hide();
+            $(".error").html("");
+            $(".success").html("");
+            event.preventDefault();  
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ route('projects.correspondence.store') }}",
+                type: "POST",
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                cache: false,
+                beforeSend: function() {
+                    $("#submit_correspondence_form").prop('disabled', true);
+                },
+                success: function(data) {
+                    if (data.success) {
+                         
+                        $("#submit_correspondence_form").prop('disabled', false);
+                        
+                        $("#correspondence-form")[0].reset();
+						
+						window.scrollTo(0,0);
+                        $('.success').show();
+                        $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.success+'</div>');  
+						
+                        $('#file-list').html();
+						setInterval(function() {
+							location.reload();
+							}, 3000);
 
 
-    // Example data
-    const assignees = [
-        { value: '1', label: 'John Doe (ACT Orders)' },
-        { value: '2', label: 'Jane Smith (ACT Developments)' },
-        { value: '3', label: 'Michael Brown (MB Architects)' },
-        { value: '4', label: 'Alice Johnson (ACT Orders)' },
-    ];
+                    }
+                    else if(data.error){
+                        $("#submit_correspondence_form").prop('disabled', false);
 
-    // Feather Icons Initialization
-    document.addEventListener('DOMContentLoaded', () => {
+                        $('.error').show();
+                        $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.error+'</div>');
+                    }
+                },
+                error: function (err) {
+                    $.each(err.responseJSON.errors, function(key, value) {
+                            var el = $(document).find('[name="'+key + '"]');
+                            if(el.length == 0){
+                                el = $(document).find('[name="'+key + '[]"]');
+                            }
+                            el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
+                            
+                        });
+
+                        $("#submit_correspondence_form").prop('disabled', false);
+
+
+                }
+            });
+    
+      });
+	  
+
+	$(".projectButton").on('click',function(event) {
+		get_users2();
+	});
+		
+	async  function get_users2(){
+		const type = $('[name="type"]').val();
+		let fetchRes = await fetch(`{{url('project/correspondence/users?type=${type}')}}`);
+		const all_users = await fetchRes.json();
+		$('[name="number"]').val(all_users.next_number);
+		const assignees = all_users.assigned_users.map(function(item) {
+			  return {'value' : item.id , 'label' : item.name};
+			});
+			console.log(assignees);
+			assignees_obj.clearStore();
+			assignees_obj.setChoices(assignees);
+			//populateChoices3('assignees',assignees);
+			
+			const distribution = all_users.destrbution_users.map(function(item) {
+			  return {'value' : item.id , 'label' : item.name};
+			});	
+			//populateChoices3('distribution', distribution);
+			distribution_obj.clearStore();
+			distribution_obj.setChoices(distribution);			
+			
+			const allusers = all_users.users.map(function(item) {
+			  return {'value' : item.id , 'label' : item.name};
+			});	
+			
+			
+			//populateChoices3('received-from', allusers);		
+			received_obj.clearStore();
+			received_obj.setChoices(allusers);
+		
+	}
+			
+    
+	
+
+	
+	get_users();
         // Populate Assignees, Distribution Members, and Received From
-        populateChoices('assignees', assignees, true);
-        populateChoices('distribution', assignees, true);
-        populateChoices('received-from', assignees);
+	async  function get_users(){
+		const type = $('[name="type"]').val();
+		let fetchRes = await fetch(`{{url('project/correspondence/users?type=${type}')}}`);
+		const all_users = await fetchRes.json();
+		$('[name="number"]').val(all_users.next_number);
+			const assignees = all_users.assigned_users.map(function(item) {
+			  return {'value' : item.id , 'label' : item.name};
+			});
+						console.log(assignees);
+
+			
+			assignees_obj = populateChoices2('assignees', assignees, true);
+		
+			const distribution = all_users.destrbution_users.map(function(item) {
+			  return {'value' : item.id , 'label' : item.name};
+			});	
+			distribution_obj = populateChoices2('distribution', distribution, true);
+			
+			
+			const allusers = all_users.users.map(function(item) {
+			  return {'value' : item.id , 'label' : item.name};
+			});	
+
+			received_obj = populateChoices2('received-from', allusers,false);
 
         feather.replace();
-    });
+			
+    }
+	
+
+
+
+    // document.addEventListener('DOMContentLoaded', () => {
+
+    // });
 
     // Attachments logic
     const dropZone = document.getElementById('drop-zone');

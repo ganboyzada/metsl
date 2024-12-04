@@ -24,7 +24,7 @@ class DesignTeamRepository extends BaseRepository implements DesignTeamRepositor
 
     /**
     * @param integer $id 
-    * @return DesignTeam
+    * @return Model
     */
     public function projects_of_design_team($id) :Model
     {

@@ -5,16 +5,14 @@ use App\Model\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
-interface DesignTeamRepositoryInterface
+interface CorrespondenceFileRepositoryInterface
 {
-
     /**
-    *  @param integer $id 
-    * @return Model
+    * @param array $data
+    * @return bool
     */
 
-    public function projects_of_design_team($id): Model;
-
+    public function create_bulk_files($data): bool;
 
     /**
     * @param integer $id

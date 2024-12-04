@@ -62,5 +62,40 @@ class UserService
         return $this->userRepository->create_role_permisions_set_of_user($project_id , $all_stakholders);
     }
 
+    public function getUsersOfProjectID($project_id){
+        $assignUsersArr = [];
+        $users = $this->userRepository->get_users_of_project($project_id);
+        foreach($users as $user){
+            $permisions = $user->allPermissions->filter(
+                function ($permission) use($project_id) {
+                    if($permission->pivot->project->id == $project_id && $permission->name == 'assign correspondence'){
+                       
+                        return true;
+                    }
+                    
+                })->all();
+            if(count($permisions) > 0 ){
+                $assignUsersArr[] = $user;
+            }    
+        }
+    
+        $distrbutionUsersArr = [];
+        foreach($users as $user){
+            $permisions = $user->allPermissions->filter(
+                function ($permission) use($project_id) {
+                    if($permission->pivot->project->id == $project_id && $permission->name == 'Distribution Members correspondence'){
+                       
+                        return true;
+                    }
+                    
+                })->all();
+            if(count($permisions) > 0 ){
+                $distrbutionUsersArr[] = $user;
+            }    
+        }
+
+        return ['assignUsers'=> $assignUsersArr, 'distrbutionUsers'=> $distrbutionUsersArr, 'users'=> $users];
+
+    }
 
 }

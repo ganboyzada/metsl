@@ -41,7 +41,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                         $role = Role::create(['name' =>  $row->role]);                    
                         $role->syncPermissions($row->permissions);  
                     }
-                    $user = User::find($row->id);       
+                    $user = $this->find($row->id);       
 
                     $user->roles()->attach($role->id, ['project_id'=>$project_id]);
                     
@@ -51,13 +51,29 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
                 
             }
+            
             //$project_name = 'asd2';
             //$m = \Mail::to('marina3mad100@gmail.com')->send(new StakholderEmail($project_name));               
-            $project =  $this->find($project_id);
+            $project =  Project::find($project_id);
             $project->stakholders()->sync($users);
+
+           // dd('ok');
         }
         //throw new \Exception('eror');
-    }  
+    } 
+    
+    /**
+     * @param int $project_id
+    * @return Collection
+    */    
+    public function get_users_of_project($project_id): Collection
+    {
+        return $this->model->whereHas('projects', function ($query) use ($project_id) {
+            $query->where(function ($q) use ($project_id) {
+                $q->where('projects.id',$project_id);
+            });
+        })->with('allPermissions.pivot.project')->get(['id', 'name']);
+    }
 
 
   

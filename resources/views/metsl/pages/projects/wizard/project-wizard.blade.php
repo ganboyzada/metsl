@@ -308,7 +308,6 @@
 @endsection
 
 @push('js')
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 
 
 <!-- JavaScript for Wizard Step Navigation -->
@@ -378,9 +377,10 @@
                         
                         $("#projectWizard")[0].reset();
 						
-
+						window.scrollTo(0,0);
                         $('.success').show();
                         $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.success+'</div>');  
+						$('#file-list').html('');
 						$('#stakeholderGrid').html('');
 						$('#projectManagerList').html('');
 						$('#contractorList').html('');
@@ -389,6 +389,12 @@
                         $('#projectNameReview').html();
                         $('#startEndDateLbl').html();
                         $('#ProjectDescription').html();
+                        $('#Stakeholders').html();
+                        $('#docs').html();
+						setInterval(function() {
+							location.reload();
+							}, 3000);
+
 
                     }
                     else if(data.error){

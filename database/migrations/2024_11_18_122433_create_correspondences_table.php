@@ -13,16 +13,34 @@ return new class extends Migration
     {
         Schema::create('correspondences', function (Blueprint $table) {
             $table->id();
-			$table->string('number')->nullable();
-			$table->string('subject')->nullable();
-			$table->integer('private')->default(0);
+			$table->string('number')->nullable()->index();
+			$table->string('subject')->nullable()->index();
+			$table->char('type')->nullable();
 			$table->char('status')->nullable();
 			$table->char('program_impact')->nullable();
 			$table->char('cost_impact')->nullable();
 			$table->longText('description')->nullable();
-			$table->integer('distribution_member')->nullable();
-			$table->integer('recieved_from')->nullable();	
+
+            $table->unsignedBiginteger('recieved_from')->unsigned();
+            $table->foreign('recieved_from')->references('id')
+                 ->on('users')->onDelete('cascade');
+
+            $table->date('created_date')->nullable();
 			$table->date('recieved_date')->nullable();
+
+            $table->unsignedBiginteger('project_id')->unsigned();
+            $table->foreign('project_id')->references('id')
+                 ->on('projects')->onDelete('cascade');
+
+            $table->unsignedBiginteger('created_by')->unsigned();
+            $table->foreign('created_by')->references('id')
+                ->on('users')->onDelete('cascade');
+
+            $table->integer('reply_correspondence_id')->nullable();    
+
+
+
+            $table->unique(['number' , 'subject']);     
 			
             $table->timestamps();
         });

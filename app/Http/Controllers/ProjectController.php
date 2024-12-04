@@ -5,6 +5,10 @@ namespace App\Http\Controllers;
 use App\Http\Requests\ProjectRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\Contractor;
+use App\Models\Permission;
+use App\Models\Project;
+use App\Models\Role;
+use App\Models\User;
 use App\Services\ClientService;
 use App\Services\CompanyService;
 use App\Services\ContractorService;
@@ -15,9 +19,8 @@ use App\Services\UserService;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
-use App\Models\Permission;
-use App\Models\Role;
 use View;
 
 
@@ -35,6 +38,21 @@ class ProjectController extends Controller
     {
     }
 
+    public function detail(Request $request){
+        $project = $this->projectService->find($request->id);
+        if (Session::has('projectID') && Session::has('projectName')){
+            $id = Session::get('projectID');
+        }    
+        return view('metsl.pages.projects.project', get_defined_vars());
+
+    }
+    public function storeIdSession(Request $request){
+         session(['projectID' => $request->projectID]);
+         session(['projectName' => $request->projectName]);
+
+        return $request->session()->all();
+    }
+
     public function allProjects(){
         $projects = $this->projectService->all();
 
@@ -42,7 +60,7 @@ class ProjectController extends Controller
         return view('metsl.pages.projects.projects', get_defined_vars());
     }
 
-    public function create(){
+    public function create(Request $request){
         //$proj = \App\Models\Project::where('id' , 3)->with('stakholders.roles')->first();
         //$proj = \App\Models\User::where('id' , 3)->with('roles.pivot.project')->first();
        // $proj = \App\Models\Project::where('id' , 3)->with('usersViaRole')->first();
@@ -55,6 +73,10 @@ class ProjectController extends Controller
         //print('<pre>');
         //$user  = \App\Models\User::where('id' , 3)->with('userable')->first();
         //dd($user->userable);
+		
+		
+		//$proj = Project::with('contractors')->where('id',6)->first();
+		//return $proj;
         $clients = $this->clientService->all();
         $contractors = $this->contractorService->all();
         //dd($contractors[0]->user->id);

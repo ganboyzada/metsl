@@ -4,13 +4,25 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
-use Illuminate\Database\Eloquent\Relations\MorphToMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
+
 class Client extends Model
 {
     protected $table = 'clients';
 
     protected $fillable = ['first_name', 'last_name','user_name','email','mobile_phone','office_phone','address','specialty','image'];
+
+    protected function getimageAttribute(): string
+    {
+        if($this->attributes['image'] != NULL){
+            return Storage::url('client'.$this->attributes['id'].'/'.$this->attributes['image']);
+        }else{
+            return asset('images/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.webp');
+        }
+        
+    }
 
     /**
      *
@@ -20,21 +32,11 @@ class Client extends Model
     {
         return $this->morphOne(User::class, 'userable');
     }
-    /**
-     *
-     * @return collection
-     */
-    public function projects(): MorphToMany
-    {
-        return $this->morphToMany(Project::class, 'projectable');
-    }
 
-    /**
-     *
-     * @return collection
-     */
-    public function issues(): MorphToMany
+    public function projects(): BelongsToMany
     {
-        return $this->morphToMany(Issue::class, 'issueable');
-    }
+        return $this->belongsToMany(Project::class, 'projects_users', 'user_id', 'project_id');
+    } 
+
+
 }

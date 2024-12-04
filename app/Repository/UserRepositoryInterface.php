@@ -16,5 +16,9 @@ interface UserRepositoryInterface
     public function create_role_permisions_set_of_user($project_id , $all_stakholders): void; 
     
 
-
+    /**
+     * @param int $project_id
+    * @return Collection
+    */    
+    public function get_users_of_project($project_id): Collection;
 }

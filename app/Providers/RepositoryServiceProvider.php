@@ -5,11 +5,15 @@ namespace App\Providers;
 use App\Repository\ClientRepositoryInterface;
 use App\Repository\CompanyRepositoryInterface;
 use App\Repository\ContractorRepositoryInterface;
+use App\Repository\CorrespondenceFileRepositoryInterface;
+use App\Repository\CorrespondenceRepositoryInterface;
 use App\Repository\DesignTeamRepositoryInterface;
 use App\Repository\Eloquent\BaseRepository;
 use App\Repository\Eloquent\ClientRepository;
 use App\Repository\Eloquent\CompanyRepository;
 use App\Repository\Eloquent\ContractorRepository;
+use App\Repository\Eloquent\CorrespondenceFileRepository;
+use App\Repository\Eloquent\CorrespondenceRepository;
 use App\Repository\Eloquent\DesignTeamRepository;
 use App\Repository\Eloquent\ProjectFileRepository;
 use App\Repository\Eloquent\ProjectManagerRepository;
@@ -23,6 +27,8 @@ use App\Repository\UserRepositoryInterface;
 use App\Services\ClientService;
 use App\Services\CompanyService;
 use App\Services\ContractorService;
+use App\Services\CorrespondenceFileService;
+use App\Services\CorrespondenceService;
 use App\Services\DesignTeamService;
 use App\Services\ProjectFileService;
 use App\Services\ProjectManagerService;
@@ -80,7 +86,26 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ProjectFileRepositoryInterface::class, ProjectFileRepository::class);
         $this->app->bind(ProjectFileService::class, function ($app) {
             return new ProjectFileService($app->make(ProjectFileRepositoryInterface::class));
-        });        
+        });  
+        
+        
+
+        $this->app->bind(CorrespondenceRepositoryInterface::class, CorrespondenceRepository::class);
+        $this->app->bind(CorrespondenceService::class, function ($app) {
+            return new CorrespondenceService(
+                $app->make(CorrespondenceRepositoryInterface::class) ,
+                $app->make(UserService::class) , 
+                $app->make(CorrespondenceFileService::class)
+            );
+        }); 
+
+
+        $this->app->bind(CorrespondenceFileRepositoryInterface::class, CorrespondenceFileRepository::class);
+        $this->app->bind(CorrespondenceFileService::class, function ($app) {
+            return new CorrespondenceFileService($app->make(CorrespondenceFileRepositoryInterface::class));
+        });  
+
+
     }
 
     /**
