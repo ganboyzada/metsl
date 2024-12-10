@@ -39,7 +39,7 @@ class ProjectController extends Controller
     }
 
     public function detail(Request $request){
-        $project = $this->projectService->find($request->id);
+        // $project = $this->projectService->find($request->id);
         if (Session::has('projectID') && Session::has('projectName')){
             $id = Session::get('projectID');
         }    

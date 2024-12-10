@@ -177,6 +177,7 @@
             selectedProjectElement.textContent = projectName; // Update the displayed project name
             const dropdown = document.getElementById('dropdown-toggle');
             dropdown.classList.toggle('hidden');
+			$('[name="project_id"]').val(projectId);
             //alert(projectId);
             $.ajax({
                 url: "{{ route('projects.store_id_session') }}",

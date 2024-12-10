@@ -341,6 +341,8 @@
    $("#projectWizard").on("submit", function(event) {
         const form = document.getElementById("projectWizard");
         const formData = new FormData(form); 
+		formData.append('description',tinyMCE.get('description').getContent());
+
         const all_stakholders = [...contractor_stakeholders,...client_stakeholders ,...designTeam_stakeholders ,...projectManager_stakeholders];
 		//console.log(all_stakholders);
         formData.append('all_stakholders' , JSON.stringify(all_stakholders));

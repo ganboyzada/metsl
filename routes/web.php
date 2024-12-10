@@ -1,8 +1,13 @@
 <?php
 
 use App\Http\Controllers\CorrespondenceController;
+use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\DocumentRevisionController;
+use App\Http\Controllers\MeetingPlaningController;
 use App\Http\Controllers\ProjectController;
 use Illuminate\Support\Facades\Route;
+
+
 
 
 
@@ -39,9 +44,27 @@ Route::middleware([
     Route::get('/project/correspondence/users',  [CorrespondenceController::class, "getUsers"])->name('projects.correspondence.users');	
 
     Route::view('/project/documents', 'metsl.pages.documents.index')->name('projects.documents');
+	Route::get('/project/documents/reviewers',  [DocumentController::class, "getreviewers"])->name('projects.documents.reviewers');	
+	Route::post('/project/documents/store',  [DocumentController::class, "store"])->name('projects.documents.store');
+    Route::get('/project/documents/all',  [DocumentController::class, "ProjectDocuments"])->name('projects.documents.all');
+    
+    Route::get('/project/documents/revisions/update_status',  [DocumentRevisionController::class, "update_status"])->name('projects.documents.revision.update_status');
+	Route::post('/projects/documents/revision/comments/store',  [DocumentRevisionController::class, "store_comment"])->name('projects.documents.revision.comments.store');
+	Route::post('/projects/documents/revision/store',  [DocumentRevisionController::class, "store"])->name('projects.documents.revision.store');
+	Route::get('/project/documents/revisions/comments/{id}',  [DocumentRevisionController::class, "revisionComments"])->name('projects.documents.revisions.comments');
+
+	Route::get('/project/documents/revisions/{id}',  [DocumentController::class, "ProjectDocumentsRevisions"])->name('projects.documents.revisions');
+
+
+
     Route::view('/project/punch-list/create', 'metsl.pages.punch-list.create')->name('projects.punch-list.create');
-    Route::view('/project/meetings/create', 'metsl.pages.meeting-minutes.create')->name('projects.meetings.create');
-    Route::view('/project/meetings/view', 'metsl.pages.meeting-minutes.view')->name('projects.meetings.view');
+	
+	Route::get('/project/meetings/all',  [MeetingPlaningController::class, "ProjectMeeetings"])->name('projects.meetings.all');
+	Route::get('/project/meetings/create',  [MeetingPlaningController::class, "create"])->name(name: 'projects.meetings.create');	
+    Route::get('/project/meetings/participates',  [MeetingPlaningController::class, "getParticipates"])->name('projects.meetings.participates');	
+	Route::post('/project/meetings/store',  [MeetingPlaningController::class, "store"])->name(name: 'projects.meetings.store');	
+
+    Route::view('/project/meetings/view/{id}', 'metsl.pages.meeting-minutes.meeting_minutes')->name('projects.meetings.view');
 
     Route::post('/project/store', action: [ProjectController::class, "store"])->name('projects.store');
 

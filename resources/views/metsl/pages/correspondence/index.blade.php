@@ -66,7 +66,10 @@
 <script>
 	$(".projectButton").on('click',function(event) {
 		loadedRows = 0;
-		get_correspondences();
+		if(localStorage.getItem("project_tool") == 'correspondence'){
+
+			get_correspondences();
+		}
 	});
 	
 	async function search(e){

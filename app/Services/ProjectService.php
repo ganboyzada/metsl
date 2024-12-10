@@ -38,12 +38,8 @@ class ProjectService
                 $file->move(('storage/project'.$model->id.'/'),$model->logo);
 
             }
-
-
             if(isset($data['docs'])){
                 $this->projectFileService->createBulkFiles($model->id , $data);
-
-
             }
             (isset($data['all_stakholders']) && count($data['all_stakholders']) > 0) ? $this->userService->createRolePermissionsOfUser($model->id , $data['all_stakholders']) : '';
              

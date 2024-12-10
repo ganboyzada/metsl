@@ -156,6 +156,7 @@
  $("#correspondence-form").on("submit", function(event) {
         const form = document.getElementById("correspondence-form");
         const formData = new FormData(form); 
+		formData.append('description',tinyMCE.get('description').getContent());
     
             $('.error').hide();
             $('.success').hide();
@@ -224,10 +225,12 @@
 	  
 
 	$(".projectButton").on('click',function(event) {
-		get_users2();
+
+			get_users_changed();
+		
 	});
 		
-	async  function get_users2(){
+	async  function get_users_changed(){
 		const type = $('[name="type"]').val();
 		let fetchRes = await fetch(`{{url('project/correspondence/users?type=${type}')}}`);
 		const all_users = await fetchRes.json();
@@ -258,10 +261,7 @@
 		
 	}
 			
-    
-	
 
-	
 	get_users();
         // Populate Assignees, Distribution Members, and Received From
 	async  function get_users(){

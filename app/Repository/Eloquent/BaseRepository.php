@@ -5,6 +5,7 @@ namespace App\Repository\Eloquent;
 use App\Repository\EloquentRepositoryInterface; 
 use Illuminate\Database\Eloquent\Model;   
 use Illuminate\Support\Collection;
+use  Illuminate\Database\Eloquent\Builder;
 
 class BaseRepository implements EloquentRepositoryInterface
 {     
@@ -28,7 +29,13 @@ class BaseRepository implements EloquentRepositoryInterface
     */
     public function all() {
        // $this->newQuery()->eagerLoadRelations();
-        return $this->model->with($this->with)->get();
+       try{
+            return $this->model->with($this->with)->get();
+
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+        
     }
  
     /**
@@ -38,31 +45,51 @@ class BaseRepository implements EloquentRepositoryInterface
     */
     public function create(array $attributes): Model
     {
-        return $this->model->create($attributes);
+        try{
+            return $this->model->create($attributes);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }    
     }
  
        /**
     * @param array $attributes
     *@param integer $id
-    * @return Model
+    * @return bool
     */
-    public function update(array $attributes , $id): Model
+    public function update(array $attributes , $id): bool
     {
-        return $this->model->create($attributes , $id);
+        try{
+            return $this->model->update($attributes , $id);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }    
     }
     /**
     * @param $id
     * @return Model
     */
-    public function find($id): ?Model
+    public function find($id): Model
     {
-        return $this->model->with($this->with)->find($id);
+        try{
+           $model =  $this->model->with($this->with)->find($id);
+           if(!$model){
+                throw new \Exception('Record not find');
+           }
+           return $model;
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }    
     }
 
      
     public function delete($id)
     {
-        return $this->model->delete($id);
+        try{
+            return $this->model->delete($id);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 
 

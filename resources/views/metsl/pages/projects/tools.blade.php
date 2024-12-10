@@ -9,13 +9,13 @@
     <!-- Dropdown Menu -->
     <div class="dropdown absolute left-0 mt-2 w-max bg-gray-800 text-gray-200 shadow-lg hidden">
         <div data-tabs="project-tools" class="grid grid-cols-1 tab-links bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg text-left">
-            <button data-tab="correspondence" class="py-3 px-4" onclick="get_correspondences()">
+            <button data-tab="correspondence" class="py-3 px-4" onclick="set_in_local_storage('correspondence'); get_correspondences()">
                 <i data-feather="repeat" class="mr-2"></i> Correspondence
             </button>
-            <button data-tab="documents" class="py-3 px-4">
+            <button data-tab="documents" class="py-3 px-4 "  onclick="set_in_local_storage('documents'); get_documents()">
                 <i data-feather="file-text" class="mr-2"></i> Documents
             </button>
-            <button data-tab="meetings" class="active py-3 px-4">
+            <button data-tab="meetings" class="active py-3 px-4"  onclick="set_in_local_storage('meeting_planing'); get_meeting_planing()">
                 <i data-feather="calendar" class="mr-2"></i> Meeting Minutes
             </button>
             <button data-tab="users" class="py-3 px-4">
@@ -35,3 +35,10 @@
         </div>
     </div>
 </div>
+<script>
+localStorage.setItem("project_tool", 'meeting_planing');
+async  function set_in_local_storage(tool){
+  localStorage.setItem("project_tool", tool);
+console.log(localStorage.getItem("project_tool"));  
+}
+</script>

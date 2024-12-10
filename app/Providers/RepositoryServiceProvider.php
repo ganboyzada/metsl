@@ -8,6 +8,7 @@ use App\Repository\ContractorRepositoryInterface;
 use App\Repository\CorrespondenceFileRepositoryInterface;
 use App\Repository\CorrespondenceRepositoryInterface;
 use App\Repository\DesignTeamRepositoryInterface;
+use App\Repository\DocumentRepositoryInterface;
 use App\Repository\Eloquent\BaseRepository;
 use App\Repository\Eloquent\ClientRepository;
 use App\Repository\Eloquent\CompanyRepository;
@@ -15,11 +16,20 @@ use App\Repository\Eloquent\ContractorRepository;
 use App\Repository\Eloquent\CorrespondenceFileRepository;
 use App\Repository\Eloquent\CorrespondenceRepository;
 use App\Repository\Eloquent\DesignTeamRepository;
+use App\Repository\Eloquent\DocumentRepository;
+use App\Repository\Eloquent\MeetingPlaningFilesRepository;
+use App\Repository\Eloquent\MeetingPlaningRepository;
+use App\Repository\Eloquent\ProjectDocumentFilesRepository;
+use App\Repository\Eloquent\ProjectDocumentRevisionsRepository;
 use App\Repository\Eloquent\ProjectFileRepository;
 use App\Repository\Eloquent\ProjectManagerRepository;
 use App\Repository\Eloquent\ProjectRepository;
 use App\Repository\Eloquent\UserRepository;
 use App\Repository\EloquentRepositoryInterface;
+use App\Repository\MeetingPlaningFilesRepositoryInterface;
+use App\Repository\MeetingPlaningRepositoryInterface;
+use App\Repository\ProjectDocumentFilesRepositoryInterface;
+use App\Repository\ProjectDocumentRevisionsRepositoryInterface;
 use App\Repository\ProjectFileRepositoryInterface;
 use App\Repository\ProjectManagerRepositoryInterface;
 use App\Repository\ProjectRepositoryInterface;
@@ -30,6 +40,11 @@ use App\Services\ContractorService;
 use App\Services\CorrespondenceFileService;
 use App\Services\CorrespondenceService;
 use App\Services\DesignTeamService;
+use App\Services\DocumentService;
+use App\Services\MeetingPlaningFilesService;
+use App\Services\MeetingPlaningService;
+use App\Services\ProjectDocumentFilesService;
+use App\Services\ProjectDocumentRevisionsService;
 use App\Services\ProjectFileService;
 use App\Services\ProjectManagerService;
 use App\Services\ProjectService;
@@ -105,6 +120,47 @@ class RepositoryServiceProvider extends ServiceProvider
             return new CorrespondenceFileService($app->make(CorrespondenceFileRepositoryInterface::class));
         });  
 
+        $this->app->bind(DocumentRepositoryInterface::class, DocumentRepository::class);
+        $this->app->bind(DocumentService::class, function ($app) {
+            return new DocumentService(
+                $app->make(DocumentRepositoryInterface::class),
+                $app->make(UserService::class) ,  
+                $app->make(ProjectDocumentFilesService::class),
+
+                
+            );
+        });
+        
+        
+        
+        $this->app->bind(ProjectDocumentFilesRepositoryInterface::class, ProjectDocumentFilesRepository::class);
+        $this->app->bind(ProjectDocumentFilesService::class, function ($app) {
+            return new ProjectDocumentFilesService($app->make(ProjectDocumentFilesRepositoryInterface::class));
+        });
+
+        $this->app->bind(ProjectDocumentRevisionsRepositoryInterface::class, ProjectDocumentRevisionsRepository::class);
+        $this->app->bind(ProjectDocumentRevisionsService::class, function ($app) {
+            return new ProjectDocumentRevisionsService($app->make(ProjectDocumentRevisionsRepositoryInterface::class));
+        }); 
+        
+        
+
+        $this->app->bind(MeetingPlaningRepositoryInterface::class, MeetingPlaningRepository::class);
+        $this->app->bind(MeetingPlaningService::class, function ($app) {
+            return new MeetingPlaningService(
+                $app->make(MeetingPlaningRepositoryInterface::class),
+                $app->make(UserService::class) ,  
+                $app->make(MeetingPlaningFilesService::class),
+
+                
+            );
+        }); 
+        
+        
+        $this->app->bind(MeetingPlaningFilesRepositoryInterface::class, MeetingPlaningFilesRepository::class);
+        $this->app->bind(MeetingPlaningFilesService::class, function ($app) {
+            return new MeetingPlaningFilesService($app->make(MeetingPlaningFilesRepositoryInterface::class));
+        });
 
     }
 

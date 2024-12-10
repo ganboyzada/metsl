@@ -81,10 +81,13 @@ class CorrespondenceController extends Controller
 
     public function getUsers(Request $request){
         if (Session::has('projectID') && Session::has('projectName')){
-            $id = Session::get('projectID');           
-            $all = $this->userService->getUsersOfProjectID($id);
-            $assigned_users = $all['assignUsers'];
-            $destrbution_users = $all['distrbutionUsers'];
+            $id = Session::get('projectID');     
+			$all = $this->userService->getUsersOfProjectID($id , '');
+            $assigness = $this->userService->getUsersOfProjectID($id , 'assign correspondence');
+			$distributions = $this->userService->getUsersOfProjectID($id , 'Distribution Members correspondence');
+			
+            $assigned_users = $assigness['users'];
+            $destrbution_users = $distributions['users'];
             $users = $all['users'];
             $id = Session::get('projectID');
             $next_number =  $this->correspondenceService->getNextNumber($request->type , $id);

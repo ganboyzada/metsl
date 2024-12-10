@@ -41,6 +41,9 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
     */
     public function add_users_to_correspondence($data , $correspondence): void
     {
+        if(!$correspondence){
+            throw new \Exception('Record not find'); 
+        }
         $correspondence->assignees()->sync($data['assignees']);
         $correspondence->DistributionMembers()->sync($data['distribution']);
        // dd('ok');
