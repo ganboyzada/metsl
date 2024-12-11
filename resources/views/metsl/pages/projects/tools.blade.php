@@ -36,9 +36,15 @@
     </div>
 </div>
 <script>
-localStorage.setItem("project_tool", 'meeting_planing');
+
+//localStorage.setItem("project_tool", 'meeting_planing');
 async  function set_in_local_storage(tool){
   localStorage.setItem("project_tool", tool);
-console.log(localStorage.getItem("project_tool"));  
+
+  if(localStorage.getItem("project_tool") == 'documents'){
+    get_reviewers();
+  }
+
+
 }
 </script>

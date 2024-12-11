@@ -28,7 +28,11 @@ class MeetingPlaningFilesRepository extends BaseRepository implements MeetingPla
 
     public function create_bulk_files($data): bool
     {
-        return $this->model->insert($data);
+        try{
+            return $this->model->insert($data);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }            
     }
    /**
     * @param integer $id

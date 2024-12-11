@@ -10,8 +10,10 @@
                 <i data-feather="x" class="w-5 h-5"></i>
             </button>
         </div>
-		<div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
-		<div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
+		<div id="success_div" class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden"></div>
+		<div id="error_div" class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden">
+			<div class= "px-2 py-1 text-sm font-semibold">error occurred</div>
+		</div>
         <!-- Revisions Table -->
         <table class="w-full text-sm text-left text-gray-600 dark:text-gray-300">
             <thead>
@@ -53,16 +55,28 @@
 
 <!-- Trigger Script -->
 <script>
+	async function update_status(id , status){
+		let url = 	`{{url('project/documents/revisions/update_status?id=${id}&status=${status}')}}`	;
+		let newurl = url.replace('amp;','');
+		let fetchRes = await fetch(newurl);
+		if(fetchRes.status != 200){
+			$('#error_div').show();
+			//$('#error_div').css('display','block !important');
+                   
+			
+		}
+		get_revisions(current_document_id);
+	}
     $("#commentWizard").on("submit", function(event) {
             const form = document.getElementById("commentWizard");
             const formData = new FormData(form); 
             formData.append('comment',tinyMCE.get('comment').getContent());
 
-                $('.error').hide();
-                $('.success').hide();
+                $('#error_div').hide();
+                $('#success_div').hide();
                 $('.err-msg').hide();
-                $(".error").html("");
-                $(".success").html("");
+                //$("#error_div").html("");
+                $("#success_div").html("");
                 event.preventDefault();  
                 $.ajaxSetup({
                     headers: {
@@ -89,14 +103,14 @@
                             document.getElementById('comment-box').classList.toggle('hidden');
                             
                             window.scrollTo(0,0);
-                            $('.success').show();
-                            $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.success+'</div>');
+                            $('#success_div').show();
+                            $('#success_div').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.success+'</div>');
                         }
                         else if(data.error){
                             $(".submit_revision_form").prop('disabled', false);
 
-                            $('.error').show();
-                            $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.error+'</div>');
+                            $('#error_div').show();
+                            $('#error_div').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.error+'</div>');
                         }
                     },
                     error: function (err) {

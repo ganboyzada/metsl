@@ -62,13 +62,7 @@
 		}
 	});	
 	
-	async function update_status(id , status){
-		let url = 	`{{url('project/documents/revisions/update_status?id=${id}&status=${status}')}}`	;
-		let newurl = url.replace('amp;','');
-		let fetchRes = await fetch(newurl);
-		
-		get_revisions(current_document_id);
-	}
+
 	
 	async function get_revisions(id){
 		current_document_id = id;
@@ -76,6 +70,11 @@
 		$('.success').hide();
 		$(".error").html("");
 		$(".success").html("");
+	
+		//$('#error_div').hide();
+		$('#success_div').hide();
+		//$("#error_div").html("");
+		$("#success_div").html("");
 		let url = 	`{{url('project/documents/revisions/${id}')}}`	;
 		let fetchRes = await fetch(url);
 		let revisions = await fetchRes.json();

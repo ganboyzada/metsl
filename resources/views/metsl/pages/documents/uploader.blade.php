@@ -177,7 +177,7 @@
 	}
 			
 
-	get_reviewers();
+	//get_reviewers();
 	async  function get_reviewers(){
 		if(localStorage.getItem("project_tool") == 'documents'){
 

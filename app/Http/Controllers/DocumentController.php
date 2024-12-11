@@ -68,7 +68,7 @@ class DocumentController extends Controller
     public function getreviewers(Request $request){
         if (Session::has('projectID') && Session::has('projectName')){
             $id = Session::get('projectID');     
-            $reviewers = $this->userService->getUsersOfProjectID($id , 'to review documents');
+            $reviewers = $this->userService->getUsersOfProjectID($id , '');
 			
             $users = $reviewers['users'];
 

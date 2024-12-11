@@ -61,6 +61,12 @@
     </div>
 </div>
 <script>
+	$(".projectButton").on('click',function(event) {
+		if(localStorage.getItem("project_tool") == 'meeting_planing' || localStorage.getItem("project_tool") == ''){
+
+			get_meeting_planing();
+		}
+	});
 	$("#search , #start-date , #end-date",).on('input',function(event) {
 		get_meeting_planing();
 	});
