@@ -11,6 +11,7 @@ window.$ = $;
 window.feather = feather;
 
 $(document).ready(function() {
+    getLocalStorage();
     feather.replace({ 'stroke-width': 1 });
 
     $('.tab-links button').click(function() {
@@ -103,6 +104,44 @@ function handleFiles(files) {
     });
 }
 
+function getLocalStorage(){
+    $('.tab-links button').removeClass('active');
+    if(!$(".tab-content").hasClass("hidden")){
+        $(".tab-content").addClass("hidden");
+    }
+
+    if(localStorage.getItem("project_tool") == 'documents'){
+        $('.current-selected').html('Documents');
+        $('.tab-content#documents').removeClass('hidden');
+        $("[data-tab='documents']").addClass("active");
+        
+        
+    }
+    else if(localStorage.getItem("project_tool") == 'correspondence'){
+        $('.current-selected').html('Correspondence');	
+        $('.tab-content#correspondence').removeClass('hidden');
+        $("[data-tab='correspondence']").addClass("active");
+
+    }
+    else if(localStorage.getItem("project_tool") == 'meeting_planing'){
+        $('.current-selected').html('Meeting Minutes');
+        $('.tab-content#meetings').removeClass('hidden');
+        $("[data-tab='meetings']").addClass("active");
+
+    }
+    else if(localStorage.getItem("project_tool") == 'punch_list'){
+        $('.current-selected').html('Punch List');
+        $('.tab-content#punch-list').removeClass('hidden');
+        $("[data-tab='punch-list']").addClass("active");
+    }
+    else if(localStorage.getItem("project_tool") == 'stakeholders'){
+        $('.current-selected').html('Stakeholders');
+        $("[data-tab='users']").addClass("active");
+
+    }
+
+}
+
 function toggleModal(modalId, action) {
     const modal = document.getElementById(modalId);
     if (!modal) {
@@ -120,6 +159,12 @@ function toggleModal(modalId, action) {
 }
 
 window.toggleModal = toggleModal;
+
+function convertToLowerCase() {
+    var input = 'MARINA';
+    alert(input.toLowerCase());
+}
+window.convertToLowerCase = convertToLowerCase;
 
 // Use Choices.js for dropdowns
 const populateChoices = (selector, options, multiple=false, placeholder=null) => {
@@ -144,6 +189,7 @@ let received_obj = {};
 let reviewers_obj = {};
 
 const populateChoices2 = (selector, options, multiple=false, placeholder=null) => {
+    //alert('ok');
     let  obj = new Choices(`#${selector}`, {
         searchEnabled: true,
         //choices:options,
@@ -151,25 +197,11 @@ const populateChoices2 = (selector, options, multiple=false, placeholder=null) =
         removeItemButton: multiple, // Allow multiple for Assignees & Distribution, single for Received From
         placeholderValue: placeholder ? placeholder : `Select ${selector.replace('-', ' ')}`,
     });	
-    if(selector == 'assignees'){
-        assignees_obj = obj;
-        assignees_obj.setChoices(options);
-        return assignees_obj;
-     
-    }else if(selector == 'distribution'){
-        distribution_obj = obj;
-        distribution_obj.setChoices(options);
-        return distribution_obj;
-    }else if(selector == 'reviewers'){
-        reviewers_obj = obj;
-        reviewers_obj.setChoices(options);
-        return reviewers_obj;
-    }
-	else{  
+  
         received_obj = obj;
         received_obj.setChoices(options);
         return received_obj;
-    }    
+       
   
 
 };
@@ -177,12 +209,8 @@ const populateChoices2 = (selector, options, multiple=false, placeholder=null) =
 
 window.populateChoices = populateChoices;
 window.populateChoices2 = populateChoices2;
-window.assignees_obj = assignees_obj;
-window.distribution_obj = distribution_obj;
 window.received_obj = received_obj;
-window.reviewers_obj = reviewers_obj;
-
-
+window.getLocalStorage = getLocalStorage;
 
 
 

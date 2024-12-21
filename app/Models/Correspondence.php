@@ -42,7 +42,7 @@ class Correspondence extends Model
 
     } 
 
-    public function DistributionMembers(): belongsToMany
+    public function distributionMembers(): belongsToMany
     {
         return $this->belongsToMany(User::class, 'correspondence_distribution_members', 'correspondence_id', 'user_id')
         ->using(CorrespondenceDistributionMembers::class);

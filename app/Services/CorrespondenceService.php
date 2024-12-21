@@ -51,14 +51,39 @@ class CorrespondenceService
         return $correspondence;
     }
 
-    public function update(array $data, $id)
+    public function update(array $data)
     {
-        return $this->correspondenceRepository->update($data, $id);
+        
+        \DB::beginTransaction();
+        try {
+            $project_id = $data['project_id'];
+            $id = $data['id'];
+
+            $this->correspondenceRepository->update($data , $id);
+            $correspondence = $this->correspondenceRepository->find($data['id']);
+            $this->correspondenceRepository->add_users_to_correspondence($data,$correspondence );
+            $path = Storage::url('/project'.$data['project_id'].'/correspondence'.$correspondence->id);
+            
+            \File::makeDirectory($path, $mode = 0777, true, true);        
+
+            if(isset($data['docs'])){
+                $this->correspondenceFileService->createBulkFiles($data['project_id'],$correspondence->id , $data);
+            }           
+            \DB::commit();
+        } catch (\Exception $e) {
+            \DB::rollback();
+            throw new \Exception($e->getMessage());
+        }
+        return $correspondence;
     }
 
     public function delete($id)
     {
-        return $this->correspondenceRepository->delete($id);
+        try{
+            return $this->correspondenceRepository->delete($id);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 
     public function all()
@@ -75,7 +100,15 @@ class CorrespondenceService
 
     public function find($id)
     {
-        return $this->correspondenceRepository->with(['assignees:id,name,userable_id,userable_type' , 'DistributionMembers:id,name,userable_id,userable_type', 'ReceivedFrom:id,name,userable_id,userable_type','ReceivedFrom.userable:id,image' ,'assignees.userable:id,image','DistributionMembers.userable:id,image', 'files:id,correspondence_id,file'])->find($id);
+        return $this->correspondenceRepository->with([
+            'assignees:id,name' ,
+            //'assignees.userable:id,image' , 
+        'distributionMembers:id,name',
+        //'distributionMembers.userable:id,image',
+         'ReceivedFrom:id,name',
+         //'ReceivedFrom.userable:id,image', 
+         
+         'files:id,correspondence_id,file,size'])->find($id);
         
     }
     public function getAllProjectCorrespondence($project_id , $request){

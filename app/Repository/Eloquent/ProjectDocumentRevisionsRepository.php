@@ -59,7 +59,7 @@ class ProjectDocumentRevisionsRepository extends BaseRepository implements Proje
     * @return Model
     */
     public function get_revision_comments($id): Model{
-         return $this->with(['comments:revision_id,user_id,comment', 'comments.user:id,name'])->find($id);
+         return $this->model->with(['comments:revision_id,user_id,comment', 'comments.user:id,name'])->find($id);
          
     }
 

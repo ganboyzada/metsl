@@ -60,7 +60,7 @@ class BaseRepository implements EloquentRepositoryInterface
     public function update(array $attributes , $id): bool
     {
         try{
-            return $this->model->update($attributes , $id);
+            return $this->model->find($id)->update($attributes );
         }catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }    
@@ -83,14 +83,16 @@ class BaseRepository implements EloquentRepositoryInterface
     }
 
      
+     
     public function delete($id)
     {
         try{
-            return $this->model->delete($id);
+            return $this->model->find($id)->delete();
         }catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
     }
+
 
 
     public function with($relations) {

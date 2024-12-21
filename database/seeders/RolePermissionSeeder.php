@@ -22,7 +22,7 @@ class RolePermissionSeeder extends Seeder
         $permission = Permission::create(['name' => 'assign correspondence','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
 
-        $permission = Permission::create(['name' => 'distribution Members correspondence','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'distribution members correspondence','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
         
         $permission = Permission::create(['name' => 'view  all RFI correspondence','guard_name' => 'sanctum']);
@@ -44,7 +44,7 @@ class RolePermissionSeeder extends Seeder
         $role->givePermissionTo($permission);
 
 
-        $permission = Permission::create(['name' => 'to review documents','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'review documents','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
 		
 		
@@ -66,9 +66,21 @@ class RolePermissionSeeder extends Seeder
         $permission = Permission::create(['name' => 'add meeting planing','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission); 
 		
-		$permission = Permission::create(['name' => 'to participate meeting planing','guard_name' => 'sanctum']);
+		$permission = Permission::create(['name' => 'participate meeting planing','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission); 
 
- 		
+        $role = Role::create(['name' => 'punch list','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'view all punch list','guard_name' => 'sanctum']);
+        $role->givePermissionTo($permission);
+
+        $permission = Permission::create(['name' => 'add punch list','guard_name' => 'sanctum']);
+        $role->givePermissionTo($permission); 
+		
+		$permission = Permission::create(['name' => 'distribution members punch list','guard_name' => 'sanctum']);
+        $role->givePermissionTo($permission); 
+
+		$permission = Permission::create(['name' => 'responsible punch list','guard_name' => 'sanctum']);
+        $role->givePermissionTo($permission); 
+		
     }
 }

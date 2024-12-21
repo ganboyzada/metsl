@@ -28,7 +28,7 @@ enum  MeetingPlanStatusEnum: int
     {
         return match($this) 
         {
-            self::ONGOING => 'bg-gray-400',
+            self::ONGOING => 'bg-gray-500',
             self::DONE => 'bg-green-500',
             self::CANCELLED => 'bg-red-500',
             self::PLANNED => 'bg-blue-500',

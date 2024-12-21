@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class MeetingPlaningRequest extends FormRequest
+class PunchListRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,16 +26,18 @@ class MeetingPlaningRequest extends FormRequest
             return [
                 'number' => [
                     'required',
-                    Rule::unique('meeting_plans' , 'number')->where(fn ($query) => $query->where('project_id', request()->project_id)->where('id','!=', request()->id))
+                    Rule::unique('punch_lists' , 'number')->where(fn ($query) => $query->where('project_id', request()->project_id)->where('id','!=', request()->id))
                 ],                     
-                'name' => 'required',
-                'link' => ['required','regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
+                'title' => 'required',
                 'location'=>'required',
-                'planned_date'=>'required',
-                'start_time'=>'required',
-                'duration'=>'required',
-                'timezone'=>'required',
-                'purpose'=>'required',
+                'cost_impact'=>'required',
+                'priority'=>'required',
+                'responsible_id'=>'required',
+                'date_notified_at' => 'required|date_format:Y-m-d',
+                'date_resolved_at' => 'required|date_format:Y-m-d',
+                'due_date' => 'required|date_format:Y-m-d',
+                'project_id'=>'required',
+                'description'=>'required',
                 "participates"    => ['required','array'],
                 'docs' => 'nullable',
                 "docs.*"  => ["nullable", "mimes:jpeg,bmp,png,gif,svg,pdf"],
@@ -46,16 +48,18 @@ class MeetingPlaningRequest extends FormRequest
             return [
                 'number' => [
                     'required',
-                    Rule::unique('meeting_plans' , 'number')->where(fn ($query) => $query->where('project_id', request()->project_id))
+                    Rule::unique('punch_lists' , 'number')->where(fn ($query) => $query->where('project_id', request()->project_id))
                 ],                     
-                'name' => 'required',
-                'link' => ['required','regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
+                'title' => 'required',
                 'location'=>'required',
-                'planned_date'=>'required',
-                'start_time'=>'required',
-                'duration'=>'required',
-                'timezone'=>'required',
-                'purpose'=>'required',
+                'cost_impact'=>'required',
+                'priority'=>'required',
+                'responsible_id'=>'required',
+                'date_notified_at' => 'required|date_format:Y-m-d',
+                'date_resolved_at' => 'required|date_format:Y-m-d',
+                'due_date' => 'required|date_format:Y-m-d',
+                'project_id'=>'required',
+                'description'=>'required',
                 "participates"    => ['required','array'],
                 'docs' => 'required',
                 "docs.*"  => ["required", "mimes:jpeg,bmp,png,gif,svg,pdf"],

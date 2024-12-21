@@ -15,13 +15,13 @@
             <button data-tab="documents" class="py-3 px-4 "  onclick="set_in_local_storage('documents'); get_documents()">
                 <i data-feather="file-text" class="mr-2"></i> Documents
             </button>
-            <button data-tab="meetings" class="active py-3 px-4"  onclick="set_in_local_storage('meeting_planing'); get_meeting_planing()">
+            <button data-tab="meetings" class=" py-3 px-4"  onclick="set_in_local_storage('meeting_planing'); get_meeting_planing()">
                 <i data-feather="calendar" class="mr-2"></i> Meeting Minutes
             </button>
-            <button data-tab="users" class="py-3 px-4">
+            <button data-tab="users" class="py-3 px-4" onclick="set_in_local_storage('stakeholders');">
                 <i data-feather="users" class="mr-2"></i> Stakeholders
             </button>
-            <button data-tab="punch-list" class="py-3 px-4">
+            <button data-tab="punch-list" class="py-3 px-4"   onclick="set_in_local_storage('punch_list');">
                 <i data-feather="list" class="mr-2"></i> Punch List
             </button>
             {{--
@@ -36,7 +36,6 @@
     </div>
 </div>
 <script>
-
 //localStorage.setItem("project_tool", 'meeting_planing');
 async  function set_in_local_storage(tool){
   localStorage.setItem("project_tool", tool);

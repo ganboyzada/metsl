@@ -11,6 +11,7 @@ use App\Models\Role;
 class CorrespondenceFile extends Model
 {
     protected $table = 'correspondence_files';
+    protected $fillable = ['file','correspondence_id','type','size'];
 
 
     public function correspondence(): BelongsTo

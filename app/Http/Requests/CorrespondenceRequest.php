@@ -22,31 +22,60 @@ class CorrespondenceRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        if(isset(request()->id)){
+            return [
 
-            'project_id' => ['required', 'integer'],
-            'type' => ['required'],
-            'number' => [
-                'required',
-                Rule::unique('correspondences' , 'number')->where(fn ($query) => $query->where('project_id', request()->project_id))
-            ],
-            'subject' => [
-                'required',
-                Rule::unique('correspondences' , 'subject')->where(fn ($query) => $query->where('project_id', request()->project_id))
-            ],
+                'project_id' => ['required', 'integer'],
+                'type' => ['required'],
+                'number' => [
+                    'required',
+                    Rule::unique('correspondences' , 'number')->where(fn ($query) => $query->where('project_id', request()->project_id)->where('id','!=', request()->id))
+                ],
+                'subject' => [
+                    'required',
+                    Rule::unique('correspondences' , 'subject')->where(fn ($query) => $query->where('project_id', request()->project_id)->where('id','!=', request()->id))
+                ],
 
-            'description' => 'nullable',
-            'status' => 'required',
-            'program_impact' => 'required',
-            'cost_impact' => 'required',
-            "assignees"    => ['required','array'],
-            "distribution"    => ['required','array'],
-            "recieved_from"    => "required",
-            'docs' => 'required',
-            'recieved_date'=>['required']
+                'description' => 'nullable',
+                'status' => 'required',
+                'program_impact' => 'required',
+                'cost_impact' => 'required',
+                "assignees"    => ['required','array'],
+                "distribution"    => ['required','array'],
+                "recieved_from"    => "required",
+                'docs' => 'nullable',
+                'recieved_date'=>['required']
 
-    
-        ]; 
+        
+            ]; 
+        }else{
+            return [
+
+                'project_id' => ['required', 'integer'],
+                'type' => ['required'],
+                'number' => [
+                    'required',
+                    Rule::unique('correspondences' , 'number')->where(fn ($query) => $query->where('project_id', request()->project_id))
+                ],
+                'subject' => [
+                    'required',
+                    Rule::unique('correspondences' , 'subject')->where(fn ($query) => $query->where('project_id', request()->project_id))
+                ],
+
+                'description' => 'nullable',
+                'status' => 'required',
+                'program_impact' => 'required',
+                'cost_impact' => 'required',
+                "assignees"    => ['required','array'],
+                "distribution"    => ['required','array'],
+                "recieved_from"    => "required",
+                'docs' => 'required',
+                'recieved_date'=>['required']
+
+        
+            ]; 
+        }
+
     }
     /**
      * Get custom attributes for validator errors.

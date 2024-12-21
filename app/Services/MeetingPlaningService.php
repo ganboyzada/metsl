@@ -55,9 +55,51 @@ class MeetingPlaningService
     }
 
 
+    public function update(array $data)
+    {
+        \DB::beginTransaction();
+        try {
+            $project_id = $data['project_id'];
+            $id = $data['id'];
+            $this->meetingPlaningRepository->update($data , $id);
+            $modal = $this->meetingPlaningRepository->find($data['id']);
+            $path = Storage::url('/project'.$data['project_id'].'/meeting_planing'.$modal->id);
+            
+            \File::makeDirectory($path, $mode = 0777, true, true);  
+           $users =  $this->meetingPlaningRepository->add_users_to_meeting_planing($data,$modal );
+          // dd($users);
+            if(isset($data['docs'])){
+                
+                $this->meetingPlaningFilesService->createBulkFiles($data['project_id'] , $modal->id ,$data['docs']);
+            }           
+            \DB::commit();
+        } catch (\Exception $e) {
+            \DB::rollback();
+            throw new \Exception($e->getMessage());
+        }
+            
+            
+
+        return $modal;
+    }
+
     public function getAllProjectMeetingPlaning($project_id , $request){
         return $this->meetingPlaningRepository->get_all_project_meeting_planing($project_id , $request);
 
+    }
+
+    public function find($meeting_planing_id){
+        $punch_list =  $this->meetingPlaningRepository->with([ 'users:id' , 'files'])->find($meeting_planing_id);
+        return $punch_list;
+    }
+
+    public function delete($id)
+    {
+        try{
+            return $this->meetingPlaningRepository->delete($id);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 
 }

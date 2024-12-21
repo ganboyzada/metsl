@@ -112,6 +112,5 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
     }
 
     
-  
  
 }

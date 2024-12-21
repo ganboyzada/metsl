@@ -22,7 +22,7 @@ class CorrespondenceFileService
                 Storage::disk('public')->putFileAs($file, 'project'.$project_id.'/correspondence'.$correspondence_id.'/'.$fileName);
 
 
-                return ['file'=>$fileName , 'correspondence_id'=>$correspondence_id , 'type'=>$file->extension()];
+                return ['file'=>$fileName , 'correspondence_id'=>$correspondence_id , 'type'=>$file->extension() , 'size'=>$file->getSize()];
 
             } , $data['docs']);
 
@@ -35,6 +35,16 @@ class CorrespondenceFileService
             throw new \Exception($e->getMessage());
         }            
         return $model;
+    }
+
+
+    public function delete($id)
+    {
+        try{
+            return $this->correspondenceFileRepository->delete($id);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 
 }

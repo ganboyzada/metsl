@@ -188,3 +188,36 @@ h1{
 .tox-tinymce{
     border-radius: 0 !important;
 }
+
+.bg-red-500 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(239 68 68 / var(--tw-bg-opacity));
+}
+
+.bg-yellow-500\/25 {
+    background-color: #eab30840;
+}
+.bg-red-500\/25 {
+    background-color: #ef444440;
+}
+.bg-gray-500\/25 {
+    background-color: #6b728040;
+}
+.bg-gray-400 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(156 163 175 / var(--tw-bg-opacity));
+}
+
+.bg-yellow-500 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(234 179 8 / var(--tw-bg-opacity));
+}
+.rounded-full {
+    border-radius: 9999px;
+}
+.w-3 {
+    width: .75rem;
+}
+.h-3 {
+    height: .75rem;
+}

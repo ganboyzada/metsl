@@ -16,7 +16,7 @@
             <div class="tab-content hidden" id="punch-list">
                 @include('metsl.pages.punch-list.index')
             </div>
-            <div class="tab-content" id="meetings">
+            <div class="tab-content hidden" id="meetings">
                 @include('metsl.pages.meeting-minutes.index')
             </div>
         </div>

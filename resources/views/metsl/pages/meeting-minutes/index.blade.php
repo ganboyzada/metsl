@@ -1,3 +1,6 @@
+<div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
+<div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
+
 <div class="">
     <!-- Page Header -->
     <div class="flex justify-between items-center mb-6">
@@ -52,6 +55,7 @@
                     <th class="px-4 py-2 font-light">Start Time</th>
                     <th class="px-4 py-2 font-light">Participants</th>
                     <th class="px-4 py-2 font-light">Overview</th>
+                    <th class="px-4 py-2 font-light">Action</th>
                 </tr>
             </thead>
             <tbody id="meetings-table">
@@ -62,15 +66,17 @@
 </div>
 <script>
 	$(".projectButton").on('click',function(event) {
-		if(localStorage.getItem("project_tool") == 'meeting_planing' || localStorage.getItem("project_tool") == ''){
+		
+		if(localStorage.getItem("project_tool") == 'meeting_planing'){
 
 			get_meeting_planing();
 		}
 	});
-	$("#search , #start-date , #end-date",).on('input',function(event) {
+	$("#search , #start-date , #end-date").on('input',function(event) {
 		get_meeting_planing();
 	});
 	async function get_meeting_planing(){
+        if(localStorage.getItem("project_tool") == 'meeting_planing'){
 		const search = $('#search').val();
 		const startDate = $('#start-date').val();
 		const endDate = $('#end-date').val();
@@ -88,7 +94,7 @@
 			let html =``;
 			if(all_meetings.length > 0){
 				for(let i=0;i<all_meetings.length;i++){
-					let url = "{{ route('projects.meetings.view', [':id']) }}".replace(':id', all_meetings[i].id);
+					let url = "{{ route('projects.meetings.edit', [':id']) }}".replace(':id', all_meetings[i].id);
 					html+=`<tr class="border-b dark:border-gray-800">
 							<td class="px-4 py-2"><a target="_blank" href="${url}">${all_meetings[i].name}</a></td>
 							<td class="px-4 py-2">${all_meetings[i].number}</td>
@@ -99,14 +105,45 @@
 							<td class="px-4 py-2">${all_meetings[i].start_time}</td>
 							<td class="px-4 py-2">${all_meetings[i].users}</td>
 							<td class="px-4 py-2">${all_meetings[i].purpose}</td>
+                            <td class="px-4 py-2">
+								<button onclick="deleteMeetingPlaning(${all_meetings[i].id})" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
+									<i data-feather="delete" class="w-5 h-5"></i>
+								</button>
+								<a target="_blank" href="${url}" class="text-gray-500 dark:text-gray-400 hover:text-gray-300">
+									<i data-feather="edit" class="w-5 h-5"></i>
+								</a>
+							</td>
 					
 							</tr>`;
 				}
 				
 			}
+            feather.replace();	
 			$('#meetings-table').html(html);
+            feather.replace();	
 			
 		console.log(all_meetings);	
+        }
 	}
+
+    async function deleteMeetingPlaning(id){
+        $('.error').hide(); 
+        $('.success').hide();
+		let url =`project/meetings/destroy/${id}`;		
+		let fetchRes = await fetch(url);
+        if(fetchRes.status != 200){
+            $('.error').show();
+            $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
+
+        }else{
+            console.log(fetchRes);
+            get_meeting_planing();
+            $('.success').show();
+            $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
+        }
+
+
+    }
+
 	get_meeting_planing();
 </script>

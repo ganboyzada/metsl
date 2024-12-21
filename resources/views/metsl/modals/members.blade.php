@@ -35,7 +35,7 @@ function renderUserList() {
 
     userCircle.forEach(user => {
         const li = document.createElement('li');
-        li.classList.add('flex', 'items-center', 'space-x-4', 'p-4', 'border', '', 'bg-gray-100', 'dark:bg-gray-700');
+       // li.classList.add('flex', 'items-center', 'space-x-4', 'p-4', 'border', '', 'bg-gray-100', 'dark:bg-gray-700');
 
         const avatar = document.createElement('div');
         avatar.classList.add('w-10', 'h-10', 'rounded-full', 'bg-blue-500', 'flex', 'items-center', 'justify-center', 'text-white', 'font-semibold');

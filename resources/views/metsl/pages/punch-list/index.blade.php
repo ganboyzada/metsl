@@ -1,17 +1,23 @@
+<div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
+<div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
 <div class="flex gap-4 items-center mb-4">
+
     <!-- Search and Actions -->
     <div class="flex items-center mr-auto">
+	<form id="filter-punch-list-form"  style = "display: flex;
+    flex-wrap: wrap;" method="GET" >
         <div class="relative mr-4">
             <i data-feather="search" stroke-width=2 class="absolute left-2 top-2 text-gray-700 dark:text-gray-300"></i>
             <input
-                type="text"
+				id="search_punsh_list"
+                type="text" name="search"
                 placeholder="Search"
                 class="pl-10 pr-4 py-2 border-0 bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
             />
         </div>
         
         <div class="has-dropdown relative inline-block mr-2">
-            <button class="dropdown-toggle p-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-200 flex items-center">
+            <button type="button" class="dropdown-toggle p-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-200 flex items-center">
                 <i data-feather="filter" class="mr-2"></i>Filters
             </button>
 
@@ -19,7 +25,7 @@
             <div id="filter-dropdown" class="dropdown hidden absolute mt-2 z-10 bg-white dark:bg-gray-800 shadow-lg w-52">
                 <ul class="divide-y divide-gray-200 dark:divide-gray-700">
                     <li>
-                        <button
+                        <button  type="button"
                             class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                             data-filter="assignee" data-filter-type="multi-select"
                         >
@@ -27,7 +33,7 @@
                         </button>
                     </li>
                     <li>
-                        <button
+                        <button  type="button"
                             class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                             data-filter="closed_by" data-filter-type="multi-select"
                         >
@@ -35,23 +41,16 @@
                         </button>
                     </li>
                     <li>
-                        <button
+                        <button  type="button"
                             class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                             data-filter="creator" data-filter-type="multi-select"
                         >
                             Creator
                         </button>
                     </li>
+      
                     <li>
-                        <button
-                            class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-                            data-filter="resolution_date" data-filter-type="date"
-                        >
-                            Resolution Date
-                        </button>
-                    </li>
-                    <li>
-                        <button
+                        <button  type="button"
                             class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                             data-filter="creation_date" data-filter-type="date"
                         >
@@ -59,7 +58,7 @@
                         </button>
                     </li>
                     <li>
-                        <button
+                        <button  type="button"
                             class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                             data-filter="date_notified" data-filter-type="date"
                         >
@@ -67,7 +66,16 @@
                         </button>
                     </li>
                     <li>
-                        <button
+                        <button  type="button"
+                            class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            data-filter="date_resolved" data-filter-type="date"
+                        >
+                            Date Resolved
+                        </button>
+                    </li>					
+					
+                    <li>
+                        <button  type="button"
                             class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                             data-filter="due_date" data-filter-type="date"
                         >
@@ -75,7 +83,7 @@
                         </button>
                     </li>
                     <li>
-                        <button
+                        <button  type="button"
                             class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
                             data-filter="priority" data-filter-type="select"
                         >
@@ -83,9 +91,9 @@
                         </button>
                     </li>
                     <li>
-                        <button
+                        <button  type="button"
                             class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
-                            data-filter="status" data-filter-type="multi-select"
+                            data-filter="status" data-filter-type="select"
                         >
                             Status
                         </button>
@@ -95,7 +103,8 @@
         </div>
         <!-- Placeholder for Filters -->
         <div id="filters-container" class="flex items-center space-x-2"></div>
-    </div>
+    </form>
+	</div>
 
     <a href="{{ route('projects.punch-list.create') }}" class="inline-flex px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"><i data-feather="plus" class="mr-2"></i> Create</a>
 </div>
@@ -145,119 +154,195 @@
                 <th class="px-4 py-2 font-light">Actions</th>
             </tr>
         </thead>
-        <tbody>
-            @foreach(range(0,3) as $k)
-            <tr class="border-b dark:border-gray-800">
-                <td class="px-4 py-2">1</td>
-                <td class="px-4 py-2">Damaged plastered walls</td>
-                <td class="px-4 py-2">Closed</td>
-                <td class="px-4 py-2">Trunk Flooring</td>
-                <td class="px-4 py-2">
-                    <!-- High Priority -->
-                    <div class="inline-flex items-center p-1 gap-1 bg-red-500/25 rounded-full">
-                        <span class="w-3 h-3 bg-red-500 rounded-full"></span>
-                        <span class="w-3 h-3 bg-red-500 rounded-full"></span>
-                        <span class="w-3 h-3 bg-red-500 rounded-full"></span>
-                    </div>
-                </td>
-                <td class="px-4 py-2">16/10/2024</td>
-                <td class="px-4 py-2">31/10/2024</td>
-                <td class="px-4 py-2">15/11/2024</td>
-                <td class="px-4 py-2 flex gap-4">
-                    <button class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
-                        <i data-feather="file-text" class="w-5 h-5"></i>
-                    </button>
-                    <button class="text-gray-500 dark:text-gray-400 hover:text-gray-300">
-                        <i data-feather="edit" class="w-5 h-5"></i>
-                    </button>
-                </td>
-            </tr>
-            <tr class="border-b dark:border-gray-800">
-                <td class="px-4 py-2">2</td>
-                <td class="px-4 py-2">Wall Finish Incorrect</td>
-                <td class="px-4 py-2">Work Required</td>
-                <td class="px-4 py-2">GMI - Granite & Marble</td>
-                <td class="px-4 py-2">
-                    <!-- Medium Priority -->
-                    <div class="inline-flex items-center p-1 gap-1 bg-yellow-500/25 rounded-full">
-                        <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
-                        <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
-                    </div>
-                </td>
-                <td class="px-4 py-2">16/10/2024</td>
-                <td class="px-4 py-2">-</td>
-                <td class="px-4 py-2">31/10/2024</td>
-                <td class="px-4 py-2 flex gap-4">
-                    <button class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
-                        <i data-feather="file-text" class="w-5 h-5"></i>
-                    </button>
-                    <button class="text-gray-500 dark:text-gray-400 hover:text-gray-300">
-                        <i data-feather="edit" class="w-5 h-5"></i>
-                    </button>
-                </td>
-            </tr>
-            <tr class="border-b dark:border-gray-800">
-                <td class="px-4 py-2">3</td>
-                <td class="px-4 py-2">Cleaning Before Final Handover</td>
-                <td class="px-4 py-2">Work Not Accepted</td>
-                <td class="px-4 py-2">J. Seamer & Son Limited</td>
-                <td class="px-4 py-2">
-                    <!-- Low Priority -->
-                    <div class="inline-flex items-center p-1 gap-1 bg-gray-500/25 rounded-full">
-                        <span class="w-3 h-3 bg-gray-400 rounded-full"></span>
-                    </div>
-                </td>
-                <td class="px-4 py-2">31/10/2024</td>
-                <td class="px-4 py-2">-</td>
-                <td class="px-4 py-2">15/11/2024</td>
-                <td class="px-4 py-2 flex gap-4">
-                    <button class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
-                        <i data-feather="file-text" class="w-5 h-5"></i>
-                    </button>
-                    <button class="text-gray-500 dark:text-gray-400 hover:text-gray-300">
-                        <i data-feather="edit" class="w-5 h-5"></i>
-                    </button>
-                </td>
-            </tr>
-            @endforeach
+        <tbody id="punch-lists-table">
+           
         </tbody>
     </table>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+
+    async  function getChangedParticipates(){
+		let fetchRes = await fetch(`{{url('project/punch-list/allParticipates')}}`);
+		const all = await fetchRes.json();
+
+		const reviewers = all.users.map(function(item) {
+		  return {'value' : item.id , 'label' : item.name};
+		});
+        for(let i = 0; i < reviewers_obj.length;i++){
+            reviewers_obj[i].clearStore();
+            reviewers_obj[i].setChoices(reviewers);
+        }		
+	}			
+
+	getAllParticipates();
+    getAllStatusPeriority();
+    let reviewers_obj = [];
+    let reviewers = {};
+	let priority = {};
+	let status = {};
+	let status_list_labels = {};
+	let status_list_colors = {};
+    let statusPieChart = {};
+ 
+	async  function getAllParticipates(){
+
+		if(localStorage.getItem("project_tool") == 'punch_list'){
+
+			let fetchRes = await fetch(`{{url('project/punch-list/allParticipates')}}`);
+			const all = await fetchRes.json();
+			reviewers = all.users.map(function(item) {
+			  return {'value' : item.id , 'label' : item.name};
+			}); 	
+            //convertToLowerCase();	
+	
+		}	
+	
+    }
+
+    async  function getAllStatusPeriority(){
+		if(localStorage.getItem("project_tool") == 'punch_list'){
+
+			let fetchRes = await fetch(`{{url('project/punch-list/allStatusPeriorityOption')}}`);
+			const all = await fetchRes.json();
+			priority = all.priority;
+			status = all.status;
+			status_list_labels = all.status_list_labels;
+			status_list_colors = all.status_list_colors;
+            statusPieChart = all.statusPieChart;
+           
+                await runPieChart(status_list_labels , status_list_colors , statusPieChart);
+
+           
+            			
+		}	
+	
+    }
+	
+	$(".projectButton").on('click',function(event) {
+		
+		if(localStorage.getItem("project_tool") == 'punch_list'){
+
+			get_punch_list();		
+			getChangedParticipates();
+            getAllStatusPeriority();
+		}
+	});
+
+	$("#search_punsh_list , .dates").on('input',function(event) {
+        get_punch_list();
+	});
+	
+    let chart;
+    function runPieChart(labels , colors , data){
+        if(chart){
+            chart.data.datasets[0].data = data;
+            chart.update();
+        }else{
+            const pieCtx = document.getElementById('status-pie-chart').getContext('2d');
+            chart = new Chart(pieCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            data: data,
+                            backgroundColor: colors,
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    borderWidth: 0,
+                    radius: '80%',
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: getLabelColor(), // Dynamically set legend label color
+                            },
+                        },
+                    },
+                    
+                }
+            });            
+        }
+                    // Pie Chart
+
+    }	
+
+	get_punch_list();
+	
+	async function get_punch_list(){
+        if(localStorage.getItem("project_tool") == 'punch_list'){
+		var queryString = $("#filter-punch-list-form").serialize();
+		const search = $('#search_punsh_list').val();
+
+		let url =`project/punch-list/all?${queryString}`;
+		//alert(url);
+		
+		let fetchRes = await fetch(url);
+		const all_punch_lists = await fetchRes.json();
+		 
+			let html =``;
+			if(all_punch_lists.length > 0){
+				for(let i=0;i<all_punch_lists.length;i++){
+					let url = "{{ route('projects.punch-list.edit', [':id']) }}".replace(':id', all_punch_lists[i].id);
+					html+=`<tr class="border-b dark:border-gray-800">
+							<td class="px-4 py-2">${all_punch_lists[i].number}</td>
+							<td class="px-4 py-2">${all_punch_lists[i].title}</td>
+							<td class="px-4 py-2">${all_punch_lists[i].status_text}</td>
+							<td class="px-4 py-2">${all_punch_lists[i].responsible.name}</td>
+						
+							<td class="px-4 py-2">${all_punch_lists[i].priority_text}</td>
+							<td class="px-4 py-2">${all_punch_lists[i].date_notified_at ?? '-'}</td>
+							<td class="px-4 py-2">${all_punch_lists[i].date_resolved_at ?? '-'}</td>
+							<td class="px-4 py-2">${all_punch_lists[i].due_date ?? '-'}</td>
+							<td class="px-4 py-2">
+								<button onclick="deletePunchList(${all_punch_lists[i].id})" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
+									<i data-feather="delete" class="w-5 h-5"></i>
+								</button>
+								<a target="_blank" href="${url}" class="text-gray-500 dark:text-gray-400 hover:text-gray-300">
+									<i data-feather="edit" class="w-5 h-5"></i>
+								</a>
+							</td>
+					
+							</tr>`;
+				}
+				
+			}
+			feather.replace();
+			$('#punch-lists-table').html(html);
+			feather.replace();			
+			
+
+        }
+    }    
+
+    async function deletePunchList(id){
+        $('.error').hide(); 
+        $('.success').hide();
+		let url =`project/punch-list/destroy/${id}`;		
+		let fetchRes = await fetch(url);
+        if(fetchRes.status != 200){
+            $('.error').show();
+            $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
+
+        }else{
+            console.log(fetchRes);
+            get_punch_list();
+            $('.success').show();
+            $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
+        }
+
+
+    }
     function getLabelColor() {
         let isDarkMode = localStorage.getItem('theme') == 'dark' ? true : false;
         
         return isDarkMode ? '#ffffff' : '#000000'; // White for dark mode, Black for light mode
     }
-    // Pie Chart
-    const pieCtx = document.getElementById('status-pie-chart').getContext('2d');
-    new Chart(pieCtx, {
-        type: 'doughnut',
-        data: {
-            labels: ['Closed', 'Work Not Accepted', 'Work Required'],
-            datasets: [
-                {
-                    data: [1, 1, 10],
-                    backgroundColor: ['#374151', '#eab308', '#ff5a5a'],
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            borderWidth: 0,
-            radius: '80%',
-            plugins: {
-                legend: {
-                    labels: {
-                        color: getLabelColor(), // Dynamically set legend label color
-                    },
-                },
-            },
-            
-        }
-    });
+
 
     // Bar Chart
     const barCtx = document.getElementById('assignee-bar-chart').getContext('2d');
@@ -330,35 +415,36 @@
 
                 let input = null
                 let options = null;
-
                 switch (filterType) {
                     case 'multi-select':
                         input = document.createElement('select');
                         input.className = 'choices dark:bg-gray-700 dark:text-gray-200';
                         input.setAttribute('multiple', true);
                         input.setAttribute('id', `filterby_${filterName}`);
-
-                        options = [
-                            {value: 'option_1', label: 'First Option'},
-                            {value: 'option_2', label: 'Second Option'},
-                            {value: 'option_3', label: 'Third Option'},
-                        ];
+                        input.setAttribute('name', filterName+'[]');
+						input.setAttribute('onchange',get_punch_list());
+ 						input.onchange = function(e) {get_punch_list(e);}; 
+                  
 
                         filterBlock.appendChild(input);
                         filtersContainer.appendChild(filterBlock);
-                        populateChoices(`filterby_${filterName}`, options, true, `Select ${filterName}s`);
+                        reviewers_obj.push(populateChoices2(`filterby_${filterName}`, reviewers, true, `Select ${filterName}s`));
+                       // populateChoices(`filterby_${filterName}`, options, true, `Select ${filterName}s`);
                         break;
                     
                     case 'select':
                         input = document.createElement('select');
                         input.className = 'choices dark:bg-gray-700 dark:text-gray-200';
                         input.setAttribute('id', `filterby_${filterName}`);
-
-                        options = [
-                            {value: 'option_1', label: 'First Option'},
-                            {value: 'option_2', label: 'Second Option'},
-                            {value: 'option_3', label: 'Third Option'},
-                        ];
+                        input.setAttribute('name', filterName);
+						input.setAttribute('onchange',get_punch_list());
+						if(filterName == 'priority'){
+							options = priority;
+						}else if(filterName == 'status'){
+							options = status;	
+						}
+						input.onchange = function(e) {get_punch_list(e);}; 
+              
 
                         filterBlock.appendChild(input);
                         filtersContainer.appendChild(filterBlock);
@@ -367,9 +453,11 @@
 
                     case 'date':
                         input = document.createElement('input');
-                        input.className = 'w-full border-0 dark:bg-gray-700 dark:text-gray-200';
+                        input.className = 'dates w-full border-0 dark:bg-gray-700 dark:text-gray-200';
                         input.setAttribute('id', `filterby_${filterName}`);
+                        input.setAttribute('name', filterName);
                         input.setAttribute('type', 'date');
+						input.oninput = function(e) {get_punch_list(e);}; 
 
                         filterBlock.appendChild(input);
                         filtersContainer.appendChild(filterBlock);

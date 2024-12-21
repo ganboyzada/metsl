@@ -52,12 +52,16 @@ class DocumentRepository extends BaseRepository implements DocumentRepositoryInt
     * 
     */
     public function get_all_project_documents($project_id , $request): Collection{
-        $query =  $this->model->where('project_id',$project_id)
-        ->addSelect(['last_upload_date' => ProjectDocumentRevisions::select('upload_date')
-        ->whereColumn('project_document_revisions.project_document_id', 'project_documents.id')->orderBy('upload_date', 'desc')->take(1)])
 
-        ->addSelect(['max_size' => ProjectDocumentFiles::select(\DB::raw('SUM(size) as max_size'))
-        ->whereColumn('project_document_files.project_document_id', 'project_documents.id')->take(1)])->withCount('revisions');
+        $query =  $this->model->where('project_id',$project_id);
+
+
+        //dd($query->get());
+       // ->addSelect(['last_upload_date' => ProjectDocumentRevisions::select('upload_date')
+        //->whereColumn('project_document_revisions.project_document_id', 'project_documents.id')->orderBy('upload_date', 'desc')->take(1)])
+
+      //  ->addSelect(['max_size' => ProjectDocumentFiles::select(\DB::raw('SUM(size) as max_size'))
+       // ->whereColumn('project_document_files.project_document_id', 'project_documents.id')->take(1)])->withCount('revisions');
        // ->get();
        // $query =  $this->model->where('project_id',$project_id)
         //->addSelect(['last_upload_date' => ProjectDocumentRevisions::select('upload_date')->whereColumn('project_document_id ', 'project_documents.id')->latest()->take(1)])
@@ -69,13 +73,22 @@ class DocumentRepository extends BaseRepository implements DocumentRepositoryInt
     
      
         else if(isset($request->orderBy) && $request->orderBy == 'upload_date'){
+            $sub2 = \DB::raw('(select project_document_id , MAX(upload_date) as last_upload_date from project_document_revisions group by project_document_id)last_upload_table');
+            $query = $query->leftjoin($sub2,function($join){
+                $join->on('last_upload_table.project_document_id','=','id');       
+            });
             $query= $query->orderby('last_upload_date' , $request->orderDirection);
 
         }
     
        
         else if(isset($request->orderBy) && $request->orderBy == 'size'){
-                $query= $query->orderby('max_size' , $request->orderDirection);
+            $sub1 = \DB::raw('(select project_document_id , SUM(size) as max_size from project_document_files group by project_document_id)max_table');
+
+            $query = $query->leftjoin($sub1,function($join){
+                    $join->on('max_table.project_document_id','=','id');       
+            });
+            $query= $query->orderby('max_size' , $request->orderDirection);
 
 
         }

@@ -24,6 +24,8 @@ use App\Repository\Eloquent\ProjectDocumentRevisionsRepository;
 use App\Repository\Eloquent\ProjectFileRepository;
 use App\Repository\Eloquent\ProjectManagerRepository;
 use App\Repository\Eloquent\ProjectRepository;
+use App\Repository\Eloquent\PunchListFilesRepository;
+use App\Repository\Eloquent\PunchListRepository;
 use App\Repository\Eloquent\UserRepository;
 use App\Repository\EloquentRepositoryInterface;
 use App\Repository\MeetingPlaningFilesRepositoryInterface;
@@ -33,6 +35,8 @@ use App\Repository\ProjectDocumentRevisionsRepositoryInterface;
 use App\Repository\ProjectFileRepositoryInterface;
 use App\Repository\ProjectManagerRepositoryInterface;
 use App\Repository\ProjectRepositoryInterface;
+use App\Repository\PunchListFilesRepositoryInterface;
+use App\Repository\PunchListRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
 use App\Services\ClientService;
 use App\Services\CompanyService;
@@ -48,6 +52,8 @@ use App\Services\ProjectDocumentRevisionsService;
 use App\Services\ProjectFileService;
 use App\Services\ProjectManagerService;
 use App\Services\ProjectService;
+use App\Services\PunchListFilesService;
+use App\Services\PunchListService;
 use App\Services\UserService;
 use Illuminate\Support\ServiceProvider;
 
@@ -161,6 +167,24 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(MeetingPlaningFilesService::class, function ($app) {
             return new MeetingPlaningFilesService($app->make(MeetingPlaningFilesRepositoryInterface::class));
         });
+
+
+        $this->app->bind(PunchListRepositoryInterface::class, PunchListRepository::class);
+        $this->app->bind(PunchListService::class, function ($app) {
+            return new PunchListService(
+                $app->make(PunchListRepositoryInterface::class),
+                $app->make(UserService::class) ,  
+                $app->make(PunchListFilesService::class),
+
+                
+            );
+        }); 
+        
+        
+        $this->app->bind(PunchListFilesRepositoryInterface::class, PunchListFilesRepository::class);
+        $this->app->bind(PunchListFilesService::class, function ($app) {
+            return new PunchListFilesService($app->make(PunchListFilesRepositoryInterface::class));
+        });        
 
     }
 

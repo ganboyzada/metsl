@@ -6,6 +6,8 @@
     <title>@yield('title')</title>
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
+
 </head>
 <body class="bg-gray-100 dark:bg-gray-800">
 
@@ -27,5 +29,6 @@
     </div>
 
     @stack('js')
+
 </body>
 </html>

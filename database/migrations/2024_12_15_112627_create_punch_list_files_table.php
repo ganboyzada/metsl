@@ -11,14 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('meeting_plan_files', function (Blueprint $table) {
+        Schema::create('punch_list_files', function (Blueprint $table) {
             $table->id();
-			$table->unsignedBiginteger('meeting_id')->unsigned();
-            $table->foreign('meeting_id')->references('id')
-                ->on('meeting_plans')->onDelete('cascade');	
+			$table->unsignedBiginteger('punch_list_id')->unsigned();
+            $table->foreign('punch_list_id')->references('id')
+                ->on('punch_lists')->onDelete('cascade');	
 			$table->string('file')->nullable();	
-            $table->string('type')->nullable();	
-            $table->double('size')->nullable();	
+            $table->string('type')->nullable();
+            $table->double('size')->nullable();			
             $table->timestamps();
         });
     }
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('meeting_planfiles');
+        Schema::dropIfExists('punch_list_files');
     }
 };

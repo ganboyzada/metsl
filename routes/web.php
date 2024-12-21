@@ -5,7 +5,9 @@ use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DocumentRevisionController;
 use App\Http\Controllers\MeetingPlaningController;
 use App\Http\Controllers\ProjectController;
+use App\Http\Controllers\PunchListController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -42,7 +44,15 @@ Route::middleware([
 
 
     Route::get('/project/correspondence/users',  [CorrespondenceController::class, "getUsers"])->name('projects.correspondence.users');	
+    Route::get('/project/correspondence/edit/{id}', [CorrespondenceController::class, "edit"])->name('projects.correspondence.edit');
 
+	Route::post('/project/correspondence/update',  [CorrespondenceController::class, "update"])->name(name: 'projects.correspondence.update');	
+	Route::get('/project/correspondence/destroy/{id}',  [CorrespondenceController::class, "destroy"])->name(name: 'projects.correspondence.destroy');	
+    Route::get('/project/correspondence/destroy-file/{id}',  [CorrespondenceController::class, "destroyFile"])->name(name: 'projects.correspondence.destroy-file');	
+
+
+
+    
     Route::view('/project/documents', 'metsl.pages.documents.index')->name('projects.documents');
 	Route::get('/project/documents/reviewers',  [DocumentController::class, "getreviewers"])->name('projects.documents.reviewers');	
 	Route::post('/project/documents/store',  [DocumentController::class, "store"])->name('projects.documents.store');
@@ -56,15 +66,30 @@ Route::middleware([
 	Route::get('/project/documents/revisions/{id}',  [DocumentController::class, "ProjectDocumentsRevisions"])->name('projects.documents.revisions');
 
 
+	Route::get('/project/punch-list/all',  [PunchListController::class, "PunchList"])->name('projects.punch-list.all');
+    Route::get('/project/punch-list/create', [PunchListController::class, "create"])->name('projects.punch-list.create');
+    Route::get('/project/punch-list/participates',  [PunchListController::class, "getParticipates"])->name('projects.punch-list.participates');	
+	Route::post('/project/punch-list/store',  [PunchListController::class, "store"])->name(name: 'projects.punch-list.store');	
+    Route::get('/project/punch-list/edit/{id}', [PunchListController::class, "edit"])->name('projects.punch-list.edit');
+    Route::get('/project/punch-list/allParticipates',  [PunchListController::class, "getAllParticipates"])->name('projects.punch-list.all_participates');	
+    Route::get('/project/punch-list/allStatusPeriorityOption',  [PunchListController::class, "getStatusPeriorityOption"])->name('projects.punch-list.all_status_periority_option');	
+	Route::post('/project/punch-list/update',  [PunchListController::class, "update"])->name(name: 'projects.punch-list.update');	
+	Route::get('/project/punch-list/destroy/{id}',  [PunchListController::class, "destroy"])->name(name: 'projects.punch-list.destroy');	
+    Route::get('/project/punch-list/destroy-file/{id}',  [PunchListController::class, "destroyFile"])->name(name: 'projects.punch-list.destroy-file');	
 
-    Route::view('/project/punch-list/create', 'metsl.pages.punch-list.create')->name('projects.punch-list.create');
-	
+
 	Route::get('/project/meetings/all',  [MeetingPlaningController::class, "ProjectMeeetings"])->name('projects.meetings.all');
 	Route::get('/project/meetings/create',  [MeetingPlaningController::class, "create"])->name(name: 'projects.meetings.create');	
     Route::get('/project/meetings/participates',  [MeetingPlaningController::class, "getParticipates"])->name('projects.meetings.participates');	
 	Route::post('/project/meetings/store',  [MeetingPlaningController::class, "store"])->name(name: 'projects.meetings.store');	
-
     Route::view('/project/meetings/view/{id}', 'metsl.pages.meeting-minutes.meeting_minutes')->name('projects.meetings.view');
+    Route::get('/project/meetings/edit/{id}', [MeetingPlaningController::class, "edit"])->name('projects.meetings.edit');
+
+	Route::post('/project/meetings/update',  [MeetingPlaningController::class, "update"])->name(name: 'projects.meetings.update');	
+	Route::get('/project/meetings/destroy/{id}',  [MeetingPlaningController::class, "destroy"])->name(name: 'projects.meetings.destroy');	
+    Route::get('/project/meetings/destroy-file/{id}',  [MeetingPlaningController::class, "destroyFile"])->name(name: 'projects.meetings.destroy-file');	
+
+
 
     Route::post('/project/store', action: [ProjectController::class, "store"])->name('projects.store');
 

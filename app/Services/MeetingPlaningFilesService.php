@@ -23,7 +23,7 @@ class MeetingPlaningFilesService
                 Storage::disk('public')->putFileAs($file, 'project'.$project_id.'/meeting_planing'.$meetingplaning_id.'/'.$fileName);
 
 
-                return ['file'=>$fileName , 'meeting_id'=>$meetingplaning_id, 'type'=>$file->extension() ];
+                return ['file'=>$fileName , 'meeting_id'=>$meetingplaning_id, 'type'=>$file->extension() , 'size'=>$file->getSize() ];
 
             } , $uploadeedfiles);
 
@@ -36,6 +36,15 @@ class MeetingPlaningFilesService
             throw new \Exception($e->getMessage());
         }            
         return $model;
+    }
+
+    public function delete($id)
+    {
+        try{
+            return $this->meetingPlaningFilesRepository->delete($id);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 
 }

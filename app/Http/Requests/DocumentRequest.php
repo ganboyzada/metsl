@@ -43,9 +43,7 @@ class DocumentRequest extends FormRequest
     public function attributes(): array
     {
         return [
-            'assignees' => 'Correspondence Assignees',
-            'distribution' => 'Correspondence Distribution Members',
-            'recieved_from' => 'Correspondence Received From',
+         
         ];
     }
 

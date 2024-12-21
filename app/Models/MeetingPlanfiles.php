@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class MeetingPlanfiles extends Model
 {
     protected $table = 'meeting_plan_files';
-    protected $fillable = ['file','meeting_id','type'];
+    protected $fillable = ['file','meeting_id','type','size'];
 
     public function meeting(): BelongsTo
     {

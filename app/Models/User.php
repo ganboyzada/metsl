@@ -38,7 +38,7 @@ class User extends Authenticatable
         'password',
     ];
 
-protected $guard_name = 'sanctum';
+    protected $guard_name = 'sanctum';
 
     /**
      * The attributes that should be hidden for serialization.
@@ -57,9 +57,9 @@ protected $guard_name = 'sanctum';
      *
      * @var array<int, string>
      */
-    protected $appends = [
+   /* protected $appends = [
         'profile_photo_url',
-    ];
+    ];*/
 
     /**
      * Get the attributes that should be cast.

@@ -1,4 +1,5 @@
-
+<div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
+<div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
 <div>
     <!-- Page Header -->
     <div class="flex items-center gap-4 mb-4">
@@ -54,6 +55,7 @@
                     <th class="px-6 py-3 font-light">Issued On</th>
                     <th class="px-6 py-3 font-light">Due Date</th>
                     <th class="px-6 py-3 font-light">Status</th>
+                    <td class="px-6 py-3 font-light">Actions</td>
                 </tr>
             </thead>
             <tbody id="table-body">
@@ -72,6 +74,7 @@
 		}
 	});
 	
+    let allDataLength = 0;
 	async function search(e){
 		loadedRows = 0;
 		const search = $('[name="search"]').val();
@@ -82,10 +85,16 @@
 			item.assignees = namesString;
 			  return item;
 			});
-			
+        allDataLength = correspondenceData.length;	
 		console.log(correspondenceData);
+        document.getElementById('table-body').innerHTML='';
+        feather.replace();	
+
 		await loadRows();
+        feather.replace();	
+
 	}
+    get_correspondences();
         // Populate Assignees, Distribution Members, and Received From
 	let correspondenceData = [];
 	async  function get_correspondences(){
@@ -97,11 +106,14 @@
 			item.assignees = namesString;
 			  return item;
 			});
-			
+        allDataLength = correspondenceData.length;	
+       // alert(allDataLength);
 		console.log(correspondenceData);
+        feather.replace();	
+        loadedRows = 0;
+        rowsToLoad = 4;
 		await loadRows();
-
-			
+        feather.replace();		
     }
     // Sample data for demonstration
     // const correspondenceData = Array.from({ length: 100 }).map((_, i) => ({
@@ -125,47 +137,103 @@
 
     const tableBody = document.getElementById('table-body');
     let loadedRows = 0;
+    let rowsToLoad = 4;
+    
 
     // Lazy load rows
     function loadRows() {
-        const rowsToLoad = 20;
+       // alert((Math.min(loadedRows + rowsToLoad, correspondenceData.length)));
         const fragment = document.createDocumentFragment();
-		//alert(correspondenceData.length);
+       
 		if(correspondenceData.length > 0){
-			document.getElementById('table-body').innerHTML='';
+            
+           // alert(allDataLength);
 			for (let i = loadedRows; i < Math.min(loadedRows + rowsToLoad, correspondenceData.length); i++) {
-				
-				const row = correspondenceData[i];
-				const tr = document.createElement('tr');
-				tr.classList.add('border-b','dark:border-gray-800','hover:shadow-lg','hover:bg-gray-100','hover:dark:bg-gray-700');
-				let url = "{{ route('projects.correspondence.view', [':id']) }}".replace(':id', row.id);
+                
+                    const row = correspondenceData[i];
+                    const tr = document.createElement('tr');
+                    tr.classList.add('border-b','dark:border-gray-800','hover:shadow-lg','hover:bg-gray-100','hover:dark:bg-gray-700' , `corespondence_row${i}`);
+                    let url = "{{ route('projects.correspondence.view', [':id']) }}".replace(':id', row.id);
+                    let url2 = "{{ route('projects.correspondence.edit', [':id']) }}".replace(':id', row.id);
 
-				tr.innerHTML = `
-					<td class="px-6 py-3">${row.number}</td>
-					<td class="px-6 py-3"><a class="underline" href="${url}">${row.subject}</a></td>
-					<td class="px-6 py-3"></td>
-					<td class="px-6 py-3">${row.assignees}</td>
-					<td class="px-6 py-3">${(row.created_by != null) ? row.created_by.name : ''}</td>
-					<td class="px-6 py-3">${row.created_date}</td>
-					<td class="px-6 py-3">${row.recieved_date ?? ''}</td>
-					<td class="px-6 py-3">
-						<span class="px-3 py-1 rounded-full text-xs  ${row.status_color[1]}">${row.status_color[0]}</span>
-					</td>
-				`;
-				fragment.appendChild(tr);
+                    tr.innerHTML = `
+                        <td class="px-6 py-3">${row.number}</td>
+                        <td class="px-6 py-3"><a class="underline" href="${url}">${row.subject}</a></td>
+                        <td class="px-6 py-3"></td>
+                        <td class="px-6 py-3">${row.assignees}</td>
+                        <td class="px-6 py-3">${(row.created_by != null) ? row.created_by.name : ''}</td>
+                        <td class="px-6 py-3">${row.created_date}</td>
+                        <td class="px-6 py-3">${row.recieved_date ?? ''}</td>
+                        <td class="px-6 py-3">
+                            <span class="px-3 py-1 rounded-full text-xs  ${row.status_color[1]}">${row.status_color[0]}</span>
+                        </td>
+                        <td class="px-4 py-2">
+                            <button onclick="deleteCorrespondence(${row.id}  , ${i})" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
+                                <i data-feather="delete" class="w-5 h-5"></i>
+                            </button>
+                            <a target="_blank" href="${url2}" class="text-gray-500 dark:text-gray-400 hover:text-gray-300">
+                                <i data-feather="edit" class="w-5 h-5"></i>
+                            </a>
+                        </td>
+                    `;
+                    feather.replace();	
+
+
+                    fragment.appendChild(tr);
+                    feather.replace();	
+                    allDataLength = allDataLength - 1;
+                    //alert(allDataLength);
+
+                
+				
+    
 			}
 		}else{
-			document.getElementById('table-body').innerHTML='';
-		}
+            document.getElementById('table-body').innerHTML='';
+        }
+       
 			console.log(fragment);
 		
-        tableBody.appendChild(fragment);
-        loadedRows += rowsToLoad;
+            tableBody.appendChild(fragment);
+            loadedRows += rowsToLoad;
+        
+
+    }
+
+    async function deleteCorrespondence(id , i){
+        $('.error').hide(); 
+        $('.success').hide();
+		let url =`project/correspondence/destroy/${id}`;		
+		let fetchRes = await fetch(url);
+        if(fetchRes.status != 200){
+            $('.error').show();
+            $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
+
+        }else{
+           // console.log(fetchRes);
+            $('.corespondence_row'+i).remove();
+            correspondenceData.splice(i,1);
+            loadedRows = loadedRows - 1;
+            rowsToLoad = rowsToLoad - loadedRows;
+            feather.replace();	
+
+            loadRows();
+            feather.replace();	
+            $('#table-body').children('tr').each(function(i){
+                $(this).attr('class', 'border-b dark:border-gray-800 hover:shadow-lg hover:bg-gray-100 hover:dark:bg-gray-700 corespondence_row'+$(this).index());
+            });
+            $('.success').show();
+            $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
+            rowsToLoad = 4;
+        }
+
+
     }
 
     // Detect scroll for lazy loading
     window.addEventListener('scroll', () => {
         const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+        
         if (scrollTop + clientHeight >= scrollHeight - 50) {
             loadRows();
         }

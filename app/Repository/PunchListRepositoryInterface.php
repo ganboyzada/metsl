@@ -5,16 +5,16 @@ use App\Model\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 
-interface MeetingPlaningRepositoryInterface
+interface PunchListRepositoryInterface
 {
 
 
         /**
     * @param array $data 
-    * @param Model $meetingPlaning 
+    * @param Model $punshList 
     * 
     */
-    public function add_users_to_meeting_planing($data , $meetingPlaning);  
+    public function add_users_to_Punch_list($data , $punshList);  
 
             /**
     * @param int $project_id
@@ -22,7 +22,7 @@ interface MeetingPlaningRepositoryInterface
     * @return Collection
     * 
     */
-    public function get_all_project_meeting_planing($project_id , $request): Collection; 
+    public function get_all_project_Punch_list($project_id , $request): Collection; 
     
     /**
     * @param int $projectID 
@@ -30,5 +30,12 @@ interface MeetingPlaningRepositoryInterface
     */
     public function get_next_number($projectID): mixed;
 
-
+        /**
+    * @param int $project_id
+    * @return Collection
+    * 
+    */
+    public function get_status_pie_chart($project_id): Collection;
+    
+ 
 }

@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Services\ClientService;
 use App\Services\CompanyService;
 use App\Services\ContractorService;
+use App\Services\CorrespondenceFileService;
 use App\Services\CorrespondenceService;
 use App\Services\DesignTeamService;
 use App\Services\ProjectManagerService;
@@ -36,7 +37,9 @@ class CorrespondenceController extends Controller
         protected DesignTeamService $designTeamService ,
         protected ProjectManagerService $projectmanagerService ,
         protected UserService $userService,
-        protected CorrespondenceService $correspondenceService
+        protected CorrespondenceService $correspondenceService,
+        protected CorrespondenceFileService $correspondenceFileService,
+       
 
         )
     {
@@ -79,6 +82,37 @@ class CorrespondenceController extends Controller
         }
     }
 
+    public function edit($id){
+        $correspondece = $this->correspondenceService->find($id);
+        //return ($correspondece);
+        return view('metsl.pages.correspondence.edit', get_defined_vars());
+
+    }
+
+    public function update(CorrespondenceRequest  $request)
+    {
+        if($request->validated()){
+            \DB::beginTransaction();
+            try{
+                $all_data = request()->all();
+               // $all_data['created_by'] = \Auth::user()->id;
+
+                //$all_data['created_date'] = date('Y-m-d');
+
+                $model = $this->correspondenceService->update($all_data);
+            \DB::commit();
+            // all good
+            } catch (\Exception $e) {
+                \DB::rollback();
+                return response()->json(['error' => $e->getMessage()]);
+            }
+
+                       
+            return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$model]);
+
+        }
+    }
+
     public function getUsers(Request $request){
         if (Session::has('projectID') && Session::has('projectName')){
             $id = Session::get('projectID');     
@@ -99,6 +133,7 @@ class CorrespondenceController extends Controller
 
     public function ProjectCorrespondence(Request $request){
         $id = Session::get('projectID');
+        //dd($id);
         $correspondeces = $this->correspondenceService->getAllProjectCorrespondence($id , $request);
         $correspondeces->map(function($row){
             return $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];
@@ -112,5 +147,15 @@ class CorrespondenceController extends Controller
         //return ($correspondece);
         return view('metsl.pages.correspondence.view', get_defined_vars());
 
+    }
+
+    
+    public function destroy($id){
+        $this->correspondenceService->delete($id);
+        
+    }
+    public function destroyFile($id){
+        $this->correspondenceFileService->delete($id);
+        return redirect()->back()->with('success' , 'Item deleted successfully');
     }
 }
