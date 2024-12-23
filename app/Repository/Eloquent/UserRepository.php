@@ -41,10 +41,10 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                         $role = Role::create(['name' =>  $row->role]);                    
                         $role->syncPermissions($row->permissions);  
                     }
-                    $user = $this->find($row->id);       
-
+                    $user = $this->find($row->id); 
+                    $user->roles()->wherePivot('project_id',$project_id)->detach();
                     $user->roles()->attach($role->id, ['project_id'=>$project_id]);
-                    
+                    $user->permissions()->wherePivot('project_id',$project_id)->detach();
                     $user->permissions()->attach($role->permissions, ['project_id'=>$project_id]);
                     
                 }

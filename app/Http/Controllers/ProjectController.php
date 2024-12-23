@@ -13,6 +13,7 @@ use App\Services\ClientService;
 use App\Services\CompanyService;
 use App\Services\ContractorService;
 use App\Services\DesignTeamService;
+use App\Services\ProjectFileService;
 use App\Services\ProjectManagerService;
 use App\Services\ProjectService;
 use App\Services\UserService;
@@ -32,7 +33,8 @@ class ProjectController extends Controller
         protected ClientService $clientService ,
         protected DesignTeamService $designTeamService ,
         protected ProjectManagerService $projectmanagerService ,
-        protected UserService $userService
+        protected UserService $userService,
+        protected ProjectFileService $projectFileService
 
         )
     {
@@ -103,7 +105,7 @@ class ProjectController extends Controller
             try{         
                 $data = $request->validated();
                 //dd($data['user_type']);
-                $data['user_name']=$data['first_name'].'_'.$data['last_name'];
+                $data['user_name']=$data['first_name'].' '.$data['last_name'];
                 if($data['user_type'] == 'client'){
                     $model = $this->clientService->create($data);
                     $user = $this->userService->create($data);
@@ -156,6 +158,57 @@ class ProjectController extends Controller
         }
     }
 
+    public function edit(Request $request , $id){
+        $project = $this->projectService->find(6);
+       // return $project;
+        $clients = $this->clientService->all();
+        $contractors = $this->contractorService->all();
+        $design_teams = $this->designTeamService->all();
+        $project_managers = $this->projectmanagerService->all();
+        $roles = Role::with('permissions')->get();
+        $role_permission_arr = [];
+        if($roles->count() > 0){
+            foreach($roles as $role){
+                $role_permission_arr[$role->name] = $role->permissions->pluck('name')->toArray();
+            }
+        }
+        $permissions = Permission::all();
+       // $c = Contractor::where('id',23)->with('user.permissions')->first();
+        //dd($c->user->permissions);
 
+        return view('metsl.pages.projects..wizard.project-wizard-edit', get_defined_vars());
+    }
+
+    public function update(ProjectRequest  $request)
+    {
+        if($request->validated()){
+            \DB::beginTransaction();
+            try{
+                $all_data = request()->all();
+                $all_data['all_stakholders'] = json_decode($all_data['all_stakholders']);
+                $model = $this->projectService->update($all_data);
+            \DB::commit();
+            // all good
+            } catch (\Exception $e) {
+                \DB::rollback();
+                return response()->json(['error' => $e->getMessage()]);
+            }
+
+                       
+            return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$model]);
+
+        }
+    }
+
+    public function destroy($id){
+        $this->projectService->delete($id);
+        return redirect()->back()->with('success' , 'Item deleted successfully');
+
+        
+    }
+    public function destroyFile($id){
+        $this->projectFileService->delete($id);
+        return redirect()->back()->with('success' , 'Item deleted successfully');
+    }
 
 }

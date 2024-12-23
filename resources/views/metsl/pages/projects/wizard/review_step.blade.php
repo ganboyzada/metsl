@@ -74,6 +74,22 @@
         Project Documents
     </h2>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8" id="docs">
+        @if ($files->count() > 0)
+            @foreach ($files as $file)
+            <div class="p-4 border  bg-gray-800 border-gray-700 flex items-center justify-between">
+
+                <div>
+                    <p class="text-lg font-medium">{{$file->name}}</p>
+                    <p class="text-sm text-gray-400">( {{ $file->size != NULL ? round($file->size/1024 , 2) : 0  }} kb )</p>
+                </div>
+                <a  href="{{ asset('storage/project'.$project->id.'/'.$file->name)  }}" target="__blank" class="text-blue-400 hover:underline flex items-center">
+                    <i data-feather="download" class="w-5 h-5 mr-1"></i> Download
+                </a>
+            </div>                
+            @endforeach
+            
+        @endif
+
 
     </div>
 </div>

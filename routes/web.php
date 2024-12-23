@@ -97,3 +97,7 @@ Route::middleware([
     Route::get('/projects',action: [ProjectController::class, "allProjects"] )->name('projects');
     Route::get('/create-project',action: [ProjectController::class, "create"] )->name('projects.create');
     Route::post('/project/users/store', action: [ProjectController::class, "store_user"])->name('projects.users.store');});
+    Route::get('/project/edit/{id}',action: [ProjectController::class, "edit"] )->name('projects.edit');
+    Route::get('/project/destroy-file/{id}',  [ProjectController::class, "destroyFile"])->name('projects.destroy-file');	
+    Route::post('/project/update',action: [ProjectController::class, "update"] )->name('projects.update');
+    Route::get('/project/destroy/{id}',  [ProjectController::class, "destroy"])->name('projects.destroy');	

@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('type')->nullable();
 			$table->integer('status')->default(1);
+            $table->double('size')->nullable();
+
             $table->unsignedBiginteger('project_id')->unsigned();
             $table->foreign('project_id')->references('id')
                  ->on('projects')->onDelete('cascade');

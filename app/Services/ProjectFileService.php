@@ -22,7 +22,7 @@ class ProjectFileService
                 Storage::disk('public')->putFileAs($file, 'project'.$project_id.'/'.$fileName);
 
 
-                return ['name'=>$fileName , 'project_id'=>$project_id , 'type'=>$file->extension()];
+                return ['name'=>$fileName , 'project_id'=>$project_id , 'type'=>$file->extension(), 'size'=>$file->getSize()];
 
             } , $data['docs']);
 
@@ -37,4 +37,12 @@ class ProjectFileService
         return $model;
     }
 
+    public function delete($id)
+    {
+        try{
+            return $this->ProjectFileRepository->delete($id);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
 }

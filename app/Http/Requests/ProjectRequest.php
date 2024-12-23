@@ -21,22 +21,43 @@ class ProjectRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'name' => 'required|unique:projects,name',
-            'description' => 'nullable',
-            'start_date' => 'required',
-            'end_date' => 'required|date_format:Y-m-d|after:start_date',
-            'status'=>'required|integer',
-            'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-            "contractor"    => "nullable|array",
-            "contractor.*"  => "nullable|string|distinct",
-            "client"    => "nullable|array",
-            "client.*"  => "nullable|string|distinct",
-            "designTeam"    => "nullable|array",
-            "designTeam.*"  => "nullable|string|distinct",
-            "projectManager"    => "nullable|array",
-            "projectManager.*"  => "nullable|string|distinct",
-        ]; 
+        if(isset(request()->id)){
+            $id = request()->id;
+            return [
+                'name' => 'required|unique:projects,name,'.$id,
+                'description' => 'nullable',
+                'start_date' => 'required',
+                'end_date' => 'required|date_format:Y-m-d|after:start_date',
+                'status'=>'required|integer',
+                'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+                "contractor"    => "nullable|array",
+                "contractor.*"  => "nullable|string|distinct",
+                "client"    => "nullable|array",
+                "client.*"  => "nullable|string|distinct",
+                "designTeam"    => "nullable|array",
+                "designTeam.*"  => "nullable|string|distinct",
+                "projectManager"    => "nullable|array",
+                "projectManager.*"  => "nullable|string|distinct",
+            ]; 
+        }else{
+            return [
+                'name' => 'required|unique:projects,name',
+                'description' => 'nullable',
+                'start_date' => 'required',
+                'end_date' => 'required|date_format:Y-m-d|after:start_date',
+                'status'=>'required|integer',
+                'logo' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+                "contractor"    => "nullable|array",
+                "contractor.*"  => "nullable|string|distinct",
+                "client"    => "nullable|array",
+                "client.*"  => "nullable|string|distinct",
+                "designTeam"    => "nullable|array",
+                "designTeam.*"  => "nullable|string|distinct",
+                "projectManager"    => "nullable|array",
+                "projectManager.*"  => "nullable|string|distinct",
+            ]; 
+        }
+
     }
     /**
      * Get custom attributes for validator errors.

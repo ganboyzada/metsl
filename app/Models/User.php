@@ -90,16 +90,16 @@ class User extends Authenticatable
 
     public function allRoles()
     {
-        return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id','role_id')
-            ->withPivot('project_id')
-            ->using(ModelHasRoles::class);
+        return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id','role_id')           
+            ->using(ModelHasRoles::class)
+			->withPivot('project_id');
     }
 
     public function allPermissions()
     {
-        return $this->belongsToMany(Permission::class, 'model_has_permissions', 'model_id','permission_id')
-            ->withPivot('project_id')
-            ->using(ModelHasPermissions::class);
+        return $this->belongsToMany(Permission::class, 'model_has_permissions', 'model_id','permission_id')			
+            ->using(ModelHasPermissions::class)
+            ->withPivot('project_id');
     }
 
     protected function getDefaultGuardName(): string { return 'sanctum'; }

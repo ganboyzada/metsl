@@ -7,6 +7,11 @@
 @endsection
 
 @section('content')
+@if(session()->has('success'))
+<div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold">
+    {{ session()->get('success') }}
+</div>
+@endif 
 <div class="flex justify-between items-center mb-6">
         <!-- Search Box -->
         <div class="relative flex items-center">
@@ -25,11 +30,16 @@
     <div id="companyGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
 	    @if($projects->count() > 0) 
 			@foreach($projects as $project)
-			<a href="{{ route('projects.find', ['id' => $project->id]) }}" class="company-card bg-gray-100 dark:bg-gray-800 dark:text-gray-100 shadow  p-5 flex flex-col">
-				<img src="{{ $project->logo }}" alt="Company Logo" class="mb-4">
-				<h3 class="text-lg font-semibold">{{ $project->name }}</h3>
-				<p class="text-sm text-gray-600 dark:text-gray-300">{{ $project->description }}</p>
-			</a>
+			<div class="company-card bg-gray-100 dark:bg-gray-800 dark:text-gray-100 shadow  p-5 flex flex-col">
+				<a href="{{ route('projects.edit', ['id' => $project->id]) }}"><img src="{{ $project->logo }}" alt="Company Logo" class="mb-4"></a>
+				<a href="{{ route('projects.edit', ['id' => $project->id]) }}"><h3 class="text-lg font-semibold">{{ $project->name }}</h3></a>
+				<p class="text-sm text-gray-600 dark:text-gray-300">{!! $project->description !!}</p>
+                <a href="{{ route('projects.destroy', ['id' => $project->id]) }}" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
+                    <i data-feather="delete" class="w-5 h-5"></i>
+                </a>
+			</div>
+
+           
 			@endforeach
 		@endif
         <!-- Company Cards -->
