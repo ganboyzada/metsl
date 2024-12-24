@@ -62,8 +62,11 @@ Route::middleware([
 	Route::post('/projects/documents/revision/comments/store',  [DocumentRevisionController::class, "store_comment"])->name('projects.documents.revision.comments.store');
 	Route::post('/projects/documents/revision/store',  [DocumentRevisionController::class, "store"])->name('projects.documents.revision.store');
 	Route::get('/project/documents/revisions/comments/{id}',  [DocumentRevisionController::class, "revisionComments"])->name('projects.documents.revisions.comments');
-
+	Route::get('/project/documents/edit/{id}',  [DocumentController::class, "edit"])->name('projects.documents.edit');
+	Route::post('/project/documents/update',  [DocumentController::class, "update"])->name('projects.documents.update');
 	Route::get('/project/documents/revisions/{id}',  [DocumentController::class, "ProjectDocumentsRevisions"])->name('projects.documents.revisions');
+	Route::get('/project/documents/delete/{id}',  [DocumentController::class, "delete"])->name('projects.documents.delete');
+	Route::get('/project/documents/delete_file/{id}',  [DocumentController::class, "delete_file"])->name('projects.documents.delete_file');
 
 
 	Route::get('/project/punch-list/all',  [PunchListController::class, "PunchList"])->name('projects.punch-list.all');

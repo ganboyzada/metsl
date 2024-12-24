@@ -53,7 +53,7 @@ class DocumentRepository extends BaseRepository implements DocumentRepositoryInt
     */
     public function get_all_project_documents($project_id , $request): Collection{
 
-        $query =  $this->model->where('project_id',$project_id);
+        $query =  $this->model->where('project_id',$project_id)->withCount('revisions');
 
 
         //dd($query->get());

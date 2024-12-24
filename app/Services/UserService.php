@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Permission;
 use App\Repository\UserRepositoryInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
@@ -64,19 +65,16 @@ class UserService
 
     public function getUsersOfProjectID($project_id , $permission_item = ''){
         $usArrers = [];
-        $users = $this->userRepository->get_users_of_project($project_id);
+        $permission = Permission::where('name' , $permission_item)->first();
+        $permission_id = (isset($permission->id)) ? $permission->id :'';
+
+        $users = $this->userRepository->get_users_of_project($project_id , $permission_id);
         foreach($users as $user){
-            $permisions = $user->allPermissions->filter(
-                function ($permission) use($project_id , $permission_item) {
-                    if(($permission->pivot->project->id == $project_id && $permission->name == $permission_item) || $permission_item == ''){
-                       
-                        return true;
-                    }
-                    
-                })->all();
-            if(count($permisions) > 0 ){
+            if($permission_id != '' && $user->allPermissions->count() > 0 ){
                 $usArrers[] = $user;
-            }    
+            }else if($permission_item == ''){
+                $usArrers[] = $user;
+            } 
         }
     
 

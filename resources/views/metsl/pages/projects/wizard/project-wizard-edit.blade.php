@@ -88,10 +88,10 @@
                         <ul id="file-list" class="mt-4 text-sm text-gray-600 dark:text-gray-300">
 
                             @if ($project->files->count()  > 0)
-                            <ul id="file-list" class="mt-4 space-y-2">
+                            <ul  class="mt-4 space-y-2">
                                 @foreach ( $project->files as $file )
                                     <li class="flex justify-between"><a href="{{ asset('storage/project'.$project->id.'/'.$file->name)  }}" target="_blank">{{ $file->name  }}   ( {{ $file->size != NULL ? round($file->size/1024 , 2) : 0  }} kb )</a>
-                                        <a href={{ route('projects.destroy-file',[$file->id]) }} class="text-red-500 dark:text-red-400 hover:text-red-300">
+                                        <a href="{{ route('projects.destroy-file',[$file->id]) }}" class="text-red-500 dark:text-red-400 hover:text-red-300">
                                             <i data-feather="delete" class="w-5 h-5"></i>
                                         </a>
                                     </li>

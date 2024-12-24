@@ -98,6 +98,7 @@
         // Populate Assignees, Distribution Members, and Received From
 	let correspondenceData = [];
 	async  function get_correspondences(){
+		if(localStorage.getItem("project_tool") == 'correspondence'){
 		const type = $('[name="type"]').val();
 		let fetchRes = await fetch(`{{url('project/correspondence/all')}}`);
 		const all_correspondes = await fetchRes.json();
@@ -113,7 +114,8 @@
         loadedRows = 0;
         rowsToLoad = 4;
 		await loadRows();
-        feather.replace();		
+        feather.replace();
+		}		
     }
     // Sample data for demonstration
     // const correspondenceData = Array.from({ length: 100 }).map((_, i) => ({

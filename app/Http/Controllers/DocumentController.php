@@ -10,7 +10,9 @@ use App\Services\ClientService;
 use App\Services\ContractorService;
 use App\Services\DesignTeamService;
 use App\Services\DocumentService;
+use App\Services\ProjectDocumentFilesService;
 use App\Services\ProjectDocumentRevisionsService;
+use App\Services\ProjectFileService;
 use App\Services\ProjectManagerService;
 use App\Services\ProjectService;
 use App\Services\UserService;
@@ -33,7 +35,8 @@ class DocumentController extends Controller
         protected ProjectManagerService $projectmanagerService ,
         protected UserService $userService,
         protected DocumentService $documentService,
-        protected ProjectDocumentRevisionsService $projectDocumentRevisionsService
+        protected ProjectDocumentRevisionsService $projectDocumentRevisionsService,
+        protected ProjectDocumentFilesService $projectDocumentFilesService
 
         )
     {
@@ -94,6 +97,37 @@ class DocumentController extends Controller
         return $documents;
     }
 
+    public function edit($document_id){
+        $detail =  $this->documentService->getDetailOfDocument($document_id);
+ 
+        return $detail;
+        
+    }
+
+    public function update(DocumentRequest  $request)
+    {
+        if($request->validated()){
+            \DB::beginTransaction();
+            try{
+                $all_data = request()->all();
+               // $all_data['created_by'] = \Auth::user()->id;
+
+                //$all_data['created_date'] = date('Y-m-d');
+
+                $model = $this->documentService->update($all_data);
+            \DB::commit();
+            // all good
+            } catch (\Exception $e) {
+                \DB::rollback();
+                return response()->json(['error' => $e->getMessage()]);
+            }
+
+                       
+            return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$model]);
+
+        }
+    }
+
     public function ProjectDocumentsRevisions($document_id){
         $revisions =  $this->projectDocumentRevisionsService->getRevisionsOfDocument($document_id);
         $revisions->map(function($row){			
@@ -102,13 +136,24 @@ class DocumentController extends Controller
             $row->hover = $row->status->hover();
             $row->dataFeather = $row->status->dataFeather();
            // dd($row->ProjectDocument->project);
+           if($row->file != NULL){
             $row->file = Storage::url('project'.$row->project->id.'/documents'.$row->project_document_id.'/revisions/'.$row->file);
+
+           }
             return $row;
 	
 			
 		});	
         return $revisions;
         
+    }
+
+    public function delete($id){
+        $this->documentService->delete($id);
+        
+    }
+    public function delete_file($id){
+        $this->projectDocumentFilesService->delete($id);
     }
 
 }

@@ -60,7 +60,11 @@ $(document).ready(function() {
 
 const dropZone = document.getElementById('drop-zone');
 const fileInput = document.getElementById('file-upload');
+const fileInputEdit = document.getElementById('file-upload-edit');
+const dropZoneEdit = document.getElementById('drop-zone-edit');
+
 const fileList = document.getElementById('file-list');
+const fileListEdit = document.getElementById('file-list-edit');
 
 // Handle drag events
 dropZone.addEventListener('dragover', (event) => {
@@ -80,6 +84,25 @@ dropZone.addEventListener('drop', (event) => {
     handleFiles(files);
 });
 
+
+// Handle drag events
+dropZoneEdit.addEventListener('dragover', (event) => {
+    event.preventDefault(); // Prevent default behavior
+    dropZoneEdit.classList.add('bg-gray-200', 'dark:bg-gray-700'); // Highlight drop zone
+});
+
+dropZoneEdit.addEventListener('dragleave', () => {
+    dropZoneEdit.classList.remove('bg-gray-200', 'dark:bg-gray-700'); // Remove highlight
+});
+
+dropZoneEdit.addEventListener('drop', (event) => {
+    event.preventDefault(); // Prevent default behavior
+    dropZoneEdit.classList.remove('bg-gray-200', 'dark:bg-gray-700'); // Remove highlight
+
+    const files = event.dataTransfer.files; // Get dropped files
+    handleFiles(files);
+});
+
 // Handle file input (click-based file selection)
 fileInput.addEventListener('change', (event) => {
     handleFiles(event.target.files);
@@ -88,6 +111,16 @@ fileInput.addEventListener('change', (event) => {
 // Open file dialog on click
 dropZone.addEventListener('click', () => {
     fileInput.click();
+});
+
+// Handle file input (click-based file selection)
+fileInputEdit.addEventListener('change', (event) => {
+    handleFilesEdit(event.target.files);
+});
+
+// Open file dialog on click
+dropZoneEdit.addEventListener('click', () => {
+    fileInputEdit.click();
 });
 
 // Handle file processing
@@ -101,6 +134,19 @@ function handleFiles(files) {
         const li = document.createElement('li');
         li.textContent = `${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
         fileList.appendChild(li);
+    });
+}
+
+function handleFilesEdit(files) {
+    fileListEdit.innerHTML = ''; // Clear file list
+    Array.from(files).forEach((file) => {
+        if (file.size > 5 * 1024 * 1024) { // Validate file size (5MB)
+            alert(`File ${file.name} exceeds the maximum size of 5MB.`);
+            return;
+        }
+        const li = document.createElement('li');
+        li.textContent = `${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
+        fileListEdit.appendChild(li);
     });
 }
 

@@ -64,15 +64,29 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     
     /**
      * @param int $project_id
+    * @param int $permission_id
     * @return Collection
     */    
-    public function get_users_of_project($project_id): Collection
+    public function get_users_of_project($project_id , $permission_id): Collection
     {
-        return $this->model->whereHas('projects', function ($query) use ($project_id) {
-            $query->where(function ($q) use ($project_id) {
-                $q->where('projects.id',$project_id);
-            });
-        })->with('allPermissions.pivot.project')->get(['id', 'name']);
+        if($permission_id != ''){
+            return $this->model->whereHas('projects', function ($query) use ($project_id) {
+                $query->where(function ($q) use ($project_id) {
+                    $q->where('projects.id',$project_id);
+                });
+            })
+            ->with(['allPermissions'=>function($query)use($project_id , $permission_id){
+                $query->wherePivot('project_id',$project_id);
+                $query->wherePivot('permission_id',$permission_id);
+                }])->get(['id', 'name']);
+        }else{
+            return $this->model->whereHas('projects', function ($query) use ($project_id) {
+                $query->where(function ($q) use ($project_id) {
+                    $q->where('projects.id',$project_id);
+                });
+            })->with('allPermissions.pivot.project')->get(['id', 'name']);
+        }
+
     }
 
 

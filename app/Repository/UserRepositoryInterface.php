@@ -17,8 +17,9 @@ interface UserRepositoryInterface
     
 
     /**
-     * @param int $project_id
+    * @param int $project_id
+    * @param int $permission_id
     * @return Collection
     */    
-    public function get_users_of_project($project_id): Collection;
+    public function get_users_of_project($project_id , $permission_id): Collection;
 }

@@ -22,18 +22,34 @@ class DocumentRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        if(isset(request()->id)){
+            return [
 
-            'project_id' => ['required', 'integer'],
-          
-            'title' => 'required',
-            'number' => 'required',
-            "reviewers"    => ['required','array'],
-            'docs' => 'required',
-            "docs.*"  => ["required","mimes:pdf"],
+                'project_id' => ['required', 'integer'],
+            
+                'title' => 'required',
+                'number' => 'required',
+                "reviewers"    => ['required','array'],
+                'docs' => 'nullable',
+                "docs.*"  => ["nullable","mimes:pdf"],
 
-    
-        ]; 
+        
+            ]; 
+        }else{
+            return [
+
+                'project_id' => ['required', 'integer'],
+            
+                'title' => 'required',
+                'number' => 'required',
+                "reviewers"    => ['required','array'],
+                'docs' => 'required',
+                "docs.*"  => ["required","mimes:pdf"],
+
+        
+            ]; 
+        }
+
     }
     /**
      * Get custom attributes for validator errors.

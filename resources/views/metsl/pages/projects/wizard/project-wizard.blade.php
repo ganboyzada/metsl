@@ -320,7 +320,7 @@
                 html+=`        <div class="p-4 border  bg-gray-800 border-gray-700 flex items-center justify-between">
                     <div>
                         <p class="text-lg font-medium">${event.target.files[i].name}</p>
-                        <p class="text-sm text-gray-400">${(event.target.files[i].size /1024 / 1024).toFixed(2) } MB</p>
+                        <p class="text-sm text-gray-400">${(event.target.files[i].size /1024 ).toFixed(2) } KB</p>
                     </div>
                     <a href="${img}" target="__blank" class="text-blue-400 hover:underline flex items-center">
                         <i data-feather="download" class="w-5 h-5 mr-1"></i> Download

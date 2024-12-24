@@ -37,12 +37,14 @@
 </div>
 <script>
 //localStorage.setItem("project_tool", 'meeting_planing');
+//alert(localStorage.getItem("project_tool"));
 async  function set_in_local_storage(tool){
   localStorage.setItem("project_tool", tool);
 
-  if(localStorage.getItem("project_tool") == 'documents'){
-    get_reviewers();
-  }
+  //if(localStorage.getItem("project_tool") == 'documents'){
+   // get_reviewers();
+	//get_documents();
+  //}
 
 
 }

@@ -37,4 +37,13 @@ class ProjectDocumentFilesService
         return $model;
     }
 
+    public function delete($id)
+    {
+        try{
+            return $this->projectDocumentFilesRepository->delete($id);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
 }
