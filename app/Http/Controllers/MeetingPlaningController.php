@@ -109,7 +109,7 @@ class MeetingPlaningController extends Controller
             $id = Session::get('projectID');     
             $next_number =  $this->meetingPlaningService->getNextNumber($id);
 
-            $reviewers = $this->userService->getUsersOfProjectID($id , '');
+            $reviewers = $this->userService->getUsersOfProjectID($id , 'participate meeting planing');
 			
             $users = $reviewers['users'];
 

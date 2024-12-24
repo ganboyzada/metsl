@@ -112,8 +112,8 @@ class PunchListController extends Controller
             $id = Session::get('projectID');     
             $next_number =  $this->punchListService->getNextNumber($id);
 
-            $distribution_members = $this->userService->getUsersOfProjectID($id , '');
-            $responsible = $this->userService->getUsersOfProjectID($id , '');
+            $distribution_members = $this->userService->getUsersOfProjectID($id , 'distribution members punch list');
+            $responsible = $this->userService->getUsersOfProjectID($id , 'responsible punch list');
 			
             $distribution_members = $distribution_members['users'];
             $responsible = $responsible['users'];
