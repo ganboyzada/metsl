@@ -46,8 +46,8 @@ class ProjectController extends Controller
             $id = Session::get('projectID');
         }    
         return view('metsl.pages.projects.project', get_defined_vars());
-
     }
+    
     public function storeIdSession(Request $request){
          session(['projectID' => $request->projectID]);
          session(['projectName' => $request->projectName]);

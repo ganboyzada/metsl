@@ -108,7 +108,7 @@
                 
             </div>
         
-            <button type="button" onclick="showStep(2); sendValueToReviewTab();" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Next</button>
+            <button type="button" onclick="showStep(2); sendValueToReviewTab();" class="bg-blue-500 text-white px-4 py-2 mt-4">Next</button>
         </div>
 
         <!-- Step 2: Stakeholder Selection -->
@@ -162,8 +162,8 @@
             </div>
 
             <!-- Navigation Buttons -->
-            <button type="button" onclick="showStep(1)" class="bg-gray-500 text-white px-4 py-2 rounded mt-4 mr-2">Back</button>
-            <button type="button" onclick="showStep(3)" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Next</button>
+            <button type="button" onclick="showStep(1)" class="bg-gray-500 text-white px-4 py-2 mt-4 mr-2">Back</button>
+            <button type="button" onclick="showStep(3)" class="bg-blue-500 text-white px-4 py-2 mt-4">Next</button>
         </div>
 
        
@@ -178,8 +178,8 @@
             </div>
 
             <!-- Navigation Buttons -->
-            <button type="button" onclick="showStep(2)" class="bg-gray-500 text-white px-4 py-2 rounded mt-4 mr-2">Back</button>
-            <button type="button" onclick="showStep(4)" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Next</button>
+            <button type="button" onclick="showStep(2)" class="bg-gray-500 text-white px-4 py-2 mt-4 mr-2">Back</button>
+            <button type="button" onclick="showStep(4)" class="bg-blue-500 text-white px-4 py-2 mt-4">Next</button>
 
         </div>
 
@@ -189,8 +189,8 @@
         <div id="step4" class="wizard-step hidden">
             <h2 class="text-2xl font-semibold mb-4">Workflow Setup</h2>
             <!-- Optional fields like milestones, budget, notes -->
-            <button type="button" onclick="showStep(3)" class="bg-gray-500 text-white px-4 py-2 rounded mt-4 mr-2">Back</button>
-            <button type="button" onclick="showStep(5)" class="bg-blue-500 text-white px-4 py-2 rounded mt-4">Next</button>
+            <button type="button" onclick="showStep(3)" class="bg-gray-500 text-white px-4 py-2 mt-4 mr-2">Back</button>
+            <button type="button" onclick="showStep(5)" class="bg-blue-500 text-white px-4 py-2 mt-4">Next</button>
         </div>
         --}}
 
@@ -200,8 +200,8 @@
             @include('metsl.pages.projects.wizard.review_step')
 
             <!-- Display summary of project details -->
-            <button type="button" onclick="showStep(3)" class="bg-gray-500 text-white px-4 py-2 rounded mt-4 mr-2">Back</button>
-            <button type="submit"id="submit_project_form" class="bg-green-500 text-white px-4 py-2 rounded mt-4">Submit Project</button>
+            <button type="button" onclick="showStep(3)" class="bg-gray-500 text-white px-4 py-2 mt-4 mr-2">Back</button>
+            <button type="submit"id="submit_project_form" class="bg-green-500 text-white px-4 py-2 mt-4">Submit Project</button>
         </div>
     </form>
             <!-- Overlay Modal for Creating New User -->

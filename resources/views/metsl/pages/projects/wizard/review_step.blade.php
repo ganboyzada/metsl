@@ -74,7 +74,7 @@
         Project Documents
     </h2>
     <div class="grid grid-cols-2 md:grid-cols-4 gap-6 mb-8" id="docs">
-        @if ($files->count() > 0)
+        @if (isset($files) && $files->count() > 0)
             @foreach ($files as $file)
             <div class="p-4 border  bg-gray-800 border-gray-700 flex items-center justify-between">
 

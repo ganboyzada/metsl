@@ -19,11 +19,13 @@ class CheckProjectSession
     {
         if (Session::has('projectID') && Session::has('projectName')){
             return $next($request);
-        }else{
+        }else{ 
             
             $project = Project::latest()->first();
-            session(['projectID' => $project->id]);
-            session(['projectName' => $project->name]);
+            if($project){
+                session(['projectID' => $project->id]);
+                session(['projectName' => $project->name]);
+            }
         }
         return $next($request);
     }

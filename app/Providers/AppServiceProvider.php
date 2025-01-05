@@ -31,8 +31,6 @@ class AppServiceProvider extends ServiceProvider
             $id= $all_projects[($all_projects->count() - 1)]->id;
 
         }
-
-      
         
         \View::share('projects', $all_projects);
        // Model::preventLazyLoading();
