@@ -31,6 +31,7 @@ class Project extends Model
     public  static function boot(){
         parent::boot();
         static::pivotSynced(function ($model, $relationName, $changes) {
+            /*
             if(count($changes['attached']) > 0){
                 foreach($changes['attached'] as $stakholder_id){
                     $user = User::find($stakholder_id); 
@@ -38,6 +39,7 @@ class Project extends Model
                     $m = \Mail::to($user->email)->send(new StakholderEmail($project_name)); 
                 }
             }
+                */
 
         });    
     

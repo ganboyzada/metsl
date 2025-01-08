@@ -12,9 +12,9 @@
     <!-- Form -->
     <form id="correspondence-form" class="space-y-6"  method="POST" enctype="multipart/form-data">
 	@csrf
-		<input type="hidden" value="{{$id}}" name="project_id"/>
-		<input type="hidden" value="{{$type}}" name="type"/>
-		<input type="hidden" value="{{$reply_correspondence_id}}" name="reply_correspondence_id"/>
+		<input type="hidden" name="project_id" value="{{ \Session::get('projectID') }}"/>
+		<input type="hidden" value="{{$type ?? ''}}" name="type"/>
+		<input type="hidden" value="{{$reply_correspondence_id ?? ''}}" name="reply_correspondence_id"/>
 		
         <!-- Grid Layout for Fields -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -226,11 +226,14 @@
 
 	$(".projectButton").on('click',function(event) {
 
-			get_users_changed();
+		get_users();
 		
 	});
-		
-	async  function get_users_changed(){
+					
+
+	get_users();
+        // Populate Assignees, Distribution Members, and Received From
+	async  function get_users(){
 		const type = $('[name="type"]').val();
 		let fetchRes = await fetch(`{{url('project/correspondence/users?type=${type}')}}`);
 		const all_users = await fetchRes.json();
@@ -262,39 +265,12 @@
 	}
 			
 
-	get_users();
-        // Populate Assignees, Distribution Members, and Received From
-	async  function get_users(){
-		const type = $('[name="type"]').val();
-		let fetchRes = await fetch(`{{url('project/correspondence/users?type=${type}')}}`);
-		const all_users = await fetchRes.json();
-		$('[name="number"]').val(all_users.next_number);
-			const assignees = all_users.assigned_users.map(function(item) {
-			  return {'value' : item.id , 'label' : item.name};
-			});
-						console.log(assignees);
-
-			
-			assignees_obj = populateChoices2('assignees', assignees, true);
+    document.addEventListener('DOMContentLoaded', () => {
+		assignees_obj = populateChoices2('assignees', [], true);		
+		distribution_obj = populateChoices2('distribution', [], true);	
+		received_obj = populateChoices2('received-from', [], false);		
 		
-			const distribution = all_users.destrbution_users.map(function(item) {
-			  return {'value' : item.id , 'label' : item.name};
-			});	
-			distribution_obj = populateChoices2('distribution', distribution, true);
-			
-			
-			const allusers = all_users.users.map(function(item) {
-			  return {'value' : item.id , 'label' : item.name};
-			});	
-
-			received_obj = populateChoices2('received-from', allusers,false);
-
-        feather.replace();
-			
-    }
-	
-
-
+    }); 
 
     // document.addEventListener('DOMContentLoaded', () => {
 

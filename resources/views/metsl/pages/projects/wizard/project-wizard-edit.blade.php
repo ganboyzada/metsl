@@ -44,7 +44,7 @@
     <!-- Step 1: Project Basics -->
     <form id="projectWizard" method="POST" enctype="multipart/form-data">
         @csrf
-        <input type="text" name="id" value="{{ $project->id }}"/>
+        <input type="hidden" name="id" value="{{ $project->id }}"/>
 
         <div id="step1" class="wizard-step">
             <h2 class="text-2xl font-semibold mb-4">Project Basics</h2>

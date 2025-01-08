@@ -3,7 +3,7 @@
 <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
 <div class="flex flex-wrap items-center justify-between mb-6">
     <!-- Add Document Button -->
-    <button data-modal="uploader-modal" class="modal-toggler bg-blue-500 text-white px-4 py-2  hover:bg-blue-600 flex items-center transition duration-200">
+    <button onclick="reset_model();" data-modal="uploader-modal" class="modal-toggler bg-blue-500 text-white px-4 py-2  hover:bg-blue-600 flex items-center transition duration-200">
         <i data-feather="plus-circle" stroke-width="2" class="w-5 h-5 mr-2"></i> Add Document
     </button>
 
@@ -62,12 +62,19 @@
 			get_documents();
 		}
 	});	
-	
+	function reset_model(){
+		$('#document_id').val(0);
+		$('#document-number').val('');
+		$('#title').val('');
+		$('#file-list').html('');
+		$('.file-list').html('');		
+	}
 	
 	async function get_files(id){
 		current_document_id = id;
 		$('.error').hide();
 		$('.success').hide();
+		$('.err-msg').hide();
 		$(".error").html("");
 		$(".success").html("");
 	
@@ -79,8 +86,8 @@
 		let fetchRes = await fetch(url);
 		let detail = await fetchRes.json();
 		$('#document_id').val(detail.id);
-		$('#document-number-edit').val(detail.number);
-		$('#title_edit').val(detail.title);
+		$('#document-number').val(detail.number);
+		$('#title').val(detail.title);
 		
 		let reviewers_selected = detail.reviewers.map(function(item) {
 		  return item.id;
@@ -90,14 +97,14 @@
 			item.selected = reviewers_selected.includes(item.value) ? true : false
 			return item;
 		});
-					//console.log(all_reviewers_with_selected);
+		console.log(doc_reviewers);
 
 
-		reviewers_obj2.clearStore();
-		reviewers_obj2.setChoices(all_reviewers_with_selected);	
+		reviewers_obj.clearStore();
+		reviewers_obj.setChoices(all_reviewers_with_selected);	
 		var html = ``;
 		if(detail.files.length > 0){
-			html+=`<ul  class="mt-4 space-y-2">`;
+			html+=``;
 			for(var i=0;i<detail.files.length;i++){
 				var file_url = 	`{{asset('storage/project${detail.project_id}/documents${detail.id}/${detail.files[i].file}')}}`;	
 				html+=`<li  class="flex justify-between" id="li${i}">
@@ -108,10 +115,10 @@
 				</li>`;
 	
 			}
-			html+=`</ul>`;
+			html+=``;
 		}
 			
-		$('.file-list').html(html);	
+		$('.file-list').append(html);	
 		feather.replace();
 		
 
@@ -233,7 +240,7 @@
 						</a>
 					</span>
 					
-					<button  onclick="get_files(${all_documents[i].id})" data-modal="files-modal"  class="modal-toggler flex justify-center items-center mb-4">
+					<button  onclick="get_files(${all_documents[i].id})" data-modal="uploader-modal"  class="modal-toggler flex justify-center items-center mb-4">
 						<i data-feather="file-text" class="w-12 h-12 dark:text-gray-200"></i>
 					</button>
 					
