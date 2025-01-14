@@ -3,9 +3,9 @@
 @section('title', 'Project Creation Wizard')
 
 @section('header')
-    <a href="{{ route('projects.find', 1) }}" class="flex items-center text-gray-600 hover:text-gray-800 bg-gray-200 hover:bg-gray-300 px-4 py-2  font-medium">
-    <i class="fas fa-arrow-left mr-2 text-gray-500"></i> Back to Project
-</a>
+    <a href="{{ route('projects.find', 1) }}" class="h-100 flex items-center text-gray-600 hover:text-gray-800 bg-gray-200 hover:bg-gray-300 px-4 py-2 font-medium">
+        <i class="fas fa-arrow-left mr-2 text-gray-500"></i> Back to Project
+    </a>
 @endsection
 
 @section('content')

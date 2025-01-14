@@ -2,7 +2,7 @@
 <div class="has-dropdown relative inline-block text-left z-10">
     <!-- Dropdown Toggle Button -->
     <button class="dropdown-toggle flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-800">
-        <span id="selected-project" class="flex flex-col items-start text-xs mr-2 font-medium">Tools <b class="current-selected">Meeting Minutes</b></span>
+        <span class="flex flex-col items-start text-xs mr-2 font-medium">Tools <b class="current-selected">Meeting Minutes</b></span>
         <i data-feather="chevron-down"></i>
     </button>
 

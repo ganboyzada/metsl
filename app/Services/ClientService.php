@@ -26,6 +26,8 @@ class ClientService
                     $data['image'] = NULL;
             }
 
+            $data['status'] = 1;
+
             $model =  $this->ClientRepository->create($data);
             
             $path = Storage::url('client'.$model->id);

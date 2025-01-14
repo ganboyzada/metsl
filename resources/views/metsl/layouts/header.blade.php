@@ -9,7 +9,7 @@
             <div class="has-dropdown relative inline-block text-left z-10">
                 <!-- Dropdown Toggle Button -->
                 <button class="dropdown-toggle flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-800">
-                    <span id="selected-project" class="flex flex-col items-start text-xs mr-2 font-medium">{{  session('projectName')  }}</span>
+                    <span id="selected-project" class="flex flex-col items-start text-xs mr-2 font-medium">Project<b id="project-variable">{{  session('projectName')  }}</b></span>
                     <i data-feather="chevron-down"></i>
                 </button>
 
@@ -21,18 +21,18 @@
                             @foreach($projects as $project)
 
                                 <li>
-                                    <button onclick="selectProject('{{ $project->name }}' , '{{ $project->id }}')" class="block w-full text-left px-4 py-2 hover:bg-black/10 projectButton">{{ $project->name }}</button>
+                                    <button onclick="selectProject('{{ $project->name }}' , '{{ $project->id }}')" class="block text-xs w-full text-left px-4 py-2 hover:bg-black/10 projectButton">{{ $project->name }}</button>
                                 </li>
                             @endforeach
                         @endif
 
                         <li class="px-3 pt-2">
-                        <a href="{{ route('projects') }}" class="inline-flex w-full text-center px-3 py-1 bg-gray-600 hover:bg-blue-700 text-white font-medium">
+                        <a href="{{ route('projects') }}" class="text-xs inline-flex w-full px-3 py-1 bg-gray-600 hover:bg-blue-700 text-white font-medium">
                             All Projects
                         </a>
                         </li>
                         <li class="px-3 pt-2">
-                        <a href="{{ route('projects.create') }}" class="inline-flex w-full text-center px-3 py-1 bg-blue-900 hover:bg-blue-700 text-white">
+                        <a href="{{ route('projects.create') }}" class="text-xs inline-flex items-center w-full px-3 py-1 bg-blue-900 hover:bg-blue-700 text-white">
                             <i data-feather="plus" class="mr-1"></i> New Project
                         </a>
                         </li>
@@ -173,7 +173,7 @@
 
  
         function selectProject(projectName , projectId) {
-            const selectedProjectElement = document.getElementById("selected-project");
+            const selectedProjectElement = document.getElementById("project-variable");
             selectedProjectElement.textContent = projectName; // Update the displayed project name
             const dropdown = document.getElementById('dropdown-toggle');
             dropdown.classList.toggle('hidden');

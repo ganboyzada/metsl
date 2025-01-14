@@ -247,8 +247,6 @@ const populateChoices2 = (selector, options, multiple=false, placeholder=null) =
         received_obj = obj;
         received_obj.setChoices(options);
         return received_obj;
-       
-  
 
 };
 

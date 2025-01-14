@@ -159,7 +159,7 @@ class ProjectController extends Controller
     }
 
     public function edit(Request $request , $id){
-        $project = $this->projectService->find(6);
+        $project = $this->projectService->find($id);
        // return $project;
         $clients = $this->clientService->all();
         $contractors = $this->contractorService->all();
