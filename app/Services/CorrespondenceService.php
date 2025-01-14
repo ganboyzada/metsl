@@ -101,12 +101,12 @@ class CorrespondenceService
     public function find($id)
     {
         return $this->correspondenceRepository->with([
-            'assignees:id,name' ,
-            //'assignees.userable:id,image' , 
-        'distributionMembers:id,name',
-        //'distributionMembers.userable:id,image',
-         'ReceivedFrom:id,name',
-         //'ReceivedFrom.userable:id,image', 
+            //'assignees:id,name' ,
+            'assignees.userable' , 
+       // 'distributionMembers:id,name',
+        'distributionMembers.userable',
+       //  'ReceivedFrom:id,name',
+         'ReceivedFrom.userable', 
          
          'files:id,correspondence_id,file,size'])->find($id);
         

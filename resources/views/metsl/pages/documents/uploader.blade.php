@@ -13,6 +13,7 @@
         <form id="upload-form"  method="POST" enctype="multipart/form-data">
 			@csrf
 			<input type="hidden" value="{{\Session::get('projectID')}}" name="project_id"/>
+			<input type="hidden" value="0" id="document_id" name="id"/>
 
             <!-- Drag and Drop Zone -->
             <div>
@@ -25,6 +26,8 @@
                     </div>
                     <input id="file-upload" name="docs[]" type="file" class="hidden" accept=".pdf" multiple>
                 </div>
+				<ul class="file-list" class="mt-4 space-y-2">
+				</ul>
                 <ul id="file-list" class="mt-4 space-y-2">
                     <!-- Uploaded files will appear here -->
                 </ul>
@@ -86,7 +89,7 @@
  $("#upload-form").on("submit", function(event) {
         const form = document.getElementById("upload-form");
         const formData = new FormData(form); 
-    
+		const document_id = $('#document_id').val();
             $('.error').hide();
             $('.success').hide();
             $('.err-msg').hide();
@@ -99,7 +102,7 @@
                 }
             });
             $.ajax({
-                url: "{{ route('projects.documents.store') }}",
+                url: (document_id == 0)? "{{ route('projects.documents.store') }}" : "{{ route('projects.documents.update') }}" ,
                 type: "POST",
                 data: formData,
                 dataType: 'json',
@@ -159,45 +162,31 @@
 	
 	$(".projectButton").on('click',function(event) {
 		if(localStorage.getItem("project_tool") == 'documents'){
-			get_reviewers2();
+			get_reviewers();
 		}
 		
 	});
 		
-	async  function get_reviewers2(){
+	async  function get_reviewers(){
 		let fetchRes = await fetch(`{{url('project/documents/reviewers')}}`);
 		const all_users = await fetchRes.json();
 		const reviewers = all_users.users.map(function(item) {
 		  return {'value' : item.id , 'label' : item.name};
 		});
 			console.log(reviewers);
-
+			doc_reviewers = reviewers;
 			reviewers_obj.clearStore();
 			reviewers_obj.setChoices(reviewers);
 
-			reviewers_obj2.clearStore();
-			reviewers_obj2.setChoices(reviewers);			
+				
 	}
 			
     get_reviewers();
 	let doc_reviewers = [];
-	async  function get_reviewers(){
-		//if(localStorage.getItem("project_tool") == 'documents'){
 
-			let fetchRes = await fetch(`{{url('project/documents/reviewers')}}`);
-			const all_users = await fetchRes.json();
-			doc_reviewers = all_users.users.map(function(item) {
-			  return {'value' : item.id , 'label' : item.name};
-			});
-
-			
-			reviewers_obj = populateChoices2('reviewers', doc_reviewers, true);
-			reviewers_obj2 = populateChoices2('reviewers_selected', doc_reviewers, true);
-
-		//}	
-	
-    }
-	
+	document.addEventListener('DOMContentLoaded', () => {
+		reviewers_obj = populateChoices2('reviewers', [], true);
+    });
 	
 document.addEventListener('DOMContentLoaded', () => {
     const modal = document.getElementById('uploader-modal');

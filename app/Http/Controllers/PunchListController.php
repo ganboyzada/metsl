@@ -64,6 +64,7 @@ class PunchListController extends Controller
             try{
                 $all_data = request()->all();
                 $all_data['created_by'] = \Auth::user()->id;
+                $all_data['closed_by'] = \Auth::user()->id;
 
                 $all_data['project_id'] = Session::get('projectID');
 

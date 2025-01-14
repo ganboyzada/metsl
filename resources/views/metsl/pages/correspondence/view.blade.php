@@ -109,7 +109,7 @@
     <!-- Description -->
     <div class="mb-6">
         <h3 class="text-sm font-medium dark:text-gray-400 mb-1">Description</h3>
-        <p class="text-lg dark:text-gray-200">{{$correspondece->description}}.</p>
+        <p class="text-lg dark:text-gray-200">{!! $correspondece->description   !!}.</p>
     </div>
 
     <!-- Attachments -->

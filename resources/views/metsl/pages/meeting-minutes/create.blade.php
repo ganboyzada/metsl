@@ -232,7 +232,9 @@
 						
                         $('#file-list').html('');
 						
-
+						setInterval(function() {
+							location.reload();
+							}, 3000);                        
 
                     }
                     else if(data.error){
@@ -265,24 +267,24 @@
 
 	$(".projectButton").on('click',function(event) {
 		if(localStorage.getItem("project_tool") == 'meeting_planing'){
-			get_participates2();
+			get_participates();
 		}
 		
 	});
 		
-	async  function get_participates2(){
-		let fetchRes = await fetch(`{{url('project/meetings/participates')}}`);
-		const all = await fetchRes.json();
-		$('[name="number"]').val(all.next_number);
+	// async  function get_participates2(){
+		// let fetchRes = await fetch(`{{url('project/meetings/participates')}}`);
+		// const all = await fetchRes.json();
+		// $('[name="number"]').val(all.next_number);
 
-		const reviewers = all.users.map(function(item) {
-		  return {'value' : item.id , 'label' : item.name};
-		});
-			console.log(reviewers);
+		// const reviewers = all.users.map(function(item) {
+		  // return {'value' : item.id , 'label' : item.name};
+		// });
+			// console.log(reviewers);
 
-			reviewers_obj.clearStore();
-			reviewers_obj.setChoices(reviewers);		
-	}
+			// reviewers_obj.clearStore();
+			// reviewers_obj.setChoices(reviewers);		
+	// }
 			
 
 	get_participates();
@@ -296,9 +298,10 @@
 			  return {'value' : item.id , 'label' : item.name};
 			});
 			console.log(reviewers);
-
+			reviewers_obj.clearStore();
+			reviewers_obj.setChoices(reviewers);
 			
-			reviewers_obj = populateChoices2('participants', reviewers, true);
+			
 		}	
 	
     }
@@ -313,8 +316,9 @@
         // {'value': '5', 'label': 'Brook Chesterville'}
     // ];
 
-    // document.addEventListener('DOMContentLoaded', () => {
-        // populateChoices('participants', participants, true);     
-    // }); 
+    document.addEventListener('DOMContentLoaded', () => {
+       // populateChoices('participants', participants, true); 
+		reviewers_obj = populateChoices2('participants', [], true);		
+    }); 
 </script>
 @endpush

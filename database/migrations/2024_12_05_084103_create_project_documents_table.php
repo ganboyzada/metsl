@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->string('number')->nullable();
 			$table->integer('status')->default(1);
-            $table->date('creacolumn: ted_date')->nullable();
+            $table->date('created_date')->nullable();
 
             $table->unsignedBiginteger('created_by')->unsigned();
             $table->foreign('created_by')->references('id')

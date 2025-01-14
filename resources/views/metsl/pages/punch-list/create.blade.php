@@ -9,7 +9,7 @@
 	<div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
 	<form id="snag-item-form" class="space-y-6"  method="POST" enctype="multipart/form-data">
 		@csrf
-				<input type="hidden" name="project_id" value="{{ \Session::get('projectID') }}"/>
+		<input type="hidden" name="project_id" value="{{ \Session::get('projectID') }}"/>
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             <!-- Title (Required) -->
             <div>
@@ -259,12 +259,12 @@
 
 	$(".projectButton").on('click',function(event) {
 		if(localStorage.getItem("project_tool") == 'punch_list'){
-			get_participates2();
+			get_participates();
 		}
 		
 	});
 		
-	async  function get_participates2(){
+	async  function get_participates(){
 		let fetchRes = await fetch(`{{url('project/punch-list/participates')}}`);
 		const all = await fetchRes.json();
 		$('[name="number"]').val(all.next_number);
@@ -285,26 +285,14 @@
 			
 
 	get_participates();
-	async  function get_participates(){
-		if(localStorage.getItem("project_tool") == 'punch_list'){
-
-			let fetchRes = await fetch(`{{url('project/punch-list/participates')}}`);
-			const all = await fetchRes.json();
-			$('[name="number"]').val(all.next_number);
-			
-			let reviewers = all.distribution_members.map(function(item) {
-			  return {'value' : item.id , 'label' : item.name};
-			});
-
-			distribution_obj = populateChoices2('distribution-members', reviewers, true);
-			
-			reviewers = all.responsible.map(function(item) {
-			  return {'value' : item.id , 'label' : item.name};
-			});			
-			reviewers_obj = populateChoices2('responsible-member', reviewers);
-		}	
 	
-    }
+	
+	document.addEventListener('DOMContentLoaded', () => {
+		distribution_obj = populateChoices2('distribution-members', [], true);	
+		reviewers_obj = populateChoices2('responsible-member', []);		
+		
+    }); 
+
 	
 
 
