@@ -99,8 +99,9 @@
             </button>
             <!-- User Dropdown Menu -->
             <div id="userDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-700 shadow-lg  py-2 z-10">
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100/25"><i data-feather="user" class="mr-3"></i>Profile</a>
-                <a href="#" class="block px-4 py-2 hover:bg-gray-100/25"><i data-feather="settings" class="mr-3"></i>Settings</a>
+                <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100/25"><i data-feather="user" class="mr-3"></i>Profile</a>
+                <a href="{{ route('roles') }}" class="flex items-center px-4 py-2 hover:bg-gray-100/25"><i data-feather="git-pull-request" class="mr-3"></i>Role Management</a>
+                <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100/25"><i data-feather="settings" class="mr-3"></i>Settings</a>
                 <form method="POST" action="{{ route('logout') }}" class="block">
                     @csrf
                     <button type="submit" class="text-left text-gray-700 dark:text-gray-300 hover:bg-red-900/25 hover:text-red-400 px-4 py-2 w-full">

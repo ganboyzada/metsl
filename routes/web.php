@@ -30,6 +30,12 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 
+
+    Route::view('/roles', 'metsl.pages.roles.index')->name('roles');
+    Route::view('/roles/create', 'metsl.pages.roles.create')->name('roles.create');
+    Route::view('/roles/permissions', 'metsl.pages.permissions.index')->name('roles.permissions');
+    Route::view('/roles/permissions/create', 'metsl.pages.permissions.create')->name('roles.permissions.create');
+
     Route::get('/project/storeIdSession', action: [ProjectController::class, "storeIdSession"])->name('projects.store_id_session');
 
     Route::get('/project/{id}', function ($id) {
