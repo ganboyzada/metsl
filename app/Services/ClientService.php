@@ -30,14 +30,15 @@ class ClientService
 
             $model =  $this->ClientRepository->create($data);
             
-            $path = Storage::url('client'.$model->id);
-            
-            \File::makeDirectory($path, $mode = 0777, true, true);
-        
-            if($data['image'] != NULL){
-                $file->move(('storage/client'.$model->id.'/'),$model->image);
+            $path = Storage::disk('public')->path('client' . $model->id);
 
-            } 
+            // Create the directory
+            \File::makeDirectory($path, $mode = 0777, true, true);
+
+            if ($data['image'] != NULL) {
+                // Store the file in the directory
+                Storage::disk('public')->putFileAs('client' . $model->id, $file, $model->image);
+            }
             \DB::commit();
         // all good
         } catch (\Exception $e) {
