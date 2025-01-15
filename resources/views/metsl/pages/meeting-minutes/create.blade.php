@@ -131,7 +131,7 @@
             </select>
         </div>
 		<div class="col-span-1">
-			<label for="endDate" class="block font-medium text-gray-700 dark:text-gray-200">status</label>
+			<label for="endDate" class="block font-medium text-gray-700 dark:text-gray-200">Status</label>
 				<select name="status" id="status"class="mt-1 block w-full   shadow-sm dark:bg-gray-800 dark:text-gray-200">
 					@php
 					$status_list = \App\Enums\MeetingPlanStatusEnum::cases();
@@ -288,6 +288,7 @@
 			
 
 	get_participates();
+
 	async  function get_participates(){
 		if(localStorage.getItem("project_tool") == 'meeting_planing'){
 
@@ -300,14 +301,10 @@
 			console.log(reviewers);
 			reviewers_obj.clearStore();
 			reviewers_obj.setChoices(reviewers);
-			
-			
+				
 		}	
-	
     }
 	
-
-
     // let participants = [
         // {'value': '1', 'label': 'John Doe'},
         // {'value': '2', 'label': 'Blake John'},

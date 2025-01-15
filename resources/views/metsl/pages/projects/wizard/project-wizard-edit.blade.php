@@ -207,7 +207,7 @@
                             @foreach ($project->designTeams as $selected_user)
                             <div class="flex items-center mb-2">
                                 <select onchange="map_user_type('designTeam')" name="designTeam[]" id="designTeam{{ $i }}" index="{{ $i }}" class="block w-96 px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200 mr-2">
-                                    @foreach ($project_managers as $user)
+                                    @foreach ($design_teams as $user)
                                         <option value="{{ $user->id }}" uuid="{{ $user->user->id }}" {{ $selected_user->id == $user->user->id ? 'selected' : '' }}   >{{ $user->user_name }}</option>`;
                                     @endforeach
                                 
@@ -596,9 +596,11 @@
 
     let client_stakeholders =  {!! json_encode($project->clients_permissions) !!};
     let  contractor_stakeholders = {!! json_encode($project->contractors_permissions) !!};
+    
 console.log(contractor_stakeholders);
 console.log(designTeam_stakeholders);
 console.log(projectManager_stakeholders);
+
 function map_user_type(type){
 		
 		// alert(e.getAttribute('index'));
@@ -758,7 +760,7 @@ function map_user_type(type){
                 html+=`
                
             </select>
-            <button type="button" onclick="openCreateUserModal('${type}' , ${length})" class="p-2 rounded-md bg-orange-600 inline-flex text-white">
+            <button type="button" onclick="openCreateUserModal('${type}' , ${length})" class="p-2 bg-orange-600 inline-flex text-white">
 
                 <i data-feather="user-plus"></i>
             </button>
