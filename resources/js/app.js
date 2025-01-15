@@ -140,7 +140,8 @@ function getLocalStorage(){
     }
     else if(localStorage.getItem("project_tool") == 'stakeholders'){
         $('.current-selected').html('Stakeholders');
-        $("[data-tab='users']").addClass("active");
+        $('.tab-content#stakeholders').removeClass('hidden');
+        $("[data-tab='stakeholders']").addClass("active");
 
     }
 

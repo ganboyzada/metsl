@@ -22,4 +22,11 @@ interface UserRepositoryInterface
     * @return Collection
     */    
     public function get_users_of_project($project_id , $permission_id): Collection;
+
+    /**
+     * @param int $project_id
+     *  @param \Request $request
+    * @return Collection
+    */ 
+    public function get_stakeholders_of_project($project_id , $request): Collection;
 }

@@ -4,6 +4,21 @@
 @endsection
 @section('content')
 <div class="container">
+    @if(session()->has('success'))
+    <div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold">
+        {{ session()->get('success') }}
+    </div>
+    @endif
+
+    @if ($errors->any())
+    <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+	@endif
     <form action="{{ route('roles.update', $role->id) }}" method="POST">
         @csrf
         @method('PUT')
@@ -19,7 +34,7 @@
             <div>
                 <input type="checkbox" name="permissions[]" value="{{ $permission->id }}" 
                        {{ $role->permissions->contains($permission->id) ? 'checked' : '' }}>
-                <label>{{ $permission->name }}</label>
+                       <label> {{ str_replace("_"," ",$permission->name)   }}</label>
             </div>
             @endforeach
         </div>

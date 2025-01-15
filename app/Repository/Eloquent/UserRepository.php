@@ -89,6 +89,39 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     }
 
+   /**
+    * @param int $project_id
+    * @param \Request $request
+    * @return Collection
+    */ 
+    public function get_stakeholders_of_project($project_id , $request):Collection    
+    {   
+        $data = $request->all();
+       return $this->model->whereHas('projects', function ($query) use ($project_id) {
+            $query->where('projects.id',$project_id);
+            
+       })
+       
+       //->whereRelation('projects', 'projects.id', '=', $project_id)
+        ->with('userable')
+        ->when($request->search , function($query) use($request){
+            $query->where(function($q) use($request){
+                $q->where('name', 'LIKE', "%".$request->search."%");
+                $q->orwhere('email', 'LIKE', "%".$request->search."%");
+                $q->orWhereHas('userable',function($q)use($request){
+                    $q->where('first_name', 'LIKE', "%".$request->search."%");
+                    $q->orwhere('last_name', 'LIKE', "%".$request->search."%");
+                    $q->orwhere('mobile_phone', 'LIKE', "%".$request->search."%");
+                    $q->orwhere('office_phone', 'LIKE', "%".$request->search."%");
+                    $q->orwhere('specialty', 'LIKE', "%".$request->search."%");
+    
+                });
+            });
 
+    
+        })
+        ->get();
+        
+    }
   
 }

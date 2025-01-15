@@ -68,11 +68,10 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
             $data['end_date'] = date_format(\Carbon\Carbon::today(), 'Y-m-d');
         }
         $meetingPlanings =  $this->model->where('project_id',$project_id)
-        ->where(function($searchquery) use($data){
-                $searchquery->where(function($searchquery2) use($data){
-                    $searchquery2->when($data['search'] , function($query) use($data){
-                        $query->where(function($q) use($data){
-                            $q->whereAny(
+
+                        ->when($data['search'] , function($query) use($data){
+                        
+                            $query->whereAny(
                                 [
                                     'number',
                                     'name',
@@ -87,25 +86,30 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
                                 'LIKE',
                                 "%".$data['search']."%"
                             );
-                        });  
-                        
+                            $query->orWhereHas('users',function($q)use($data){
+                                $q->where('name', 'LIKE', "%".$data['search']."%");
+                            });
+                       
+                        /*
                         $query->orWhereHas('users',function($q)use($data){
                             $q->where('name', 'LIKE', "%".$data['search']."%");
                         });
+                        */
 
-                    });
+                    })
 
-                });
-
-                $searchquery->orwhere(function($searchquery2) use($data){
-                    $searchquery2->when($data['start_date'] , function($query) use($data){
+                    ->when($data['start_date'] , function($query) use($data){
                         $query->where(function($q) use($data){
             
                         $q->orwhereBetween('start_time', [$data['start_date'], $data['end_date']]);
             
                     });
-                });
-            });    
+
+                    
+
+              
+
+               
         })->with(['users:id,name'])->get();
   
       return $meetingPlanings;

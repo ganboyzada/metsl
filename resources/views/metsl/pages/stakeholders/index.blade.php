@@ -1,4 +1,5 @@
-
+<div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
+<div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
     <div class="flex justify-between items-center mb-6">
         <!-- Search Box -->
         <div class="relative flex items-center">
@@ -9,38 +10,201 @@
 
     </div>
 
-    <!-- Responsive Grid for Companies -->
     <div id="stakeholdersGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-6">
-	    @if(isset($stakeholders) && $stakeholders->count() > 0) 
-			@foreach($stakeholders as $user)
-			<div class="company-card bg-gray-100 dark:bg-gray-800 dark:text-gray-100 shadow  p-5 flex flex-col">
-				<a href=""><img src="{{ $user->photo }}" alt="user_photo" class="mb-4"></a>
-				<a href=""><h3 class="text-lg font-semibold">{{ $user->name }}</h3></a>
-				<p class="text-sm text-gray-600 dark:text-gray-300">{{ $user->email }}</p>
-                <a href="#" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
-                    <i data-feather="eye" class="w-5 h-5"></i>
-                </a>
-			</div>
-			@endforeach
-		@endif
         <!-- Company Cards -->
       
-	  </div>
+	</div>
+
+    <div id="createUserModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800  p-6 w-full max-w-md">
+            <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Edit User</h3>
+            <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
+
+
+            <form id="createUserForm"   enctype="multipart/form-data">
+                @csrf
+                <input type="hidden" id="user_type" name="user_type">
+                <input type="hidden" id="user_id" name="user_id">
+                <input type="hidden" id="userable_id" name="userable_id">
+
+                <input type="hidden" id="user_index" name="user_index">
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-200 mb-1">image</label>
+                    <input   accept="image/*" type="file" name="image" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" >
+                </div>  
+                <img src="" id="user_image" class="w-32 h-32 object-cover mt-2"/>                  
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-200 mb-1">Name</label>
+                    <input type="text" name="first_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-200 mb-1">Surname</label>
+                    <input type="text" name="last_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-200 mb-1">Mobile Phone</label>
+                    <input type="text" name="mobile_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-200 mb-1">Office Phone</label>
+                    <input type="text" name="office_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-200 mb-1">Email (Login Credential)</label>
+                    <input type="email" name="email" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-gray-700 dark:text-gray-200 mb-1">Specialty</label>
+                    <input type="text" name="specialty" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                </div>
+                <div class="flex justify-end mt-6">
+                    <button type="button" onclick="closeCreateUserModal()" class="text-gray-600 dark:text-gray-300 mr-3">Cancel</button>
+                    <button type="submit" id="submitBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Update User</button>
+                </div>
+            </form>
+        </div>
+    </div>
 
     <!-- JavaScript for Filtering -->
     <script>
-        document.getElementById('searchStakeholders').addEventListener('input', function () {
-            const searchQuery = this.value.toLowerCase();
-            const stakeholderCards = document.querySelectorAll('.stakeholder-card');
-            
-            stakeholderCards.forEach(card => {
-                const stakeholderName = card.querySelector('h3').textContent.toLowerCase();
-                
-                if (stakeholderName.includes(searchQuery)) {
-                    card.style.display = 'block';
-                } else {
-                    card.style.display = 'none';
-                }
-            });
+            $("#createUserForm").on("submit", function(event) {
+        $('.err-msg').hide();
+        $(".error").html("");
+        $(".error").hide();
+        event.preventDefault();  
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
         });
+
+        $.ajax({
+            url: "{{ route('projects.stakeholders.update') }}",
+            type: "POST",
+            data: new FormData(this),
+            dataType: 'json',
+            contentType: false,
+            processData: false,
+            cache: false,
+            beforeSend: function() {
+                $("#submitBtn").prop('disabled', true);
+            },
+            success: function(data) {
+                if (data.success) {
+                    //  
+                    $("#submitBtn").prop('disabled', false); 
+                  
+                    $("#createUserForm")[0].reset(); 
+                    document.getElementById("createUserModal").classList.add("hidden");
+                    get_stakeholders();
+					$('.success').show();
+					$('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Updated Successfully</div>');
+
+                
+                }
+            },
+            error: function (err) {
+                $.each(err.responseJSON.errors, function(key, value) {
+                        var el = $(document).find('[name="'+key + '"]');
+                        el.after($('<span class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</span>'));
+                        
+                    });
+
+                    $("#submitBtn").prop('disabled', false);
+                    $(".error").show();
+                    $(".error").html("<div class='text-white-500  px-2 py-1 text-sm font-semibold'>Some Error Occurred!</div>")
+
+            }
+        });
+    });
+        
+   
+
+        function openCreateUserModal(i) {
+            let currentStakeholder = allStakeholder[i];
+            console.log(currentStakeholder);
+            $('#user_type').val(currentStakeholder.userable_type);
+            $('[name="first_name"]').val(currentStakeholder.userable.first_name);
+            $('[name="last_name"]').val(currentStakeholder.userable.last_name);
+            $('[name="mobile_phone"]').val(currentStakeholder.userable.mobile_phone);
+            $('[name="office_phone"]').val(currentStakeholder.userable.office_phone);
+            $('[name="email"]').val(currentStakeholder.userable.email);
+            $('[name="specialty"]').val(currentStakeholder.userable.specialty);
+            $('[name="userable_id"]').val(currentStakeholder.userable.id);
+            $('[name="user_id"]').val(currentStakeholder.id);
+            $('#user_image').attr('src',currentStakeholder.userable.image);
+            document.getElementById("createUserModal").classList.remove("hidden");
+        }
+
+
+		$(".projectButton").on('click',function(event) {
+		
+		if(localStorage.getItem("project_tool") == 'stakeholders'){
+
+			get_stakeholders();
+		}
+	});
+	$("#searchStakeholders").on('input',function(event) {
+		get_stakeholders();
+	});
+    let allStakeholder = {};
+	get_stakeholders();
+	async function get_stakeholders(){
+        if(localStorage.getItem("project_tool") == 'stakeholders'){
+		const search = $('#searchStakeholders').val();		
+		let url =`project/stakeholders/all?search=${search}`;
+		//alert(url);
+		
+		let fetchRes = await fetch(url);
+		const all_stakeholders = await fetchRes.json();
+	
+			let html =``;
+			if(all_stakeholders.length > 0){
+                allStakeholder = all_stakeholders;
+				for(let i=0;i<all_stakeholders.length;i++){
+					let url = "{{ route('projects.stakeholders.edit', [':id']) }}".replace(':id', all_stakeholders[i].id);
+                    let url_delete = "{{ route('projects.stakeholders.destroy', [':id']) }}".replace(':id', all_stakeholders[i].id);
+					html+=`	<div class="company-card bg-gray-100 dark:bg-gray-800 dark:text-gray-100 shadow  p-5 flex flex-col">
+						<a href=""><img src="${all_stakeholders[i].userable.image}" alt="user_photo" class="mb-4"></a>
+						<a href=""><h3 class="text-lg font-semibold">${all_stakeholders[i].userable.first_name} ${all_stakeholders[i].userable.last_name}</h3></a>
+						<p class="text-sm text-gray-600 dark:text-gray-300">${all_stakeholders[i].email}</p>
+						<a onclick="openCreateUserModal('${i}')" href="#" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
+							<i data-feather="eye" class="w-5 h-5"></i>
+						</a>
+
+						<a  onclick="deleteUser(${all_stakeholders[i].id})" href="#" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
+							<i data-feather="trash" class="w-5 h-5"></i>
+						</a>                        
+					</div>`;
+				}
+				
+			}
+            feather.replace();	
+			$('#stakeholdersGrid').html(html);
+            feather.replace();	
+			
+        }
+	}
+
+   
+    async function deleteUser(id){
+        $('.error').hide(); 
+        $('.success').hide();
+		let url =`project/stakeholders/destroy/${id}`;		
+		let fetchRes = await fetch(url);
+        if(fetchRes.status != 200){
+            $('.error').show();
+            $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
+
+        }else{
+            get_stakeholders();
+            $('.success').show();
+            $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
+        }
+
+
+    }
+
+
+
     </script>

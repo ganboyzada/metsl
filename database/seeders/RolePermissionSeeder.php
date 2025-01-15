@@ -16,70 +16,70 @@ class RolePermissionSeeder extends Seeder
 
 
         $role = Role::create(['name' => 'correspondence','guard_name' => 'sanctum']);
-        $permission = Permission::create(['name' => 'add correspondence','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'add_correspondence','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission); 
 
-        $permission = Permission::create(['name' => 'assign correspondence','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'assign_correspondence','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
 
-        $permission = Permission::create(['name' => 'distribution members correspondence','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'distribution_members_correspondence','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
         
-        $permission = Permission::create(['name' => 'view  all RFI correspondence','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'view_all_RFI_correspondence','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
 
-        $permission = Permission::create(['name' => 'view  all RFV correspondence','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'view_all_RFV_correspondence','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
 
-        $permission = Permission::create(['name' => 'view  all RFC correspondence','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'view_all_RFC_correspondence','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
 
 
 
         $role = Role::create(['name' => 'documents','guard_name' => 'sanctum']);
-        $permission = Permission::create(['name' => 'view all documents','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'view_all_documents','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission); 
 
-        $permission = Permission::create(['name' => 'add documents','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'add_documents','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
 
 
-        $permission = Permission::create(['name' => 'review documents','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'review_documents','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
 		
 		
-        $permission = Permission::create(['name' => 'add document revision','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'add_document_revision','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);	
 
-        $permission = Permission::create(['name' => 'view all document revisions','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'view_all_document_revisions','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
 
-        $permission = Permission::create(['name' => 'add revision comment','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'add_revision_comment','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
 
 
 
         $role = Role::create(['name' => 'metting planing','guard_name' => 'sanctum']);
-        $permission = Permission::create(['name' => 'view all meeting planing','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'view_all_meeting_planing','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
 
-        $permission = Permission::create(['name' => 'add meeting planing','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'add_meeting_planing','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission); 
 		
-		$permission = Permission::create(['name' => 'participate meeting planing','guard_name' => 'sanctum']);
+		$permission = Permission::create(['name' => 'participate_in_meetings','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission); 
 
         $role = Role::create(['name' => 'punch list','guard_name' => 'sanctum']);
-        $permission = Permission::create(['name' => 'view all punch list','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'view_all_punch_list','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
 
-        $permission = Permission::create(['name' => 'add punch list','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'add_punch_list','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission); 
 		
-		$permission = Permission::create(['name' => 'distribution members punch list','guard_name' => 'sanctum']);
+		$permission = Permission::create(['name' => 'distribution_members_punch_list','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission); 
 
-		$permission = Permission::create(['name' => 'responsible punch list','guard_name' => 'sanctum']);
+		$permission = Permission::create(['name' => 'responsible_punch_list','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission); 
 		
     }

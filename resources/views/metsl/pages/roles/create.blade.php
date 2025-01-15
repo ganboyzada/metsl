@@ -4,8 +4,23 @@
 @endsection
 @section('content')
 <div class="container">
-    
-    <form action="" method="POST">
+
+    @if(session()->has('success'))
+    <div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold">
+        {{ session()->get('success') }}
+    </div>
+    @endif
+
+    @if ($errors->any())
+    <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error">
+        <ul>
+            @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+            @endforeach
+        </ul>
+    </div>
+	@endif
+    <form action="{{ route('roles.store') }}" method="POST">
         @csrf
         <div class="form-group">
             <label for="name">Role Name</label>
@@ -17,7 +32,7 @@
             @foreach($permissions as $permission)
             <div>
                 <input type="checkbox" name="permissions[]" value="{{ $permission->id }}">
-                <label>{{ $permission->name }}</label>
+                <label> {{ str_replace("_"," ",$permission->name)   }}</label>
             </div>
             @endforeach
         </div>

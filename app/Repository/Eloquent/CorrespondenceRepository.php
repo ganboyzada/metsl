@@ -75,15 +75,23 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
                     'LIKE',
                     "%".$request->search."%"
                 );
+                $q->orWhereHas('CreatedBy',function($q)use($request){
+                    $q->where('name', 'LIKE', "%".$request->search."%");
+                });
+    
+                $q->orWhereHas('assignees',function($q)use($request){
+                    $q->where('name', 'LIKE', "%".$request->search."%");
+                });
             });
 
-            $query->orWhereHas('CreatedBy',function($q)use($request){
+            /*$query->orWhereHas('CreatedBy',function($q)use($request){
                 $q->where('name', 'LIKE', "%".$request->search."%");
             });
 
             $query->orWhereHas('assignees',function($q)use($request){
                 $q->where('name', 'LIKE', "%".$request->search."%");
             });
+            */
 
         })
         ->with(['assignees:id,name' , 'CreatedBy:id,name'])->get();

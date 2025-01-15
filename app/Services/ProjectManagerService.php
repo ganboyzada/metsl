@@ -50,9 +50,37 @@ class ProjectManagerService
         return $model;
     }
 
-    public function update(array $data, $id)
+    public function update(array $data)
     {
-        return $this->ProjectManagerRepository->update($data, $id);
+        \DB::beginTransaction();
+        try {         
+            if(isset($data['image']) && $data['image'] != NULL){
+                $file = $data['image'];
+                $fileName = md5(time()).'.'.$file->extension();            
+                $data['image'] = $fileName;
+            }
+            $data['status'] = 1;
+            $id = $data['userable_id'];
+            $model =  $this->ProjectManagerRepository->update($data , $id);
+            
+           // $path = Storage::disk('public')->path('/projectManager' . $model->id);
+            $path = Storage::disk('public')->path('projectManager'.$id);
+            
+            \File::makeDirectory($path, $mode = 0777, true, true);
+        
+            if(isset($data['image']) && $data['image'] != NULL){
+                //dd($model->image);
+                // Store the file in the directory
+                Storage::disk('public')->putFileAs('projectManager' . $id, $file, $data['image']);
+            }          
+
+            \DB::commit();
+        // all good
+        } catch (\Exception $e) {
+            \DB::rollback();
+            throw new \Exception($e->getMessage());
+        }            
+        return $model;
     }
 
     public function delete($id)

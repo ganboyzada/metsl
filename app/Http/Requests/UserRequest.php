@@ -21,16 +21,33 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            'first_name' => 'required',
-            'last_name' => 'required',
-            'mobile_phone' => 'required',
-            'office_phone' => 'required',
-            'email'=>'required|email|unique:clients,email|unique:contractors,email|unique:design_teams,email|unique:project_managers,email',
-            'specialty' => 'required',
-            "user_type"    => "required",
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
-        ]; 
+        if(isset(request()->userable_id)){
+            $id = request()->user_id;
+            return [
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'mobile_phone' => 'required',
+                'office_phone' => 'required',
+                'email'=>'required|email|unique:users,email,'.$id,
+                'specialty' => 'required',
+                "user_type"    => "required",
+                "userable_id"    => "required",
+                "user_id"    => "required",
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            ]; 
+        }else{
+            return [
+                'first_name' => 'required',
+                'last_name' => 'required',
+                'mobile_phone' => 'required',
+                'office_phone' => 'required',
+                'email'=>'required|email|unique:clients,email|unique:contractors,email|unique:design_teams,email|unique:project_managers,email',
+                'specialty' => 'required',
+                "user_type"    => "required",
+                'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
+            ]; 
+        }
+
     }
     /**
      * Get custom attributes for validator errors.

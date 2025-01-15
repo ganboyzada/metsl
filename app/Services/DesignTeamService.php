@@ -49,9 +49,40 @@ class DesignTeamService
         return $model;
     }
 
-    public function update(array $data, $id)
+    public function update(array $data)
     {
-        return $this->DesignTeamRepository->update($data, $id);
+        \DB::beginTransaction();
+        try { 
+
+            if(isset($data['image']) && $data['image'] != NULL){
+                $file = $data['image'];
+                $fileName = md5(time()).'.'.$file->extension();            
+                $data['image'] = $fileName;
+
+            }
+            $data['status'] = 1;
+            $id = $data['userable_id'];
+            $model =  $this->DesignTeamRepository->update($data , $id);
+            
+            $path = Storage::disk('public')->path('designTeam'.$id);
+            
+            \File::makeDirectory($path, $mode = 0777, true, true);
+        
+            if(isset($data['image']) && $data['image'] != NULL){
+                Storage::disk('public')->putFileAs('designTeam' . $id, $file, $data['image']);
+
+            } 
+
+            
+        
+    
+            \DB::commit();
+        // all good
+        } catch (\Exception $e) {
+            \DB::rollback();
+            throw new \Exception($e->getMessage());
+        }            
+        return $model;
     }
 
     public function delete($id)

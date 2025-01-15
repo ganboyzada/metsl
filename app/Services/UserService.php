@@ -39,14 +39,29 @@ class UserService
         return $model;
     }
 
-    public function update(array $data, $id)
+    public function update(array $data)
     {
-        return $this->userRepository->update($data, $id);
-    }
+        \DB::beginTransaction();
+        try {
+            
+            
+            $data['name'] = $data['first_name'].'_'.$data['last_name'];
+            $data['password'] = Hash::make('password');
+            $id = $data['user_id'];
+            $model =  $this->userRepository->update($data , $id);
 
-    public function delete($id)
-    {
-        return $this->userRepository->delete($id);
+            //$this->userRepository->create_role_permisions_of_user($model->id , $data);
+           
+            \DB::commit();
+        // all good
+        } catch (\Exception $e) {
+            \DB::rollback();
+            throw new \Exception($e->getMessage());
+        }
+            
+            
+
+        return $model;
     }
 
     public function all()
@@ -81,6 +96,20 @@ class UserService
 
         return ['users'=> $usArrers];
 
+    }
+
+    public function getAllProjectStakeholders($project_id , $request){
+        $all_stakholders = $this->userRepository->get_stakeholders_of_project($project_id , $request);
+        return $all_stakholders;
+    }
+
+    public function delete($id)
+    {
+        try{
+            return $this->userRepository->delete($id);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
     }
 
 }

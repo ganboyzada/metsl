@@ -6,7 +6,10 @@ use App\Http\Controllers\DocumentRevisionController;
 use App\Http\Controllers\MeetingPlaningController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PunchListController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\StakeholderController;
 use Illuminate\Support\Facades\Route;
+
 
 
 
@@ -31,12 +34,19 @@ Route::middleware([
     })->name('dashboard');
 
 
-    Route::view('/roles', 'metsl.pages.roles.index')->name('roles');
-    Route::view('/roles/create', 'metsl.pages.roles.create')->name('roles.create');
+    Route::get('/roles',  [RoleController::class, "index"])->name('roles');
+    Route::get('/roles/create',  [RoleController::class, "create"])->name('roles.create');
+    Route::post('/roles/store',  [RoleController::class, "store"])->name('roles.store');
+
+    Route::get('/roles/edit/{id}',  [RoleController::class, "edit"])->name('roles.edit');
+    Route::delete('/roles/destroy/{id}',  [RoleController::class, "destroy"])->name('roles.destroy');
+    Route::put('/roles/update/{id}',  [RoleController::class, "update"])->name('roles.update');
+
+
     Route::view('/roles/permissions', 'metsl.pages.permissions.index')->name('roles.permissions');
     Route::view('/roles/permissions/create', 'metsl.pages.permissions.create')->name('roles.permissions.create');
 
-    Route::get('/project/storeIdSession', action: [ProjectController::class, "storeIdSession"])->name('projects.store_id_session');
+    Route::get('/project/storeIdSession', [ProjectController::class, "storeIdSession"])->name('projects.store_id_session');
 
     Route::get('/project/{id}', function ($id) {
         return view('metsl.pages.projects.project'); // The view file for the company detail page
@@ -94,6 +104,12 @@ Route::middleware([
 	Route::post('/project/meetings/update',  [MeetingPlaningController::class, "update"])->name(name: 'projects.meetings.update');	
 	Route::get('/project/meetings/destroy/{id}',  [MeetingPlaningController::class, "destroy"])->name(name: 'projects.meetings.destroy');	
     Route::get('/project/meetings/destroy-file/{id}',  [MeetingPlaningController::class, "destroyFile"])->name(name: 'projects.meetings.destroy-file');	
+
+
+    Route::get('/project/stakeholders/all',  [StakeholderController::class, "stakeholders"])->name('projects.stakeholders.all');
+    Route::get('/project/stakeholders/edit/{id}',  [StakeholderController::class, "edit"])->name('projects.stakeholders.edit');
+	Route::get('/project/stakeholders/destroy/{id}',  [StakeholderController::class, "destroy"])->name(name: 'projects.stakeholders.destroy');	
+    Route::post('/project/stakeholders/update', action: [StakeholderController::class, "update"])->name('projects.stakeholders.update');
 
 
 

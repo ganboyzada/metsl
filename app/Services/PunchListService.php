@@ -114,12 +114,12 @@ class PunchListService
     }
 
 
-  public function delete($id)
-  {
-      try{
-          return $this->punchListRepository->delete($id);
-      }catch (\Exception $e) {
-          throw new \Exception($e->getMessage());
-      }
-  }
+    public function delete($id)
+    {
+        try{
+            return $this->punchListRepository->delete($id);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
 }

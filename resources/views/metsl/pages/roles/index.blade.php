@@ -32,12 +32,13 @@
             </tr>
         </thead>
         <tbody>
-            @if(false)
+            @if($roles->count() > 0)
             @foreach($roles as $role)
-            <tr>
-                <td>{{ $role->name }}</td>
+            <tr class="roles_tr">
+                <td style="width:250px;">{{ $role->name }}</td>
                 <td>
                     <a href="{{ route('roles.edit', $role->id) }}" class="btn btn-warning btn-sm">Edit</a>
+                    
                     <form action="{{ route('roles.destroy', $role->id) }}" method="POST" style="display:inline;">
                         @csrf
                         @method('DELETE')
@@ -50,4 +51,22 @@
         </tbody>
     </table>
 </div>
+
+<script>
+    document.getElementById('searchBar').addEventListener('input', function () {
+        const searchQuery = this.value.toLowerCase();
+        const rows = document.querySelectorAll('.roles_tr');
+        console.log(rows);
+        
+        rows.forEach(card => {
+            const name = card.querySelector('td:first-child').textContent.toLowerCase();
+            
+            if (name.includes(searchQuery)) {
+                card.style.display = 'block';
+            } else {
+                card.style.display = 'none';
+            }
+        });
+    });
+</script>
 @endsection
