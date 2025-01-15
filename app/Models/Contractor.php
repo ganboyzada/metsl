@@ -15,7 +15,7 @@ class Contractor extends Model
     // protected $with = ['projects']; 
     protected $table = 'contractors';
 
-    protected $fillable = ['first_name', 'last_name','user_name','email','mobile_phone','office_phone','address','specialty','image'];
+    protected $fillable = ['first_name', 'last_name','user_name','email','mobile_phone','office_phone','address','specialty','image','status'];
 
     protected function getimageAttribute(): string
     {

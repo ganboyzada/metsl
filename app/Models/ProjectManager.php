@@ -13,7 +13,7 @@ class ProjectManager extends Model
 {
     protected $table = 'project_managers';
 
-    protected $fillable = ['first_name', 'last_name','user_name','email','mobile_phone','office_phone','address','specialty','image'];
+    protected $fillable = ['first_name', 'last_name','user_name','email','mobile_phone','office_phone','address','specialty','image','status'];
 
     protected function getimageAttribute(): string
     {
