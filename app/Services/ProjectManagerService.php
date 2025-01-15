@@ -25,16 +25,22 @@ class ProjectManagerService
                 $data['image'] = NULL;
             }
 
+
+            $data['status'] = 1;
+
             $model =  $this->ProjectManagerRepository->create($data);
             
-            $path = Storage::url('projectManager'.$model->id);
+           // $path = Storage::disk('public')->path('/projectManager' . $model->id);
+            $path = Storage::disk('public')->path('projectManager'.$model->id);
             
             \File::makeDirectory($path, $mode = 0777, true, true);
         
-            if($data['image'] != NULL){
-                $file->move(('storage/projectManager'.$model->id.'/'),$model->image);
+            if ($data['image'] != NULL) {
+                //dd($model->image);
+                // Store the file in the directory
+                Storage::disk('public')->putFileAs('projectManager' . $model->id, $file, $data['image']);
+            }          
 
-            } 
             \DB::commit();
         // all good
         } catch (\Exception $e) {

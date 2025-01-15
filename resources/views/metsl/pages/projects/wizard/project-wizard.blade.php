@@ -100,7 +100,7 @@
                         </div>                        
                         <div class="mb-4">
                             <label for="startDate" class="block font-medium text-gray-700 dark:text-gray-200">logo</label>
-                            <input type="file" name="logo" id="logo" class="mt-1 block w-full   shadow-sm dark:bg-gray-800 dark:text-gray-200" >
+                            <input type="file"  accept="image/*" name="logo" id="logo" class="mt-1 block w-full   shadow-sm dark:bg-gray-800 dark:text-gray-200" >
                         </div>
 
                     </div>
@@ -217,7 +217,7 @@
                         <input type="hidden" id="user_index" name="user_index">
                         <div class="mb-4">
                             <label class="block text-gray-700 dark:text-gray-200 mb-1">image</label>
-                            <input type="file" name="image" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" >
+                            <input   accept="image/*" type="file" name="image" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" >
                         </div>                    
                         <div class="mb-4">
                             <label class="block text-gray-700 dark:text-gray-200 mb-1">Name</label>

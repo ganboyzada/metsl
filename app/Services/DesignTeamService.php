@@ -25,17 +25,21 @@ class DesignTeamService
             }else{
                     $data['image'] = NULL;
             }
-
+            $data['status'] = 1;
             $model =  $this->DesignTeamRepository->create($data);
             
-            $path = Storage::url('designTeam'.$model->id);
+            $path = Storage::disk('public')->path('designTeam'.$model->id);
             
             \File::makeDirectory($path, $mode = 0777, true, true);
         
             if($data['image'] != NULL){
-                $file->move(('storage/designTeam'.$model->id.'/'),$model->image);
+                Storage::disk('public')->putFileAs('designTeam' . $model->id, $file, $data['image']);
 
             } 
+
+            
+        
+    
             \DB::commit();
         // all good
         } catch (\Exception $e) {

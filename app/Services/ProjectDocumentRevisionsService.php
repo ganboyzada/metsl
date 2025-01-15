@@ -21,7 +21,7 @@ class ProjectDocumentRevisionsService
             $project_id = $data['project_id'];
             $project_document_id = $data['project_document_id'];
             if(isset($data['file']) && $data['file'] != NULL){
-                $file = $data['logo'];
+                $file = $data['file'];
                 $fileName = $file->getClientOriginalName();            
                 $data['file'] = $fileName;
 
@@ -31,12 +31,12 @@ class ProjectDocumentRevisionsService
 
 
             $modal =  $this->projectDocumentRevisionsRepository->create($data);
-            $path = Storage::url('/project'.$data['project_id'].'/documents'.$project_document_id.'/revisions'.$modal->id);
-            
+            $path = Storage::disk('public')->path('/project'.$data['project_id'].'/documents'.$project_document_id.'/revisions'.$modal->id);            
             \File::makeDirectory($path, $mode = 0777, true, true);  
 
             if($data['file'] != NULL){
-                $file->move(('storage/project'.$data['project_id'].'/documents'.$project_document_id.'/revisions/'),$modal->file);
+                Storage::disk('public')->putFileAs('project'.$data['project_id'].'/documents'.$project_document_id.'/revisions/', $file, $modal->file);
+
 
             }           
             \DB::commit();

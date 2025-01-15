@@ -25,15 +25,15 @@ class ContractorService
             }else{
                 $data['image'] = NULL;
             }
-
+            $data['status'] = 1;
             $model =  $this->ContractorRepository->create($data);
             
-            $path = Storage::url('contractor'.$model->id);
+            $path = Storage::disk('public')->path('contractor'.$model->id);
             
             \File::makeDirectory($path, $mode = 0777, true, true);
         
             if($data['image'] != NULL){
-                $file->move(('storage/contractor'.$model->id.'/'),$model->image);
+                Storage::disk('public')->putFileAs('contractor' . $model->id, $file, $data['image']);
 
             } 
             \DB::commit();

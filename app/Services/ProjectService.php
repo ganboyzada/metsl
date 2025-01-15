@@ -34,12 +34,12 @@ class ProjectService
 
             $model =  $this->ProjectRepository->create($data);
 
-            $path = Storage::url('/project'.$model->id);
+            $path = Storage::disk('public')->path('project'.$model->id);
             
             \File::makeDirectory($path, $mode = 0777, true, true);
         
             if($data['logo'] != NULL){
-                $file->move(('storage/project'.$model->id.'/'),$model->logo);
+                Storage::disk('public')->putFileAs('project' . $model->id, $file, $data['logo']);
 
             }
             if(isset($data['docs'])){
@@ -74,12 +74,12 @@ class ProjectService
             $this->ProjectRepository->update($data , $id);
             $model = $this->ProjectRepository->find($id);
 
-            $path = Storage::url('/project'.$model->id);
+            $path = Storage::disk('public')->path('project'.$model->id);
             
             \File::makeDirectory($path, $mode = 0777, true, true);
         
             if(isset($data['logo']) && $data['logo'] != NULL){
-                $file->move(('storage/project'.$model->id.'/'),$model->logo);
+                Storage::disk('public')->putFileAs('project' . $model->id, $file, $model->logo);
 
             }
             if(isset($data['docs'])){
