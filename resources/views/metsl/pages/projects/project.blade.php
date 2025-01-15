@@ -19,6 +19,9 @@
             <div class="tab-content hidden" id="meetings">
                 @include('metsl.pages.meeting-minutes.index')
             </div>
+            <div class="tab-content hidden" id="stakeholders">
+                @include('metsl.pages.stakeholders.index')
+            </div>
         </div>
     </div>
 @endsection

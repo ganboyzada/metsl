@@ -55,9 +55,6 @@ Route::middleware([
 	Route::post('/project/correspondence/update',  [CorrespondenceController::class, "update"])->name(name: 'projects.correspondence.update');	
 	Route::get('/project/correspondence/destroy/{id}',  [CorrespondenceController::class, "destroy"])->name(name: 'projects.correspondence.destroy');	
     Route::get('/project/correspondence/destroy-file/{id}',  [CorrespondenceController::class, "destroyFile"])->name(name: 'projects.correspondence.destroy-file');	
-
-
-
     
     Route::view('/project/documents', 'metsl.pages.documents.index')->name('projects.documents');
 	Route::get('/project/documents/reviewers',  [DocumentController::class, "getreviewers"])->name('projects.documents.reviewers');	

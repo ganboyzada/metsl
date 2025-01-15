@@ -12,7 +12,7 @@
     {{ session()->get('success') }}
 </div>
 @endif 
-<div class="flex justify-between items-center mb-6">
+    <div class="flex justify-between items-center mb-6">
         <!-- Search Box -->
         <div class="relative flex items-center">
             <input type="text" id="searchBar" placeholder="Search companies..." 

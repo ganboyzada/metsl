@@ -144,7 +144,7 @@
 	async function delete_doc(i , id){
         $('.error').hide(); 
         $('.success').hide();
-		let url =`project/documents/delete/${id}`;		
+		let url =`/project/documents/delete/${id}`;		
 		let fetchRes = await fetch(url);
         if(fetchRes.status != 200){
             $('.error').show();
@@ -168,7 +168,7 @@
 		$('#success_div').hide();
 		//$("#error_div").html("");
 		$("#success_div").html("");
-		let url = 	`{{url('project/documents/revisions/${id}')}}`	;
+		let url = 	`{{url('/project/documents/revisions/${id}')}}`	;
 		let fetchRes = await fetch(url);
 		let revisions = await fetchRes.json();
 		let html = ``;
