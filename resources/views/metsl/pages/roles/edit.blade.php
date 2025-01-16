@@ -23,23 +23,29 @@
         @csrf
         @method('PUT')
 
-        <div class="form-group">
-            <label for="name">Role Name</label>
-            <input type="text" name="name" id="name" class="form-control" value="{{ $role->name }}" required>
+        <div class="mb-10">
+            <label for="name" class="block text-lg mb-2 font-medium dark:text-gray-200">Role Title</label>
+            <input
+                type="text"
+                name="name" id="name" value="{{ $role->name }}"
+                class="w-96 w-max-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200" required
+            />
         </div>
 
-        <div class="form-group mt-4">
-            <h5>Assign Permissions</h5>
+        <div>
+            <label for="permissions" class="block text-lg mb-2 font-medium dark:text-gray-200">Permission Assignment</label>
+            <div class="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2">
             @foreach($permissions as $permission)
-            <div>
+            <div class="py-2">
                 <input type="checkbox" name="permissions[]" value="{{ $permission->id }}" 
                        {{ $role->permissions->contains($permission->id) ? 'checked' : '' }}>
-                       <label> {{ str_replace("_"," ",$permission->name)   }}</label>
+                       <label class="ml-3"> {{ ucwords(str_replace("_"," ",$permission->name))   }}</label>
             </div>
             @endforeach
+            </div>
         </div>
 
-        <button type="submit" class="btn btn-success mt-4">Update Role</button>
+        <button type="submit" class="mt-5 px-4 py-2 bg-blue-500 text-white hover:bg-blue-600">Update Role</button>
     </form>
 </div>
 @endsection
