@@ -38,7 +38,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                 if($row->role != '' && count($row->permissions) > 0){
                     $role = Role::where(['name' =>  $row->role])->first(); 
                     if (!isset($role->id)) {
-                        $role = Role::create(['name' =>  $row->role]);                    
+                      //  dd($row->permissions);
+                        $role = Role::create(['name' =>  $row->role, 'guard_name'=> 'sanctum']); 
                         $role->syncPermissions($row->permissions);  
                     }
                     $user = $this->find($row->id); 
