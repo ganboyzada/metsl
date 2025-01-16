@@ -65,75 +65,95 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
        // dd($data);
         $punchLists =  $this->model->where('project_id',$project_id);
         if(isset($data['assignee'])){
-            $punchLists=$punchLists->when($data['assignee'] , function($query) use($data){
-                $query->whereIn('responsible_id',$data['assignee']);
-                $query->orWhereHas('users',function($q) use($data){
-                    $q->whereIn('users.id',$data['assignee']);
-                });            
+            $punchLists=$punchLists->when($data['assignee'] , function($q) use($data){
+                $q->where(function($query) use($data){
+                    $query->whereIn('responsible_id',$data['assignee']);
+                    $query->orWhereHas('users',function($q) use($data){
+                        $q->whereIn('users.id',$data['assignee']);
+                    }); 
+                });
+           
             });
         }
 
         if(isset($data['closed_by'])){
-            $punchLists=$punchLists->when($data['closed_by'] , function($query) use($data){
-                $query->whereHas('closedByUser',function($q) use($data){
-                    $q->whereIn('users.id',$data['closed_by']);
-                });
+            $punchLists=$punchLists->when($data['closed_by'] , function($q) use($data){
+                $q->where(function($query) use($data){
+                    $query->whereHas('closedByUser',function($q) use($data){
+                        $q->whereIn('users.id',$data['closed_by']);
+                    });
+                });    
 
             });            
         }
 
         if(isset($data['creator'])){
-            $punchLists=$punchLists->when($data['creator'] , function($query) use($data){
-                $query->whereHas('createdByUser',function($q) use($data){
-                    $q->whereIn('users.id',$data['creator']);
-                });
+            $punchLists=$punchLists->when($data['creator'] , function($q) use($data){
+                $q->where(function($query) use($data){
+                    $query->whereHas('createdByUser',function($q) use($data){
+                        $q->whereIn('users.id',$data['creator']);
+                    });
+                });    
             });
         }
         if(isset($data['creation_date'])){
 
 
-            $punchLists=$punchLists->when($data['creation_date'] , function($query) use($data){
+            $punchLists=$punchLists->when($data['creation_date'] , function($q) use($data){
+                $q->where(function($query) use($data){
                 $query->whereDate('created_at',$data['creation_date']);
+                });
                         
             }) ;  
         }
         
         if(isset($data['date_notified'])){
 
-            $punchLists=$punchLists->when($data['date_notified'] , function($query) use($data){
-                $query->whereDate('date_notified_at',$data['date_notified']);                   
+            $punchLists=$punchLists->when($data['date_notified'] , function($q) use($data){
+                $q->where(function($query) use($data){
+                $query->whereDate('date_notified_at',$data['date_notified']); 
+                });               
             }) ; 
         }
         
         if(isset($data['date_resolved'])){
 
-            $punchLists=$punchLists->when($data['date_resolved'] , function($query) use($data){
+            $punchLists=$punchLists->when($data['date_resolved'] , function($q) use($data){
+                $q->where(function($query) use($data){
                 $query->whereDate('date_resolved_at',$data['date_resolved']);
+                });
                         
             }) ; 
         }
         if(isset($data['due_date'])){     
             
-            $punchLists=$punchLists->when($data['due_date'] , function($query) use($data){
+            $punchLists=$punchLists->when($data['due_date'] , function($q) use($data){
+                $q->where(function($query) use($data){
                 $query->whereDate('due_date',$data['due_date']);
+                });
                         
             }) ; 
         }
         
         if(isset($data['status'])){
-            $punchLists=$punchLists->when($data['status'] , function($query) use($data){
-                $query->where('status',$data['status']);
+            $punchLists=$punchLists->when($data['status'] , function($q) use($data){
+                $q->where(function($query) use($data){
+                    $query->where('status',$data['status']);
+                });
                         
             }) ;
         }
         if(isset($data['priority'])){    
-            $punchLists=$punchLists->when($data['priority'] , function($query) use($data){
+            $punchLists=$punchLists->when($data['priority'] , function($q) use($data){
+                $q->where(function($query) use($data){
                 $query->where('priority',$data['priority']);
+                });
                         
             }) ; 
         }          
         $punchLists=$punchLists->when($data['search'] , function($q) use($data){
-                $q->whereAny(
+        $q->where(function($query) use($data){
+                $query->whereAny(
                     [
                         'number',
                         'title',
@@ -148,7 +168,7 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
                     "%".$data['search']."%"
                 );
             
-        
+        });
 
         })
 

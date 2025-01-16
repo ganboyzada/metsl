@@ -69,26 +69,29 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
         }
         $meetingPlanings =  $this->model->where('project_id',$project_id)
 
-                        ->when($data['search'] , function($query) use($data){
+            ->when($data['search'] , function($q) use($data){
+                    $q->where(function($query) use($data){
+                        $query->whereAny(
+                            [
+                                'number',
+                                'name',
+                                'link',
+                                'location',
+                                'planned_date',
+                                'purpose',
+                                'start_time',
+                                'duration',
+                                'timezone'
+                            ],
+                            'LIKE',
+                            "%".$data['search']."%"
+                        );
+                        $query->orWhereHas('users',function($q)use($data){
+                            $q->where('name', 'LIKE', "%".$data['search']."%");
+                        });
+                    });
                         
-                            $query->whereAny(
-                                [
-                                    'number',
-                                    'name',
-                                    'link',
-                                    'location',
-                                    'planned_date',
-                                    'purpose',
-                                    'start_time',
-                                    'duration',
-                                    'timezone'
-                                   ],
-                                'LIKE',
-                                "%".$data['search']."%"
-                            );
-                            $query->orWhereHas('users',function($q)use($data){
-                                $q->where('name', 'LIKE', "%".$data['search']."%");
-                            });
+
                        
                         /*
                         $query->orWhereHas('users',function($q)use($data){
@@ -96,21 +99,18 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
                         });
                         */
 
-                    })
+            })
 
-                    ->when($data['start_date'] , function($query) use($data){
-                        $query->where(function($q) use($data){
-            
-                        $q->orwhereBetween('start_time', [$data['start_date'], $data['end_date']]);
-            
-                    });
+            ->when($data['start_date'] , function($query) use($data){
+                $query->where(function($q) use($data){
+    
+                $q->orwhereBetween('start_time', [$data['start_date'], $data['end_date']]);
+    
+                });
 
-                    
-
-              
-
-               
-        })->with(['users:id,name'])->get();
+                       
+            })
+            ->with(['users:id,name'])->get();
   
       return $meetingPlanings;
     }
