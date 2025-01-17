@@ -1,7 +1,14 @@
 <div class="flex h-screen">
     <!-- Sidebar for Task Groups -->
     <div class="w-1/6 bg-gray-100 dark:bg-gray-800 px-5 py-4 rounded-xl">
-        <h2 class="text-lg font-semibold mb-4">Task Groups</h2>
+        <div class="flex items-center pb-7">
+            <h2 class="text-md font-semibold me-auto">Task Groups</h2>
+            <button class="ms-2 px-3 py-1 rounded-full text-sm inline-flex border border-gray-600 dark:bg-gray-700 whitespace-nowrap">
+                <i class="w-5 h-5 mr-2" data-feather="folder-plus"></i>
+                Create
+            </button>
+        </div>
+        
         <ul id="group-list" class="space-y-4">
             <!-- Groups will be dynamically added -->
         </ul>
@@ -208,7 +215,7 @@
                     </div>`
             );
             return `
-                <div class="relative h-16 border-t border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 striped-background">
+                <div class="relative h-24 border-t border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 striped-background">
                     ${taskElements.join("")}
                 </div>`;
         });
@@ -226,7 +233,7 @@
     function zoomTimeline(inOut) {
         if (inOut === 'in' && visibleDays > 3) {
             visibleDays -= 1;
-        } else if (inOut === 'out' && visibleDays < 14) {
+        } else if (inOut === 'out' && visibleDays < 31) {
             visibleDays += 1;
         }
         renderDays();

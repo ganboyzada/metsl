@@ -25,7 +25,7 @@
                 <i data-feather="list" class="mr-2"></i> Punch List
             </button>
             <button data-tab="task-planner" class="py-3 px-4"   onclick="set_in_local_storage('task_planner');">
-                <i data-feather="check-circle" class="mr-2"></i> Task Planner
+                <i data-feather="check-circle" class="mr-2"></i> Last Planner
             </button>
             {{--
             <button data-tab="images" class="py-3 px-4">

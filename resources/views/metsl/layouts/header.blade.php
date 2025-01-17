@@ -90,7 +90,7 @@
         <div class="relative pl-5">
             <button onclick="toggleUserDropdown()" class="rounded-full flex items-center pl-1 py-1 pr-4 bg-gray-200 dark:bg-gray-800">
                 <!-- User Image -->
-                <img src="https://via.placeholder.com/32" alt="User" class="w-9 h-9 mr-2 rounded-full">
+                <img src="https://placehold.co/32" alt="User" class="w-9 h-9 mr-2 rounded-full">
                 <!-- User Name -->
                 <div class="text-xs flex flex-col items-start">
                     <span>Welcome,</span>
