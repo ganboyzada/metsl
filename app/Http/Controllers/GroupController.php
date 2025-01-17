@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\GroupRequest;
 use App\Http\Requests\MeetingPlaningRequest;
 use App\Services\GroupService;
+use App\Services\UserService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -18,6 +19,7 @@ class GroupController extends Controller
     public function __construct(
 
         protected GroupService $groupService,
+        protected UserService $userService
 
         )
     {
@@ -52,9 +54,10 @@ class GroupController extends Controller
     public function all(Request $request){
         $id = Session::get('projectID');
         $groups = $this->groupService->allGroups($id);
+        $assignees = $this->userService->getUsersOfProjectID($id , '');
  
      
-        return $groups;
+        return ['groups'=>$groups , 'assignees'=>$assignees];
     }
 
     public function update(GroupRequest  $request)

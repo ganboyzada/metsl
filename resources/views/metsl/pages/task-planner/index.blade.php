@@ -84,46 +84,54 @@
             @csrf
             <div>
                 <label for="task-subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Subject</label>
-                <input type="text" id="task-subject" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
+                <input type="text" name="subject" id="task-subject" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
             </div>
             <div>
                 <label for="task-explanation" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Explanation</label>
-                <textarea id="task-explanation" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white"></textarea>
+                <textarea name="description" id="task-explanation" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white"></textarea>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 space-x-4">
                 <div>
                     <label for="task-start-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Start Date</label>
-                    <input type="date" id="task-start-date" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
+                    <input type="date" name="start_date" id="task-start-date" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
                 </div>
                 <div>
                     <label for="task-deadline-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Deadline Date</label>
-                    <input type="date" id="task-deadline-date" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
+                    <input type="date" name="end_date" id="task-deadline-date" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
                 </div>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Priority</label>
                 <div class="flex space-x-4">
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="task-priority" value="high" class="form-radio text-red-500">
+                        <input type="radio" name="priority" value="high" class="form-radio text-red-500">
                         <span>High</span>
                     </label>
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="task-priority" value="medium" class="form-radio text-yellow-500">
+                        <input type="radio" name="priority" value="medium" class="form-radio text-yellow-500">
                         <span>Medium</span>
                     </label>
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="task-priority" value="low" class="form-radio text-green-500">
+                        <input type="radio" name="priority" value="low" class="form-radio text-green-500">
                         <span>Low</span>
                     </label>
                 </div>
             </div>
             <div>
-                <label for="task-attachment" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Attachment</label>
-                <input type="file" id="task-attachment" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
+                <label for="group" class="block text-sm font-medium text-gray-700 dark:text-gray-300">group</label>
+                <select name="group_id" id="group" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
+
+                </select>
             </div>
             <div>
-                <label for="task-assignees" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Assignees</label>
-                <select id="task-assignees" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white" multiple></select>
+                <label for="task-attachment" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Attachment</label>
+                <input type="file" name="file" id="task-attachment" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
+            </div>
+            <div>
+                
+                <label for="assignees" class="block text-sm mb-2 font-medium dark:text-gray-200">Assignees</label>
+                <select id="assignees" name="assignees[]" multiple class="choices w-full border dark:bg-gray-800 dark:text-gray-200">
+                </select>
             </div>
             <div class="flex justify-end">
                 <button type="button" id="cancel-add-task" class="px-4 py-2 bg-gray-300 text-gray-700 hover:bg-gray-400">Cancel</button>
@@ -143,12 +151,12 @@
             @csrf
             <div>
                 <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
-                <input type="text" name="name" id="name" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
+                <input type="text" required name="name" id="name" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
             </div>
          
                 <div>
                     <label for="color" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Color</label>
-                    <input type="color" name="color" id="color" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
+                    <input required type="color" name="color" id="color" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
                 </div>
                
             
@@ -162,7 +170,10 @@
 </div>
 
 <script>
-    	$(".projectButton").on('click',function(event) {
+    document.addEventListener('DOMContentLoaded', () => {
+		assignees_obj = populateChoices2('assignees', [], true);		
+    }); 
+    $(".projectButton").on('click',function(event) {
 		
 		if(localStorage.getItem("project_tool") == 'task_planner'){
 
@@ -247,12 +258,20 @@
 		//alert(url);
 		
 		let fetchRes = await fetch(url);
-		const all_groups = await fetchRes.json();
+        const res = await fetchRes.json();
+		const all_groups = res.groups;
+        const assignees = res.assignees.users.map(function(item) {
+			  return {'value' : item.id , 'label' : item.name};
+		});
+        assignees_obj.clearStore();
+        assignees_obj.setChoices(assignees);
 
+        let html = ``;
         for (let i = 0; i < all_groups.length; i++) {
             groups.push({ id: all_groups[i].id, name: all_groups[i].name, color: all_groups[i].color });
+            html+= `<option value="${all_groups[i].id}">${all_groups[i].name}</option>`;
         }
-
+        $('[name="group_id"]').html(html);
         renderGroups();
         renderDays();
         renderTimeline();
