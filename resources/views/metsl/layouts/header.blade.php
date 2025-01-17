@@ -133,17 +133,6 @@
             localStorage.setItem('theme', isDarkMode ? 'dark' : 'light');
         }
 
-        // Check user preference on page load
-        document.addEventListener('DOMContentLoaded', () => {
-            const userPreference = localStorage.getItem('theme');
-            
-            if (userPreference === 'dark' || (!userPreference && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-        });
-
         // Notifications Toggle Function
         function toggleNotifications() {
             const popup = document.getElementById('notificationPopup');

@@ -18,7 +18,7 @@
     <div class="flex-1 overflow-x-auto">
         <!-- Timeline Header -->
         <div class="flex items-center justify-between mb-4 px-4">
-            <div class="flex items-center space-x-3">
+            <div class="flex items-center space-x-2">
                 <button id="prev-btn" class="py-2 px-4 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 rounded-full ">
                     <i data-feather="arrow-left"></i>
                 </button>
@@ -27,15 +27,18 @@
                 </button>
                 <span id="current-month" class="text-lg font-semibold text-gray-700 dark:text-gray-200"></span>
             </div>
-            <div class="flex items-center space-x-3">
-                <button id="add-task-btn" class="inline-flex gap-2 font-semibold py-2 px-4 bg-blue-200 text-blue-800 hover:bg-blue-500 hover:text-white dark:bg-blue-800 dark:hover:bg-blue-600 dark:text-blue-200 rounded-full">
+            <div class="flex items-center">
+                <button id="add-task-btn" class="mr-3 inline-flex gap-2 font-semibold py-2 px-4 bg-blue-200 text-blue-800 hover:bg-blue-500 hover:text-white dark:bg-blue-800 dark:hover:bg-blue-600 dark:text-blue-200 rounded-full">
                     <i data-feather="plus"></i> Add Task
                 </button>   
 
-                <button id="zoom-in-btn" class="py-2 px-4 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 rounded-full">
+                <button id="zoom-in-btn" class="py-2 px-4 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 rounded-s-full">
                     <i data-feather="zoom-in"></i>
                 </button>
-                <button id="zoom-out-btn" class="py-2 px-4 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 rounded-full">
+                <button id="zoom-reset-btn" class="mx-1 py-2 px-2 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200">
+                    <i data-feather="minimize-2"></i>
+                </button>
+                <button id="zoom-out-btn" class="py-2 px-4 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 rounded-e-full">
                     <i data-feather="zoom-out"></i>
                 </button>
             </div>
@@ -141,7 +144,8 @@
     ];
 
     let currentDayOffset = 0;
-    let visibleDays = 14; // Default number of visible days
+    const visibleDaysReset = 14;
+    let visibleDays = visibleDaysReset; // Default number of visible days
 
     // Generate dynamic days based on offset
     function generateDays(offset) {
@@ -235,6 +239,8 @@
             visibleDays -= 1;
         } else if (inOut === 'out' && visibleDays < 31) {
             visibleDays += 1;
+        } else{
+            visibleDays = visibleDaysReset;
         }
         renderDays();
         renderTimeline();
@@ -253,6 +259,7 @@
         // Zoom in/out
         $("#zoom-in-btn").click(() => zoomTimeline('in'));
         $("#zoom-out-btn").click(() => zoomTimeline('out'));
+        $("#zoom-reset-btn").click(() => zoomTimeline('reset'));
 
         // Open Task Modal
         $("#timeline-rows").on("click", "[data-task-id]", function () {

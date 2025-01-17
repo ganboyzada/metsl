@@ -169,11 +169,11 @@
                         <td class="px-6 py-3">
                             <span class="px-3 py-1 rounded-full text-xs  ${row.status_color[1]}">${row.status_color[0]}</span>
                         </td>
-                        <td class="px-4 py-2">
-                            <button onclick="deleteCorrespondence(${row.id}  , ${i})" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
-                                <i data-feather="delete" class="w-5 h-5"></i>
+                        <td class="px-4 py-2 inline-flex space-x-4 items-center">
+                            <button onclick="deleteCorrespondence(${row.id}  , ${i})" class="text-red-500 dark:text-red-400 hover:text-red-300">
+                                <i data-feather="trash" class="w-5 h-5"></i>
                             </button>
-                            <a target="_blank" href="${url2}" class="text-gray-500 dark:text-gray-400 hover:text-gray-300">
+                            <a target="_blank" href="${url2}" class="text-gray-500 dark:text-gray-400 hover:text-gray-400">
                                 <i data-feather="edit" class="w-5 h-5"></i>
                             </a>
                         </td>

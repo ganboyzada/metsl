@@ -7,8 +7,16 @@ import 'tinymce/themes/silver/theme';
 import Choices from 'choices.js';
 import 'choices.js/public/assets/styles/choices.min.css';
 
+const userPreference = localStorage.getItem('theme');
+if (userPreference === 'dark' || (!userPreference && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+    document.documentElement.classList.add('dark');
+} else {
+    document.documentElement.classList.remove('dark');
+}
+
 window.$ = $;
 window.feather = feather;
+
 
 $(document).ready(function() {
     getLocalStorage();
