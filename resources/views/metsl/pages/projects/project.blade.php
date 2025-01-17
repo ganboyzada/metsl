@@ -22,6 +22,9 @@
             <div class="tab-content hidden" id="stakeholders">
                 @include('metsl.pages.stakeholders.index')
             </div>
+            <div class="tab-content hidden" id="task-planner">
+                @include('metsl.pages.task-planner.index')
+            </div>
         </div>
     </div>
 @endsection

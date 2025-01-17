@@ -144,6 +144,12 @@ function getLocalStorage(){
         $("[data-tab='stakeholders']").addClass("active");
 
     }
+    else if(localStorage.getItem("project_tool") == 'task_planner'){
+        $('.current-selected').html('Task Planner');
+        $('.tab-content#task-planner').removeClass('hidden');
+        $("[data-tab='task-planner']").addClass("active");
+
+    }
 
 }
 

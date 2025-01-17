@@ -20,6 +20,10 @@
     "dependencies": {
         "@fontsource-variable/dm-sans": "^5.1.0",
         "@fortawesome/fontawesome-free": "^6.6.0",
+        "@fullcalendar/core": "^6.1.15",
+        "@fullcalendar/interaction": "^6.1.15",
+        "@fullcalendar/resource-timeline": "^6.1.15",
+        "@fullcalendar/timeline": "^6.1.15",
         "@heroicons/react": "^2.1.5",
         "choices.js": "^11.0.2",
         "feather-icons": "^4.29.2",
