@@ -20,6 +20,9 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RolePermissionCorrespondenceTypesSeeder::class
         ]);
+        $this->call([
+            RolePermissionTaskPlanner::class
+        ]);
         User::factory()->create([
             'name' => 'Test User',
             'email' => 'test@example.com',

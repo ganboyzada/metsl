@@ -1,9 +1,11 @@
+<div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
+<div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
 <div class="flex h-screen">
     <!-- Sidebar for Task Groups -->
     <div class="w-1/6 bg-gray-100 dark:bg-gray-800 px-5 py-4 rounded-xl">
         <div class="flex items-center pb-7">
             <h2 class="text-md font-semibold me-auto">Task Groups</h2>
-            <button class="ms-2 px-3 py-1 rounded-full text-sm inline-flex border border-gray-600 dark:bg-gray-700 whitespace-nowrap">
+            <button id="add-group-btn" class="ms-2 px-3 py-1 rounded-full text-sm inline-flex border border-gray-600 dark:bg-gray-700 whitespace-nowrap">
                 <i class="w-5 h-5 mr-2" data-feather="folder-plus"></i>
                 Create
             </button>
@@ -76,7 +78,10 @@
 <div id="add-task-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
     <div class="bg-white dark:bg-gray-800 shadow-lg p-6 w-1/3">
         <h3 class="text-lg font-semibold mb-4">Add New Task</h3>
-        <form id="add-task-form" class="space-y-4">
+        <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
+
+        <form id="add-task-form" class="space-y-4"  method="POST" enctype="multipart/form-data">
+            @csrf
             <div>
                 <label for="task-subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Subject</label>
                 <input type="text" id="task-subject" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
@@ -129,13 +134,133 @@
 </div>
 
 
+<div id="add-group-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white dark:bg-gray-800 shadow-lg p-6 w-1/3">
+        <h3 class="text-lg font-semibold mb-4">Add New group</h3>
+        <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
+
+        <form id="add-group-form" class="space-y-4"  method="POST" enctype="multipart/form-data">
+            @csrf
+            <div>
+                <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Name</label>
+                <input type="text" name="name" id="name" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
+            </div>
+         
+                <div>
+                    <label for="color" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Color</label>
+                    <input type="color" name="color" id="color" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
+                </div>
+               
+            
+   
+            <div class="flex justify-end">
+                <button type="button" id="cancel-add-group" class="px-4 py-2 bg-gray-300 text-gray-700 hover:bg-gray-400">Cancel</button>
+                <button type="submit"  id="add-group" class="ml-3 px-4 py-2 bg-blue-500 text-white hover:bg-blue-600">Add group</button>
+            </div>
+        </form>
+    </div>
+</div>
+
 <script>
-    const groups = [
-        { id: 1, name: "Communications", color: "bg-pink-400" },
-        { id: 2, name: "Marketing", color: "bg-yellow-400" },
-        { id: 3, name: "Design", color: "bg-orange-400" },
-        { id: 4, name: "Administrative", color: "bg-purple-400" },
+    	$(".projectButton").on('click',function(event) {
+		
+		if(localStorage.getItem("project_tool") == 'task_planner'){
+
+			get_groups();
+		}
+	});
+    $("#add-group-form").on("submit", function(event) {
+        const form = document.getElementById("add-group-form");
+        const formData = new FormData(form); 
+
+            $('.error').hide();
+            $('.success').hide();
+            $('.err-msg').hide();
+            $(".error").html("");
+            $(".success").html("");
+            event.preventDefault();  
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ route('projects.groups.store') }}",
+                type: "POST",
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                cache: false,
+                beforeSend: function() {
+                    $("#add-group").prop('disabled', true);
+                },
+                success: function(data) {
+                    if (data.success) {
+                        $('#add-group-modal').addClass('hidden');
+                        $("#add-group").prop('disabled', false);                        
+                        $("#add-group-form")[0].reset();						
+						window.scrollTo(0,0);
+                        $('.success').show();
+                        $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.success+'</div>');  
+					
+						setInterval(function() {
+							location.reload();
+							}, 3000);
+
+
+                    }
+                    else if(data.error){
+                        $("#add-group").prop('disabled', false);
+
+                        $('.error').show();
+                        $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.error+'</div>');
+                    }
+                },
+                error: function (err) {
+                    $.each(err.responseJSON.errors, function(key, value) {
+                            var el = $(document).find('[name="'+key + '"]');
+                            if(el.length == 0){
+                                el = $(document).find('[id="'+key + '"]');
+                            }
+                            el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
+                            
+                        });
+
+                        $("#add-group").prop('disabled', false);
+
+
+                }
+            });
+    
+      });
+        
+    
+    
+    let groups = [
+
     ];
+    get_groups();
+    async function get_groups() {
+        groups = [];
+		let url =`project/groups/all`;
+		//alert(url);
+		
+		let fetchRes = await fetch(url);
+		const all_groups = await fetchRes.json();
+
+        for (let i = 0; i < all_groups.length; i++) {
+            groups.push({ id: all_groups[i].id, name: all_groups[i].name, color: all_groups[i].color });
+        }
+
+        renderGroups();
+        renderDays();
+        renderTimeline();
+       
+        console.log(all_groups);
+    }
+
+ 
 
     const tasks = [
         { id: 1, title: "Complete presentation", groupId: 1, start: 0, duration: 2, assignees: ["Alice"], priority: "high", attachments: true },
@@ -167,7 +292,7 @@
         const groupElements = groups.map(
             (group) =>
                 `<li class="flex items-center space-x-2">
-                    <span class="w-6 h-6 ${group.color} block rounded-lg"></span>
+                    <span class="w-6 h-6 ${group.color} block rounded-lg" style="background-color: ${group.color}"></span>
                     <span>${group.name}</span>
                 </li>`
         ).join('');
@@ -284,6 +409,14 @@
 
         $('#cancel-add-task').click(function () {
             $('#add-task-modal').addClass('hidden');
+        });
+
+        $('#add-group-btn').click(function () {
+            $('#add-group-modal').removeClass('hidden');
+        });
+
+        $('#cancel-add-group').click(function () {
+            $('#add-group-modal').addClass('hidden');
         });
 
         $('#add-task-form').submit(function (e) {

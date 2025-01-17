@@ -17,6 +17,7 @@ use App\Repository\Eloquent\CorrespondenceFileRepository;
 use App\Repository\Eloquent\CorrespondenceRepository;
 use App\Repository\Eloquent\DesignTeamRepository;
 use App\Repository\Eloquent\DocumentRepository;
+use App\Repository\Eloquent\GroupRepository;
 use App\Repository\Eloquent\MeetingPlaningFilesRepository;
 use App\Repository\Eloquent\MeetingPlaningRepository;
 use App\Repository\Eloquent\ProjectDocumentFilesRepository;
@@ -28,6 +29,7 @@ use App\Repository\Eloquent\PunchListFilesRepository;
 use App\Repository\Eloquent\PunchListRepository;
 use App\Repository\Eloquent\UserRepository;
 use App\Repository\EloquentRepositoryInterface;
+use App\Repository\GroupRepositoryInterface;
 use App\Repository\MeetingPlaningFilesRepositoryInterface;
 use App\Repository\MeetingPlaningRepositoryInterface;
 use App\Repository\ProjectDocumentFilesRepositoryInterface;
@@ -45,6 +47,7 @@ use App\Services\CorrespondenceFileService;
 use App\Services\CorrespondenceService;
 use App\Services\DesignTeamService;
 use App\Services\DocumentService;
+use App\Services\GroupService;
 use App\Services\MeetingPlaningFilesService;
 use App\Services\MeetingPlaningService;
 use App\Services\ProjectDocumentFilesService;
@@ -185,7 +188,20 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(PunchListFilesRepositoryInterface::class, PunchListFilesRepository::class);
         $this->app->bind(PunchListFilesService::class, function ($app) {
             return new PunchListFilesService($app->make(PunchListFilesRepositoryInterface::class));
-        });        
+        });  
+        
+        
+
+        $this->app->bind(GroupRepositoryInterface::class, GroupRepository::class);
+        $this->app->bind(GroupService::class, function ($app) {
+            return new GroupService($app->make(GroupRepositoryInterface::class));
+        }); 
+
+/*
+        $this->app->bind(TaskRepositoryInterface::class, TaskRepository::class);
+        $this->app->bind(TaskService::class, function ($app) {
+            return new TaskService($app->make(TaskRepositoryInterface::class));
+        });  */       
 
     }
 

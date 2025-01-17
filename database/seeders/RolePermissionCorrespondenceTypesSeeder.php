@@ -13,13 +13,13 @@ class RolePermissionCorrespondenceTypesSeeder extends Seeder
      */
     public function run(): void
     {
-        $permissoion = Permission::where('name' , 'assign_correspondence')->orWhere('name','assign correspondence')->first();
+        //$permissoion = Permission::where('name' , 'assign_correspondence')->orWhere('name','assign correspondence')->first();
         $role = Role::where('name' , 'correspondence')->first();
-        if(isset($permissoion->id)){
+        /*if(isset($permissoion->id)){
             $role->permissions()->detach($permissoion->id);
         }
         Permission::where('name' , 'assign_correspondence')->delete();
-
+        */
         $enums_list = \App\Enums\CorrespondenceTypeEnum::cases();
         foreach ($enums_list as $enum) {
             $permission = Permission::create(['name' => 'create_'.$enum->value,'guard_name' => 'sanctum']);

@@ -3,17 +3,14 @@
 use App\Http\Controllers\CorrespondenceController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\DocumentRevisionController;
+use App\Http\Controllers\GroupController;
 use App\Http\Controllers\MeetingPlaningController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PunchListController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\StakeholderController;
+use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
-
-
-
-
-
 
 
 Route::middleware([
@@ -111,6 +108,16 @@ Route::middleware([
 	Route::get('/project/stakeholders/destroy/{id}',  [StakeholderController::class, "destroy"])->name(name: 'projects.stakeholders.destroy');	
     Route::post('/project/stakeholders/update', action: [StakeholderController::class, "update"])->name('projects.stakeholders.update');
 
+    Route::get('/project/groups/all',  [GroupController::class, "all"])->name(name: 'projects.groups.all');	
+	Route::post('/project/groups/store',  [GroupController::class, "store"])->name(name: 'projects.groups.store');	
+	Route::post('/project/groups/update',  [GroupController::class, "update"])->name(name: 'projects.groups.update');	
+	Route::get('/project/groups/destroy/{id}',  [GroupController::class, "destroy"])->name(name: 'projects.groups.destroy');	
+    
+
+    Route::get('/project/tasks/all',  [TaskController::class, "all"])->name(name: 'projects.tasks.all');	
+	Route::post('/project/tasks/store',  [TaskController::class, "store"])->name(name: 'projects.tasks.store');	
+	Route::post('/project/tasks/update',  [TaskController::class, "update"])->name(name: 'projects.tasks.update');	
+	Route::get('/project/tasks/destroy/{id}',  [TaskController::class, "destroy"])->name(name: 'projects.tasks.destroy');	
 
 
     Route::post('/project/store', action: [ProjectController::class, "store"])->name('projects.store');
