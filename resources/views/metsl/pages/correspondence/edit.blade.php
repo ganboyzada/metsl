@@ -169,7 +169,13 @@
 </div>
 
 <script>
-    
+    document.addEventListener('DOMContentLoaded', () => {
+		
+		assignees_obj = populateChoices2('assignees', [], true);		
+		distribution_obj = populateChoices2('distribution', [], true);	
+		received_obj = populateChoices2('received-from', [], false);		
+		
+    });    
     $("#correspondence-form").on("submit", function(event) {
         const form = document.getElementById("correspondence-form");
         const formData = new FormData(form); 
@@ -245,25 +251,7 @@
 			
 
 	get_users();
-    /*
-    async  function get_users(){
-		const type = $('[name="type"]').val();
-        alert(type);
-		let fetchRes = await fetch(`{{url('project/correspondence/users?type=${type}')}}`);
-		const all_users = await fetchRes.json();
-			const assignees = all_users.assigned_users.map(function(item) {
-			  return {'value' : item.id , 'label' : item.name};
-			});
-						console.log(assignees);
 
-			
-			assignees_obj = populateChoices2('assignees', assignees, true);
-		
-			
-			
-    }
-        // Populate Assignees, Distribution Members, and Received From
-	*/
     async  function get_users(){
 		const type = $('[name="type"]').val();
 		let fetchRes = await fetch(`{{url('project/correspondence/users?type=${type}')}}`);
@@ -278,27 +266,30 @@
             return {'value' : item.id , 'label' : item.name ,  'selected': selected_assignees.includes(item.id) ? true : false};
         });
 
-        
-        assignees_obj = populateChoices2('assignees', assignees, true);
+        console.log(assignees);
+        // assignees_obj = populateChoices2('assignees', assignees, true);
+		assignees_obj.clearStore();
+		assignees_obj.setChoices(assignees);		
+
+
+		let DistributionMembers ={!! json_encode($correspondece->DistributionMembers) !!}  ;
 		
+		let selected_DistributionMembers=DistributionMembers.map(function(item) {
+			return item.id;
+		})	;
+		const distribution = all_users.destrbution_users.map(function(item) {
+		  return {'value' : item.id , 'label' : item.name ,  'selected': selected_DistributionMembers.includes(item.id) ? true : false};
+		});	
+		distribution_obj.clearStore();
+		distribution_obj.setChoices(distribution);	
+		
+		let recieved  = `{{ $correspondece->recieved_from }}`;
+		const allusers = all_users.users.map(function(item) {
+		  return {'value' : item.id , 'label' : item.name, 'selected' : recieved == item.id ? true : false};
+		});	
 
-
-            let DistributionMembers ={!! json_encode($correspondece->DistributionMembers) !!}  ;
-            
-            let selected_DistributionMembers=DistributionMembers.map(function(item) {
-                return item.id;
-            })	;
-			const distribution = all_users.destrbution_users.map(function(item) {
-			  return {'value' : item.id , 'label' : item.name ,  'selected': selected_DistributionMembers.includes(item.id) ? true : false};
-			});	
-			distribution_obj = populateChoices2('distribution', distribution, true);
-			
-			let recieved  = `{{ $correspondece->recieved_from }}`;
-			const allusers = all_users.users.map(function(item) {
-			  return {'value' : item.id , 'label' : item.name, 'selected' : recieved == item.id ? true : false};
-			});	
-
-			received_obj = populateChoices2('received-from', allusers,false);
+		received_obj.clearStore();
+		received_obj.setChoices(allusers);
 
         feather.replace();
 			
@@ -312,22 +303,22 @@
     // });
 
     // Attachments logic
-    const dropZone = document.getElementById('drop-zone');
-    const fileInput = document.getElementById('file-upload');
-    const fileList = document.getElementById('file-list');
+    // const dropZone = document.getElementById('drop-zone');
+    // const fileInput = document.getElementById('file-upload');
+    // const fileList = document.getElementById('file-list');
 
-    dropZone.addEventListener('click', () => fileInput.click());
-    dropZone.addEventListener('dragover', event => {
-        event.preventDefault();
-        dropZone.classList.add('bg-gray-700');
-    });
-    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('bg-gray-700'));
-    dropZone.addEventListener('drop', event => {
-        event.preventDefault();
-        dropZone.classList.remove('bg-gray-700');
-        handleFiles(event.dataTransfer.files);
-    });
-    fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+    // dropZone.addEventListener('click', () => fileInput.click());
+    // dropZone.addEventListener('dragover', event => {
+        // event.preventDefault();
+        // dropZone.classList.add('bg-gray-700');
+    // });
+    // dropZone.addEventListener('dragleave', () => dropZone.classList.remove('bg-gray-700'));
+    // dropZone.addEventListener('drop', event => {
+        // event.preventDefault();
+        // dropZone.classList.remove('bg-gray-700');
+        // handleFiles(event.dataTransfer.files);
+    // });
+    // fileInput.addEventListener('change', () => handleFiles(fileInput.files));
 
     function handleFiles(files) {
         Array.from(files).forEach(file => {

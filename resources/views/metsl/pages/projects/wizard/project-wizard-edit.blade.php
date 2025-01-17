@@ -386,7 +386,7 @@
                                 @foreach($permissions as $permission)   
                                     <label class="inline-flex items-center">
                                         <input type="checkbox" value="{{  $permission->name }}" class="form-checkbox text-blue-600 dark:text-blue-300 mr-2" 
-                                        onchange="handleCustomPermissions()"> {{  $permission->name }}
+                                        onchange="handleCustomPermissions()"> {{ str_replace("_"," ",$permission->name)   }}
                                     </label>                                                        
                                 @endforeach
                                 @endif

@@ -101,14 +101,13 @@ class CorrespondenceService
     public function find($id)
     {
         return $this->correspondenceRepository->with([
-            //'assignees:id,name' ,
             'assignees.userable' , 
-       // 'distributionMembers:id,name',
         'distributionMembers.userable',
-       //  'ReceivedFrom:id,name',
-         'ReceivedFrom.userable', 
+         'ReceivedFrom', 
          
-         'files:id,correspondence_id,file,size'])->find($id);
+         'files:id,correspondence_id,file,size'
+         
+         ])->find($id);
         
     }
     public function getAllProjectCorrespondence($project_id , $request){

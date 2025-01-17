@@ -46,4 +46,9 @@ class ProjectDocumentFilesService
         }
     }
 
+    public function getAllFiles($project_id)
+    {
+        return $this->projectDocumentFilesRepository->project_document_files($project_id);
+    }
+
 }

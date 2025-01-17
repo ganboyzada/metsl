@@ -20,4 +20,10 @@ interface ProjectDocumentFilesRepositoryInterface
     */
 
     public function change_status($id , $status): bool;
+
+    /**
+    * @param integer $project_id
+    * @return Collection
+    */
+    public function project_document_files($project_id): Collection;
 }

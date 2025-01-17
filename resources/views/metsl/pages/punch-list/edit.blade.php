@@ -323,21 +323,28 @@
 			  return {'value' : item.id , 'label' : item.name , 'selected' : selected_distrbution_members.includes(item.id) ? true : false };
 			});
 
-			distribution_obj = populateChoices2('distribution-members', reviewers, true);
+            distribution_obj.clearStore();
+            distribution_obj.setChoices(reviewers);	
 			
             let resposible_id = `{{ $punch_list->responsible_id }}`;
 			reviewers = all.responsible.map(function(item) {
 			  return {'value' : item.id , 'label' : item.name , 'selected' : resposible_id == item.id ? true : false};
 			});	
-
-			reviewers_obj = populateChoices2('responsible-member', reviewers , false);
+            reviewers_obj.clearStore();
+            reviewers_obj.setChoices(reviewers);	
+			
 		}	
 	
     }
         
 	
 
-
+    document.addEventListener('DOMContentLoaded', () => {
+		
+		distribution_obj = populateChoices2('distribution-members', [], true);		
+		reviewers_obj = populateChoices2('responsible-member', [] , false);	
+		
+    }); 
 
 </script>
 @endsection

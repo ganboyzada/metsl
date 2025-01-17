@@ -41,7 +41,6 @@
 </div>
 @include('metsl.pages.documents.revisions')
 @include('metsl.pages.documents.uploader')
-@include('metsl.pages.documents.files')
 @include('metsl.pages.documents.comments')
 
 <script>

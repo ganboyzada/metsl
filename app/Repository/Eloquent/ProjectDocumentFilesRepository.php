@@ -43,4 +43,13 @@ class ProjectDocumentFilesRepository extends BaseRepository implements ProjectDo
         return $this->model->where('id',$id)->update(['status'=>$status]);
     }
 
+       /**
+    * @param integer $project_id
+    * @return Collection
+    */
+    public function project_document_files($project_id): Collection
+    {
+        return $this->model->whereRelation('project', 'projects.id', '=', $project_id)->get(['project_document_id', 'file' , 'id']);
+    }
+
 }

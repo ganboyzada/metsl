@@ -14,4 +14,16 @@ class ProjectDocumentFiles extends Model
     {
         return $this->belongsTo(ProjectDocument::class);
     }
+
+    public function project()
+    {
+        return $this->hasOneThrough(
+            Project::class,
+            ProjectDocument::class,
+            'id', // refers to id column on invoices table
+            'id', // refers to id column on customers table
+            'project_document_id', // refers to invoice_id column on credit_notes table
+            'project_id' // refers to customer_id column on invoices table
+        );
+    }
 }

@@ -237,7 +237,14 @@
 		const type = $('[name="type"]').val();
 		let fetchRes = await fetch(`{{url('project/correspondence/users?type=${type}')}}`);
 		const all_users = await fetchRes.json();
-		$('[name="number"]').val(all_users.next_number);
+        if($('[name="reply_correspondence_id"]').val() != ''){
+            var old_type = "{{ $reply_correspondence->number ?? ''}}";
+		    $('[name="number"]').val('Replying to '+old_type);
+
+        }else{
+            $('[name="number"]').val(all_users.next_number);
+          
+        }
 		const assignees = all_users.assigned_users.map(function(item) {
 			  return {'value' : item.id , 'label' : item.name};
 			});
@@ -277,22 +284,22 @@
     // });
 
     // Attachments logic
-    const dropZone = document.getElementById('drop-zone');
-    const fileInput = document.getElementById('file-upload');
-    const fileList = document.getElementById('file-list');
+    // const dropZone = document.getElementById('drop-zone');
+    // const fileInput = document.getElementById('file-upload');
+    // const fileList = document.getElementById('file-list');
 
-    dropZone.addEventListener('click', () => fileInput.click());
-    dropZone.addEventListener('dragover', event => {
-        event.preventDefault();
-        dropZone.classList.add('bg-gray-700');
-    });
-    dropZone.addEventListener('dragleave', () => dropZone.classList.remove('bg-gray-700'));
-    dropZone.addEventListener('drop', event => {
-        event.preventDefault();
-        dropZone.classList.remove('bg-gray-700');
-        handleFiles(event.dataTransfer.files);
-    });
-    fileInput.addEventListener('change', () => handleFiles(fileInput.files));
+    // dropZone.addEventListener('click', () => fileInput.click());
+    // dropZone.addEventListener('dragover', event => {
+        // event.preventDefault();
+        // dropZone.classList.add('bg-gray-700');
+    // });
+    // dropZone.addEventListener('dragleave', () => dropZone.classList.remove('bg-gray-700'));
+    // dropZone.addEventListener('drop', event => {
+        // event.preventDefault();
+        // dropZone.classList.remove('bg-gray-700');
+        // handleFiles(event.dataTransfer.files);
+    // });
+    // fileInput.addEventListener('change', () => handleFiles(fileInput.files));
 
     function handleFiles(files) {
         Array.from(files).forEach(file => {

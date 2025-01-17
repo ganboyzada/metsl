@@ -132,6 +132,7 @@ class RepositoryServiceProvider extends ServiceProvider
                 $app->make(DocumentRepositoryInterface::class),
                 $app->make(UserService::class) ,  
                 $app->make(ProjectDocumentFilesService::class),
+                $app->make(ProjectDocumentRevisionsService::class),
 
                 
             );

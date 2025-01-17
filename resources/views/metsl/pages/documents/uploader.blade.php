@@ -24,7 +24,7 @@
                         <p class="text-sm text-gray-500">Click to upload or drag and drop</p>
                         <p class="text-xs text-gray-500">PDF only (max. 5MB)</p>
                     </div>
-                    <input id="file-upload" name="docs[]" type="file" class="hidden" accept=".pdf" multiple>
+                    <input id="file-upload" name="docs[]" type="file" class="hidden" accept=".pdf" multiple  onchange="loadFiles(event)">
                 </div>
 				<ul class="file-list" class="mt-4 space-y-2">
 				</ul>
@@ -86,6 +86,21 @@
     </div>
 </div>
 <script>
+    function loadFiles(event) {
+        if (!$('input#custom-number-toggle').is(':checked')) {
+            let name_number = '';
+            if(event.target.files.length > 0){
+                for(var i =0; i < event.target.files.length; i++){
+                    let name= event.target.files[i].name;
+                    name_number+= name.split('.')[0]+',';
+
+                }
+            }
+            $('#document-number').val(name_number);
+        }
+
+
+    }
  $("#upload-form").on("submit", function(event) {
         const form = document.getElementById("upload-form");
         const formData = new FormData(form); 
@@ -210,11 +225,20 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!e.target.checked) {
             // Reset value if toggling back
             if (fileInput.files.length > 0) {
-                const fileName = fileInput.files[0].name.split('.')[0];
+                //const fileName = fileInput.files[0].name.split('.')[0];
+                let fileName = '';
+                    for(var i =0; i < fileInput.files.length; i++){
+                        let name= fileInput.files[i].name;
+                        fileName+= name.split('.')[0]+',';
+
+                    }                
+
                 documentNumberInput.value = fileName;
             } else {
                 documentNumberInput.value = '';
             }
+        }else{
+            documentNumberInput.value = '';
         }
     });
 

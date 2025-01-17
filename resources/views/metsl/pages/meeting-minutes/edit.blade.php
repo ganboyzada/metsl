@@ -304,8 +304,9 @@
 			});
 			console.log(reviewers);
 
-			
-			reviewers_obj = populateChoices2('participants', reviewers, true);
+            reviewers_obj.clearStore();
+            reviewers_obj.setChoices(reviewers);			
+			//reviewers_obj = populateChoices2('participants', reviewers, true);
 		}	
 	
     }
@@ -320,8 +321,8 @@
         // {'value': '5', 'label': 'Brook Chesterville'}
     // ];
 
-    // document.addEventListener('DOMContentLoaded', () => {
-        // populateChoices('participants', participants, true);     
-    // }); 
+     document.addEventListener('DOMContentLoaded', () => {
+        reviewers_obj = populateChoices2('participants', [], true);     
+     }); 
 </script>
 @endpush

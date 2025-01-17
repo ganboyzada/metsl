@@ -52,6 +52,10 @@ class CorrespondenceController extends Controller
             $id = Session::get('projectID');
             $type = $request->type;
             $reply_correspondence_id = $request->correspondece ?? NULL;
+            if($reply_correspondence_id != NULL){
+                $reply_correspondence = $this->correspondenceService->find($reply_correspondence_id);
+
+            }
           //  $next_number =  $this->correspondenceService->getNextNumber($type , $id);
 
         }
@@ -144,7 +148,6 @@ class CorrespondenceController extends Controller
 
     public function find($id){
         $correspondece = $this->correspondenceService->find($id);
-        //return ($correspondece);
         return view('metsl.pages.correspondence.view', get_defined_vars());
 
     }

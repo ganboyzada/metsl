@@ -12,7 +12,8 @@ class DocumentService
     public function __construct(
         protected DocumentRepositoryInterface $documentRepository,
         protected UserService $userService,
-        protected ProjectDocumentFilesService $projectDocumentFilesService
+        protected ProjectDocumentFilesService $projectDocumentFilesService,
+        protected ProjectDocumentRevisionsService $projectDocumentRevisionsService
 
         ) {
     }
@@ -23,20 +24,59 @@ class DocumentService
         \DB::beginTransaction();
         try {
             $project_id = $data['project_id'];
-            $document =  $this->documentRepository->create($data);
-            $path = Storage::url('/project'.$data['project_id'].'/documents'.$document->id);
-            
-            \File::makeDirectory($path, $mode = 0777, true, true);  
+            $files = [];
+            $document_files = $this->projectDocumentFilesService->getAllFiles($project_id);
+            if($document_files->count()  > 0){
+                foreach($document_files as $file){
+                    $files[$file->file] = array('id'=>$file->id , 'project_document_id'=>$file->project_document_id);;
 
-           $users =  $this->documentRepository->add_users_to_document($data,$document );
-          // dd($users);
+                }
+            }
 
-
+            $revisions = [];
+            $news = [];
             if(isset($data['docs'])){
-                $document_id = $document->id;
+                foreach($data['docs'] as $doc){
+                    if(array_key_exists($doc->getClientOriginalName() , $files)){
+                        $revisions[] = array('id'=> $files[$doc->getClientOriginalName()]['id'] ,
+                         'project_document_id'=> $files[$doc->getClientOriginalName()]['project_document_id'] ,'doc'=>$doc);
+                    } else{
+                        $news[] = $doc;
+                    }                   
+                    
+                }
+            }
+            
+            if(count($news) > 0){
+                $document =  $this->documentRepository->create($data);
+                $path = Storage::url('/project'.$data['project_id'].'/documents'.$document->id);
                 
-                $this->projectDocumentFilesService->createBulkFiles($data['project_id'] , $document->id ,$data['docs']);
-            }           
+                \File::makeDirectory($path, $mode = 0777, true, true);  
+
+                $users =  $this->documentRepository->add_users_to_document($data,$document );
+    
+            
+
+                $document_id = $document->id;
+                    
+                $this->projectDocumentFilesService->createBulkFiles($data['project_id'] , $document->id ,$news);
+                
+            }
+            if(count($revisions) > 0){
+                foreach($revisions as $revision){
+                    $new_data['project_id'] = $project_id;
+                    $new_data['project_document_id'] = $revision['project_document_id'];
+                    $new_data['file'] = $revision['doc'];
+                    $new_data['project_document_file_id'] = $revision['id'];
+                    $new_data['title'] = $data['title'];
+                    $new_data['user_id'] = \Auth::user()->id;
+                    $new_data['status'] = 0;
+                    $new_data['upload_date'] = date('Y-m-d');
+                   // dd($new_data);
+                    $this->projectDocumentRevisionsService->create($new_data);
+                }
+            }
+          
             \DB::commit();
         } catch (\Exception $e) {
             \DB::rollback();
@@ -45,7 +85,7 @@ class DocumentService
             
             
 
-        return $document;
+        return $document ?? null;
     }
 
     public function update(array $data)
