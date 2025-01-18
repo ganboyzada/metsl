@@ -20,7 +20,7 @@ class MeetingPlaningFilesService
         try {         
             $docs = array_map(function($file) use($project_id , $meetingplaning_id , $uploadeedfiles ){
                 $fileName = $file->getClientOriginalName();
-                Storage::disk('public')->putFileAs($file, 'project'.$project_id.'/meeting_planing'.$meetingplaning_id.'/'.$fileName);
+                Storage::disk('public')->putFileAs( 'project'.$project_id.'/meeting_planing'.$meetingplaning_id , $file, $fileName);
 
 
                 return ['file'=>$fileName , 'meeting_id'=>$meetingplaning_id, 'type'=>$file->extension() , 'size'=>$file->getSize() ];

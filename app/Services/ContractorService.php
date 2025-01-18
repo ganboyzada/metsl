@@ -33,7 +33,7 @@ class ContractorService
             \File::makeDirectory($path, $mode = 0777, true, true);
         
             if($data['image'] != NULL){
-                Storage::disk('public')->putFileAs('contractor' . $model->id, $file, $data['image']);
+                Storage::disk('public')->putFileAs('contractor' . $model->id, $file, $fileName);
 
             } 
             \DB::commit();
@@ -66,7 +66,7 @@ class ContractorService
             \File::makeDirectory($path, $mode = 0777, true, true);
         
             if(isset($data['image']) && $data['image'] != NULL){
-                Storage::disk('public')->putFileAs('contractor' . $id, $file, $data['image']);
+                Storage::disk('public')->putFileAs('contractor' . $id, $file, $fileName);
 
             } 
             \DB::commit();

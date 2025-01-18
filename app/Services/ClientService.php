@@ -37,7 +37,7 @@ class ClientService
 
             if ($data['image'] != NULL) {
                 // Store the file in the directory
-                Storage::disk('public')->putFileAs('client' . $model->id, $file, $data['image']);
+                Storage::disk('public')->putFileAs('client' . $model->id, $file, $fileName);
             }
             \DB::commit();
         // all good
@@ -73,7 +73,7 @@ class ClientService
 
             if(isset($data['image']) && $data['image'] != NULL){
                 // Store the file in the directory
-                Storage::disk('public')->putFileAs('client' . $id, $file, $data['image']);
+                Storage::disk('public')->putFileAs('client' . $id, $file, $fileName);
             }
             \DB::commit();
         // all good

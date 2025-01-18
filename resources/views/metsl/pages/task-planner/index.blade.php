@@ -306,6 +306,10 @@
                             var el = $(document).find('[name="'+key + '"]');
                             if(el.length == 0){
                                 el = $(document).find('[id="'+key + '"]');
+                                if(el.length == 0){
+                                    el = $(document).find('[name="'+key+ '[]"]');
+
+                                }
                             }
                             el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
                             

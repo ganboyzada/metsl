@@ -19,7 +19,7 @@ class ProjectFileService
             $docs = array_map(function($file) use($project_id){
                 $fileName = $file->getClientOriginalName();
                 //$file->move(('storage/project'.$project_id.'/'),$fileName);
-                Storage::disk('public')->putFileAs($file, 'project'.$project_id.'/'.$fileName);
+                Storage::disk('public')->putFileAs('project'.$project_id , $file, $fileName);
 
 
                 return ['name'=>$fileName , 'project_id'=>$project_id , 'type'=>$file->extension(), 'size'=>$file->getSize()];

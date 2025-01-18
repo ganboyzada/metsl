@@ -33,7 +33,7 @@ class DesignTeamService
             \File::makeDirectory($path, $mode = 0777, true, true);
         
             if($data['image'] != NULL){
-                Storage::disk('public')->putFileAs('designTeam' . $model->id, $file, $data['image']);
+                Storage::disk('public')->putFileAs('designTeam' . $model->id, $file, $fileName);
 
             } 
 
@@ -69,7 +69,7 @@ class DesignTeamService
             \File::makeDirectory($path, $mode = 0777, true, true);
         
             if(isset($data['image']) && $data['image'] != NULL){
-                Storage::disk('public')->putFileAs('designTeam' . $id, $file, $data['image']);
+                Storage::disk('public')->putFileAs('designTeam' . $id, $file, $fileName);
 
             } 
 

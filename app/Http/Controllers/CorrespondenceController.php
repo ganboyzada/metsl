@@ -53,7 +53,7 @@ class CorrespondenceController extends Controller
             $type = $request->type;
             $reply_correspondence_id = $request->correspondece ?? NULL;
             if($reply_correspondence_id != NULL){
-                $reply_correspondence = $this->correspondenceService->find($reply_correspondence_id);
+                $reply_correspondence = $this->correspondenceService->edit($reply_correspondence_id);
 
             }
           //  $next_number =  $this->correspondenceService->getNextNumber($type , $id);
@@ -87,7 +87,7 @@ class CorrespondenceController extends Controller
     }
 
     public function edit($id){
-        $correspondece = $this->correspondenceService->find($id);
+        $correspondece = $this->correspondenceService->edit($id);
         //return ($correspondece);
         return view('metsl.pages.correspondence.edit', get_defined_vars());
 

@@ -39,7 +39,7 @@ class ProjectService
             \File::makeDirectory($path, $mode = 0777, true, true);
         
             if($data['logo'] != NULL){
-                Storage::disk('public')->putFileAs('project' . $model->id, $file, $data['logo']);
+                Storage::disk('public')->putFileAs('project' . $model->id, $file, $fileName);
 
             }
             if(isset($data['docs'])){
@@ -79,7 +79,7 @@ class ProjectService
             \File::makeDirectory($path, $mode = 0777, true, true);
         
             if(isset($data['logo']) && $data['logo'] != NULL){
-                Storage::disk('public')->putFileAs('project' . $model->id, $file, $model->logo);
+                Storage::disk('public')->putFileAs('project' . $model->id, $file, $fileName);
 
             }
             if(isset($data['docs'])){

@@ -98,12 +98,25 @@ class CorrespondenceService
         
     }
 
+    public function edit($id)
+    {
+        return $this->correspondenceRepository->with([
+            'assignees' , 
+        'distributionMembers',
+         'ReceivedFrom', 
+         
+         'files:id,correspondence_id,file,size'
+         
+         ])->find($id);
+        
+    }
+
     public function find($id)
     {
         return $this->correspondenceRepository->with([
             'assignees.userable' , 
         'distributionMembers.userable',
-         'ReceivedFrom', 
+         'ReceivedFrom.userable', 
          
          'files:id,correspondence_id,file,size'
          

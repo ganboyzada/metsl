@@ -54,7 +54,8 @@ class GroupController extends Controller
     public function all(Request $request){
         $id = Session::get('projectID');
         $groups = $this->groupService->allGroups($id);
-        $assignees = $this->userService->getUsersOfProjectID($id , '');
+        $assignees = $this->userService->getUsersOfProjectID($id , 'assign_task');
+        
  
      
         return ['groups'=>$groups , 'assignees'=>$assignees];

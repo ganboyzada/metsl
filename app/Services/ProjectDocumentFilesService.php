@@ -19,7 +19,7 @@ class ProjectDocumentFilesService
         try {         
             $docs = array_map(function($file) use($project_id , $document_id , $uploadeedfiles ){
                 $fileName = $file->getClientOriginalName();
-                Storage::disk('public')->putFileAs($file, 'project'.$project_id.'/documents'.$document_id.'/'.$fileName);
+                Storage::disk('public')->putFileAs('project'.$project_id.'/documents'.$document_id, $file, $fileName);
 
 
                 return ['file'=>$fileName , 'project_document_id'=>$document_id, 'type'=>$file->extension() , 'size'=>$file->getSize()];

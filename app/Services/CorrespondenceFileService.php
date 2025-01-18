@@ -19,7 +19,7 @@ class CorrespondenceFileService
             $docs = array_map(function($file) use($project_id , $correspondence_id){
                 $fileName = $file->getClientOriginalName();
                 //$file->move(('storage/project'.$project_id.'/'),$fileName);
-                Storage::disk('public')->putFileAs($file, 'project'.$project_id.'/correspondence'.$correspondence_id.'/'.$fileName);
+                Storage::disk('public')->putFileAs( 'project'.$project_id.'/correspondence'.$correspondence_id , $file, $fileName);
 
 
                 return ['file'=>$fileName , 'correspondence_id'=>$correspondence_id , 'type'=>$file->extension() , 'size'=>$file->getSize()];

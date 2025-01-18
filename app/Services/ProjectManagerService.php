@@ -38,7 +38,7 @@ class ProjectManagerService
             if ($data['image'] != NULL) {
                 //dd($model->image);
                 // Store the file in the directory
-                Storage::disk('public')->putFileAs('projectManager' . $model->id, $file, $data['image']);
+                Storage::disk('public')->putFileAs('projectManager' . $model->id, $file, $fileName);
             }          
 
             \DB::commit();
@@ -71,7 +71,7 @@ class ProjectManagerService
             if(isset($data['image']) && $data['image'] != NULL){
                 //dd($model->image);
                 // Store the file in the directory
-                Storage::disk('public')->putFileAs('projectManager' . $id, $file, $data['image']);
+                Storage::disk('public')->putFileAs('projectManager' . $id, $file, $fileName);
             }          
 
             \DB::commit();

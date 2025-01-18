@@ -239,9 +239,8 @@
 						</a>
 					</span>
 					
-					<button  onclick="get_files(${all_documents[i].id})" data-modal="uploader-modal"  class="modal-toggler flex justify-center items-center mb-4">
 						<i data-feather="file-text" class="w-12 h-12 dark:text-gray-200"></i>
-					</button>
+					
 					
 				
 					<span class="absolute bottom-2 right-2 flex items-center text-xs font-semibold bg-blue-900 text-white rounded-full px-2 py-1">

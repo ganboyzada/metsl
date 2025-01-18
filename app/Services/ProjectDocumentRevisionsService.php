@@ -34,8 +34,8 @@ class ProjectDocumentRevisionsService
             $path = Storage::disk('public')->path('/project'.$data['project_id'].'/documents'.$project_document_id.'/revisions'.$modal->id);            
             \File::makeDirectory($path, $mode = 0777, true, true);  
 
-            if($data['file'] != NULL){
-                Storage::disk('public')->putFileAs('project'.$data['project_id'].'/documents'.$project_document_id.'/revisions/', $file, $modal->file);
+            if(isset($data['file']) && $data['file'] != NULL){
+                Storage::disk('public')->putFileAs('project'.$data['project_id'].'/documents'.$project_document_id.'/revisions/', $file, $fileName);
 
 
             }           

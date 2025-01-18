@@ -20,7 +20,7 @@ class PunchListFilesService
         try {         
             $docs = array_map(function($file) use($project_id , $punchlist_id , $uploadeedfiles ){
                 $fileName = $file->getClientOriginalName();
-                Storage::disk('public')->putFileAs($file, 'project'.$project_id.'/punch_list'.$punchlist_id.'/'.$fileName);
+                Storage::disk('public')->putFileAs( 'project'.$project_id.'/punch_list'.$punchlist_id, $file, $fileName);
 
 
                 return ['file'=>$fileName , 'punch_list_id'=>$punchlist_id, 'type'=>$file->extension() , 'size'=>$file->getSize()];
