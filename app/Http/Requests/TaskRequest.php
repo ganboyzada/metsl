@@ -6,7 +6,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Validation\Rule;
 
-class GroupRequest extends FormRequest
+class TaskRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,11 +26,16 @@ class GroupRequest extends FormRequest
         $project_id =  Session::get('projectID');
         if(isset(request()->id)){
             return [
-                'name' => [
+                'subject' => [
                     'required',
-                    Rule::unique('groups' , 'name')->where(fn ($query) => $query->where('project_id', $project_id)->where('id','!=', request()->id))
+                    Rule::unique('tasks' , 'subject')->where(fn ($query) => $query->where('project_id', $project_id)->where('id','!=', request()->id))
                 ],                     
-                'color' => 'required',
+                'description' => 'required',
+                'priority' => 'required',
+                'start_date' => 'required|date_format:Y-m-d',
+                'end_date' => 'required|date_format:Y-m-d|after:start_date',
+                'file' => 'nullable',
+                'group_id' => 'required',
                 'id' => 'required',
             
 
@@ -38,12 +43,16 @@ class GroupRequest extends FormRequest
             ]; 
         }else{
             return [
-                'name' => [
+                'subject' => [
                     'required',
-                    Rule::unique('groups' , 'name')->where(fn ($query) => $query->where('project_id', $project_id))
+                    Rule::unique('tasks' , 'subject')->where(fn ($query) => $query->where('project_id', $project_id))
                 ],                     
-                'color' => 'required',
-
+                'description' => 'required',
+                'priority' => 'required',
+                'start_date' => 'required|date_format:Y-m-d',
+                'end_date' => 'required|date_format:Y-m-d|after:start_date',
+                'file' => 'nullable',
+                'group_id' => 'required',
 
         
             ]; 

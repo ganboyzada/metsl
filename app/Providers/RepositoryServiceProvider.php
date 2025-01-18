@@ -27,6 +27,7 @@ use App\Repository\Eloquent\ProjectManagerRepository;
 use App\Repository\Eloquent\ProjectRepository;
 use App\Repository\Eloquent\PunchListFilesRepository;
 use App\Repository\Eloquent\PunchListRepository;
+use App\Repository\Eloquent\TaskRepository;
 use App\Repository\Eloquent\UserRepository;
 use App\Repository\EloquentRepositoryInterface;
 use App\Repository\GroupRepositoryInterface;
@@ -39,6 +40,7 @@ use App\Repository\ProjectManagerRepositoryInterface;
 use App\Repository\ProjectRepositoryInterface;
 use App\Repository\PunchListFilesRepositoryInterface;
 use App\Repository\PunchListRepositoryInterface;
+use App\Repository\TaskRepositoryInterface;
 use App\Repository\UserRepositoryInterface;
 use App\Services\ClientService;
 use App\Services\CompanyService;
@@ -57,6 +59,7 @@ use App\Services\ProjectManagerService;
 use App\Services\ProjectService;
 use App\Services\PunchListFilesService;
 use App\Services\PunchListService;
+use App\Services\TaskService;
 use App\Services\UserService;
 use Illuminate\Support\ServiceProvider;
 
@@ -197,11 +200,11 @@ class RepositoryServiceProvider extends ServiceProvider
             return new GroupService($app->make(GroupRepositoryInterface::class));
         }); 
 
-/*
+
         $this->app->bind(TaskRepositoryInterface::class, TaskRepository::class);
         $this->app->bind(TaskService::class, function ($app) {
             return new TaskService($app->make(TaskRepositoryInterface::class));
-        });  */       
+        });         
 
     }
 

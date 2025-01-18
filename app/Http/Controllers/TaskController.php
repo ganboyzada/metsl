@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\GroupRequest;
 
-use App\Services\GroupService;
+use App\Http\Requests\TaskRequest;
 
+use App\Services\GroupService;
+use App\Services\TaskService;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
@@ -20,14 +22,14 @@ class TaskController extends Controller
 {
     public function __construct(
 
-        protected GroupService $groupService,
+        protected TaskService $taskService,
 
         )
     {
     }
 
 
-    public function store(GroupRequest  $request)
+    public function store(TaskRequest  $request)
     {
 
         if($request->validated()){
@@ -40,7 +42,7 @@ class TaskController extends Controller
                 $all_data['project_id'] = Session::get('projectID');
                 $all_data['status'] = 1;
 
-                $model = $this->groupService->create($all_data);
+                $model = $this->taskService->create($all_data);
             \DB::commit();
             // all good
             } catch (\Exception $e) {
@@ -56,13 +58,13 @@ class TaskController extends Controller
 
     public function all(Request $request){
         $id = Session::get('projectID');
-        $groups = $this->groupService->allGroups($id);
+        $tasks = $this->taskService->allTasks($id);
  
      
-        return $groups;
+        return $tasks;
     }
 
-    public function update(GroupRequest  $request)
+    public function update(TaskRequest  $request)
     {
 
         if($request->validated()){
@@ -73,7 +75,7 @@ class TaskController extends Controller
 
                 //$all_data['project_id'] = Session::get('projectID');
 
-                $model = $this->groupService->update($all_data);
+                $model = $this->taskService->update($all_data);
             \DB::commit();
             // all good
             } catch (\Exception $e) {
@@ -91,9 +93,7 @@ class TaskController extends Controller
 
 
     public function destroy($id){
-        $group = $this->groupService->find($id);
-        $group->tasks()->delete();
-        $this->groupService->delete($id);
+        $this->taskService->delete($id);
         
     }
 

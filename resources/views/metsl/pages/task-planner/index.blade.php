@@ -69,6 +69,9 @@
             <p><strong>Start:</strong> <span id="task-start"></span></p>
             <p><strong>Deadline:</strong> <span id="task-end"></span></p>
         </div>
+        <div>
+            <span id="delete_butn"></span>
+        </div>
         <button id="close-modal" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
             Close
         </button>
@@ -84,27 +87,27 @@
             @csrf
             <div>
                 <label for="task-subject" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Subject</label>
-                <input type="text" name="subject" id="task-subject" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
+                <input required type="text" name="subject" id="task-subject" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
             </div>
             <div>
                 <label for="task-explanation" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Explanation</label>
-                <textarea name="description" id="task-explanation" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white"></textarea>
+                <textarea  name="description" id="task-explanation" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white"></textarea>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 space-x-4">
                 <div>
                     <label for="task-start-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Start Date</label>
-                    <input type="date" name="start_date" id="task-start-date" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
+                    <input required type="date" name="start_date" id="task-start-date" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
                 </div>
                 <div>
                     <label for="task-deadline-date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">Deadline Date</label>
-                    <input type="date" name="end_date" id="task-deadline-date" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
+                    <input required type="date" name="end_date" id="task-deadline-date" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
                 </div>
             </div>
             <div>
                 <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">Priority</label>
                 <div class="flex space-x-4">
                     <label class="flex items-center space-x-2">
-                        <input type="radio" name="priority" value="high" class="form-radio text-red-500">
+                        <input type="radio" name="priority" value="high" class="form-radio text-red-500" checked>
                         <span>High</span>
                     </label>
                     <label class="flex items-center space-x-2">
@@ -119,7 +122,7 @@
             </div>
             <div>
                 <label for="group" class="block text-sm font-medium text-gray-700 dark:text-gray-300">group</label>
-                <select name="group_id" id="group" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
+                <select required name="group_id" id="group" class="w-full px-3 py-2 border border-gray-300 dark:bg-gray-700 dark:text-white">
 
                 </select>
             </div>
@@ -130,12 +133,12 @@
             <div>
                 
                 <label for="assignees" class="block text-sm mb-2 font-medium dark:text-gray-200">Assignees</label>
-                <select id="assignees" name="assignees[]" multiple class="choices w-full border dark:bg-gray-800 dark:text-gray-200">
+                <select required id="assignees" name="assignees[]" multiple class="choices w-full border dark:bg-gray-800 dark:text-gray-200">
                 </select>
             </div>
             <div class="flex justify-end">
                 <button type="button" id="cancel-add-task" class="px-4 py-2 bg-gray-300 text-gray-700 hover:bg-gray-400">Cancel</button>
-                <button type="submit" class="ml-3 px-4 py-2 bg-blue-500 text-white hover:bg-blue-600">Add Task</button>
+                <button type="submit" id="add-task" class="ml-3 px-4 py-2 bg-blue-500 text-white hover:bg-blue-600">Add Task</button>
             </div>
         </form>
     </div>
@@ -178,6 +181,7 @@
 		if(localStorage.getItem("project_tool") == 'task_planner'){
 
 			get_groups();
+            get_tasks();
 		}
 	});
     $("#add-group-form").on("submit", function(event) {
@@ -247,10 +251,83 @@
       });
         
     
+      $("#add-task-form").on("submit", function(event) {
+        const form = document.getElementById("add-task-form");
+        
+        const formData = new FormData(form); 
+        formData.append('description',tinyMCE.get('task-explanation').getContent());
+
+            $('.error').hide();
+            $('.success').hide();
+            $('.err-msg').hide();
+            $(".error").html("");
+            $(".success").html("");
+            event.preventDefault();  
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ route('projects.tasks.store') }}",
+                type: "POST",
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                cache: false,
+                beforeSend: function() {
+                    $("#add-task").prop('disabled', true);
+                },
+                success: function(data) {
+                    if (data.success) {
+                        $('#add-task-modal').addClass('hidden');
+                        $("#add-task").prop('disabled', false);                        
+                        $("#add-task-form")[0].reset();						
+						window.scrollTo(0,0);
+                        $('.success').show();
+                        $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.success+'</div>');  
+					
+						setInterval(function() {
+							location.reload();
+							}, 3000);
+
+
+                    }
+                    else if(data.error){
+                        $("#add-task").prop('disabled', false);
+
+                        $('.error').show();
+                        $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.error+'</div>');
+                    }
+                },
+                error: function (err) {
+                    $.each(err.responseJSON.errors, function(key, value) {
+                            var el = $(document).find('[name="'+key + '"]');
+                            if(el.length == 0){
+                                el = $(document).find('[id="'+key + '"]');
+                            }
+                            el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
+                            
+                        });
+
+                        $("#add-task").prop('disabled', false);
+
+
+                }
+            });
     
+      });
+        
+    
+        
     let groups = [
 
     ];
+    let tasks = [
+
+];
+
     get_groups();
     async function get_groups() {
         groups = [];
@@ -279,14 +356,31 @@
         console.log(all_groups);
     }
 
- 
+    get_tasks();
+    async function get_tasks() { 
+        tasks = [];
+		let url =`project/tasks/all`;
+		//alert(url);
+		
+		let fetchRes = await fetch(url);
+        const all_tasks  = await fetchRes.json();
 
+        for (let i = 0; i < all_tasks.length; i++) {
+            tasks.push(all_tasks[i]);
+        }
+        renderGroups();
+        renderDays();
+        renderTimeline();
+       
+        console.log(tasks);
+    }
+/*
     const tasks = [
         { id: 1, title: "Complete presentation", groupId: 1, start: 0, duration: 2, assignees: ["Alice"], priority: "high", attachments: true },
         { id: 2, title: "Marketing Analysis", groupId: 2, start: 1, duration: 3, assignees: ["Bob", "Charlie"], priority: "medium", attachments: false },
         { id: 3, title: "UI Design", groupId: 3, start: -2, duration: 4, assignees: ["David"], priority: "low", attachments: true },
     ];
-
+*/
     let currentDayOffset = 0;
     const visibleDaysReset = 14;
     let visibleDays = visibleDaysReset; // Default number of visible days
@@ -313,9 +407,35 @@
                 `<li class="flex items-center space-x-2">
                     <span class="w-6 h-6 ${group.color} block rounded-lg" style="background-color: ${group.color}"></span>
                     <span>${group.name}</span>
+
+                    <button onclick="delete_group(${group.id})" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
+                        <i data-feather="delete" class="w-5 h-5"></i>
+                    </button>
+
                 </li>`
         ).join('');
         $("#group-list").html(groupElements);
+        feather.replace();
+    }
+    async function delete_group(id){
+        $('.error').hide(); 
+        $('.success').hide();
+		let url =`project/groups/destroy/${id}`;		
+		let fetchRes = await fetch(url);
+        if(fetchRes.status != 200){
+            $('.error').show();
+            $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
+
+        }else{
+            console.log(fetchRes);
+            groups = groups.filter((group) => group.id != id);
+            tasks = tasks.filter((task) => task.groupId != id);
+            renderGroups();
+            renderDays();
+            renderTimeline();
+            $('.success').show();
+            $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
+        }
     }
 
     // Render Days Header
@@ -337,6 +457,26 @@
         $("#current-month").text(monthName);
     }
 
+    async function delete_task(id){
+        $('.error').hide(); 
+        $('.success').hide();
+		let url =`project/tasks/destroy/${id}`;		
+		let fetchRes = await fetch(url);
+        if(fetchRes.status != 200){
+            $('.error').show();
+            $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
+
+        }else{
+            console.log(fetchRes);
+            $("#task-modal").addClass("hidden");
+            tasks = tasks.filter((task) => task.id != id);
+            renderGroups();
+            renderDays();
+            renderTimeline();
+            $('.success').show();
+            $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
+        }
+    }
     // Render Groups and Tasks
     function renderTimeline() {
         const rows = groups.map((group) => {
@@ -345,7 +485,7 @@
                 (task) =>
                     `<div 
                         class="absolute h-full ${group.color} text-white text-sm px-2 py-1"
-                        style="left: ${((task.start - currentDayOffset) * (100 / visibleDays))}%; width: ${(task.duration * (100 / visibleDays))}%"
+                        style="left: ${((task.start - currentDayOffset) * (100 / visibleDays))}%; width: ${(task.duration * (100 / visibleDays))}% ;background-color: ${group.color}"
                         data-task-id="${task.id}">
                         <div class="flex justify-between items-center">
                             <span>${task.title}</span>
@@ -411,14 +551,18 @@
             const task = tasks.find((t) => t.id === taskId);
 
             $("#task-title").text(task.title);
-            $("#task-description").text("Description goes here...");
+            $("#task-description").text(task.description);
             $("#task-assignees").text(task.assignees.join(", "));
             $("#task-start").text(`Day ${task.start}`);
-            $("#task-end").text(`Day ${task.start + task.duration}`);
+            $("#task-end").text(`Day ${task.end}`);
+
+            $('#delete_butn').html(`                    <button onclick="delete_task(${task.id})" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-delete w-5 h-5"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path><line x1="18" y1="9" x2="12" y2="15"></line><line x1="12" y1="9" x2="18" y2="15"></line></svg>
+                    </button>`);
 
             $("#task-modal").removeClass("hidden");
         });
-
+9/
         // Close Task Modal
         $("#close-modal").click(() => $("#task-modal").addClass("hidden"));
 
@@ -438,10 +582,6 @@
             $('#add-group-modal').addClass('hidden');
         });
 
-        $('#add-task-form').submit(function (e) {
-            e.preventDefault();
-            // Add form submission logic here
-            $('#add-task-modal').addClass('hidden');
-        });
+ 
     });
 </script>
