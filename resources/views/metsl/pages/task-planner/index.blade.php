@@ -1,8 +1,8 @@
 <div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
 <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
-<div class="flex h-screen">
+<div class="flex flex-col lg:flex-row h-screen">
     <!-- Sidebar for Task Groups -->
-    <div class="w-1/6 bg-gray-100 dark:bg-gray-800 px-5 py-4 rounded-xl">
+    <div class="mb-4 lg:mb-0 lg:w-1/6 bg-gray-100 dark:bg-gray-800 px-5 py-4 rounded-xl">
         <div class="flex items-center pb-7">
             <h2 class="text-md font-semibold me-auto">Task Groups</h2>
             <button id="add-group-btn" class="ms-2 px-3 py-1 rounded-full text-sm inline-flex border border-gray-600 dark:bg-gray-700 whitespace-nowrap">
@@ -290,7 +290,7 @@
 					
 						setInterval(function() {
 							location.reload();
-							}, 3000);
+							}, 1000);
 
 
                     }
@@ -335,7 +335,7 @@
     get_groups();
     async function get_groups() {
         groups = [];
-		let url =`project/groups/all`;
+		let url =`/project/groups/all`;
 		//alert(url);
 		
 		let fetchRes = await fetch(url);
@@ -363,7 +363,7 @@
     get_tasks();
     async function get_tasks() { 
         tasks = [];
-		let url =`project/tasks/all`;
+		let url =`/project/tasks/all`;
 		//alert(url);
 		
 		let fetchRes = await fetch(url);
@@ -386,6 +386,7 @@
     ];
 */
     let currentDayOffset = 0;
+    let dayCursor = normalizeToMidnight(new Date());
     const visibleDaysReset = 14;
     let visibleDays = visibleDaysReset; // Default number of visible days
 
@@ -408,12 +409,12 @@
     function renderGroups() {
         const groupElements = groups.map(
             (group) =>
-                `<li class="flex items-center space-x-2">
+                `<li class="flex items-center gap-2">
                     <span class="w-6 h-6 ${group.color} block rounded-lg" style="background-color: ${group.color}"></span>
                     <span>${group.name}</span>
 
-                    <button onclick="delete_group(${group.id})" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
-                        <i data-feather="delete" class="w-5 h-5"></i>
+                    <button onclick="delete_group(${group.id})" class="ms-auto text-red-500 dark:text-red-400 hover:text-red-300">
+                        <i data-feather="x" class="w-5 h-5"></i>
                     </button>
 
                 </li>`
@@ -424,21 +425,23 @@
     async function delete_group(id){
         $('.error').hide(); 
         $('.success').hide();
-		let url =`project/groups/destroy/${id}`;		
-		let fetchRes = await fetch(url);
-        if(fetchRes.status != 200){
-            $('.error').show();
-            $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
+		let url =`/project/groups/destroy/${id}`;	
+        if(window.confirm('This will result in all tasks under this group being deleted permanently. Are you sure?')){
+            let fetchRes = await fetch(url);
+            if(fetchRes.status != 200){
+                $('.error').show();
+                $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
 
-        }else{
-            console.log(fetchRes);
-            groups = groups.filter((group) => group.id != id);
-            tasks = tasks.filter((task) => task.groupId != id);
-            renderGroups();
-            renderDays();
-            renderTimeline();
-            $('.success').show();
-            $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
+            }else{
+                console.log(fetchRes);
+                groups = groups.filter((group) => group.id != id);
+                tasks = tasks.filter((task) => task.groupId != id);
+                renderGroups();
+                renderDays();
+                renderTimeline();
+                $('.success').show();
+                $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
+            }
         }
     }
 
@@ -447,8 +450,8 @@
         const days = generateDays(currentDayOffset);
         const dayElements = days.map(
             (day) =>
-                `<div class="p-2 border-r border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-700 striped-background">
-                    <div class="text-xs mb-2">${day.toLocaleDateString("en-US", { weekday: "short" })}</div><span class='border border-gray-300 rounded-full px-2 py-1'>${day.getDate()}</span>
+                `<div class="p-2 border-r border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 striped-background">
+                    <div class="text-xs mb-2">${day.toLocaleDateString("en-US", { weekday: "short" })}</div><span class='border border-gray-300 dark:border-gray-600 rounded-full px-2 py-1'>${day.getDate()}</span>
                 </div>`
         );
         $("#days-header")
@@ -464,7 +467,7 @@
     async function delete_task(id){
         $('.error').hide(); 
         $('.success').hide();
-		let url =`project/tasks/destroy/${id}`;		
+		let url =`/project/tasks/destroy/${id}`;		
 		let fetchRes = await fetch(url);
         if(fetchRes.status != 200){
             $('.error').show();
@@ -481,15 +484,48 @@
             $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
         }
     }
+
+    function normalizeToMidnight(date) {
+        return new Date(date.getFullYear(), date.getMonth(), date.getDate());
+    }
+
     // Render Groups and Tasks
     function renderTimeline() {
         const rows = groups.map((group) => {
             const groupTasks = tasks.filter((task) => task.groupId === group.id);
-            const taskElements = groupTasks.map(
+
+             // Array to track rows for tasks in this group
+            const groupRows = [];
+
+            groupTasks.forEach((task) => {
+                // Check for available rows to place the task
+                let placed = false;
+                for (let row of groupRows) {
+                    // Check if the task overlaps with any task in the current row
+                    const overlap = row.some(
+                        (t) =>
+                            task.start < t.start + t.duration &&
+                            task.start + task.duration > t.start
+                    );
+                    if (!overlap) {
+                        row.push(task);
+                        placed = true;
+                        break;
+                    }
+                }
+
+                // If no row can accommodate the task, create a new row
+                if (!placed) {
+                    groupRows.push([task]);
+                }
+            });
+
+            const rowElements = groupRows.map((rowTasks) => {
+                const taskElements = rowTasks.map(
                 (task) =>
                     `<div 
-                        class="absolute h-full ${group.color} text-white text-sm px-2 py-1"
-                        style="left: ${((task.start - currentDayOffset) * (100 / visibleDays))}%; width: ${(task.duration * (100 / visibleDays))}% ;background-color: ${group.color}"
+                        class="absolute h-full ${group.color} completed text-white text-sm px-2 py-1"
+                        style="left: ${((Math.floor((normalizeToMidnight(new Date(task.start)) - dayCursor) / (1000 * 60 * 60 * 24))) * (100 / visibleDays))}%; width: ${(task.duration * (100 / visibleDays))}% ;background-color: ${group.color}"
                         data-task-id="${task.id}">
                         <div class="flex justify-between items-center">
                             <span>${task.title}</span>
@@ -497,26 +533,31 @@
                         </div>
                         <div class="flex items-center ps-3 mt-2">
                           <div class="flex items-center me-auto">
-                              ${task.assignees.map(name => `<img src="https://placehold.co/20" alt="${name}" class="w-6 h-6 rounded-full border-2 border-white -ml-2">`).join('')}
+                              ${task.assignees.map(name => `<img src="https://placehold.co/20" alt="${name}" class="min-w-6 w-6 h-6 rounded-full border-2 border-white -ml-2">`).join('')}
                           </div>
-                          <div class="text-xs me-2 bg-gray-100 text-gray-800 rounded-full px-2 py-1">${task.duration} days left</div>
-                          <div class="text-xs rounded-full px-2 py-1 font-bold bg-gray-100 ${task.priority === 'high' ? 'text-red-500' : task.priority === 'medium' ? 'text-yellow-500' : 'text-green-500'}">
-                              ${task.priority}
+                          <div class="text-xs me-2 bg-gray-800 text-gray-200 rounded-full px-2 py-1"><b>${task.duration}</b> d</div>
+                          <div class="text-xs rounded-full px-2 py-1 border font-bold bg-gray-100 ${task.priority === 'high' ? 'bg-red-500 border-red-300' : task.priority === 'medium' ? 'bg-yellow-500 border-yellow-300 text-yellow-800' : 'bg-green-300 border-green-200 text-green-800'}">
+                            <i class="w-4 h-4" data-feather="${task.priority ==='high' ? 'alert-triangle' : task.priority === 'medium' ? 'alert-circle' : 'info'}"></i>  
                           </div>
                         </div>
                     </div>`
-            );
-            return `
-                <div class="relative h-24 border-t border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 striped-background">
-                    ${taskElements.join("")}
-                </div>`;
-        });
+                    );
+                    return `
+                        <div class="relative h-24 border-t border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 striped-background">
+                            ${taskElements.join("")}
+                        </div>`;
+                    });
+                return rowElements.join("");
+            });
         $("#timeline-rows").html(rows.join(""));
+        feather.replace();
     }
 
     // Scroll Navigation
     function scrollTimeline(direction) {
         currentDayOffset += direction;
+        dayCursor.setDate(dayCursor.getDate() + direction);
+        dayCursor = normalizeToMidnight(dayCursor);
         renderDays();
         renderTimeline();
     }

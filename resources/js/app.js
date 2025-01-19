@@ -61,8 +61,8 @@ $(document).ready(function() {
         branding: false, // Hide branding
         base_url: '/tinymce', // Path to TinyMCE assets
         suffix: '.min', // Ensure minified files are used
-        skin: 'oxide-dark', // Use the dark theme
-        content_css: 'dark', // Use the dark mode content CSS
+        skin: userPreference=='dark' ? 'oxide-dark' : 'oxide', // Use the dark theme
+        content_css: userPreference=='dark' ? 'dark' : null, // Use the dark mode content CSS
     });
 });
 

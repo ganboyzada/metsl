@@ -8,9 +8,9 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.js"></script>
 </head>
-<body class="bg-gray-100 dark:bg-gray-800">
+<body class="bg-gray-100 dark:bg-gray-800 pt-[7rem] md:pt-[4rem]">
 
-    <div class="flex h-screen">
+    <div class="h-screen">
         <!-- Sidebar -->
 
         <!-- Main Content -->
@@ -19,7 +19,7 @@
             @include('metsl.layouts.header')
 
             <!-- Content -->
-            <main class="p-6 bg-white dark:bg-gray-900 dark:text-gray-200">
+            <main class="relative z-5 p-6 bg-white dark:bg-gray-900 dark:text-gray-200">
                 @yield('content')
 
                 @include('metsl.modals.members')

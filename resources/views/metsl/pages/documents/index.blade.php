@@ -229,17 +229,17 @@
 		let html = ``;
 		if(all_documents.length > 0){
 			for(let i=0; i<all_documents.length; i++){
-				html+=`<div id="doc${i}" class="relative p-4 bg-gray-100 dark:bg-gray-800  shadow-md group transition transform hover:scale-105">
+				html+=`<div id="doc${i}" class="relative h-40 p-4 bg-gray-100 dark:bg-gray-800  shadow-md group transition transform hover:scale-105">
 					<h3 class="text-sm font-medium dark:text-gray-400 mb-2 truncate">${all_documents[i].title}</h3>
 
 					<span class="flex absolute top-4 right-4 text-xs font-semibold text-blue-500 dark:text-blue-300">
 						${all_documents[i].created_date}
 						<a onclick="delete_doc(${i} , ${all_documents[i].id})" href="#" class="text-red-500 dark:text-red-400 hover:text-red-300">
-							<i data-feather="delete" class="w-5 h-5"></i>
+							<i data-feather="trash" class="ms-2 w-5 h-5"></i>
 						</a>
 					</span>
 					
-						<i data-feather="file-text" class="w-12 h-12 dark:text-gray-200"></i>
+						<i data-feather="file-text" class="w-12 h-12 text-gray-400 dark:text-gray-500"></i>
 					
 					
 				
