@@ -488,12 +488,12 @@
             const taskElements = groupTasks.map(
                 (task) =>
                     `<div 
-                        class="absolute h-full ${group.color} text-white text-sm px-2 py-1"
+                        class="task_row absolute h-full ${group.color} text-white text-sm px-2 py-1"
                         style="left: ${((task.start - currentDayOffset) * (100 / visibleDays))}%; width: ${(task.duration * (100 / visibleDays))}% ;background-color: ${group.color}"
                         data-task-id="${task.id}">
                         <div class="flex justify-between items-center">
                             <span>${task.title}</span>
-                            <input type="checkbox" class="w-4 h-4">
+                            <input   type="checkbox" onchange="updateTaskStatus(this , ${task.id})" ${task.done == 1 ? 'checked' : ''} class=" w-4 h-4">
                         </div>
                         <div class="flex items-center ps-3 mt-2">
                           <div class="flex items-center me-auto">
@@ -514,6 +514,36 @@
         $("#timeline-rows").html(rows.join(""));
     }
 
+
+
+    async function updateTaskStatus(checkboxElement , id){
+        var st = checkboxElement.checked ? 1 : 0;
+        $('.error').hide(); 
+        $('.success').hide();
+		let url =`project/tasks/change-status/${id}/${st}`;		
+		let fetchRes = await fetch(url);
+        if(fetchRes.status != 200){
+            $('.error').show();
+            $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
+
+        }else{
+            console.log(fetchRes);
+           // $("#task-modal").addClass("hidden");
+            tasks = tasks.map(function(item) {
+                if(item.id == id){
+                    item.done = st;
+                }
+                return item;
+            });
+            renderGroups();
+            renderDays();
+            renderTimeline();
+            $('.success').show();
+            $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item changed Successfully</div>');
+        }
+        
+        
+    }
     // Scroll Navigation
     function scrollTimeline(direction) {
         currentDayOffset += direction;

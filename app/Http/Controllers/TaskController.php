@@ -97,5 +97,9 @@ class TaskController extends Controller
         
     }
 
+    public function change_status($id , $st){
+        \App\Models\Task::where('id' , $id)->update(['done' => $st]);
+    }
+
 
 }

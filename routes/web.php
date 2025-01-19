@@ -118,6 +118,7 @@ Route::middleware([
 	Route::post('/project/tasks/store',  [TaskController::class, "store"])->name(name: 'projects.tasks.store');	
 	Route::post('/project/tasks/update',  [TaskController::class, "update"])->name(name: 'projects.tasks.update');	
 	Route::get('/project/tasks/destroy/{id}',  [TaskController::class, "destroy"])->name(name: 'projects.tasks.destroy');	
+	Route::get('/project/tasks/change-status/{id}/{st}',  [TaskController::class, "change_status"])->name(name: 'projects.tasks.change-status');	
 
 
     Route::post('/project/store', action: [ProjectController::class, "store"])->name('projects.store');

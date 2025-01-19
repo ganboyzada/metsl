@@ -156,7 +156,8 @@
         }		
 		
 	}	
-	async function get_revisions(id){
+	async function get_revisions(id , number){
+		$('#revisions-title').html('Revisions for '+number);
 		current_document_id = id;
 		$('.error').hide();
 		$('.success').hide();
@@ -246,7 +247,7 @@
 					<span class="absolute bottom-2 right-2 flex items-center text-xs font-semibold bg-blue-900 text-white rounded-full px-2 py-1">
 						<i data-feather="refresh-cw" class="w-4 h-4 mr-1"></i>${all_documents[i].revisions_count}
 					</span>
-					<button onclick="get_revisions(${all_documents[i].id})" data-modal="revisions-modal"
+					<button onclick="get_revisions(${all_documents[i].id} , '${all_documents[i].number}')" data-modal="revisions-modal"
 						class="absolute modal-toggler bottom-2 left-2 bg-blue-500 text-white px-3 py-1 text-xs  hidden group-hover:block transition duration-200"
 						aria-label="View Revisions"
 					>

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\belongsToMany;
 
 class Task extends Model
 {
-    protected $fillable = ['subject','created_date','created_by','status','description','priority','start_date','end_date','file','group_id','project_id'];
+    protected $fillable = ['subject','created_date','created_by','status','description','priority','start_date','end_date','file','group_id','project_id','done'];
 
     public function group(): belongsTo
     {

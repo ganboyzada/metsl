@@ -46,7 +46,8 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
                 'assignees' => $task->assignees->pluck('name')->toArray(),
                 'priority' => $task->priority,
                 'attachments' => $task->file != NULL ?true : false,
-                'description' => $task->description
+                'description' => $task->description,
+                'done' => $task->done
             ];
         });
     }
