@@ -413,7 +413,7 @@
                     <span class="w-6 h-6 ${group.color} block rounded-lg" style="background-color: ${group.color}"></span>
                     <span>${group.name}</span>
 
-                    <button onclick="delete_group(${group.id})" class="ms-auto text-red-500 dark:text-red-400 hover:text-red-300">
+                    <button onclick="delete_group(${group.id})" class="ms-auto text-red-300 dark:text-gray-500 hover:text-red-500">
                         <i data-feather="x" class="w-5 h-5"></i>
                     </button>
 
@@ -535,7 +535,7 @@
                           <div class="flex items-center me-auto">
                               ${task.assignees.map(name => `<img src="https://placehold.co/20" alt="${name}" class="min-w-6 w-6 h-6 rounded-full border-2 border-white -ml-2">`).join('')}
                           </div>
-                          <div class="text-xs me-2 bg-gray-800 text-gray-200 rounded-full px-2 py-1"><b>${task.duration}</b> d</div>
+                          <div class="text-xs me-2 bg-gray-800 text-gray-200 rounded-full px-2 py-1"><b>${Math.floor((normalizeToMidnight(new Date(task.end)) - normalizeToMidnight(new Date())) / (1000 * 60 * 60 * 24))}</b> d</div>
                           <div class="text-xs rounded-full px-2 py-1 border font-bold bg-gray-100 ${task.priority === 'high' ? 'bg-red-500 border-red-300' : task.priority === 'medium' ? 'bg-yellow-500 border-yellow-300 text-yellow-800' : 'bg-green-300 border-green-200 text-green-800'}">
                             <i class="w-4 h-4" data-feather="${task.priority ==='high' ? 'alert-triangle' : task.priority === 'medium' ? 'alert-circle' : 'info'}"></i>  
                           </div>
