@@ -104,7 +104,7 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
             ->when($data['start_date'] , function($query) use($data){
                 $query->where(function($q) use($data){
     
-                $q->orwhereBetween('start_time', [$data['start_date'], $data['end_date']]);
+                $q->whereBetween('planned_date', [$data['start_date'], $data['end_date']]);
     
                 });
 

@@ -82,6 +82,14 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
                 $q->orWhereHas('assignees',function($q)use($request){
                     $q->where('name', 'LIKE', "%".$request->search."%");
                 });
+
+                $q->orWhereHas('ReceivedFrom',function($q)use($request){
+                    $q->where('name', 'LIKE', "%".$request->search."%");
+                });
+
+                $q->orWhereHas('distributionMembers',function($q)use($request){
+                    $q->where('name', 'LIKE', "%".$request->search."%");
+                });
             });
 
             /*$query->orWhereHas('CreatedBy',function($q)use($request){
