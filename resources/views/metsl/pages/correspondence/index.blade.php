@@ -7,13 +7,13 @@
             <div class="relative">
                 <i data-feather="search" stroke-width=2 class="absolute left-2 top-2"></i>
                 <input
-                    type="text"
+                    type="text" oninput="search()"
                     placeholder="Search"
 					name="search"
                     class="pl-10 pr-4 py-2 border-0 bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
                 />
             </div>
-            <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-200" onclick="return search()">Add Filter</button>
+            <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-200" >Add Filter</button>
         </div>
         <!-- Create Button with Dropdown -->
         <div class="has-dropdown relative">
@@ -161,7 +161,7 @@
                     tr.innerHTML = `
                         <td class="px-6 py-3">${row.number}</td>
                         <td class="px-6 py-3"><a class="underline" href="${url}">${row.subject}</a></td>
-                        <td class="px-6 py-3"></td>
+                        <td class="px-6 py-3">${(row.last_upload_date != null) ? row.last_upload_date : ''}</td>
                         <td class="px-6 py-3">${row.assignees}</td>
                         <td class="px-6 py-3">${(row.created_by != null) ? row.created_by.name : ''}</td>
                         <td class="px-6 py-3">${row.created_date}</td>

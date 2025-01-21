@@ -66,7 +66,9 @@ class DocumentRepository extends BaseRepository implements DocumentRepositoryInt
        // $query =  $this->model->where('project_id',$project_id)
         //->addSelect(['last_upload_date' => ProjectDocumentRevisions::select('upload_date')->whereColumn('project_document_id ', 'project_documents.id')->latest()->take(1)])
        // ->with(['files' , 'revisions','LastRevisionDate']);
-      
+        if(isset($request->DocNO) && $request->DocNO != ''){
+            $query->where('number' ,'LIKE', '%'.$request->DocNO.'%');
+        }
        if(isset($request->orderBy) && ($request->orderBy == 'number' || $request->orderBy == 'created_date')){
             $query= $query->orderBy($request->orderBy , $request->orderDirection);       
         }

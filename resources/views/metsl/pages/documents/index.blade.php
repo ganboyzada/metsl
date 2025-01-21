@@ -5,7 +5,7 @@
 
 	<div class="flex flex-wrap lg:flex-nowrap gap-2 w-full md:w-auto">
 		<div class="relative flex items-center w-full sm:w-1/2 md:w-full">
-            <input type="text" id="searchDocuments" placeholder="Search by Doc.No" 
+            <input type="text" id="searchDocuments" placeholder="Search by Doc.No" oninput="get_documents()"
                 class="w-full pl-10 pr-4 py-2 border-0 bg-gray-200 dark:bg-gray-700 dark:text-gray-200" />
             <i data-feather="search" class="absolute left-2 top-2"></i>
         </div>
@@ -255,7 +255,8 @@
 		$('#revisions-list').html('');
 		const orderBy = $('#order-by').val();
 		const orderDirection = $('#order-direction').val();
-		let url = 	`{{url('project/documents/all?orderBy=${orderBy}&orderDirection=${orderDirection}')}}`	;
+		const DocNo = $('#searchDocuments').val();
+		let url = 	`/project/documents/all?DocNO=${DocNo}&orderBy=${orderBy}&orderDirection=${orderDirection}`	;
 		let newurl = url.replace('amp;','');
 		let fetchRes = await fetch(newurl);
 		all_documents = await fetchRes.json();

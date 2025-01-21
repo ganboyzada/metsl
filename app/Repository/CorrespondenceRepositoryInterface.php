@@ -30,4 +30,22 @@ interface CorrespondenceRepositoryInterface
     * 
     */
     public function get_all_project_correspondence($project_id , $request): Collection;  
+
+
+        /**
+    * @param int $project_id
+    * @param int $corespondence_id 
+    * @return Collection
+    * 
+    */
+    public function get_correspondence_replies($project_id , $corespondence_id): Collection;
+
+
+       /**
+    * @param int $project_id
+    * @param int $corespondence_id 
+    * @return Collection
+    * 
+    */
+    public function get_correspondence_parent($project_id , $corespondence_id): Collection;
 }

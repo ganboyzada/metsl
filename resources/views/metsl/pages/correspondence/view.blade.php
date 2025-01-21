@@ -142,15 +142,39 @@
                 <tr>
                     <th class="px-6 py-3 font-light">Number</th>
                     <th class="px-6 py-3 font-light">Subject</th><!-- WILL HAVE LINK TO REDIRECT (target="_blank") -->
-                    <th class="px-6 py-3 font-light">Last Activity</th>
                     <th class="px-6 py-3 font-light">Assignees</th>
                     <th class="px-6 py-3 font-light">Created By</th>
                     <th class="px-6 py-3 font-light">Issued On</th>
                     <th class="px-6 py-3 font-light">Due Date</th>
                     <th class="px-6 py-3 font-light">Status</th>
+                    <th class="px-6 py-3 font-light"></th>
                 </tr>
             </thead>
             <tbody id="table-body">
+                @if ($others_correspondeces_realated->count() > 0)
+                    @foreach ($others_correspondeces_realated as $correspondece)                
+                        <tr class="border dark:border-gray-800">
+                            <td class="px-6 py-4">{{$correspondece->number}}</td>
+                            <td class="px-6 py-4"><a class="underline" href="{{route('projects.correspondence.view', $correspondece->id)}}">{{$correspondece->subject}}</a></td>
+                            <td class="px-6 py-4">{{$correspondece->assignees}}</td>
+                            <td class="px-6 py-4">{{$correspondece->CreatedBy->name}}</td>
+                            <td class="px-6 py-4">{{$correspondece->created_date}}</td>
+                            <td class="px-6 py-4">{{$correspondece->recieved_date ?? ''}}</td>
+                            <td class="px-6 py-4">
+                                <span class="px-3 py-1 rounded-full text-xs  {{$correspondece->status_color[1]}}">{{$correspondece->status_color[0]}}</span>
+                            </td>
+                            <td class="px-4 py-2 inline-flex space-x-4 items-center">
+                                <button onclick="deleteCorrespondence({{$correspondece->id}})" class="text-red-500 dark:text-red-400 hover:text-red-300">
+                                    <i data-feather="trash" class="w-5 h-5"></i>
+                                </button>
+                                <a target="_blank" href="{{route('projects.correspondence.edit', $correspondece->id)}}" class="text-gray-500 dark:text-gray-400 hover:text-gray-400">
+                                    <i data-feather="edit" class="w-5 h-5"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                    
+                @endif
                 <!-- Rows will be dynamically loaded -->
             </tbody>
         </table>

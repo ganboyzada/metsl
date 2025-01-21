@@ -60,7 +60,13 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
     * 
     */
     public function get_all_project_correspondence($project_id , $request): Collection{
-        return $this->model->where('project_id',$project_id)
+        $sub = \DB::raw('(select  reply_correspondence_id as replyCorespondenceId  , MAX(created_date) as last_upload_date
+         from correspondences where reply_correspondence_id is not null group by reply_correspondence_id)last_upload_table');
+
+        return $this->model->where('project_id',$project_id)->where('reply_correspondence_id',NULL)
+        ->leftjoin($sub,function($join){
+            $join->on('last_upload_table.replyCorespondenceId','=','id');       
+        })
         ->when($request->search , function($query) use($request){
             $query->where(function($q) use($request){
                 $q->whereAny(
@@ -106,6 +112,30 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
     }
 
     
-  
+    /**
+    * @param int $project_id
+    * @param int $corespondence_id 
+    * @return Collection
+    * 
+    */
+    public function get_correspondence_replies($project_id , $corespondence_id): Collection{
+        return $this->model->where('project_id',$project_id)->where('reply_correspondence_id',$corespondence_id)
+        
+        ->with(['assignees:id,name' , 'CreatedBy:id,name'])->get();
+    }  
+
+
+
+        /**
+    * @param int $project_id
+    * @param int $corespondence_id 
+    * @return Collection
+    * 
+    */
+    public function get_correspondence_parent($project_id , $corespondence_id): Collection{
+        return $this->model->where('project_id',$project_id)->where('id',$corespondence_id)
+        
+        ->with(['assignees:id,name' , 'CreatedBy:id,name'])->get();
+    }  
  
 }

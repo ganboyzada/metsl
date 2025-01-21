@@ -128,4 +128,27 @@ class CorrespondenceService
 
     }
 
+    public function getCorrespondenceParent($project_id , $correspondence_id){
+        return $this->correspondenceRepository->get_correspondence_parent($project_id , $correspondence_id)->map(function($correspondence){
+            $correspondence->assignees = implode(',',$correspondence->assignees->map(function($assignee){
+                return $assignee->name; 
+            })->all());
+
+            return $correspondence;
+        });
+
+    }
+
+    public function getCorrespondenceReplies($project_id , $correspondence_id){
+        return $this->correspondenceRepository->get_correspondence_replies($project_id , $correspondence_id)->map(function($correspondence){
+            $correspondence->assignees = implode(',',$correspondence->assignees->map(function($assignee){
+                return $assignee->name; 
+            })->all());
+            return $correspondence;
+
+
+        });
+
+    }
+
 }

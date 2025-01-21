@@ -148,6 +148,18 @@ class CorrespondenceController extends Controller
 
     public function find($id){
         $correspondece = $this->correspondenceService->find($id);
+        if($correspondece->reply_correspondence_id == NULL){
+            $others_correspondeces_realated = $this->correspondenceService->getCorrespondenceReplies($correspondece->project_id , $correspondece->id)->map(function($row){
+                $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];
+                return $row;
+            });
+        }else{
+            $others_correspondeces_realated = $this->correspondenceService->getCorrespondenceParent($correspondece->project_id , $correspondece->reply_correspondence_id)->map(function($row){
+                $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];
+                return $row;
+            });
+
+        }
         return view('metsl.pages.correspondence.view', get_defined_vars());
 
     }
