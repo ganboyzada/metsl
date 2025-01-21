@@ -26,6 +26,7 @@ class DocumentRequest extends FormRequest
             return [
 
                 'project_id' => ['required', 'integer'],
+                'package_id' => ['required', 'integer'],
             
                 'title' => 'required',
                 'number' => 'required',
@@ -39,6 +40,7 @@ class DocumentRequest extends FormRequest
             return [
 
                 'project_id' => ['required', 'integer'],
+                'package_id' => ['required', 'integer'],
             
                 'title' => 'required',
                 'number' => 'required',
