@@ -105,11 +105,11 @@
 							<td class="px-4 py-2">${all_meetings[i].start_time}</td>
 							<td class="px-4 py-2">${all_meetings[i].users}</td>
 							<td class="px-4 py-2">${all_meetings[i].purpose}</td>
-                            <td class="px-4 py-2">
-								<button onclick="deleteMeetingPlaning(${all_meetings[i].id})" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
-									<i data-feather="delete" class="w-5 h-5"></i>
+                            <td class="px-4 py-2 flex items-center gap-3">
+								<button onclick="deleteMeetingPlaning(${all_meetings[i].id})" class="text-gray-500 dark:text-gray-400 hover:text-gray-300">
+									<i data-feather="trash" class="w-5 h-5"></i>
 								</button>
-								<a target="_blank" href="${url}" class="text-gray-500 dark:text-gray-400 hover:text-gray-300">
+								<a target="_blank" href="${url}" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
 									<i data-feather="edit" class="w-5 h-5"></i>
 								</a>
 							</td>
@@ -141,8 +141,6 @@
             $('.success').show();
             $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
         }
-
-
     }
 
 	get_meeting_planing();

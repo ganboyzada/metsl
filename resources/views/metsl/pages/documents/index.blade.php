@@ -3,9 +3,32 @@
 <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
 <div class="flex flex-wrap items-center justify-between mb-6">
     <!-- Add Document Button -->
-    <button onclick="reset_model();" data-modal="uploader-modal" class="modal-toggler bg-blue-500 text-white px-4 py-2  hover:bg-blue-600 flex items-center transition duration-200">
-        <i data-feather="plus-circle" stroke-width="2" class="w-5 h-5 mr-2"></i> Add Document
-    </button>
+	<div class="flex gap-2">
+		<div class="has-dropdown w-3/5 sm:w-auto relative inline-block text-left z-10">
+			<!-- Dropdown Toggle Button -->
+			<button class="dropdown-toggle w-full flex gap-2 items-center px-3 py-2 bg-gray-200 dark:bg-gray-800">
+				<i data-feather="folder" class="text-gray-400 dark:text-gray-500"></i>
+				<span class="text-sm font-bold me-auto">Schematics</span>
+				<i data-feather="chevron-down" class="text-gray-400 dark:text-gray-500"></i>
+			</button>
+
+			<!-- Dropdown Menu -->
+			<div class="dropdown absolute left-0 min-w-full w-max bg-gray-800 text-gray-200 shadow-lg hidden">
+				<div data-tabs="project-tools" class="text-sm grid grid-cols-1 tab-links bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg text-left">
+					@foreach(['Schematics', 'Facade Designs', 'Interior Designs', 'Electrical Mapping'] as $package)
+					<button data-tab="correspondence" class="p-3 hover:bg-gray/75" onclick="set_in_local_storage('correspondence'); get_correspondences()">
+						<i class="mr-1 text-gray-500 dark:text-gray-400" data-feather="folder"></i>
+						{{ $package }}
+					</button>
+					@endforeach
+				</div>
+			</div>
+		</div>
+		<button onclick="reset_model();" data-modal="uploader-modal" class="modal-toggler bg-blue-500 h-full text-white px-3 py-2  hover:bg-blue-600 flex items-center transition duration-200">
+			<i data-feather="plus-circle" stroke-width="2" class="w-5 h-5 mr-2"></i> Add Document
+		</button>
+	</div>
+    
 
     <!-- Order By and Filter -->
     <div class="flex items-center gap-4">

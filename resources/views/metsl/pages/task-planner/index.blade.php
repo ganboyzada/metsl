@@ -11,7 +11,7 @@
             </button>
         </div>
         
-        <ul id="group-list" class="space-y-4">
+        <ul id="group-list" class="space-y-3">
             <!-- Groups will be dynamically added -->
         </ul>
     </div>
@@ -393,6 +393,7 @@
     let dayCursor = normalizeToMidnight(new Date());
     const visibleDaysReset = 14;
     let visibleDays = visibleDaysReset; // Default number of visible days
+    const filteredGroups = [];
 
     // Generate dynamic days based on offset
     function generateDays(offset) {
@@ -413,11 +414,14 @@
     function renderGroups() {
         const groupElements = groups.map(
             (group) =>
-                `<li class="flex items-center gap-2">
+                `<li class="flex items-center gap-2 py-1" data-group="${group.id}">
                     <span class="w-6 h-6 ${group.color} block rounded-lg" style="background-color: ${group.color}"></span>
                     <span>${group.name}</span>
 
-                    <button onclick="delete_group(${group.id})" class="ms-auto text-red-300 dark:text-gray-500 hover:text-red-500">
+                    <button onclick="filter_group(${group.id})" class="ms-auto me-1 text-gray-800 px-1 rounded dark:text-gray-200 hover:bg-black/25">
+                        <i data-feather="eye" class="w-4 h-4"></i>
+                    </button>
+                    <button onclick="delete_group(${group.id})" class="text-red-300 dark:text-gray-500 hover:text-red-500">
                         <i data-feather="x" class="w-5 h-5"></i>
                     </button>
 
@@ -447,6 +451,30 @@
                 $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
             }
         }
+    }
+
+    function filter_group(id){
+        if(filteredGroups.indexOf(id) > -1){
+            filteredGroups.splice(filteredGroups.indexOf(id), 1);
+        } else{
+            filteredGroups.push(id);
+        }
+
+        $('li[data-group]').removeClass('filtered');
+
+        if(filteredGroups.length){
+            
+            $(`div[data-group-tasks]`).addClass('hidden');
+
+            filteredGroups.forEach(group => {
+                $(`li[data-group="${group}"]`).addClass('filtered');
+                $(`div[data-group-tasks="${group}"]`).removeClass('hidden');
+            });
+        } else{
+            $(`div[data-group-tasks]`).removeClass('hidden');
+        }
+        
+        
     }
 
     // Render Days Header
@@ -547,7 +575,7 @@
                     </div>`
                     );
                     return `
-                        <div class="relative h-24 border-t border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 striped-background">
+                        <div data-group-tasks="${group.id}" class="relative h-24 border-t border-gray-300 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 striped-background">
                             ${taskElements.join("")}
                         </div>`;
                     });

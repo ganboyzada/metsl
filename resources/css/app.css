@@ -269,3 +269,12 @@ div.error{
         }
     }
 }
+
+li[data-group]{
+    &.filtered{
+        background-color: #0000002e;
+        padding: 0.4rem;
+        border-radius: 12px;
+        transform: scale(1.08);
+    }
+}

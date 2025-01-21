@@ -155,7 +155,7 @@
                 },
                 error: function (err) {
                     $.each(err.responseJSON.errors, function(key, value) {
-                            var el = $(document).find('[name="'+key + '"]');
+                            var el = $(document).find(`[name="${key=='reviewers' ? 'reviewers[]' : key}"]`);
 							el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
                             if(el.length == 0){
                                 el = $(document).find('#file-upload');
