@@ -9,9 +9,12 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class ProjectDocument extends Model
 {
-    protected $fillable = ['title','number','status', 'project_id','custom_input','created_by','created_date'];
+    protected $fillable = ['title','number','status', 'project_id','custom_input','created_by','created_date','package_id'];
 
-
+    public function package(): belongsTo
+    {
+        return $this->belongsTo(Package::class);
+    }
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
