@@ -17,50 +17,54 @@
     </div>
 
     <!-- Timeline -->
-    <div class="flex-1 overflow-x-auto">
+    <div class="flex-1">
         <!-- Timeline Header -->
-        <div class="flex items-center justify-between mb-4 px-4">
+        <div class="flex items-center justify-between mb-4 md:px-4">
             <div class="flex items-center space-x-2">
-                <button id="prev-btn" class="py-2 px-4 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 rounded-full ">
+                <button id="prev-btn" class="py-2 px-2 md:px-4 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 rounded-lg md:rounded-full ">
                     <i data-feather="arrow-left"></i>
                 </button>
-                <button id="next-btn" class="py-2 px-4 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 rounded-full ">
+                <button id="next-btn" class="py-2 px-2 md:px-4 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 rounded-lg md:rounded-full ">
                     <i data-feather="arrow-right"></i>
                 </button>
                 <span id="current-month" class="text-lg font-semibold text-gray-700 dark:text-gray-200"></span>
             </div>
             <div class="flex items-center">
-                <button id="add-task-btn" class="mr-3 inline-flex gap-2 font-semibold py-2 px-4 bg-blue-200 text-blue-800 hover:bg-blue-500 hover:text-white dark:bg-blue-800 dark:hover:bg-blue-600 dark:text-blue-200 rounded-full">
+                <button id="add-task-btn" class="md:mr-3 text-sm md:text-md inline-flex items-center font-semibold py-2 px-3 md:px-4 bg-blue-200 text-blue-800 hover:bg-blue-500 hover:text-white dark:bg-blue-800 dark:hover:bg-blue-600 dark:text-blue-200 rounded-lg md:rounded-full">
                     <i data-feather="plus"></i> Add Task
                 </button>   
 
-                <button id="zoom-in-btn" class="py-2 px-4 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 rounded-s-full">
+                <button id="zoom-in-btn" class="hidden md:block py-2 px-4 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 rounded-s-full">
                     <i data-feather="zoom-in"></i>
                 </button>
-                <button id="zoom-reset-btn" class="mx-1 py-2 px-2 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200">
+                <button id="zoom-reset-btn" class="hidden md:block mx-1 py-2 px-2 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200">
                     <i data-feather="minimize-2"></i>
                 </button>
-                <button id="zoom-out-btn" class="py-2 px-4 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 rounded-e-full">
+                <button id="zoom-out-btn" class="hidden md:block py-2 px-4 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 rounded-e-full">
                     <i data-feather="zoom-out"></i>
                 </button>
             </div>
         </div>
 
-        <!-- Days Header -->
-        <div id="days-header" class="grid text-center border-b border-gray-300 dark:border-gray-700" style="grid-template-columns: repeat(var(--visible-days), 1fr);">
-            <!-- Days will be dynamically added -->
-        </div>
+        <div class="flex overflow-x-auto md:overflow-hidden rounded-xl md:rounded-none">
+            <div class="timeline-wrapper md:w-full">
+                <!-- Days Header -->
+                <div id="days-header" class="grid text-center border-b border-gray-300 dark:border-gray-700" style="grid-template-columns: repeat(var(--visible-days), 1fr);">
+                    <!-- Days will be dynamically added -->
+                </div>
 
-        <!-- Timeline Rows -->
-        <div id="timeline-rows" class="relative">
-            <!-- Rows and tasks will be dynamically added -->
+                <!-- Timeline Rows -->
+                <div id="timeline-rows" class="relative">
+                    <!-- Rows and tasks will be dynamically added -->
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
 <!-- Modal for Task Details -->
 <div id="task-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6 w-1/3">
+    <div class="bg-white dark:bg-gray-800 shadow-lg p-5 min-w-1/3 max-w-full">
         <h3 class="text-lg font-semibold mb-4">Task Details</h3>
         <div class="space-y-2">
             <p><strong>Title:</strong> <span id="task-title"></span></p>
@@ -72,14 +76,14 @@
         <div>
             <span id="delete_butn"></span>
         </div>
-        <button id="close-modal" class="mt-4 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+        <button id="close-modal" class="mt-4 px-4 py-2 bg-blue-500 text-white hover:bg-blue-600">
             Close
         </button>
     </div>
 </div>
 
 <div id="add-task-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white dark:bg-gray-800 shadow-lg p-6 w-1/3">
+    <div class="bg-white dark:bg-gray-800 shadow-lg p-5 min-w-1/3 max-w-full">
         <h3 class="text-lg font-semibold mb-4">Add New Task</h3>
         <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
 
@@ -450,8 +454,8 @@
         const days = generateDays(currentDayOffset);
         const dayElements = days.map(
             (day) =>
-                `<div class="p-2 border-r border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 striped-background">
-                    <div class="text-xs mb-2">${day.toLocaleDateString("en-US", { weekday: "short" })}</div><span class='border border-gray-300 dark:border-gray-600 rounded-full px-2 py-1'>${day.getDate()}</span>
+                `<div class="w-36 flex justify-center items-center md:block md:w-auto p-2 border-r border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700">
+                    <div class="text-xs mr-2 md:mr-0 md:mb-2">${day.toLocaleDateString("en-US", { weekday: "short" })}</div><span class='border border-gray-300 dark:border-gray-600 rounded-full px-2 py-1'>${day.getDate()}</span>
                 </div>`
         );
         $("#days-header")
@@ -524,7 +528,7 @@
                 const taskElements = rowTasks.map(
                 (task) =>
                     `<div 
-                        class="absolute h-full ${group.color} completed text-white text-sm px-2 py-1"
+                        class="task absolute h-full ${group.color} completed text-white text-sm px-2 py-1 border dark:border-gray-500"
                         style="left: ${((Math.floor((normalizeToMidnight(new Date(task.start)) - dayCursor) / (1000 * 60 * 60 * 24))) * (100 / visibleDays))}%; width: ${(task.duration * (100 / visibleDays))}% ;background-color: ${group.color}"
                         data-task-id="${task.id}">
                         <div class="flex justify-between items-center">

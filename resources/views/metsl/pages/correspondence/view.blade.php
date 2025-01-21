@@ -24,7 +24,7 @@
 
 
 <!-- Correspondence Information -->
- <div class="p-6 bg-white dark:bg-gray-900 ">
+ <div class="pt-4 bg-white dark:bg-gray-900 ">
 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
         <!-- Number -->
@@ -113,7 +113,7 @@
     </div>
 
     <!-- Attachments -->
-    <div>
+    <div class="mb-4">
         <h3 class="text-sm font-medium dark:text-gray-400 mb-2">Attachments</h3>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
 		@if($correspondece->files->count() > 0)
@@ -133,6 +133,27 @@
 		@endif
   
         </div>
+    </div>
+
+    <h3 class="font-medium dark:text-gray-400 mb-2">RELATED ACTIVITY</h3>
+    <div class="overflow-x-auto">
+        <table class="min-w-full border-collapse border dark:border-gray-800">
+            <thead class="bg-gray-100 dark:bg-gray-800 text-sm text-left">
+                <tr>
+                    <th class="px-6 py-3 font-light">Number</th>
+                    <th class="px-6 py-3 font-light">Subject</th><!-- WILL HAVE LINK TO REDIRECT (target="_blank") -->
+                    <th class="px-6 py-3 font-light">Last Activity</th>
+                    <th class="px-6 py-3 font-light">Assignees</th>
+                    <th class="px-6 py-3 font-light">Created By</th>
+                    <th class="px-6 py-3 font-light">Issued On</th>
+                    <th class="px-6 py-3 font-light">Due Date</th>
+                    <th class="px-6 py-3 font-light">Status</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- Rows will be dynamically loaded -->
+            </tbody>
+        </table>
     </div>
 </div>
 @endsection
