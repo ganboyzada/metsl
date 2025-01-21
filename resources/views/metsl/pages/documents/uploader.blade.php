@@ -15,6 +15,9 @@
 			<input type="hidden" value="{{\Session::get('projectID')}}" name="project_id"/>
 			<input type="hidden" value="0" id="document_id" name="id"/>
 
+            
+            
+
             <!-- Drag and Drop Zone -->
             <div>
                 <label class="block mb-1">Attachments (PDF only)</label>
@@ -58,14 +61,27 @@
 
             <!-- Title -->
             <div class="mb-4">
-                <label for="title" class="block text-sm font-medium dark:text-gray-200 mb-1">Title</label>
-                <input
-                    type="text"
-                    id="title"
-					name="title"
-                    class="w-full px-3 py-2 border  dark:bg-gray-800 dark:text-gray-200"
-                    placeholder="Enter title"
-                />
+                <div class="flex gap-2">  
+                    <div class="w-1/3">
+                        <label for="package" class="block text-sm font-medium dark:text-gray-200 mb-1">Package</label>
+                        <select name="package" id="package" class="w-full px-3 py-2 border dark:bg-gray-800 dark:text-gray-200">
+                            <option value="1">Package 1</option>
+                            <option value="2">Package 2</option>
+                            <option value="3">Package 3</option>
+                        </select>
+                    </div>
+                    <div class="w-2/3">
+                        <label for="title" class="block text-sm font-medium dark:text-gray-200 mb-1">Title</label>
+                        <input
+                            type="text"
+                            id="title"
+                            name="title"
+                            class="w-full px-3 py-2 border  dark:bg-gray-800 dark:text-gray-200"
+                            placeholder="Enter title"
+                        />
+                    </div>
+                </div>
+                
             </div>
 
             <!-- Reviewers -->

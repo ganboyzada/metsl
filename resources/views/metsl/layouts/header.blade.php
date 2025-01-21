@@ -88,7 +88,7 @@
 
             <!-- User Profile and Dropdown -->
             <div class="relative">
-                <button onclick="toggleUserDropdown()" class="rounded-full flex items-center pl-1 py-1 pr-1 md:pr-2 lg:pr-4 bg-gray-200 dark:bg-gray-800">
+                <button onclick="toggleUserDropdown()" class="rounded-full flex items-center pl-1 py-1 pr-1 md:pr-2 lg:pr-4 bg-gray-100 dark:bg-gray-800">
                     <!-- User Image -->
                     <img src="https://placehold.co/32" alt="User" class="min-w-7 md:min-w-9 w-7 md:w-9 h-7 md:h-9 md:mr-2 rounded-full">
                     <!-- User Name -->

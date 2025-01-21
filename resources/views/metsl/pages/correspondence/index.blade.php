@@ -5,7 +5,7 @@
     <div class="flex items-center gap-4 mb-4">
         <div class="flex items-center gap-4 mr-auto">
             <div class="relative">
-                <i data-feather="search" stroke-width=2 class="absolute left-2 top-2 text-gray-700 dark:text-gray-300"></i>
+                <i data-feather="search" stroke-width=2 class="absolute left-2 top-2"></i>
                 <input
                     type="text"
                     placeholder="Search"

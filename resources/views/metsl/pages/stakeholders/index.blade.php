@@ -4,8 +4,8 @@
         <!-- Search Box -->
         <div class="relative flex items-center">
             <input type="text" id="searchStakeholders" placeholder="Search by name..." 
-                class=" p-2 pl-10 w-64 dark:bg-gray-900 dark:text-gray-100 border-gray-300 dark:border-gray-600 focus:outline-none focus:ring focus:border-blue-300" />
-            <i data-feather="search" class="absolute left-3"></i>
+                class="pl-10 pr-4 py-2 border-0 bg-gray-200 dark:bg-gray-700 dark:text-gray-200" />
+            <i data-feather="search" class="absolute left-2 top-2"></i>
         </div>
 
     </div>
