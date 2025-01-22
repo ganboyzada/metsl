@@ -22,7 +22,11 @@
                 <option value="">Health & Safety</option>
                 <option value="">Client</option>
             </select>
-            <input type="text" class="hidden w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200" id="new-meeting-type" name="new-meeting-type" placeholder="Enter new type">
+            <div class="flex hidden" id="new-meeting-type">
+                <input type="text" class=" w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200"  name="new-meeting-type" placeholder="Enter new type">
+                <button type="button" id="submit-meeting-type"><i data-feather="save" class="bg-blue-500 text-white p-2"></i></button>
+            </div>
+            
         </div>
 
         <!-- Conference Link -->
