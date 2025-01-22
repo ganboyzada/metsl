@@ -7,6 +7,7 @@ use App\Enums\RevisionStatusEnum;
 use App\Http\Requests\CorrespondenceRequest;
 use App\Http\Requests\DocumentRequest;
 use App\Http\Requests\MeetingPlaningRequest;
+use App\Http\Requests\TypeRequest;
 use App\Services\ClientService;
 use App\Services\ContractorService;
 use App\Services\DesignTeamService;
@@ -140,5 +141,25 @@ class MeetingPlaningController extends Controller
         $this->meetingPlaningFilesService->delete($id);
         return redirect()->back()->with('success' , 'Item deleted successfully');
     }
+
+
+    public function store_type(TypeRequest  $request)
+    {
+        if($request->validated()){
+            \DB::beginTransaction();
+            try{
+                $all_data = request()->all();
+                $type = \App\Models\MeetingTypes::create($all_data);  
+                         
+            \DB::commit();            
+            } catch (\Exception $e) {
+                \DB::rollback();
+                return response()->json(['error' => $e->getMessage()]);
+            }
+        
+            return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$type]);
+
+        }
+    }  
 
 }

@@ -10,17 +10,21 @@
     <!-- Meeting Planner Form -->
     <form id="meeting-planner-form" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4"  method="POST" enctype="multipart/form-data">
 		@csrf
-		<input type="hidden" name="project_id" value="{{ \Session::get('projectID') }}"/>
+		<input type="hidden" id="project_id" name="project_id" value="{{ \Session::get('projectID') }}"/>
 
         <div class="col-span-1">
             <label for="meeting_type" class="block text-sm mb-2 font-medium dark:text-gray-200">Meeting Type</label>
-            <select id="meeting_type" name="meeting_type" class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200" required>
-                <option value="">Kick-off</option>
-                <option value="">Progress</option>
-                <option value="">Weekly</option>
-                <option value="">Monthly</option>
-                <option value="">Health & Safety</option>
-                <option value="">Client</option>
+            <select id="name" onchange="check_type(this)" name="name" class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200" required>
+                <option value="">select type</option>
+                @php
+                $meeting_types = \App\Models\MeetingTypes::where('project_id', \Session::get('projectID'))->get();
+                @endphp
+                @foreach ($meeting_types as $meeting_type)
+                    <option value="{{$meeting_type->name}}">{{$meeting_type->name}}</option>
+                @endforeach
+                @endphp
+                <option value="0">Add New</option>
+
             </select>
             <div class="flex hidden" id="new-meeting-type">
                 <input type="text" class=" w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200"  
@@ -185,6 +189,80 @@
 
 @push('js')
 <script>
+    function check_type(element){
+        if(element.value == 0){
+            $('#new-meeting-type').removeClass('hidden');
+        }else{
+            $('#new-meeting-type').addClass('hidden');
+        }
+        element.value = '';
+    }
+
+    $("#submit-meeting-type").on("click", function(event) {
+ 
+            $('.error').hide();
+            $('.success').hide();
+            $('.err-msg').hide();
+            $(".error").html("");
+            $(".success").html("");
+            event.preventDefault();  
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ route('projects.meetings.type.store') }}" ,
+                type: "POST",
+                data: {'name':$('[name="new-meeting-type"]').val() , 'project_id':$('#project_id').val() ,   "_token": "{{ csrf_token() }}",},
+                dataType: 'json',
+               
+             
+                success: function(data) {
+                    if (data.success) {
+                         
+                        
+                        $('[name="new-meeting-type"]').val('');
+						
+						window.scrollTo(0,0);
+						$('#new-meeting-type').addClass('hidden');
+
+                        $('.success').show();
+                        $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.success+'</div>');  
+						
+
+                        const select = document.getElementById(`name`);
+                        const opt = document.createElement('option');
+                        opt.value = data.data.name;
+                        opt.innerHTML = data.data.name;
+                        select.appendChild(opt);
+                        document.getElementById(`name`).value = data.data.name;                    
+						
+
+
+                    }
+                    else if(data.error){
+
+                        $('.error').show();
+                        $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.error+'</div>');
+                    }
+                },
+                error: function (err) {
+                    $.each(err.responseJSON.errors, function(key, value) {
+                            var el = $(document).find(`[name="new-meeting-type"]`);
+							el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
+                       
+                            
+                        });
+
+
+
+                }
+            });
+    
+      });
+	 
+
  $("#meeting-planner-form").on("submit", function(event) {
         const form = document.getElementById("meeting-planner-form");
         const formData = new FormData(form); 
@@ -260,6 +338,7 @@
 	  
 
 	$(".projectButton").on('click',function(event) {
+        location.reload();
 		if(localStorage.getItem("project_tool") == 'meeting_planing'){
 			get_participates();
 		}
