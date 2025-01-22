@@ -23,26 +23,36 @@
         @csrf
         @method('PUT')
 
-        <div class="mb-10">
-            <label for="name" class="block text-lg mb-2 font-medium dark:text-gray-200">Role Title</label>
-            <input
-                type="text"
-                name="name" id="name" value="{{ $role->name }}"
-                class="w-96 w-max-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200" required
-            />
-        </div>
+        <div class="flex flex-wrap gap-10 pb-5">
+            <div class="w-full">
+                <label for="name" class="block text-sm mb-5 font-medium dark:text-gray-200">Role Name</label>
+                <input
+                    type="text"
+                    name="name"
+                    id="name"
+                    class="max-w-full w-80 px-4 py-2 border dark:bg-gray-800 dark:text-gray-200"
+                    placeholder="Enter Preset Role Name" value="{{ $role->name }}" required
+                />
+                <button type="submit" class="flex px-4 gap-3 py-2 bg-blue-500 text-white hover:bg-blue-600 mt-4">
+                    <i data-feather="save"></i>
+                    Save Role
+                </button>
+            </div>
 
-        <div>
-            <label for="permissions" class="block text-lg mb-2 font-medium dark:text-gray-200">Permission Assignment</label>
-            <div class="grid grid-cols-1 lg:grid-cols-4 md:grid-cols-2">
-            @foreach($permissions as $permission)
-            <div class="py-2">
-                <input type="checkbox" name="permissions[]" value="{{ $permission->id }}" 
-                       {{ $role->permissions->contains($permission->id) ? 'checked' : '' }}>
-                       <label class="ml-3"> {{ ucwords(str_replace("_"," ",$permission->name))   }}</label>
+            <div>
+                <h3 class="block text-sm mb-5 font-medium dark:text-gray-200">Assign Permissions</h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6 checkbox-style-1">
+                
+                    @foreach($permissions as $permission)
+                    <div class="checkbox-wrapper-47">
+                        <input type="checkbox" name="permissions[]"  value="{{ $permission->id }}" id="p-{{ $permission->id }}" {{ $role->permissions->contains($permission->id) ? 'checked' : '' }}/>
+                        <label for="p-{{ $permission->id }}" class="leading-snug">{{ ucwords(str_replace("_"," ",$permission->name))   }}</label>
+                    </div>
+                    @endforeach
+                    
+                </div>
             </div>
-            @endforeach
-            </div>
+            
         </div>
 
         <button type="submit" class="mt-5 px-4 py-2 bg-blue-500 text-white hover:bg-blue-600">Update Role</button>
