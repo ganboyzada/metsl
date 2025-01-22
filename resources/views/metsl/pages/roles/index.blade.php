@@ -42,23 +42,31 @@
             @foreach($roles as $role)
             <tr class="roles_tr">
                 <td class="px-6 py-3">{{ $role->name }}</td>
-                <td class="gap-3 text-blue-800 dark:text-blue-200">
-                    @foreach($role->permissions as $permission)
-                    <span class="text-sm px-3 py-1 rounded-full bg-blue-200 dark:bg-blue-900">{{ ucwords(str_replace("_"," ",$permission->name)) }}</span>
-                    @endforeach
+                <td class="p-4 text-blue-800 dark:text-blue-200">
+                    <div class="flex items-center flex-wrap gap-1">
+                    @foreach($role->permissions as $k=>$permission)
+                        @if($k < 7)
+                        <span class="text-sm px-3 py-1 rounded-full bg-blue-200 dark:bg-blue-900">{{ ucwords(str_replace("_"," ",$permission->name)) }}</span>
+                        @endif
+                        @endforeach
+                        @if(count($role->permissions)>7)
+                        <span class="text-sm px-3 py-1 rounded-full bg-gray-200 text-gray-700 dark:bg-gray-800 dark:text-gray-400">more ...</span>
+                    @endif
+                    </div>
                 </td>
-                <td class="px-6 py-3 flex items-center">
-                    <a href="{{ route('roles.edit', $role->id) }}" class="text-gray-500 mr-2 dark:text-gray-400 hover:text-gray-300">
-                        <i data-feather="edit" class="w-5 h-5"></i>
-                    </a>
-                    
-                    <form action="{{ route('roles.destroy', $role->id) }}" method="POST" style="display:inline;">
-                        @csrf
-                        @method('DELETE')
-                        <button type="submit" class="text-red-500 dark:text-red-400 hover:text-blue-300">
-                        <i data-feather="trash" class="w-5 h-5"></i>
-                        </button>
-                    </form>
+                <td class="px-6 py-3">
+                    <div class="flex items-center">
+                        <a href="{{ route('roles.edit', $role->id) }}" class="text-gray-500 mr-2 dark:text-gray-400 hover:text-gray-300">
+                            <i data-feather="edit" class="w-5 h-5"></i>
+                        </a>
+                        <form action="{{ route('roles.destroy', $role->id) }}" method="POST" style="display:inline;">
+                            @csrf
+                            @method('DELETE')
+                            <button type="submit" class="text-red-500 dark:text-red-400 hover:text-blue-300">
+                            <i data-feather="trash" class="w-5 h-5"></i>
+                            </button>
+                        </form>
+                    </div>
                 </td>
             </tr>
             @endforeach
