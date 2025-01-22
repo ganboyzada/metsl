@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\belongsToMany;
 
 class Package extends Model
 {
-    protected $fillable = ['name' , 'public_accessible','project_id'];
+    protected $fillable = ['name' , 'public_accessible'];
 
 
 

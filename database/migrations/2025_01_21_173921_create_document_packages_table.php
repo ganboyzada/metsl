@@ -15,9 +15,6 @@ return new class extends Migration
             $table->id();
             $table->string('name')->nullable();
             $table->integer('public_accessible')->default(1);
-            $table->unsignedBiginteger('project_id')->unsigned();
-            $table->foreign('project_id')->references('id')
-                    ->on('projects')->onDelete('cascade'); 
             $table->timestamps();
         });
     }

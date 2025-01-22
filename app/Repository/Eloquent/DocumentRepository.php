@@ -69,11 +69,6 @@ class DocumentRepository extends BaseRepository implements DocumentRepositoryInt
         if(isset($request->DocNO) && $request->DocNO != ''){
             $query->where('number' ,'LIKE', '%'.$request->DocNO.'%');
         }
-
-        if(isset($request->package_id) && $request->package_id != 0){
-            $query->where('package_id' , $request->package_id);
-        }
-
        if(isset($request->orderBy) && ($request->orderBy == 'number' || $request->orderBy == 'created_date')){
             $query= $query->orderBy($request->orderBy , $request->orderDirection);       
         }
