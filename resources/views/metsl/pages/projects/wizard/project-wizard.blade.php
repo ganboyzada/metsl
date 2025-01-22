@@ -86,9 +86,9 @@
                 </div>
                 <div>
 
-                    <div class="grid lg:grid-cols-1  md:grid-cols-1 gap-4">
+                    <div class="grid md:grid-cols-1 gap-4">
                         <div class="mb-4">
-                            <label for="endDate" class="block font-medium text-gray-700 dark:text-gray-200">status</label>
+                            <label for="endDate" class="block font-medium text-gray-700 dark:text-gray-200">Project Status</label>
                             <select name="status" id="status"class="mt-1 block w-full   shadow-sm dark:bg-gray-800 dark:text-gray-200">
                                 @php
                                 $status_list = \App\Enums\ProjectStatusEnum::cases();
@@ -99,7 +99,7 @@
                             </select>
                         </div>                        
                         <div class="mb-4">
-                            <label for="startDate" class="block font-medium text-gray-700 dark:text-gray-200">logo</label>
+                            <label for="startDate" class="block font-medium text-gray-700 dark:text-gray-200">Project Photo</label>
                             <input type="file"  accept="image/*" name="logo" id="logo" class="mt-1 block w-full   shadow-sm dark:bg-gray-800 dark:text-gray-200" >
                         </div>
 
@@ -260,6 +260,12 @@
     
                     <!-- Role Assignment Form -->
                     <form id="roleAssignmentForm" onsubmit="saveRoleAssignment(event)">
+
+                        <div class="mb-4">
+                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Job title</label>
+                            <input type="text" id="job_title" name="job_title" class="w-full px-4 py-2 border dark:bg-gray-700 dark:text-gray-200" placeholder="e.g, Electrical Engineer">
+                        </div>
+
                         <div class="mb-4">
                             <label class="block text-gray-700 dark:text-gray-200 mb-1">Custom Role Name</label>
                             <input type="text" id="customRoleName" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" placeholder="Enter custom role name (optional)" disabled>

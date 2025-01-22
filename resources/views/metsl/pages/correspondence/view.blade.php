@@ -26,7 +26,7 @@
 <!-- Correspondence Information -->
  <div class="pt-4 bg-white dark:bg-gray-900 ">
 
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-6">
+    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
         <!-- Number -->
         <div>
             <h3 class="text-sm font-medium dark:text-gray-400">Number</h3>
@@ -56,15 +56,6 @@
         <div>
             <h3 class="text-sm font-medium dark:text-gray-400">Cost Impact</h3>
             <p class="text-lg font-semibold dark:text-gray-200">{{$correspondece->cost_impact}}</p>
-        </div>
-
-        <!-- Received From -->
-        <div class="flex items-center">
-            <img src="{{$correspondece->ReceivedFrom->userable->image}}" alt="Profile" class="w-10 h-10 rounded-full mr-4">
-            <div>
-                <h3 class="text-sm font-medium dark:text-gray-400">Received From</h3>
-                <p class=" dark:text-gray-200">{{$correspondece->ReceivedFrom->name}}</p>
-            </div>
         </div>
 
         <!-- Assignees -->
@@ -108,31 +99,55 @@
 
     <!-- Description -->
     <div class="mb-6">
-        <h3 class="text-sm font-medium dark:text-gray-400 mb-1">Description</h3>
-        <p class="text-lg dark:text-gray-200">{!! $correspondece->description   !!}.</p>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div>
+                <h3 class="text-sm font-medium dark:text-gray-400 mb-1">Description</h3>
+                <p class="text-lg dark:text-gray-200">{!! $correspondece->description   !!}.</p>
+            </div>
+            
+            <div>
+                <h3 class="text-sm font-medium dark:text-gray-400 mb-2">Attached Files</h3>
+                <div class="grid grid-cols-2 gap-4">
+                @if($correspondece->files->count() > 0)
+                    @foreach($correspondece->files as $file)
+                        <div class="bg-gray-100 dark:bg-gray-800 p-4  flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i data-feather="file" class="w-6 h-6 mr-3 dark:text-gray-400"></i>
+                                <p class="text-sm dark:text-gray-200">{{$file->file}}</p>
+                            </div>
+                            <a target="_blank" href="{{Storage::url('project'.$correspondece->project_id.'/correspondence'.$correspondece->id.'/'.$file->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
+                        </div>            
+                    @endforeach
+                @endif
+                </div>
+            </div>
+
+            <div>
+                <h3 class="text-sm font-medium dark:text-gray-400 mb-2">Linked Documents</h3>
+                <div class="grid grid-cols-2 gap-4">
+                @if($correspondece->files->count() > 0)
+                    @foreach($correspondece->files as $file)
+                        <div class="bg-gray-100 dark:bg-gray-800 p-4  flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i data-feather="file" class="w-6 h-6 mr-3 dark:text-gray-400"></i>
+                                <p class="text-sm dark:text-gray-200">{{$file->file}}</p>
+                            </div>
+                            <a target="_blank" href="{{Storage::url('project'.$correspondece->project_id.'/correspondence'.$correspondece->id.'/'.$file->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
+                        </div>
+            
+                
+                    @endforeach
+                    
+                
+                @endif
+                </div>
+            </div>
+        </div>
     </div>
 
     <!-- Attachments -->
     <div class="mb-4">
-        <h3 class="text-sm font-medium dark:text-gray-400 mb-2">Attachments</h3>
-        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-		@if($correspondece->files->count() > 0)
-			@foreach($correspondece->files as $file)
-				<div class="bg-gray-100 dark:bg-gray-800 p-4  flex items-center justify-between">
-					<div class="flex items-center">
-						<i data-feather="file" class="w-6 h-6 mr-3 dark:text-gray-400"></i>
-						<p class="text-sm dark:text-gray-200">{{$file->file}}</p>
-					</div>
-					<a target="_blank" href="{{Storage::url('project'.$correspondece->project_id.'/correspondence'.$correspondece->id.'/'.$file->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
-				</div>
-	
-		
-			@endforeach
-			
-		
-		@endif
-  
-        </div>
+        
     </div>
 
     <h3 class="font-medium dark:text-gray-400 mb-2">RELATED ACTIVITY</h3>

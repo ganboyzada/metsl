@@ -109,19 +109,6 @@
                 <label for="distribution" class="block text-sm font-medium mb-1">Distribution Members</label>
                 <select id="distribution" name="distribution[]" multiple class="w-full"></select>
             </div>
-
-            <!-- Received From -->
-            <div class="relative">
-                <label for="received-from" class="block text-sm font-medium mb-1">Received From</label>
-                <select id="received-from" name="recieved_from" class="w-full"></select>
-            </div>
-			
-            <div class="relative">
-                <label for="received-date" class="block text-sm font-medium mb-1">Received Date</label>
-                <input type="date" id="received-date" name="recieved_date"  value="{{ $correspondece->recieved_date }}"
-				class="w-full px-4 py-2 border  dark:bg-gray-800 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
-				>
-            </div>			
         </div>
 
         <div class="grid md:grid-cols-2 gap-6">

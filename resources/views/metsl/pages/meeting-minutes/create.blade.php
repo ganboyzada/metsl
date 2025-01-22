@@ -8,33 +8,20 @@
 	<div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
 	<div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
     <!-- Meeting Planner Form -->
-    <form id="meeting-planner-form" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"  method="POST" enctype="multipart/form-data">
+    <form id="meeting-planner-form" class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4"  method="POST" enctype="multipart/form-data">
 		@csrf
 		<input type="hidden" name="project_id" value="{{ \Session::get('projectID') }}"/>
-        <!-- Meeting # -->
-        <div class="col-span-1">
-            <label for="meeting-number" class="block text-sm mb-2 font-medium dark:text-gray-200">Meeting #</label>
-            <input
-                type="text"
-				name="number"
-                id="meeting-number"
-                class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200"
-                placeholder="Enter meeting number"
-                required
-            />
-        </div>
 
-        <!-- Meeting Name -->
         <div class="col-span-1">
-            <label for="meeting-name" class="block text-sm mb-2 font-medium dark:text-gray-200">Meeting Name</label>
-            <input
-                type="text"
-                id="name"
-				name="name"
-                class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200"
-                placeholder="Enter meeting name"
-                required
-            />
+            <label for="meeting_type" class="block text-sm mb-2 font-medium dark:text-gray-200">Meeting Type</label>
+            <select id="meeting_type" name="meeting_type" class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200" required>
+                <option value="">Kick-off</option>
+                <option value="">Progress</option>
+                <option value="">Weekly</option>
+                <option value="">Monthly</option>
+                <option value="">Health & Safety</option>
+                <option value="">Client</option>
+            </select>
         </div>
 
         <!-- Conference Link -->
@@ -75,7 +62,7 @@
 
         <!-- Start Time -->
         <div class="col-span-1">
-            <label for="start-time" class="block text-sm mb-2 font-medium dark:text-gray-200">Start Time</label>
+            <label for="start-time" class="block text-sm mb-2 font-medium dark:text-gray-200">Planned Start</label>
             <input
                 type="time"
 				name="start_time"
@@ -149,8 +136,8 @@
         </div>
 
         <!-- Meeting Purpose -->
-        <div class="col-span-3">
-            <label for="meeting-purpose" class="block text-sm mb-2 font-medium dark:text-gray-200">Meeting Purpose</label>
+        <div class="col-span-2">
+            <label for="meeting-purpose" class="block text-sm mb-2 font-medium dark:text-gray-200">Meeting Agenda</label>
             <textarea
                 id="purpose"
 				name="purpose"
@@ -161,7 +148,7 @@
         </div>
 
         <!-- Attachments -->
-        <div class="col-span-3">
+        <div class="col-span-1">
             <label for="attachments" class="block text-sm mb-2 font-medium dark:text-gray-200">Attachments</label>
             <div id="drop-zone" class="flex flex-col items-center justify-center w-full h-full border-2 border-dashed  dark:bg-gray-800 dark:border-gray-700 border-gray-300">
                 <div class="flex flex-col items-center justify-center">
@@ -177,7 +164,7 @@
         </div>
 
         <!-- Submit Button -->
-        <div class="col-span-3 flex justify-end">
+        <div class="col-span-full flex justify-end">
             <button
                 type="submit"
                 class="submit_planing_meeting_form px-6 py-2 bg-blue-500 text-white hover:bg-blue-600"
