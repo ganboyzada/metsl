@@ -127,7 +127,7 @@ class DocumentService
     }
 
     public function getDetailOfDocument($document_id){
-       return $this->documentRepository->with(['files','reviewers'])->find($document_id);
+        return $this->documentRepository->with(['files','reviewers','user'])->find($document_id);
 
     }
 

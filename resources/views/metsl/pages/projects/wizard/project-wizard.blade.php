@@ -518,7 +518,7 @@
 						
 					}else{
 						
-						client_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(),  'role': "", 'permissions': [] , 'type':type});
+						client_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(),  'role': "" , 'job_title': "", 'permissions': [] , 'type':type});
 					}                   
 
                 }
@@ -533,7 +533,7 @@
 						
 					}else{
 						
-						contractor_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(),  'role': "", 'permissions': [] , 'type':type});
+						contractor_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(),  'role': "", 'job_title': "",'permissions': [] , 'type':type});
 					}
                 }
             
@@ -549,7 +549,7 @@
 						
 					}else{
 						
-						designTeam_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(),  'role': "", 'permissions': [] , 'type':type});
+						designTeam_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(),  'role': "", 'job_title': "",'permissions': [] , 'type':type});
 					}
 
                 }
@@ -565,7 +565,7 @@
 						
 					}else{
 						
-						projectManager_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(),  'role': "", 'permissions': [] , 'type':type});
+						projectManager_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(),  'role': "", 'job_title': "", 'permissions': [] , 'type':type});
 					}					
 
                 }
@@ -717,6 +717,7 @@ function renderStakeholderGrid() {
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user w-6 h-6 mr-2 text-gray-500"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
                     <div>
                         <p class="text-sm font-medium">${stakeholder.name}</p>
+                        <p class="text-xs text-gray-400">${stakeholder.job_title}</p>
                         <p class="text-xs text-gray-400">Client</p>
                     </div>
                 </div>
@@ -776,6 +777,7 @@ function renderStakeholderGrid() {
 
                     <div>
                         <p class="text-sm font-medium">${stakeholder.name}</p>
+                        <p class="text-xs text-gray-400">${stakeholder.job_title}</p>
                         <p class="text-xs text-gray-400">Contractor</p>
                     </div>
                 </div>
@@ -830,6 +832,7 @@ function renderStakeholderGrid() {
 
                     <div>
                         <p class="text-sm font-medium">${stakeholder.name}</p>
+                        <p class="text-xs text-gray-400">${stakeholder.job_title}</p>
                         <p class="text-xs text-gray-400">Design Team</p>
                     </div>
                 </div>
@@ -883,6 +886,7 @@ function renderStakeholderGrid() {
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user w-6 h-6 mr-2 text-gray-500"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>        
                     <div>
                         <p class="text-sm font-medium">${stakeholder.name}</p>
+                        <p class="text-xs text-gray-400">${stakeholder.job_title}</p>
                         <p class="text-xs text-gray-400">Project Manager</p>
                     </div>
                 </div>
@@ -947,6 +951,7 @@ function openRoleAssignmentModal(stakeholder) {
     currentStakeholder = stakeholder;
     document.getElementById("modalStakeholderName").textContent = `Assign Role to ${stakeholder.name}`;
     document.getElementById("customRoleName").value = stakeholder.role || "";
+    document.getElementById("job_title").value = stakeholder.job_title || "";
     document.getElementById("presetRoleSelect").value = ""; // Clear preset selection
     document.getElementById("customRoleName").disabled = true; // Initially disable custom role input
 
@@ -985,11 +990,12 @@ function saveRoleAssignment(event) {
 
     const role = document.getElementById("customRoleName").value || document.getElementById("presetRoleSelect").value;
     const permissions = Array.from(document.querySelectorAll("#roleAssignmentForm input[type='checkbox']:checked")).map(checkbox => checkbox.value);
-
+    const job_title = document.getElementById("job_title").value
     if (currentStakeholder) {
         // Save custom role and permissions to the stakeholder
         currentStakeholder.role = role || "Custom Role";
         currentStakeholder.permissions = permissions;
+        currentStakeholder.job_title = job_title;
     }
 
     closeRoleAssignmentModal();

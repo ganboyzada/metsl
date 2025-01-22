@@ -67,7 +67,10 @@ Route::middleware([
 	Route::get('/project/documents/reviewers',  [DocumentController::class, "getreviewers"])->name('projects.documents.reviewers');	
 	Route::post('/project/documents/store',  [DocumentController::class, "store"])->name('projects.documents.store');
     Route::get('/project/documents/all',  [DocumentController::class, "ProjectDocuments"])->name('projects.documents.all');
-    
+    Route::post('/project/documents/package/store',  [DocumentController::class, "store_package"])->name('projects.documents.package.store');
+
+
+
     Route::get('/project/documents/revisions/update_status',  [DocumentRevisionController::class, "update_status"])->name('projects.documents.revision.update_status');
 	Route::post('/projects/documents/revision/comments/store',  [DocumentRevisionController::class, "store_comment"])->name('projects.documents.revision.comments.store');
 	Route::post('/projects/documents/revision/store',  [DocumentRevisionController::class, "store"])->name('projects.documents.revision.store');

@@ -5,7 +5,7 @@ namespace App\Http\Requests;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class DocumentRequest extends FormRequest
+class PackageRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -26,13 +26,13 @@ class DocumentRequest extends FormRequest
             return [
 
                 'project_id' => ['required', 'integer'],
-                'package_id' => ['required', 'integer'],
+                'name' => [
+                    'required',
+                    Rule::unique('packages' , 'name')->where(fn ($query) => $query->where('project_id', request()->project_id)->where('id','!=', request()->id))
+                ],
+               
+                "accessibles"    => ['required','array'],
             
-                'title' => 'required',
-                'number' => 'required',
-                "reviewers"    => ['required','array'],
-                'docs' => 'nullable',
-                "docs.*"  => ["nullable","mimes:pdf"],
 
         
             ]; 
@@ -40,13 +40,14 @@ class DocumentRequest extends FormRequest
             return [
 
                 'project_id' => ['required', 'integer'],
-                'package_id' => ['required', 'integer'],
+                'name' => [
+                    'required',
+                    Rule::unique('packages' , 'name')->where(fn ($query) => $query->where('project_id', request()->project_id))
+                ],
+               
+                "accessibles"    => ['required','array'],
             
-                'title' => 'required',
-                'number' => 'required',
-                "reviewers"    => ['required','array'],
-                'docs' => 'required',
-                "docs.*"  => ["required","mimes:pdf"],
+
 
         
             ]; 

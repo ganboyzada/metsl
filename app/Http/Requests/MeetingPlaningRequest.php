@@ -24,10 +24,10 @@ class MeetingPlaningRequest extends FormRequest
     {
         if(isset(request()->id)){
             return [
-                'number' => [
+                /*'number' => [
                     'required',
                     Rule::unique('meeting_plans' , 'number')->where(fn ($query) => $query->where('project_id', request()->project_id)->where('id','!=', request()->id))
-                ],                     
+                ], */                    
                 'name' => 'required',
                 'link' => ['required','regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
                 'location'=>'required',
@@ -44,10 +44,10 @@ class MeetingPlaningRequest extends FormRequest
             ]; 
         }else{
             return [
-                'number' => [
+                /*'number' => [
                     'required',
                     Rule::unique('meeting_plans' , 'number')->where(fn ($query) => $query->where('project_id', request()->project_id))
-                ],                     
+                ],  */                   
                 'name' => 'required',
                 'link' => ['required','regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
                 'location'=>'required',

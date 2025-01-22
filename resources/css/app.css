@@ -278,3 +278,8 @@ li[data-group]{
         transform: scale(1.08);
     }
 }
+
+.choices{
+    z-index: 9999999 !important;
+
+}

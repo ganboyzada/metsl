@@ -13,8 +13,8 @@
 		<input type="hidden" name="project_id" value="{{ \Session::get('projectID') }}"/>
 
         <div class="col-span-1">
-            <label for="meeting_type" class="block text-sm mb-2 font-medium dark:text-gray-200">Meeting Type</label>
-            <select id="meeting_type" name="meeting_type" class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200" required>
+            <label for="name" class="block text-sm mb-2 font-medium dark:text-gray-200">Meeting Type</label>
+            <select id="name" name="name" class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200" required>
                 <option value="">Kick-off</option>
                 <option value="">Progress</option>
                 <option value="">Weekly</option>
@@ -281,7 +281,7 @@
 
 			let fetchRes = await fetch(`{{url('project/meetings/participates')}}`);
 			const all = await fetchRes.json();
-			$('[name="number"]').val(all.next_number);
+			//$('[name="number"]').val(all.next_number);
 			const reviewers = all.users.map(function(item) {
 			  return {'value' : item.id , 'label' : item.name};
 			});

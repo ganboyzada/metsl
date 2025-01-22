@@ -39,4 +39,10 @@ class ProjectDocument extends Model
     {
         return $this->hasOne(ProjectDocumentRevisions::class,'project_document_id')->latestOfMany();
     } 
+
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class , 'created_by');
+    }
 }

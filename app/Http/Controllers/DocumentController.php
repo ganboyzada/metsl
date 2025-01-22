@@ -6,6 +6,8 @@ use App\Enums\CorrespondenceStatusEnum;
 use App\Enums\RevisionStatusEnum;
 use App\Http\Requests\CorrespondenceRequest;
 use App\Http\Requests\DocumentRequest;
+use App\Http\Requests\PackageRequest;
+
 use App\Services\ClientService;
 use App\Services\ContractorService;
 use App\Services\DesignTeamService;
@@ -72,10 +74,12 @@ class DocumentController extends Controller
         if (Session::has('projectID') && Session::has('projectName')){
             $id = Session::get('projectID');     
             $reviewers = $this->userService->getUsersOfProjectID($id , 'review_documents');
-			
+            $accessibles = $this->userService->getUsersOfProjectID($id , '');
+		
             $users = $reviewers['users'];
+            $accessibles = $accessibles['users'];
 
-            return ['users'=>$users];
+            return ['users'=>$users , 'accessibles'=>$accessibles];
         }
 
     }
@@ -155,5 +159,24 @@ class DocumentController extends Controller
     public function delete_file($id){
         $this->projectDocumentFilesService->delete($id);
     }
+
+    public function store_package(PackageRequest  $request)
+    {
+        if($request->validated()){
+            \DB::beginTransaction();
+            try{
+                $all_data = request()->all();
+                $package = \App\Models\Package::create($all_data);  
+                $package->assignees()->sync($all_data['accessibles']);         
+            \DB::commit();            
+            } catch (\Exception $e) {
+                \DB::rollback();
+                return response()->json(['error' => $e->getMessage()]);
+            }
+        
+            return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$package]);
+
+        }
+    }    
 
 }

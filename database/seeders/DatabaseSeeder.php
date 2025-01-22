@@ -21,6 +21,9 @@ class DatabaseSeeder extends Seeder
             RolePermissionCorrespondenceTypesSeeder::class
         ]);
         $this->call([
+            RolePermissionPackage::class
+        ]);
+        $this->call([
             RolePermissionTaskPlanner::class
         ]);
         User::factory()->create([

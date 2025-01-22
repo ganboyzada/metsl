@@ -44,7 +44,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                     }
                     $user = $this->find($row->id); 
                     $user->roles()->wherePivot('project_id',$project_id)->detach();
-                    $user->roles()->attach($role->id, ['project_id'=>$project_id]);
+                    $user->roles()->attach($role->id, ['project_id'=>$project_id , 'job_title'=>$row->job_title]);
                     $user->permissions()->wherePivot('project_id',$project_id)->detach();
                     $user->permissions()->attach($role->permissions, ['project_id'=>$project_id]);
                     
@@ -79,13 +79,20 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             ->with(['allPermissions'=>function($query)use($project_id , $permission_id){
                 $query->wherePivot('project_id',$project_id);
                 $query->wherePivot('permission_id',$permission_id);
-                }])->get(['id', 'name']);
+                }])
+                
+                ->with(['allRoles'=>function($query)use($project_id , $permission_id){
+                    $query->wherePivot('project_id',$project_id);
+
+                }])
+
+                ->get(['id', 'name']);
         }else{
             return $this->model->whereHas('projects', function ($query) use ($project_id) {
                 $query->where(function ($q) use ($project_id) {
                     $q->where('projects.id',$project_id);
                 });
-            })->with('allPermissions.pivot.project')->get(['id', 'name']);
+            })->with('allPermissions')->with('allRoles')->get(['id', 'name']);
         }
 
     }

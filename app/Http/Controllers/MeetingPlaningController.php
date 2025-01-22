@@ -107,13 +107,13 @@ class MeetingPlaningController extends Controller
     public function getParticipates(Request $request){
         if (Session::has('projectID') && Session::has('projectName')){
             $id = Session::get('projectID');     
-            $next_number =  $this->meetingPlaningService->getNextNumber($id);
+           // $next_number =  $this->meetingPlaningService->getNextNumber($id);
 
             $reviewers = $this->userService->getUsersOfProjectID($id , 'participate_in_meetings');
 			
             $users = $reviewers['users'];
 
-            return ['users'=>$users , 'next_number'=>$next_number];
+            return ['users'=>$users ];
         }
 
     }
