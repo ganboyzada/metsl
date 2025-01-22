@@ -18,30 +18,18 @@
 		<input type="hidden" name="project_id" value="{{ \Session::get('projectID') }}"/>
         <input type="hidden" name="id" value="{{ $meeting_id }}"/> 
 
-        <!-- Meeting # -->
-        <div class="col-span-1">
-            <label for="meeting-number" class="block text-sm mb-2 font-medium dark:text-gray-200">Meeting #</label>
-            <input
-                type="text" value="{{ $meeting->number }}"
-				name="number"
-                id="meeting-number"
-                class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200"
-                placeholder="Enter meeting number"
-                required
-            />
-        </div>
+ 
 
-        <!-- Meeting Name -->
         <div class="col-span-1">
-            <label for="meeting-name" class="block text-sm mb-2 font-medium dark:text-gray-200">Meeting Name</label>
-            <input
-                type="text" value="{{ $meeting->name }}"
-                id="name"
-				name="name"
-                class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200"
-                placeholder="Enter meeting name"
-                required
-            />
+            <label for="name" class="block text-sm mb-2 font-medium dark:text-gray-200">Meeting Type</label>
+            <select id="name" name="name" class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200" required>
+                <option value="">Kick-off</option>
+                <option value="">Progress</option>
+                <option value="">Weekly</option>
+                <option value="">Monthly</option>
+                <option value="">Health & Safety</option>
+                <option value="">Client</option>
+            </select>
         </div>
 
         <!-- Conference Link -->

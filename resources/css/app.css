@@ -279,6 +279,10 @@ li[data-group]{
     }
 }
 
+.choices{
+    z-index: 9999999 !important;
+
+}
 .checkbox-wrapper-47 input[type="checkbox"] {
     display: none;
     visibility: hidden;

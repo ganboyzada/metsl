@@ -1,5 +1,4 @@
 <?php
-
 namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
@@ -16,10 +15,10 @@ class RolePermissionPackage extends Seeder
         $role = Role::create(['name' => 'Package','guard_name' => 'sanctum']);
         $permission = Permission::create(['name' => 'create_package','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission); 
-
         $permission = Permission::create(['name' => 'ediet_package','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
        
         
     }
 }
+

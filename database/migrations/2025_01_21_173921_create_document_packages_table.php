@@ -17,7 +17,7 @@ return new class extends Migration
             $table->integer('public_accessible')->default(1);
             $table->unsignedBiginteger('project_id')->unsigned();
             $table->foreign('project_id')->references('id')
-                    ->on('projects')->onDelete('cascade'); 
+                    ->on('projects')->onDelete('cascade');
             $table->timestamps();
         });
     }

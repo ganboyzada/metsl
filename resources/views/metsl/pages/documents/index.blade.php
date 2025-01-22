@@ -20,18 +20,21 @@
 			<!-- Dropdown Menu -->
 			<div class="dropdown absolute left-0 min-w-full w-max bg-gray-800 text-gray-200 shadow-lg hidden">
 				<div  class="text-sm grid grid-cols-1 tab-links bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg text-left">
-					
+		
 					@php
 						$packages = \App\Models\Package::where('project_id',Session::get('projectID'))->get();
 					@endphp
 					@if ($packages->count() > 0)
 						@foreach ($packages as $package)
+
 							<button class="p-3 hover:bg-gray/75" onclick="set_package_id('{{ $package->id }}'); get_documents('{{ $package->id }}')">
-								<i class="mr-1 text-gray-500 dark:text-gray-400" data-feather="folder"></i>	
-								{{ $package->name }}	
+								<i class="mr-1 text-gray-500 dark:text-gray-400" data-feather="folder"></i>
+								{{ $package->name }}
 							</button>
 						@endforeach
 					@endif
+
+					
 					
 				</div>
 			</div>
@@ -83,23 +86,22 @@
 
 
 </div>
+@include('metsl.pages.documents.create_package')
+
 @include('metsl.pages.documents.revisions')
 @include('metsl.pages.documents.uploader')
-@include('metsl.pages.documents.create_package')
 @include('metsl.pages.documents.comments')
 
 <script>
 	
 	$(".projectButton").on('click',function(event) {
 		if(localStorage.getItem("project_tool") == 'documents'){
-
 			get_documents();
 		}
 	});
 	$("#order-by , #order-direction").on('change',function(event) {
 		loadedRows = 0;
 		if(localStorage.getItem("project_tool") == 'documents'){
-
 			get_documents();
 		}
 	});	
@@ -133,14 +135,11 @@
 		let reviewers_selected = detail.reviewers.map(function(item) {
 		  return item.id;
 		})	;
-
 		let all_reviewers_with_selected = doc_reviewers.map(function(item) {
 			item.selected = reviewers_selected.includes(item.value) ? true : false
 			return item;
 		});
 		console.log(doc_reviewers);
-
-
 		reviewers_obj.clearStore();
 		reviewers_obj.setChoices(all_reviewers_with_selected);	
 		var html = ``;
@@ -170,7 +169,6 @@
         if(fetchRes.status != 200){
             $('.error').show();
             $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
-
         }else{
 			$('#li'+i).remove();
             $('.success').show();
@@ -187,7 +185,6 @@
         if(fetchRes.status != 200){
             $('.error').show();
             $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
-
         }else{
 			$('#doc'+i).remove();
             $('.success').show();
@@ -212,19 +209,15 @@
 		let url = 	`{{url('project/documents/edit/${id}')}}`	;
 		let fetchRes = await fetch(url);
 		let detail = await fetchRes.json();
-
-
 		let url2 = 	`{{url('/project/documents/revisions/${id}')}}`	;
 		let fetchRes2 = await fetch(url2);
 		let revisions = await fetchRes2.json();
-
 
 		if(detail.files.length > 0){
 			html+=``;
 			for(var i=0;i<detail.files.length;i++){
 				var file_url = 	`{{asset('storage/project${detail.project_id}/documents${detail.id}/${detail.files[i].file}')}}`;	
 			
-
 				html+=`<tr class="group hover:bg-gray-100 dark:hover:bg-gray-700" style="background-color: gold;">
                     <td class="py-2 px-4">${i + 1}</td>
                     <td class="py-2 px-4">${ detail.title}</td>
@@ -244,7 +237,6 @@
                     html+=`</td>
                 </tr>`;
 
-
 	
 			}
 			
@@ -255,6 +247,7 @@
 			for(let i=0; i<revisions.length; i++){
 				
 				html+=`<tr class="group hover:bg-gray-100 dark:hover:bg-gray-700">
+
                     <td class="py-2 px-4">${z++}</td>
                     <td class="py-2 px-4">${ revisions[i].title}</td>
                     <td class="py-2 px-4">${ revisions[i].user.name}</td>
@@ -286,13 +279,11 @@
                 
                     html+=`</td>
                 </tr>`;
-
 			}
 		}			
 		
 		$('#revisions-list').html(html);
 		feather.replace();
-
 		
 	}
 	let all_documents = {};
@@ -309,6 +300,7 @@
 		const orderBy = $('#order-by').val();
 		const orderDirection = $('#order-direction').val();
 		const DocNo = $('#searchDocuments').val();
+
 		let url = 	`/project/documents/all?package_id=${package_id}&DocNO=${DocNo}&orderBy=${orderBy}&orderDirection=${orderDirection}`;
 
 		

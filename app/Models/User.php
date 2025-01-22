@@ -92,7 +92,7 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id','role_id')           
             ->using(ModelHasRoles::class)
-			->withPivot('project_id');
+			->withPivot(['project_id' , 'job_title']);
     }
 
     public function allPermissions()

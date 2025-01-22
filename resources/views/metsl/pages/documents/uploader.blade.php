@@ -64,7 +64,8 @@
                 <div class="flex gap-2">  
                     <div class="w-1/3">
                         <label for="package" class="block text-sm font-medium dark:text-gray-200 mb-1">Package</label>
-                        <select name="package" id="package" class="w-full px-3 py-2 border dark:bg-gray-800 dark:text-gray-200">
+                        <select name="package_id" id="package_id" class="w-full px-3 py-2 border dark:bg-gray-800 dark:text-gray-200">
+
                             @if ($packages->count() > 0)
                                 @foreach ($packages as $package)
                                     <option value="{{$package->id}}">{{$package->name}}</option>    
@@ -95,7 +96,7 @@
 
             <!-- Submit Button -->
             <button
-                type="submit"
+                type="submit" id="submit_upload_form"
                 class="flex gap-x-2 bg-blue-500 text-white px-4 py-2  hover:bg-blue-600 transition"
             >   <i data-feather="upload"></i>
                 Upload
@@ -211,7 +212,14 @@
 			reviewers_obj.clearStore();
 			reviewers_obj.setChoices(reviewers);
 
-				
+        const accessibles = all_users.accessibles.map(function(item) {
+		  return {'value' : item.id , 'label' : item.name};
+		});
+
+			accessibles_obj.clearStore();
+			accessibles_obj.setChoices(accessibles);
+
+   
 	}
 			
     get_reviewers();
@@ -219,6 +227,10 @@
 
 	document.addEventListener('DOMContentLoaded', () => {
 		reviewers_obj = populateChoices2('reviewers', [], true);
+        accessibles_obj = populateChoices2('accessibles', [], true);
+
+       // assignees_obj = populateChoices2('assignees', [], true);
+
     });
 	
 document.addEventListener('DOMContentLoaded', () => {
