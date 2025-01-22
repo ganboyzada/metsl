@@ -65,6 +65,7 @@
                     <div class="w-1/3">
                         <label for="package" class="block text-sm font-medium dark:text-gray-200 mb-1">Package</label>
                         <select name="package_id" id="package_id" class="w-full px-3 py-2 border dark:bg-gray-800 dark:text-gray-200">
+
                             @if ($packages->count() > 0)
                                 @foreach ($packages as $package)
                                     <option value="{{$package->id}}">{{$package->name}}</option>    

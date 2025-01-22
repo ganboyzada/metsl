@@ -20,18 +20,22 @@
 			<!-- Dropdown Menu -->
 			<div class="dropdown absolute left-0 min-w-full w-max bg-gray-800 text-gray-200 shadow-lg hidden">
 				<div  class="text-sm grid grid-cols-1 tab-links bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg text-left">
+		
 					@php
 						$packages = \App\Models\Package::where('project_id',Session::get('projectID'))->get();
 					@endphp
 					@if ($packages->count() > 0)
 						@foreach ($packages as $package)
 
-					<button class="p-3 hover:bg-gray/75" onclick="set_package_id('{{ $package->id }}'); get_documents('{{ $package->id }}')">
-						<i class="mr-1 text-gray-500 dark:text-gray-400" data-feather="folder"></i>
-						{{ $package->name }}
-					</button>
-					@endforeach
+							<button class="p-3 hover:bg-gray/75" onclick="set_package_id('{{ $package->id }}'); get_documents('{{ $package->id }}')">
+								<i class="mr-1 text-gray-500 dark:text-gray-400" data-feather="folder"></i>
+								{{ $package->name }}
+							</button>
+						@endforeach
 					@endif
+
+					
+					
 				</div>
 			</div>
 		</div>
@@ -188,6 +192,7 @@
         }		
 		
 	}	
+
 	async function get_revisions(id , number){
 		$('#revisions-title').html('Revisions for '+number);
 		current_document_id = id;
@@ -207,6 +212,7 @@
 		let url2 = 	`{{url('/project/documents/revisions/${id}')}}`	;
 		let fetchRes2 = await fetch(url2);
 		let revisions = await fetchRes2.json();
+
 		if(detail.files.length > 0){
 			html+=``;
 			for(var i=0;i<detail.files.length;i++){
@@ -230,17 +236,20 @@
                 
                     html+=`</td>
                 </tr>`;
+
 	
 			}
 			
 		}		
+
 		if(revisions.length > 0){
 			var z = i+1;
 			for(let i=0; i<revisions.length; i++){
 				
 				html+=`<tr class="group hover:bg-gray-100 dark:hover:bg-gray-700">
-					<td class="py-2 px-4">${z++}</td>
-                   <td class="py-2 px-4">${ revisions[i].title}</td>
+
+                    <td class="py-2 px-4">${z++}</td>
+                    <td class="py-2 px-4">${ revisions[i].title}</td>
                     <td class="py-2 px-4">${ revisions[i].user.name}</td>
                     <td class="py-2 px-4">${ revisions[i].upload_date}</td>
                     <td class="py-2 px-4">${ revisions[i].status_text}</td>
@@ -284,6 +293,7 @@
 	function set_package_id(id){
 		package_id = id;
 	}
+
 	async function get_documents(){
 		if(localStorage.getItem("project_tool") == 'documents'){
 		$('#revisions-list').html('');
@@ -292,6 +302,8 @@
 		const DocNo = $('#searchDocuments').val();
 
 		let url = 	`/project/documents/all?package_id=${package_id}&DocNO=${DocNo}&orderBy=${orderBy}&orderDirection=${orderDirection}`;
+
+		
 		let newurl = url.replace('amp;','');
 		let fetchRes = await fetch(newurl);
 		all_documents = await fetchRes.json();
