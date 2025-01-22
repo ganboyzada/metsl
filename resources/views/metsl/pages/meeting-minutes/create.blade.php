@@ -22,6 +22,7 @@
                 <option value="">Health & Safety</option>
                 <option value="">Client</option>
             </select>
+            <input type="text" class="hidden w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200" id="new-meeting-type" name="new-meeting-type" placeholder="Enter new type">
         </div>
 
         <!-- Conference Link -->
