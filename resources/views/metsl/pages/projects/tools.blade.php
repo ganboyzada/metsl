@@ -1,5 +1,5 @@
 
-<div class="has-dropdown w-3/5 sm:w-auto relative inline-block text-left z-10">
+<div class="has-dropdown w-3/5 sm:w-auto relative inline-block text-left z-50">
     <!-- Dropdown Toggle Button -->
     <button class="dropdown-toggle w-full flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-800">
         <span class="flex flex-col items-start text-xs mr-2 font-medium me-auto">Tools <b class="current-selected">Meeting Minutes</b></span>

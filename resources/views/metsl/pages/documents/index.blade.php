@@ -1,7 +1,7 @@
 <!-- Top Toolbar -->
 <div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
 <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
-<div class="flex flex-wrap items-end justify-between gap-4 mb-6 relative z-2">
+<div class="flex flex-wrap items-end justify-between gap-4 mb-6 relative z-10">
 
 	<div class="flex flex-wrap lg:flex-nowrap gap-2 w-full md:w-auto">
 		<div class="relative flex items-center w-full sm:w-1/2 md:w-full">
@@ -9,11 +9,14 @@
                 class="w-full pl-10 pr-4 py-2 border-0 bg-gray-200 dark:bg-gray-700 dark:text-gray-200" />
             <i data-feather="search" class="absolute left-2 top-2"></i>
         </div>
-		<div class="has-dropdown w-full sm:w-1/2 md:w-full relative inline-block text-left z-3">
+		@php
+			$packages = \App\Models\Package::where('project_id',Session::get('projectID'))->get();
+		@endphp
+		<div class="has-dropdown w-full sm:w-1/2 md:w-full relative inline-block text-left">
 			<!-- Dropdown Toggle Button -->
 			<button class="dropdown-toggle w-full flex gap-2 items-center px-3 py-2 bg-gray-200 dark:bg-gray-700">
 				<i data-feather="folder" class="text-gray-500 dark:text-gray-400"></i>
-				<span class="text-sm font-semibold me-auto">Schematics</span>
+				<span class="text-sm font-semibold me-auto" id="current-doc-package">Choose a Package</span>
 				<i data-feather="chevron-down" class="text-gray-400 dark:text-gray-500"></i>
 			</button>
 
@@ -21,13 +24,10 @@
 			<div class="dropdown absolute left-0 min-w-full w-max bg-gray-800 text-gray-200 shadow-lg hidden">
 				<div  class="text-sm grid grid-cols-1 tab-links bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg text-left">
 		
-					@php
-						$packages = \App\Models\Package::where('project_id',Session::get('projectID'))->get();
-					@endphp
+					
 					@if ($packages->count() > 0)
 						@foreach ($packages as $package)
-
-							<button class="p-3 hover:bg-gray/75" onclick="set_package_id('{{ $package->id }}'); get_documents('{{ $package->id }}')">
+							<button class="p-3 hover:bg-gray/75" onclick="set_package_id('{{ $package->id }}', '{{ $package->name }}'); get_documents('{{ $package->id }}')">
 								<i class="mr-1 text-gray-500 dark:text-gray-400" data-feather="folder"></i>
 								{{ $package->name }}
 							</button>
@@ -82,7 +82,7 @@
 </div>
 
 <!-- File Manager Grid -->
-<div id="documents_list" class="relative z-1 grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+<div id="documents_list" class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
 
 
 </div>
@@ -218,7 +218,7 @@
 			for(var i=0;i<detail.files.length;i++){
 				var file_url = 	`{{asset('storage/project${detail.project_id}/documents${detail.id}/${detail.files[i].file}')}}`;	
 			
-				html+=`<tr class="group hover:bg-gray-100 dark:hover:bg-gray-700" style="background-color: gold;">
+				html+=`<tr class="group hover:bg-gray-100 dark:hover:bg-gray-700" ${i==0 ? 'style="background-color: #ffd70026;"' : ''}>
                     <td class="py-2 px-4">${i + 1}</td>
                     <td class="py-2 px-4">${ detail.title}</td>
                     <td class="py-2 px-4">${ detail.user.name}</td>
@@ -290,8 +290,9 @@
 	let current_document_id = 0;
 	let package_id = 0;
 	get_documents();
-	function set_package_id(id){
+	function set_package_id(id, text){
 		package_id = id;
+		$('#current-doc-package').text(text);
 	}
 
 	async function get_documents(){
