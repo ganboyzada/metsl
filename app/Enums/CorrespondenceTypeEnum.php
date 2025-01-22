@@ -4,23 +4,24 @@ namespace App\Enums;
 
 enum  CorrespondenceTypeEnum: string
 {
-    case AI = "AI";
+    case INS = "INS";
 
     case RFI = 'RFI';
 
-    case RFV = 'RFV';
-
     case RFC = 'RFC';
+
+    case NCR = 'NCR';
 
 
     public function color(): string
     {
         return match($this) 
         {
-            self::AI => 'bg-blue-500',
+            self::INS => 'bg-blue-500',
             self::RFI => 'bg-yellow-400',
-            self::RFV => 'bg-green-500',
+            
             self::RFC => 'bg-red-500',
+            self::NCR => 'bg-green-500',
         };
     }
 
@@ -28,10 +29,11 @@ enum  CorrespondenceTypeEnum: string
     {
         return match($this) 
         {
-            self::AI => 'box',
+            self::INS => 'box',
             self::RFI => 'info',
-            self::RFV => 'copy',
+
             self::RFC => 'refresh-cw',
+            self::NCR => 'info',
         };
     }
 }
