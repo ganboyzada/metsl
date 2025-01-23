@@ -329,3 +329,49 @@ li[data-group]{
   .checkbox-wrapper-47 label::before {
     transition: 0.25s all ease;
   }
+
+
+  .loader-frame{
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999999;
+    width: 100vw;
+    height: 100vh;
+    left: 0;
+    top: 0;
+    pointer-events: none;
+    background-color: #00000074;
+    backdrop-filter: blur(20px);
+    transition: 0.4s ease;
+  }
+
+  .loader-frame.disabled{
+    backdrop-filter: blur(0);
+    opacity: 0;
+  }
+
+  .loader {
+    width: 60px;
+    aspect-ratio: 1;
+    border: 5px solid #ffffff4a;
+    border-radius: 50%;
+    position: relative;
+    transform: rotate(45deg);
+  }
+  .loader::before {
+    content: "";
+    position: absolute;
+    inset: -5px;
+    border-radius: 50%;
+    border: 5px solid #ff8800;
+    animation: loading 1.5s infinite linear;
+  }
+  @keyframes loading {
+      0%   {clip-path:polygon(50% 50%,0 0,0    0,0    0   ,0    0   ,0    0   )}
+      25%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0   ,100% 0   ,100% 0   )}
+      50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
+      75%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0    100%,0    100%)}
+      100% {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0    100%,0    0   )}
+  }

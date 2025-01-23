@@ -17,6 +17,18 @@ if (userPreference === 'dark' || (!userPreference && window.matchMedia('(prefers
 window.$ = $;
 window.feather = feather;
 
+function preload(duration){
+    $('#preloader').toggleClass('disabled');
+    setTimeout(function(){
+        $('#preloader').toggleClass('disabled');
+    }, duration);
+}
+
+window.preload = preload;
+
+setTimeout(function(){
+    $('#preloader').toggleClass('disabled');
+}, 2000);
 
 $(document).ready(function() {
     getLocalStorage();

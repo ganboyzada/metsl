@@ -27,6 +27,9 @@
         </div>
     </div>
 
+    <div id="preloader" class="loader-frame">
+        <div class="loader"></div>
+    </div>
     @stack('js')
 
 </body>
