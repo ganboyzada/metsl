@@ -10,176 +10,122 @@
 	<form id="snag-item-form" class="space-y-6"  method="POST" enctype="multipart/form-data">
 		@csrf
 		<input type="hidden" name="project_id" value="{{ \Session::get('projectID') }}"/>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <!-- Title (Required) -->
-            <div>
-                <label for="title" class="block text-sm mb-2 font-medium dark:text-gray-200">Title <span class="text-red-500">*</span></label>
-                <input
-                    type="text"
-                    id="title" name="title"
-                    class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200"
-                    placeholder="Enter title"
-                    required
-                />
-            </div>
 
-            <!-- Number (#) (Required) -->
-            <div>
-                <label for="number" class="block text-sm mb-2 font-medium dark:text-gray-200">Number (#) <span class="text-red-500">*</span></label>
-                <input
-                    type="text"
-                    id="number" name="number"
-                    class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200"
-                    placeholder="Enter number"
-                    required
-                />
-            </div>
+        <div class="flex flex-wrap md:flex-nowrap items-start gap-6">
 
-            <!-- Responsible Member (Single Selector) (Required) -->
-            <div>
-                <label for="responsible-member" class="block text-sm mb-2 font-medium dark:text-gray-200">Responsible Member <span class="text-red-500">*</span></label>
-                <select id="responsible-member" name="responsible_id" class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200" required>
-            
-                </select>
-            </div>
-
-            <!-- Distribution Members (Multiple Selector) -->
-            <div>
-                <label for="distribution-members" class="block text-sm mb-2 font-medium dark:text-gray-200">Distribution Members</label>
-                <select id="distribution-members"  name="participates[]" multiple class="choices w-full border dark:bg-gray-800 dark:text-gray-200">
-            
-                </select>
-            </div>
-
-            <!-- Location -->
-            <div>
-                <label for="location" class="block text-sm mb-2 font-medium dark:text-gray-200">Location</label>
-                <input
-                    type="text"
-                    id="location" name="location"
-                    class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200"
-                    placeholder="Enter location"
-                />
-            </div>
-
-            <!-- Priority -->
-            <div>
-                <label for="priority" class="block text-sm mb-2 font-medium dark:text-gray-200">Priority</label>
-                <select id="priority" name="priority" class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200">
-					@php
-					$status_list = \App\Enums\PunchListPriorityEnum::cases();
-					@endphp
-					@foreach ($status_list as $status)
-						<option value="{{$status->value}}">{{$status->name}}</option>
-					@endforeach
-                </select>
-            </div>
-
-            <!-- Cost Impact -->
-            <div>
-                <label for="cost-impact" class="block text-sm mb-2 font-medium dark:text-gray-200">Cost Impact</label>
-                <select id="cost-impact" name="cost_impact" class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200">
-
-					@php
-					$enums_list = \App\Enums\CorrespondenceCostImpactEnum::cases();
-					@endphp
-					@foreach ($enums_list as $enum)
-						<option value="{{$enum->value}}">{{$enum->name}}</option>
-					@endforeach
-					
-                </select>
-            </div>
-			
-			
-            <div>
-                <label for="status" class="block text-sm mb-2 font-medium dark:text-gray-200">status</label>
-                <select id="status" name="status" class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200">
-
-					@php
-					$enums_list = \App\Enums\PunchListStatusEnum::cases();
-					@endphp
-					@foreach ($enums_list as $enum)
-						<option value="{{$enum->value}}">{{$enum->text()}}</option>
-					@endforeach
-					
-                </select>
-            </div>			
-			
-            <div>
-                <label for="date_notified_at" class="block text-sm mb-2 font-medium dark:text-gray-200">Notified Date at</label>
-                <input
-                    type="date"
-                    name="date_notified_at"
-                    id="date_notified_at"
-                    class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200"
-                    required
-                />
-            </div>			
-			
-
-            <div>
-                <label for="date_resolved_at" class="block text-sm mb-2 font-medium dark:text-gray-200">Resolved Date</label>
-                <input
-                    type="date"
-                    name="date_resolved_at"
-                    id="date_resolved_at"
-                    class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200"
-                    required
-                />
-            </div>			
-
-            
-            <div>
-                <label for="due_date" class="block text-sm mb-2 font-medium dark:text-gray-200">Due Date</label>
-                <input
-                    type="date"
-                    name="due_date"
-                    id="due_date"
-                    class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200"
-                    required
-                />
-            </div>		
-			
-        </div>
-
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-
-            <!-- Description -->
-            <div>
-                <label for="description" class="block text-sm mb-2 dark:text-gray-200">Description</label>
-                <textarea
-                    id="description" name="description"
-                    class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200"
-                    rows="4"
-                    placeholder="Enter description"
-                ></textarea>
-            </div>
-
-            <!-- Attachments (Dropzone) -->
-            <div>
-                <label class="block mb-2 text-sm">Attachments (PDF, JPG, JPEG, PNG)</label>
-                <div id="drop-zone" class="flex flex-col items-center justify-center w-full h-full border-2 border-dashed  dark:bg-gray-800 dark:border-gray-700 border-gray-300">
-                    <div class="flex flex-col items-center justify-center">
-                        <i data-feather="upload" class="w-10 h-10 text-gray-500"></i>
-                        <p class="text-sm text-gray-500">Click to upload or drag and drop</p>
-                        <p class="text-xs text-gray-500">PDF, JPG, JPEG, PNG (max. 10MB)</p>
-                    </div>
-                <input id="file-upload" accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"  name="docs[]" type="file" class="hidden" multiple>
+            <div class="w-full md:w-3/5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                <!-- Title (Required) -->
+                <div class="sm:col-span-2">
+                    <label for="title" class="block text-sm mb-2 font-medium dark:text-gray-200">Title <span class="text-red-500">*</span></label>
+                    <input
+                        type="text"
+                        id="title" name="title"
+                        class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200"
+                        placeholder="Enter title"
+                        required
+                    />
                 </div>
-                <ul id="file-list" class="mt-4 space-y-2">
-                    <!-- Uploaded files will appear here -->
-                </ul>
+
+                <!-- Number (#) (Required) -->
+                <div>
+                    <label for="number" class="block text-sm mb-2 font-medium dark:text-gray-200">Number (#) <span class="text-red-500">*</span></label>
+                    <input
+                        type="text"
+                        id="number" name="number"
+                        class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200"
+                        placeholder="Enter number"
+                        required
+                    />
+                </div>
+
+                <!-- Responsible Member (Single Selector) (Required) -->
+                <div class="md:col-span-2">
+                    <label for="responsible-member" class="block text-sm mb-2 font-medium dark:text-gray-200">Responsible Member <span class="text-red-500">*</span></label>
+                    <select id="responsible-member" name="responsible_id" class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200" required>
+                
+                    </select>
+                </div>
+
+                <!-- Priority -->
+                <div>
+                    <label for="priority" class="block text-sm mb-2 font-medium dark:text-gray-200">Priority</label>
+                    <select id="priority" name="priority" class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200">
+                        @php
+                        $status_list = \App\Enums\PunchListPriorityEnum::cases();
+                        @endphp
+                        @foreach ($status_list as $status)
+                            <option value="{{$status->value}}">{{$status->name}}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Distribution Members (Multiple Selector) -->
+                <div class="sm:col-span-2 md:col-span-3">
+                    <label for="distribution-members" class="block text-sm mb-2 font-medium dark:text-gray-200">Distribution Members</label>
+                    <select id="distribution-members"  name="participates[]" multiple class="choices w-full border dark:bg-gray-800 dark:text-gray-200">
+                
+                    </select>
+                </div>
+
+                <!-- Location -->
+                <div class="md:col-span-2">
+                    <label for="location" class="block text-sm mb-2 font-medium dark:text-gray-200">Location</label>
+                    <input
+                        type="text"
+                        id="location" name="location"
+                        class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200"
+                        placeholder="Enter location"
+                    />
+                </div>
+
+                <div>
+                    <label for="due_date" class="block text-sm mb-2 font-medium dark:text-gray-200">Due Date</label>
+                    <input
+                        type="date"
+                        name="due_date"
+                        id="due_date"
+                        class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200"
+                        required
+                    />
+                </div>		
+                <!-- Submit Button -->
+                <button
+                    type="submit"
+                    class="submit_punch_list_form px-4 py-2 mt-5 bg-blue-500 text-white hover:bg-blue-600"
+                >
+                    Submit Item
+                </button>
             </div>
-        
+
+            <div class="w-full md:w-2/5">
+                <div class="mb-4">
+                    <label for="description" class="block text-sm mb-2 dark:text-gray-200">Description</label>
+                    <textarea
+                        id="description" name="description"
+                        class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200"
+                        rows="4"
+                        placeholder="Enter description"
+                    ></textarea>
+                </div>
+                <!-- Attachments (Dropzone) -->
+                <div>
+                    <label class="block mb-2 text-sm">Attachments (PDF, JPG, JPEG, PNG)</label>
+                    <div id="drop-zone" class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed  dark:bg-gray-800 dark:border-gray-700 border-gray-300">
+                        <div class="flex flex-col items-center justify-center">
+                            <i data-feather="upload" class="w-10 h-10 text-gray-500"></i>
+                            <p class="text-sm text-gray-500">Click to upload or drag and drop</p>
+                            <p class="text-xs text-gray-500">PDF, JPG, JPEG, PNG (max. 10MB)</p>
+                        </div>
+                    <input id="file-upload" accept="image/jpeg,image/gif,image/png,application/pdf,image/x-eps"  name="docs[]" type="file" class="hidden" multiple>
+                    </div>
+                    <ul id="file-list" class="mt-4 space-y-2">
+                        <!-- Uploaded files will appear here -->
+                    </ul>
+                </div>
+            </div>
+
         </div>
 
-        <!-- Submit Button -->
-        <button
-            type="submit"
-            class="submit_punch_list_form px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"
-        >
-            Submit Punch Item
-        </button>
     </form>
 </div>
 <script>

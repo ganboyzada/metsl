@@ -4,19 +4,19 @@ namespace App\Enums;
 
 enum  PunchListStatusEnum: int
 {
-    case CLOSED = 0;
+    case PENDING = 0;
 
-    case WORKREQUIRED = 1;
+    case REJECTED = 1;
 
-    case WORKNOTACCEPTED = 2;
+    case ACCEPTED = 2;
 
     public function text(): string
     {
         return match($this) 
         {
-            self::CLOSED => 'Closed',
-            self::WORKREQUIRED => 'Work Required',
-            self::WORKNOTACCEPTED => 'Work Not Required',
+            self::PENDING => 'Pending',
+            self::REJECTED => 'Rejected',
+            self::ACCEPTED => 'Accepted',
         };
     }
 
@@ -24,9 +24,9 @@ enum  PunchListStatusEnum: int
     {
         return match($this) 
         {
-            self::CLOSED => '#374151',
-            self::WORKREQUIRED => '#ff5a5a',
-            self::WORKNOTACCEPTED => '#eab308'
+            self::PENDING => '#374151',
+            self::REJECTED => '#ff5a5a',
+            self::ACCEPTED => '#4ab342'
         };
     }
 }
