@@ -173,7 +173,7 @@
             <p class="mb-2 text-gray-700 dark:text-gray-200">Assign specific roles to the stakeholders selected in the previous step.</p>
 
             <!-- Stakeholder Grid -->
-            <div id="stakeholderGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div id="stakeholderGrid" class="stakeholder-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                 <!-- Stakeholder cards will be generated here -->
             </div>
 
@@ -286,19 +286,19 @@
                         </div>
     
                         <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Custom Permissions</label>
-                            <div class="grid grid-cols-2 gap-2">
+                            <label class="block text-gray-700 dark:text-gray-200 mb-3">Custom Permissions</label>
+                            <div class="grid grid-cols-2 gap-6">
                                 @if($permissions->count() > 0)
-                                @foreach($permissions as $permission)   
-                                    <label class="inline-flex items-center">
-                                        <input type="checkbox" value="{{  $permission->name }}" class="form-checkbox text-blue-600 dark:text-blue-300 mr-2" 
-                                        onchange="handleCustomPermissions()"> {{ str_replace("_"," ",$permission->name)   }}
-                                    </label>                                                        
+                                @foreach($permissions as $permission)  
+                                <div class="checkbox-wrapper-47"> 
+                                    <input type="checkbox" id="p-{{ $permission->id }}" value="{{  $permission->name }}" class="form-checkbox text-blue-600 dark:text-blue-300 mr-2" 
+                                    onchange="handleCustomPermissions()">
+                                    <label class="text-sm" for="p-{{ $permission->id }}">
+                                         {{ ucwords(str_replace("_"," ",$permission->name)) }}
+                                    </label>          
+                                </div>                                              
                                 @endforeach
                                 @endif
-    
-    
-                            
                             </div>
                         </div>
     
@@ -677,32 +677,43 @@ const stakeholders = [
 
 ];
 
-// Function to render stakeholder grid
-function renderStakeholderGrid() {
-    const grid = document.getElementById("stakeholderGrid");
-    $('#Stakeholders').html('');
-    grid.innerHTML = ""; // Clear existing content
-    if(client_stakeholders.length > 0){
-        client_stakeholders.forEach(stakeholder => {
+function stakeholderCard(users, title, grid){
+    if(users.length > 0){
+        users.forEach(stakeholder => {
+
             // Create stakeholder card
             const card = document.createElement("div");
-            card.classList.add("bg-gray-100", "dark:bg-gray-700", "rounded-lg", "p-4", "shadow-md", "cursor-pointer");
+            card.classList.add("stakeholder-card", "bg-gray-800", "rounded-lg", "p-4", "shadow-md", "cursor-pointer");
             card.onclick = () => openRoleAssignmentModal(stakeholder);
+
+            const stakeholderGroup = document.createElement("div");
+            stakeholderGroup.classList.add("mb-3", "text-sm", "text-blue-500"); 
+            stakeholderGroup.textContent = title;
 
             // Stakeholder info
             const name = document.createElement("h4");
-            name.classList.add("text-lg", "font-semibold", "text-gray-800", "dark:text-gray-200");
+            name.classList.add("text-lg", "font-semibold", "text-gray-200");
             name.textContent = stakeholder.name;
 
             const role = document.createElement("p");
-            role.classList.add("text-sm", "text-gray-600", "dark:text-gray-400");
+            role.classList.add("stakeholder-role", "text-sm", "text-gray-400");
             role.textContent = stakeholder.role || "No role assigned";
 
-            const permissions = document.createElement("p");
-            permissions.classList.add("text-sm", "text-gray-600", "dark:text-gray-400");
-            permissions.textContent = stakeholder.permissions.length ? `Permissions: ${stakeholder.permissions.join(", ")}` : "No permissions assigned";
+            const permissions = document.createElement("div");
+            permissions.classList.add("permissions", "flex", "flex-wrap", "gap-2", "text-sm", "text-white");
+            
+            if(stakeholder.permissions.length){
+                stakeholder.permissions.forEach(permission => {
+                    $(permissions).append(`
+                        <span class="px-2 py-1 rounded-full bg-blue-900">${permission.replace(/_/g, ' ').replace(/\b\w/g, char => char.toUpperCase())}</span>
+                    `);
+                });
+            } else{
+                permissions.textContent = "No permissions assigned";
+            }
 
             // Append elements to card
+            card.appendChild(stakeholderGroup);
             card.appendChild(name);
             card.appendChild(role);
             card.appendChild(permissions);
@@ -738,173 +749,19 @@ function renderStakeholderGrid() {
 
         });
     }
+}
+
+// Function to render stakeholder grid
+function renderStakeholderGrid() {
+    const grid = document.getElementById("stakeholderGrid");
+    $('#Stakeholders').html('');
+    grid.innerHTML = ""; // Clear existing content
+
+    stakeholderCard(client_stakeholders, 'Client', grid);
+    stakeholderCard(contractor_stakeholders, 'Contractor Employee', grid);
+    stakeholderCard(designTeam_stakeholders, 'Design Team Member', grid);
+    stakeholderCard(projectManager_stakeholders, 'Project Manager', grid);
  
-    if(contractor_stakeholders.length > 0){
-        contractor_stakeholders.forEach(stakeholder => {
-            // Create stakeholder card
-            const card = document.createElement("div");
-            card.classList.add("bg-gray-100", "dark:bg-gray-700", "rounded-lg", "p-4", "shadow-md", "cursor-pointer");
-            card.onclick = () => openRoleAssignmentModal(stakeholder);
-
-            // Stakeholder info
-            const name = document.createElement("h4");
-            name.classList.add("text-lg", "font-semibold", "text-gray-800", "dark:text-gray-200");
-            name.textContent = stakeholder.name;
-
-            const role = document.createElement("p");
-            role.classList.add("text-sm", "text-gray-600", "dark:text-gray-400");
-            role.textContent = stakeholder.role || "No role assigned";
-
-            const permissions = document.createElement("p");
-            permissions.classList.add("text-sm", "text-gray-600", "dark:text-gray-400");
-            permissions.textContent = stakeholder.permissions.length ? `Permissions: ${stakeholder.permissions.join(", ")}` : "No permissions assigned";
-
-
-            // Append elements to card
-            card.appendChild(name);
-            card.appendChild(role);
-            card.appendChild(permissions);
-
-
-            // Append card to grid
-            grid.appendChild(card);
-
-
-            let stakholder_review = `<div class="p-4 border  bg-gray-800 border-gray-700">
-                <div class="flex items-center mb-4">
-                    <i data-feather="user" class="w-6 h-6 mr-2 text-gray-500"></i>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user w-6 h-6 mr-2 text-gray-500"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-
-                    <div>
-                        <p class="text-sm font-medium">${stakeholder.name}</p>
-                        <p class="text-xs text-gray-400">${stakeholder.job_title}</p>
-                        <p class="text-xs text-gray-400">Contractor</p>
-                    </div>
-                </div>
-                <p class="text-xs text-gray-400 mb-1">Role</p>
-                <p class="text-sm font-medium mb-2">${stakeholder.role || "No role assigned"}</p>
-                <p class="text-xs text-gray-400 mb-1">Permissions</p>
-                <ul class="list-disc pl-5 text-xs text-gray-300">`;
-                    stakeholder.permissions.forEach(function(permission){
-                        stakholder_review+= `<li>${permission}</li>`;
-
-                    });
-                    stakholder_review+= !stakeholder.permissions.length ?  `No permissions assigned` : '';
-                stakholder_review+= `</ul>
-            </div>`;
-
-           $('#Stakeholders').append(stakholder_review);
-
-        });
-    }    
-
-    if(designTeam_stakeholders.length > 0){
-        designTeam_stakeholders.forEach(stakeholder => {
-            // Create stakeholder card
-            const card = document.createElement("div");
-            card.classList.add("bg-gray-100", "dark:bg-gray-700", "rounded-lg", "p-4", "shadow-md", "cursor-pointer");
-            card.onclick = () => openRoleAssignmentModal(stakeholder);
-
-            // Stakeholder info
-            const name = document.createElement("h4");
-            name.classList.add("text-lg", "font-semibold", "text-gray-800", "dark:text-gray-200");
-            name.textContent = stakeholder.name;
-
-            const role = document.createElement("p");
-            role.classList.add("text-sm", "text-gray-600", "dark:text-gray-400");
-            role.textContent = stakeholder.role || "No role assigned";
-
-            const permissions = document.createElement("p");
-            permissions.classList.add("text-sm", "text-gray-600", "dark:text-gray-400");
-            permissions.textContent = stakeholder.permissions.length ? `Permissions: ${stakeholder.permissions.join(", ")}` : "No permissions assigned";
-
-            // Append elements to card
-            card.appendChild(name);
-            card.appendChild(role);
-            card.appendChild(permissions);
-
-            // Append card to grid
-            grid.appendChild(card);
-            let stakholder_review = `<div class="p-4 border  bg-gray-800 border-gray-700">
-                <div class="flex items-center mb-4">
-                    <i data-feather="user" class="w-6 h-6 mr-2 text-gray-500"></i>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user w-6 h-6 mr-2 text-gray-500"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-
-                    <div>
-                        <p class="text-sm font-medium">${stakeholder.name}</p>
-                        <p class="text-xs text-gray-400">${stakeholder.job_title}</p>
-                        <p class="text-xs text-gray-400">Design Team</p>
-                    </div>
-                </div>
-                <p class="text-xs text-gray-400 mb-1">Role</p>
-                <p class="text-sm font-medium mb-2">${stakeholder.role || "No role assigned"}</p>
-                <p class="text-xs text-gray-400 mb-1">Permissions</p>
-                <ul class="list-disc pl-5 text-xs text-gray-300">`;
-                    stakeholder.permissions.forEach(function(permission){
-                        stakholder_review+= `<li>${permission}</li>`;
-
-                    });
-                    stakholder_review+= !stakeholder.permissions.length ?  `No permissions assigned` : '';
-                stakholder_review+= `</ul>
-            </div>`;
-
-           $('#Stakeholders').append(stakholder_review);           
-        });
-    }
- 
-    if(projectManager_stakeholders.length > 0){
-        projectManager_stakeholders.forEach(stakeholder => {
-            // Create stakeholder card
-            const card = document.createElement("div");
-            card.classList.add("bg-gray-100", "dark:bg-gray-700", "rounded-lg", "p-4", "shadow-md", "cursor-pointer");
-            card.onclick = () => openRoleAssignmentModal(stakeholder);
-
-            // Stakeholder info
-            const name = document.createElement("h4");
-            name.classList.add("text-lg", "font-semibold", "text-gray-800", "dark:text-gray-200");
-            name.textContent = stakeholder.name;
-
-            const role = document.createElement("p");
-            role.classList.add("text-sm", "text-gray-600", "dark:text-gray-400");
-            role.textContent = stakeholder.role || "No role assigned";
-
-            const permissions = document.createElement("p");
-            permissions.classList.add("text-sm", "text-gray-600", "dark:text-gray-400");
-            permissions.textContent = stakeholder.permissions.length ? `Permissions: ${stakeholder.permissions.join(", ")}` : "No permissions assigned";
-
-            // Append elements to card
-            card.appendChild(name);
-            card.appendChild(role);
-            card.appendChild(permissions);
-
-            // Append card to grid
-            grid.appendChild(card);
-
-            let stakholder_review = `<div class="p-4 border  bg-gray-800 border-gray-700">
-                <div class="flex items-center mb-4">
-                    <i data-feather="user" class="w-6 h-6 mr-2 text-gray-500"></i>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1" stroke-linecap="round" stroke-linejoin="round" class="feather feather-user w-6 h-6 mr-2 text-gray-500"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>        
-                    <div>
-                        <p class="text-sm font-medium">${stakeholder.name}</p>
-                        <p class="text-xs text-gray-400">${stakeholder.job_title}</p>
-                        <p class="text-xs text-gray-400">Project Manager</p>
-                    </div>
-                </div>
-                <p class="text-xs text-gray-400 mb-1">Role</p>
-                <p class="text-sm font-medium mb-2">${stakeholder.role || "No role assigned"}</p>
-                <p class="text-xs text-gray-400 mb-1">Permissions</p>
-                <ul class="list-disc pl-5 text-xs text-gray-300">`;
-                    stakeholder.permissions.forEach(function(permission){
-                        stakholder_review+= `<li>${permission}</li>`;
-
-                    });
-                    stakholder_review+= !stakeholder.permissions.length ?  `No permissions assigned` : '';
-                stakholder_review+= `</ul>
-            </div>`;
-
-           $('#Stakeholders').append(stakholder_review);            
-        });
-    }  
 
     /*
     stakeholders.forEach(stakeholder => {
