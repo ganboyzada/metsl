@@ -42,11 +42,8 @@ class CorrespondenceRequest extends FormRequest
                 'cost_impact' => 'required',
                 "assignees"    => ['required','array'],
                 "distribution"    => ['required','array'],
-                "recieved_from"    => "required",
                 'docs' => 'nullable',
-                'recieved_date'=>['required']
 
-        
             ]; 
         }else{
             return [
@@ -68,10 +65,7 @@ class CorrespondenceRequest extends FormRequest
                 'cost_impact' => 'required',
                 "assignees"    => ['required','array'],
                 "distribution"    => ['required','array'],
-                "recieved_from"    => "required",
                 'docs' => 'required',
-                'recieved_date'=>['required']
-
         
             ]; 
         }

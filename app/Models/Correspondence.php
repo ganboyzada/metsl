@@ -28,7 +28,7 @@ class Correspondence extends Model
         ];
     }
 
-    protected $fillable = ['reply_correspondence_id','created_date','created_by','project_id','number', 'subject','type','status' ,'program_impact','cost_impact','description','recieved_from','recieved_date'];
+    protected $fillable = ['reply_correspondence_id','created_date','created_by','project_id','number', 'subject','type','status' ,'program_impact','cost_impact','description'];
 
     public function files(): HasMany
     {

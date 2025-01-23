@@ -29,7 +29,7 @@
 
                 <input type="hidden" id="user_index" name="user_index">
                 <div class="mb-4">
-                    <label class="block text-gray-700 dark:text-gray-200 mb-1">image</label>
+                    <label class="block text-gray-700 dark:text-gray-200 mb-1">Image</label>
                     <input   accept="image/*" type="file" name="image" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" >
                 </div>  
                 <img src="" id="user_image" class="w-32 h-32 object-cover mt-2"/>                  
@@ -54,12 +54,12 @@
                     <input type="email" name="email" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
                 </div>
                 <div class="mb-4">
-                    <label class="block text-gray-700 dark:text-gray-200 mb-1">Specialty</label>
+                    <label class="block text-gray-700 dark:text-gray-200 mb-1">Field of specialty</label>
                     <input type="text" name="specialty" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
                 </div>
                 <div class="flex justify-end mt-6">
-                    <button type="button" onclick="closeCreateUserModal()" class="text-gray-600 dark:text-gray-300 mr-3">Cancel</button>
-                    <button type="submit" id="submitBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Update User</button>
+                    <button type="button" data-modal="createUserModal" class="modal-toggler text-gray-600 dark:text-gray-300 mr-5">Cancel</button>
+                    <button type="submit" id="submitBtn" class="bg-blue-500 text-white px-4 py-2">Update User</button>
                 </div>
             </form>
         </div>
@@ -153,7 +153,6 @@
         if(localStorage.getItem("project_tool") == 'stakeholders'){
 		const search = $('#searchStakeholders').val();		
 		let url =`project/stakeholders/all?search=${search}`;
-		//alert(url);
 		
 		let fetchRes = await fetch(url);
 		const all_stakeholders = await fetchRes.json();

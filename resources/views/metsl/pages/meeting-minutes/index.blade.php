@@ -49,7 +49,7 @@
             <thead class="bg-gray-100 dark:bg-gray-800 text-sm text-left">
                 <tr>
                     <th class="px-4 py-2 font-light">Title</th>
-                    <th class="px-4 py-2 font-light">Number</th>
+                    <th class="px-4 py-2 font-light">Meeting Type</th>
                     <th class="px-4 py-2 font-light">Planned Date</th>
                     <th class="px-4 py-2 font-light">Status</th>
                     <th class="px-4 py-2 font-light">Start Time</th>

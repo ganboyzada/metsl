@@ -75,7 +75,6 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
                         'subject',
                         'type',
                         'created_date',
-                        'recieved_date',
                         'description'
                        ],
                     'LIKE',

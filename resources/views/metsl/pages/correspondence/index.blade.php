@@ -51,9 +51,8 @@
                     <th class="px-6 py-3 font-light">Subject</th>
                     <th class="px-6 py-3 font-light">Last Activity</th>
                     <th class="px-6 py-3 font-light">Assignees</th>
-                    <th class="px-6 py-3 font-light">Created By</th>
-                    <th class="px-6 py-3 font-light">Issued On</th>
-                    <th class="px-6 py-3 font-light">Due Date</th>
+                    <th class="px-6 py-3 font-light">Created by</th>
+                    <th class="px-6 py-3 font-light">Created at</th>
                     <th class="px-6 py-3 font-light">Status</th>
                     <td class="px-6 py-3 font-light">Actions</td>
                 </tr>
@@ -165,9 +164,8 @@
                         <td class="px-6 py-3">${row.assignees}</td>
                         <td class="px-6 py-3">${(row.created_by != null) ? row.created_by.name : ''}</td>
                         <td class="px-6 py-3">${row.created_date}</td>
-                        <td class="px-6 py-3">${row.recieved_date ?? ''}</td>
                         <td class="px-6 py-3">
-                            <span class="px-3 py-1 rounded-full text-xs  ${row.status_color[1]}">${row.status_color[0]}</span>
+                            <span class="px-3 py-1 rounded-full text-xs font-bold ${row.status_color[1]}">${row.status_color[0]}</span>
                         </td>
                         <td class="px-4 py-2 inline-flex space-x-4 items-center">
                             <button onclick="deleteCorrespondence(${row.id}  , ${i})" class="text-red-500 dark:text-red-400 hover:text-red-300">
