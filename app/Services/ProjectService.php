@@ -170,13 +170,17 @@ class ProjectService
                 return [
                     'id'=> $client->id,
                     'name' => $client->name,
+                    'company'=> $client->company ? $client->company->name : '',
                     'role'=>$client->allRoles[0]->name,
+                    'job_title'=>$client->allRoles[0]->job_title,
                     'permissions' => $permissions
                 ];
             }else{
                 return [
                     'id'=> $client->id,
                     'name' => $client->name,
+                    'company'=> $client->company ? $client->company->name : '',
+                    'job_title'=> '',
                     'role'=>'',
                     'permissions' => []
                 ];
@@ -194,14 +198,18 @@ class ProjectService
                 return [
                     'id'=> $contractor->id,
                     'name' => $contractor->name,
+                    'company'=> $contractor->company ? $contractor->company->name : '',
                     'role'=>$contractor->allRoles[0]->name,
+                    'job_title'=>$contractor->allRoles[0]->job_title,
                     'permissions' => $permissions
                 ];
             }else{
                 return [
                     'id'=> $contractor->id,
                     'name' => $contractor->name,
+                    'company'=> $contractor->company ? $contractor->company->name : '',
                     'role'=>'',
+                    'job_title'=> '',
                     'permissions' => []
                 ];
             }
@@ -220,14 +228,18 @@ class ProjectService
                 return [
                     'id'=> $design_team->id,
                     'name' => $design_team->name,
+                    'company'=> $design_team->company ? $design_team->company->name : '',
                     'role'=>$design_team->allRoles[0]->name,
+                    'job_title'=>$design_team->allRoles[0]->job_title,
                     'permissions' => $permissions
                 ];
             }else{
                 return [
                     'id'=> $design_team->id,
                     'name' => $design_team->name,
+                    'company'=> $design_team->company ? $design_team->company->name : '',
                     'role'=>'',
+                    'job_title'=> '',
                     'permissions' => []
                 ];
             }
@@ -244,14 +256,18 @@ class ProjectService
                 return [
                     'id'=> $project_manager->id,
                     'name' => $project_manager->name,
+                    'company'=> $project_manager->company ? $project_manager->company->name : '',
                     'role'=>$project_manager->allRoles[0]->name,
+                    'job_title'=>$project_manager->allRoles[0]->job_title,
                     'permissions' => $permissions
                 ];
             }else{
                 return [
                     'id'=> $project_manager->id,
                     'name' => $project_manager->name,
+                    'company'=> $project_manager->company ? $project_manager->company->name : '',
                     'role'=>'',
+                    'job_title'=> '',
                     'permissions' => []
                 ];
             }

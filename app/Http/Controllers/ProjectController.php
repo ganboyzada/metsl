@@ -167,6 +167,7 @@ class ProjectController extends Controller
         $contractors = $this->contractorService->all();
         $design_teams = $this->designTeamService->all();
         $project_managers = $this->projectmanagerService->all();
+        $companies = Company::where('active', true)->get()->keyBy('id');
         $roles = Role::with('permissions')->get();
         $role_permission_arr = [];
         if($roles->count() > 0){
@@ -195,7 +196,6 @@ class ProjectController extends Controller
                 \DB::rollback();
                 return response()->json(['error' => $e->getMessage()]);
             }
-
                        
             return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$model]);
 

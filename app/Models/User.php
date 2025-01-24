@@ -97,6 +97,12 @@ class User extends Authenticatable
 			->withPivot(['project_id' , 'job_title']);
     }
 
+    // public function jobTitle(){
+    //     return $this->belongsToMany(ModelHasRoles::class, 'model_has_roles', 'model_id')           
+    //         ->using(ModelHasRoles::class)
+	// 		->withPivot(['project_id' , 'job_title']);
+    // }
+
     public function allPermissions()
     {
         return $this->belongsToMany(Permission::class, 'model_has_permissions', 'model_id','permission_id')			

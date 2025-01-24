@@ -742,7 +742,6 @@ function stakeholderCard(users, title, grid){
             }
 
             card.appendChild(name);
-            
             card.appendChild(role);
             card.appendChild(permissions);
 
@@ -790,7 +789,6 @@ function renderStakeholderGrid() {
     grid.innerHTML = ""; // Clear existing content
 
     stakeholderCard(client_stakeholders, 'Client', grid);
-    console.log(contractor_stakeholders);
     stakeholderCard(contractor_stakeholders, 'Contractor Employee', grid);
     stakeholderCard(designTeam_stakeholders, 'Design Team Member', grid);
     stakeholderCard(projectManager_stakeholders, 'Project Manager', grid);
