@@ -44,7 +44,7 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                     }
                     $user = $this->find($row->id); 
                     $user->roles()->wherePivot('project_id',$project_id)->detach();
-                    $user->roles()->attach($role->id, ['project_id'=>$project_id , 'job_title'=>$row->job_title]);
+                    $user->roles()->attach($role->id, ['project_id'=>$project_id , 'job_title'=>$row->job_title ?? NULL]);
                     $user->permissions()->wherePivot('project_id',$project_id)->detach();
                     $user->permissions()->attach($role->permissions, ['project_id'=>$project_id]);
                     

@@ -130,11 +130,13 @@
                 <ul id="file-list" class="mt-4 space-y-2">
                     <!-- Uploaded files will appear here -->
                 </ul>
-                <!-- Assignees -->
-                <div class="relative">
-                    <label for="linked_documents" class="block text-sm font-medium mb-1">Linked Documents</label>
-                    <select id="linked_documents" name="linked_documents[]" multiple class="w-full"></select>
-                </div>
+            
+				
+			<div class="relative">
+                <label for="linked_documents" class="block text-sm font-medium mb-1">Linked Documents</label>
+                <select id="linked_documents" name="linked_documents[]" multiple class="w-full"></select>
+            </div>
+			
             </div>
         </div>
 
@@ -253,14 +255,20 @@
 			distribution_obj.clearStore();
 			distribution_obj.setChoices(distribution);			
 			
-			const allusers = all_users.users.map(function(item) {
-			  return {'value' : item.id , 'label' : item.name};
+			// const allusers = all_users.users.map(function(item) {
+			  // return {'value' : item.id , 'label' : item.name};
+			// });	
+			
+			
+			// received_obj.clearStore();
+			// received_obj.setChoices(allusers);
+			let files =  {!! json_encode($files) !!};
+			const allfiles = files.map(function(item) {
+			  return {'value' : item.file_id+'-'+item.revisionid  , 'label' : item.project_document.number};
 			});	
-			
-			
-			//populateChoices3('received-from', allusers);		
-			received_obj.clearStore();
-			received_obj.setChoices(allusers);
+			linked_documents.clearStore();
+			linked_documents.setChoices(allfiles);				
+		
 		
 	}
 			
@@ -268,7 +276,7 @@
     document.addEventListener('DOMContentLoaded', () => {
 		assignees_obj = populateChoices2('assignees', [], true);		
 		distribution_obj = populateChoices2('distribution', [], true);	
-		received_obj = populateChoices2('received-from', [], false);		
+		linked_documents = populateChoices2('linked_documents', [], false);		
 		
     }); 
 

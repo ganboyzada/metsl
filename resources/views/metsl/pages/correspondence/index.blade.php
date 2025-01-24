@@ -171,9 +171,7 @@
                             <button onclick="deleteCorrespondence(${row.id}  , ${i})" class="text-red-500 dark:text-red-400 hover:text-red-300">
                                 <i data-feather="trash" class="w-5 h-5"></i>
                             </button>
-                            <a target="_blank" href="${url2}" class="text-gray-500 dark:text-gray-400 hover:text-gray-400">
-                                <i data-feather="edit" class="w-5 h-5"></i>
-                            </a>
+                           
                         </td>
                     `;
                     feather.replace();	

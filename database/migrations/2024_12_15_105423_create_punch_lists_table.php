@@ -19,7 +19,7 @@ return new class extends Migration
 			$table->char('cost_impact')->nullable();
 			$table->char('priority')->nullable();
 			$table->LongText('description')->nullable();
-			$table->integer('status')->default(1);
+			$table->integer('status')->default(0);
             
             $table->date('date_notified_at')->nullable();
             $table->date('date_resolved_at')->nullable();

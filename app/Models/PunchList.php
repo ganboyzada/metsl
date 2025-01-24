@@ -46,4 +46,10 @@ class PunchList extends Model
     {
         return $this->belongsTo(User::class , 'closed_by');
     }
+
+    public function replies(): hasMany
+    {
+
+        return $this->hasMany(PunchListReplies::class, 'punch_list_id');
+    }
 }

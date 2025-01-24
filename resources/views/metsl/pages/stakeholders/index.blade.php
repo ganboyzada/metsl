@@ -32,30 +32,41 @@
                     <label class="block text-gray-700 dark:text-gray-200 mb-1">Image</label>
                     <input   accept="image/*" type="file" name="image" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" >
                 </div>  
-                <img src="" id="user_image" class="w-32 h-32 object-cover mt-2"/>                  
-                <div class="mb-4">
-                    <label class="block text-gray-700 dark:text-gray-200 mb-1">Name</label>
-                    <input type="text" name="first_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 dark:text-gray-200 mb-1">Surname</label>
-                    <input type="text" name="last_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 dark:text-gray-200 mb-1">Mobile Phone</label>
-                    <input type="text" name="mobile_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 dark:text-gray-200 mb-1">Office Phone</label>
-                    <input type="text" name="office_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 dark:text-gray-200 mb-1">Email (Login Credential)</label>
-                    <input type="email" name="email" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                </div>
-                <div class="mb-4">
-                    <label class="block text-gray-700 dark:text-gray-200 mb-1">Field of specialty</label>
-                    <input type="text" name="specialty" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                <img src="" id="user_image" class="w-32 h-32 object-cover mt-2"/>   
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div class="md:col-span-2">
+                        <label for="company_id" class="block text-sm mb-4 font-medium dark:text-gray-200">Company (Optional)</label>
+                        <select name="company_id" id="user_company" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" id="company_id">
+                            <option value="" selected>None</option>
+                        @foreach(\App\Models\Company::where('active', true)->get() as $company)
+                            <option value="{{ $company->id }}">{{ $company->name }}</option>
+                        @endforeach
+                        </select>
+                    </div>               
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Name</label>
+                        <input type="text" name="first_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Surname</label>
+                        <input type="text" name="last_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Mobile Phone</label>
+                        <input type="text" name="mobile_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Office Phone</label>
+                        <input type="text" name="office_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Email (Login Credential)</label>
+                        <input type="email" name="email" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                    </div>
+                    <div class="mb-4">
+                        <label class="block text-gray-700 dark:text-gray-200 mb-1">Field of specialty</label>
+                        <input type="text" name="specialty" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                    </div>
                 </div>
                 <div class="flex justify-end mt-6">
                     <button type="button" data-modal="createUserModal" class="modal-toggler text-gray-600 dark:text-gray-300 mr-5">Cancel</button>
@@ -124,6 +135,7 @@
             let currentStakeholder = allStakeholder[i];
             console.log(currentStakeholder);
             $('#user_type').val(currentStakeholder.userable_type);
+            $('[name="company_id"]').val(currentStakeholder.company_id);
             $('[name="first_name"]').val(currentStakeholder.userable.first_name);
             $('[name="last_name"]').val(currentStakeholder.userable.last_name);
             $('[name="mobile_phone"]').val(currentStakeholder.userable.mobile_phone);
@@ -137,7 +149,7 @@
         }
 
 
-		$(".projectButton").on('click',function(event) {
+	$(".projectButton").on('click',function(event) {
 		
 		if(localStorage.getItem("project_tool") == 'stakeholders'){
 

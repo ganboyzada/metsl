@@ -53,6 +53,37 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
        // dd('ok');
     }
 
+   /**
+    * @param array $data 
+    * @param Model $correspondence 
+    * 
+    */
+    public function add_Linked_documents_to_correspondence($data , $correspondence): void
+    {
+        try{
+            if(!$correspondence){
+                throw new \Exception('Record not find'); 
+            }
+            //dd($data['linked_documents']);
+            if(count($data['linked_documents']) > 0){
+                $correspondence->documentFiles()->detach();
+                foreach($data['linked_documents'] as $doc){
+                    $ids = explode('-' , $doc);
+                    $file_id = $ids[0];
+                    $revision_id = $ids[1] ?? NULL;
+                    $correspondence->documentFiles()->attach($file_id, ['revision_id'=>$revision_id]);
+
+                }
+            }
+            
+
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }    
+       // dd('ok');
+    }
+
+
     /**
     * @param int $project_id 
     * @param \Request $request

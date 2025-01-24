@@ -303,7 +303,7 @@
 									<i data-feather="delete" class="w-5 h-5"></i>
 								</button>
 								<a target="_blank" href="${url}" class="text-gray-500 dark:text-gray-400 hover:text-gray-300">
-									<i data-feather="edit" class="w-5 h-5"></i>
+									<i data-feather="file" class="w-5 h-5"></i>
 								</a>
 							</td>
 					

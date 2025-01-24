@@ -33,6 +33,8 @@ class CorrespondenceService
 
             $correspondence =  $this->correspondenceRepository->create($data);
             $this->correspondenceRepository->add_users_to_correspondence($data,$correspondence );
+            $this->correspondenceRepository->add_Linked_documents_to_correspondence($data,$correspondence );
+
             $path = Storage::url('/project'.$data['project_id'].'/correspondence'.$correspondence->id);
             
             \File::makeDirectory($path, $mode = 0777, true, true);        
@@ -62,6 +64,10 @@ class CorrespondenceService
             $this->correspondenceRepository->update($data , $id);
             $correspondence = $this->correspondenceRepository->find($data['id']);
             $this->correspondenceRepository->add_users_to_correspondence($data,$correspondence );
+
+            $this->correspondenceRepository->add_Linked_documents_to_correspondence($data,$correspondence );
+
+
             $path = Storage::url('/project'.$data['project_id'].'/correspondence'.$correspondence->id);
             
             \File::makeDirectory($path, $mode = 0777, true, true);        
@@ -105,7 +111,8 @@ class CorrespondenceService
         'distributionMembers',
          'ReceivedFrom', 
          
-         'files:id,correspondence_id,file,size'
+         'files:id,correspondence_id,file,size',
+         'documentFiles'
          
          ])->find($id);
         
@@ -118,7 +125,8 @@ class CorrespondenceService
         'distributionMembers.userable',
          'ReceivedFrom.userable', 
          
-         'files:id,correspondence_id,file,size'
+         'files:id,correspondence_id,file,size',
+         'documentFiles'
          
          ])->find($id);
         

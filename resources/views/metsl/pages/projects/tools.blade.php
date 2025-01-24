@@ -18,13 +18,13 @@
             <button data-tab="meetings" class=" py-3 px-4"  onclick="set_in_local_storage('meeting_planing'); get_meeting_planing()">
                 <i data-feather="calendar" class="mr-2"></i> Meeting Minutes
             </button>
-            <button data-tab="stakeholders" class="py-3 px-4" onclick="set_in_local_storage('stakeholders');">
+            <button data-tab="stakeholders" class="py-3 px-4" onclick="set_in_local_storage('stakeholders'); get_stakeholders()">
                 <i data-feather="users" class="mr-2"></i> Stakeholders
             </button>
-            <button data-tab="punch-list" class="py-3 px-4"   onclick="set_in_local_storage('punch_list');">
+            <button data-tab="punch-list" class="py-3 px-4"   onclick="set_in_local_storage('punch_list'); get_punch_list()">
                 <i data-feather="list" class="mr-2"></i> Punch List
             </button>
-            <button data-tab="task-planner" class="py-3 px-4"   onclick="set_in_local_storage('task_planner');">
+            <button data-tab="task-planner" class="py-3 px-4"   onclick="set_in_local_storage('task_planner'); get_tasks()">
                 <i data-feather="check-circle" class="mr-2"></i> Last Planner
             </button>
             {{--

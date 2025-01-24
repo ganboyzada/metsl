@@ -145,6 +145,12 @@
                     @endif
                     <!-- Uploaded files will appear here -->
                 </ul>
+				
+								
+			<div class="relative">
+                <label for="linked_documents" class="block text-sm font-medium mb-1">Linked Documents</label>
+                <select id="linked_documents" name="linked_documents[]" multiple class="w-full"></select>
+            </div>
             </div>
         </div>
 
@@ -160,7 +166,7 @@
 		
 		assignees_obj = populateChoices2('assignees', [], true);		
 		distribution_obj = populateChoices2('distribution', [], true);	
-		received_obj = populateChoices2('received-from', [], false);		
+		linked_documents = populateChoices2('linked_documents', [], false);		
 		
     });    
     $("#correspondence-form").on("submit", function(event) {
@@ -270,14 +276,24 @@
 		distribution_obj.clearStore();
 		distribution_obj.setChoices(distribution);	
 		
-		let recieved  = `{{ $correspondece->recieved_from }}`;
-		const allusers = all_users.users.map(function(item) {
-		  return {'value' : item.id , 'label' : item.name, 'selected' : recieved == item.id ? true : false};
-		});	
+		// let recieved  = `{{ $correspondece->recieved_from }}`;
+		// const allusers = all_users.users.map(function(item) {
+		  // return {'value' : item.id , 'label' : item.name, 'selected' : recieved == item.id ? true : false};
+		// });	
 
-		received_obj.clearStore();
-		received_obj.setChoices(allusers);
-
+		// received_obj.clearStore();
+		// received_obj.setChoices(allusers);
+	
+		let DocumentFiles ={!! json_encode($correspondece->documentFiles) !!}  ;	
+		let selectedDocumentFiles=DocumentFiles.map(function(item) {
+			return item.pivot.file_id+'-'+(item.pivot.revision_id == 0 ? null : item.pivot.revision_id);
+		})	;
+		let files =  {!! json_encode($files) !!};
+		const allfiles = files.map(function(item) {
+		  return {'value' : item.file_id+'-'+item.revisionid  , 'label' : item.project_document.number,  'selected': selectedDocumentFiles.includes(item.file_id+'-'+item.revisionid) ? true : false};
+		});		
+			linked_documents.clearStore();
+			linked_documents.setChoices(allfiles);	
         feather.replace();
 			
     }

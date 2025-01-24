@@ -48,4 +48,11 @@ interface CorrespondenceRepositoryInterface
     * 
     */
     public function get_correspondence_parent($project_id , $corespondence_id): Collection;
+
+     /**
+    * @param array $data 
+    * @param Model $correspondence 
+    * 
+    */
+    public function add_Linked_documents_to_correspondence($data , $correspondence): void;
 }

@@ -17,9 +17,10 @@
 		@csrf
 		<input type="hidden" name="project_id" value="{{ \Session::get('projectID') }}"/>
         <input type="hidden" name="id" value="{{ $punch_list_id }}"/>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="flex flex-wrap md:flex-nowrap items-start gap-6">
+            <div class="w-full md:w-3/5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             <!-- Title (Required) -->
-            <div>
+            <div class="sm:col-span-2">
                 <label for="title" class="block text-sm mb-2 font-medium dark:text-gray-200">Title <span class="text-red-500">*</span></label>
                 <input
                     type="text"
@@ -45,7 +46,7 @@
             </div>
 
             <!-- Responsible Member (Single Selector) (Required) -->
-            <div>
+            <div class="sm:col-span-2 md:col-span-3">
                 <label for="responsible-member" class="block text-sm mb-2 font-medium dark:text-gray-200">Responsible Member <span class="text-red-500">*</span></label>
                 <select id="responsible-member" name="responsible_id" class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200" required>
                 
@@ -53,24 +54,9 @@
             </div>
 
             <!-- Distribution Members (Multiple Selector) -->
-            <div>
-                <label for="distribution-members" class="block text-sm mb-2 font-medium dark:text-gray-200">Distribution Members</label>
-                <select id="distribution-members"  name="participates[]" multiple class="choices w-full border dark:bg-gray-800 dark:text-gray-200">
-            
-                </select>
-            </div>
+     
 
-            <!-- Location -->
-            <div>
-                <label for="location" class="block text-sm mb-2 font-medium dark:text-gray-200">Location</label>
-                <input
-                    type="text"
-                     value="{{ $punch_list->location }}"
-                    id="location" name="location"
-                    class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200"
-                    placeholder="Enter location"
-                />
-            </div>
+
 
             <!-- Priority -->
             <div>
@@ -85,61 +71,24 @@
                 </select>
             </div>
 
-            <!-- Cost Impact -->
-            <div>
-                <label for="cost-impact" class="block text-sm mb-2 font-medium dark:text-gray-200">Cost Impact</label>
-                <select id="cost-impact" name="cost_impact" class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200">
-
-					@php
-					$enums_list = \App\Enums\CorrespondenceCostImpactEnum::cases();
-					@endphp
-					@foreach ($enums_list as $enum)
-						<option value="{{$enum->value}}"  {{  $enum->value == $punch_list->cost_impact ? 'selected':'' }} >{{$enum->name}}</option>
-					@endforeach
-					
+            <div class="sm:col-span-2 md:col-span-3">
+                <label for="distribution-members" class="block text-sm mb-2 font-medium dark:text-gray-200">Distribution Members</label>
+                <select id="distribution-members"  name="participates[]" multiple class="choices w-full border dark:bg-gray-800 dark:text-gray-200">
+            
                 </select>
             </div>
-			
-			
-            <div>
-                <label for="status" class="block text-sm mb-2 font-medium dark:text-gray-200">status</label>
-                <select id="status" name="status" class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200">
-
-					@php
-					$enums_list = \App\Enums\PunchListStatusEnum::cases();
-					@endphp
-					@foreach ($enums_list as $enum)
-						<option value="{{$enum->value}}"  {{  $enum->value == $punch_list->status_val ? 'selected':'' }} >{{$enum->text()}}</option>
-					@endforeach
-					
-                </select>
-            </div>			
-			
-            <div>
-                <label for="date_notified_at" class="block text-sm mb-2 font-medium dark:text-gray-200">Notified Date at</label>
+		
+            <!-- Location -->
+            <div class="md:col-span-2">
+                <label for="location" class="block text-sm mb-2 font-medium dark:text-gray-200">Location</label>
                 <input
-                    type="date"
-                    value="{{ $punch_list->date_notified_at }}"
-                    name="date_notified_at"
-                    id="date_notified_at"
-                    class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200"
-                    required
+                    type="text"
+                     value="{{ $punch_list->location }}"
+                    id="location" name="location"
+                    class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200"
+                    placeholder="Enter location"
                 />
-            </div>			
-			
-
-            <div>
-                <label for="date_resolved_at" class="block text-sm mb-2 font-medium dark:text-gray-200">Resolved Date</label>
-                <input
-                    type="date"
-                    value="{{ $punch_list->date_resolved_at }}"
-                    name="date_resolved_at"
-                    id="date_resolved_at"
-                    class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200"
-                    required
-                />
-            </div>			
-
+            </div>
             
             <div>
                 <label for="due_date" class="block text-sm mb-2 font-medium dark:text-gray-200">Due Date</label>
@@ -153,12 +102,20 @@
                 />
             </div>		
 			
+        
+                <button
+                    type="submit"
+                    class="submit_punch_list_form px-4 py-2 mt-5 bg-blue-500 text-white hover:bg-blue-600"
+                >
+                    Submit Item
+                </button>
+            </div>
         </div>
 
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div class="w-full md:w-2/5">
 
             <!-- Description -->
-            <div>
+            <div class="mb-4">
                 <label for="description" class="block text-sm mb-2 dark:text-gray-200">Description</label>
                 <textarea
                     id="description" name="description"
@@ -198,12 +155,7 @@
         </div>
 
         <!-- Submit Button -->
-        <button
-            type="submit"
-            class="submit_punch_list_form px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"
-        >
-            Submit Punch Item
-        </button>
+       
     </form>
 </div>
 <script>

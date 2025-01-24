@@ -237,7 +237,7 @@ class ProjectService
                 return [
                     'id'=> $design_team->id,
                     'name' => $design_team->name,
-                    'company'=> $design_team->company ? $design_team->company->name : '',
+                    'job_title'=>'',
                     'role'=>'',
                     'job_title'=> '',
                     'permissions' => []

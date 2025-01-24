@@ -53,7 +53,20 @@ class PunchListController extends Controller
         $distribution_members = $distribution_members['users'];
         $responsible = $responsible['users'];*/
       // return $punch_list;
-        return view('metsl.pages.punch-list.edit', get_defined_vars());
+        return view('metsl.pages.punch-list.view', get_defined_vars());
+    }
+
+
+    public function view($id){
+        $punch_list_id = $id;
+        $punch_list = $this->punchListService->find($punch_list_id);
+        /*$distribution_members = $this->userService->getUsersOfProjectID(Session::get('projectID') , '');
+        $responsible = $this->userService->getUsersOfProjectID(Session::get('projectID') , '');
+        
+        $distribution_members = $distribution_members['users'];
+        $responsible = $responsible['users'];*/
+      // return $punch_list;
+        return view('metsl.pages.punch-list.view', get_defined_vars());
     }
 
     public function store(PunchListRequest  $request)
@@ -67,7 +80,8 @@ class PunchListController extends Controller
                 $all_data['closed_by'] = \Auth::user()->id;
 
                 $all_data['project_id'] = Session::get('projectID');
-
+                $all_data['status'] = 0;
+                $all_data['date_notified_at'] = date('Y-m-d');
                 $model = $this->punchListService->create($all_data);
             \DB::commit();
             // all good
@@ -184,6 +198,43 @@ class PunchListController extends Controller
     public function destroyFile($id){
         $this->punchListFilesService->delete($id);
         return redirect()->back()->with('success' , 'Item deleted successfully');
+    }
+
+    public function store_reply(Request $request){
+        $data = $request->all();
+        $err = $request->validate([
+            'description_reply' => 'required|string|max:255',
+            'title' => 'required|',
+            'punch_list_id' => 'required',
+           
+        ]);
+        $data['created_by'] = \Auth::user()->id;
+        $data['created_date'] = date('Y-m-d');
+        $data['description'] = $request->description_reply;
+
+    
+        if($data['docs'] != NULL){
+            $file = $data['docs'];
+            $fileName = $file->getClientOriginalName();
+    
+            $path = Storage::disk('public')->path('project'.$data['project_id'].'/punch_list'.$data['punch_list_id'].'/replies');
+                
+            \File::makeDirectory($path, $mode = 0777, true, true);
+    
+            Storage::disk('public')->putFileAs( 'project'.$data['project_id'].'/punch_list'.$data['punch_list_id'].'/replies', $file, $fileName);
+            $data['file'] = $fileName;
+   
+        } 
+        
+
+        //dd($err);
+        $model = \App\Models\PunchlistReplies::create($data);
+        return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$model]);
+    }
+
+    public function change_status(Request $request){
+        \App\Models\PunchList::where('id',$request->id)->update(['status'=>$request->status]);
+        return response()->json(['success' => 'Form changed successfully.' ]);
     }
 
 }

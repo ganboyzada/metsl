@@ -73,6 +73,7 @@
             <p><strong>Start:</strong> <span id="task-start"></span></p>
             <p><strong>Deadline:</strong> <span id="task-end"></span></p>
         </div>
+        <div id="file_area" style="color:blue;text-decoration: underline"></div>
         <div>
             <span id="delete_butn"></span>
         </div>
@@ -662,6 +663,7 @@
             $("#task-assignees").text(task.assignees.join(", "));
             $("#task-start").text(`Day ${task.start}`);
             $("#task-end").text(`Day ${task.end}`);
+            $('#file_area').html(`<a target="_blank" href="${task.file}">${task.file_name}</a>`);
 
             $('#delete_butn').html(`                    <button onclick="delete_task(${task.id})" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-delete w-5 h-5"><path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path><line x1="18" y1="9" x2="12" y2="15"></line><line x1="12" y1="9" x2="18" y2="15"></line></svg>
