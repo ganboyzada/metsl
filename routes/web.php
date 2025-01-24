@@ -8,6 +8,7 @@ use App\Http\Controllers\MeetingPlaningController;
 use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PunchListController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\StakeholderController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
@@ -34,11 +35,16 @@ Route::middleware([
     Route::get('/roles',  [RoleController::class, "index"])->name('roles');
     Route::get('/roles/create',  [RoleController::class, "create"])->name('roles.create');
     Route::post('/roles/store',  [RoleController::class, "store"])->name('roles.store');
-
     Route::get('/roles/edit/{id}',  [RoleController::class, "edit"])->name('roles.edit');
     Route::delete('/roles/destroy/{id}',  [RoleController::class, "destroy"])->name('roles.destroy');
     Route::put('/roles/update/{id}',  [RoleController::class, "update"])->name('roles.update');
 
+    Route::get('/companies',  [CompanyController::class, "index"])->name('companies');
+    Route::get('/companies/create',  [CompanyController::class, "create"])->name('companies.create');
+    Route::post('/companies/store',  [CompanyController::class, "store"])->name('companies.store');
+    Route::get('/companies/edit/{id}',  [CompanyController::class, "edit"])->name('companies.edit');
+    Route::delete('/companies/destroy/{id}',  [CompanyController::class, "destroy"])->name('companies.destroy');
+    Route::put('/companies/update/{id}',  [CompanyController::class, "update"])->name('companies.update');
 
     Route::view('/roles/permissions', 'metsl.pages.permissions.index')->name('roles.permissions');
     Route::view('/roles/permissions/create', 'metsl.pages.permissions.create')->name('roles.permissions.create');

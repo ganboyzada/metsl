@@ -90,7 +90,7 @@ class ProjectManagerService
 
     public function all()
     {
-        return $this->ProjectManagerRepository->with(['user:id,userable_id,userable_type'])->all();
+        return $this->ProjectManagerRepository->with(['user:id,userable_id,userable_type,company_id'])->all();
 
        // return $this->ProjectManagerRepository->with(['user:id,userable_id,userable_type'])->query()->get();
     }

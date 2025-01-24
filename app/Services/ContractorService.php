@@ -87,7 +87,7 @@ class ContractorService
 
     public function all()
     {
-        return $this->ContractorRepository->with(['user:id,userable_id,userable_type'])->all();
+        return $this->ContractorRepository->with(['user:id,userable_id,userable_type,company_id'])->all();
 
         // return $this->ContractorRepository->with(['user:id,userable_id,userable_type'])->query()->get();
        // return $this->ContractorRepository->all();

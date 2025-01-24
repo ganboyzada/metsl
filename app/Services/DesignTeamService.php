@@ -92,7 +92,7 @@ class DesignTeamService
 
     public function all()
     {
-        return $this->DesignTeamRepository->with(['user:id,userable_id,userable_type'])->all();
+        return $this->DesignTeamRepository->with(['user:id,userable_id,userable_type,company_id'])->all();
     }
 
     public function projectsOfDesignTeam($id)

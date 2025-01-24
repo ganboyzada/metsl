@@ -16,6 +16,7 @@ use Illuminate\Database\Eloquent\Relations\belongsToMany;
 use App\Models\Permission;
 use App\Models\Role;
 use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
+use App\Models\Company;
 
 class User extends Authenticatable
 {
@@ -36,6 +37,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'company_id'
     ];
 
     protected $guard_name = 'sanctum';
@@ -100,6 +102,10 @@ class User extends Authenticatable
         return $this->belongsToMany(Permission::class, 'model_has_permissions', 'model_id','permission_id')			
             ->using(ModelHasPermissions::class)
             ->withPivot('project_id');
+    }
+
+    public function company(){
+        return $this->belongsTo(Company::class);
     }
 
     protected function getDefaultGuardName(): string { return 'sanctum'; }

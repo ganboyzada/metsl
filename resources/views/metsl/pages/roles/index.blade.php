@@ -22,7 +22,6 @@
         </a>
 
     </div>
-    
 </div>
 <div class="overflow-x-auto">
 

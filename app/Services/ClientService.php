@@ -94,7 +94,7 @@ class ClientService
 
     public function all()
     {
-        return $this->ClientRepository->with(['user:id,userable_id,userable_type'])->all();
+        return $this->ClientRepository->with(['user:id,userable_id,userable_type,company_id'])->all();
     }
 
     public function projectsOfClient($id)

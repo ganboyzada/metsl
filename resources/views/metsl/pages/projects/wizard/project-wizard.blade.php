@@ -206,7 +206,7 @@
     </form>
             <!-- Overlay Modal for Creating New User -->
             <div id="createUserModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-                <div class="bg-white dark:bg-gray-800  p-6 w-full max-w-md">
+                <div class="bg-white dark:bg-gray-800 p-6 w-full max-w-md">
                     <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Create New User</h3>
                     <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
     
@@ -219,33 +219,45 @@
                             <label class="block text-gray-700 dark:text-gray-200 mb-1">image</label>
                             <input   accept="image/*" type="file" name="image" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" >
                         </div>                    
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Name</label>
-                            <input type="text" name="first_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Surname</label>
-                            <input type="text" name="last_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Mobile Phone</label>
-                            <input type="text" name="mobile_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Office Phone</label>
-                            <input type="text" name="office_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Email (Login Credential)</label>
-                            <input type="email" name="email" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Specialty</label>
-                            <input type="text" name="specialty" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="md:col-span-2">
+                                <label for="company_id" class="block text-sm mb-4 font-medium dark:text-gray-200">Company (Optional)</label>
+                                <select name="company_id" id="user_company" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" id="company_id">
+                                    <option value="" selected>None</option>
+                                @foreach(\App\Models\Company::where('active', true)->get() as $company)
+                                    <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-200 mb-1">Name</label>
+                                <input type="text" name="first_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-200 mb-1">Surname</label>
+                                <input type="text" name="last_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-200 mb-1">Mobile Phone</label>
+                                <input type="text" name="mobile_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-200 mb-1">Office Phone</label>
+                                <input type="text" name="office_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-gray-700 dark:text-gray-200 mb-1">Email (Login Credential)</label>
+                                <input type="email" name="email" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-gray-700 dark:text-gray-200 mb-1">Specialty</label>
+                                <input type="text" name="specialty" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                            </div>
                         </div>
                         <div class="flex justify-end mt-6">
                             <button type="button" onclick="closeCreateUserModal()" class="text-gray-600 dark:text-gray-300 mr-3">Cancel</button>
-                            <button type="submit" id="submitBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Create User</button>
+                            <button type="submit" id="submitBtn" class="bg-blue-500 text-white px-4 py-2">Create Account</button>
                         </div>
                     </form>
                 </div>
@@ -255,7 +267,7 @@
             
             <!-- Role Assignment Modal -->
             <div id="roleAssignmentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-                <div class="bg-white dark:bg-gray-800  p-6 w-full max-w-lg">
+                <div class="bg-white dark:bg-gray-800 max-h-[90vh] overflow-y-scroll p-6 w-full max-w-lg">
                     <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200" id="modalStakeholderName">Assign Role to Stakeholder</h3>
     
                     <!-- Role Assignment Form -->
@@ -462,11 +474,13 @@
                     $("#submitBtn").prop('disabled', false); 
                     const type = $('#user_type').val();
                     const index = $('#user_index').val();
+                    const company = $('#user_company').val();
 
                     const select = document.getElementById(`${type}.${index}`);
                     const opt = document.createElement('option');
                     opt.value = data.data.id;
                     opt.uuid = data.user.id;
+                    opt.company = data.company.name;
                     opt.setAttribute("uuid",data.user.id);
                     opt.innerHTML = data.data.user_name;
                     select.appendChild(opt);
@@ -515,10 +529,11 @@
  					if (typeof client_stakeholders[idx] !== 'undefined') {
 						client_stakeholders[idx].id = parseInt($(ele).find(":selected").attr('uuid'));
 						client_stakeholders[idx].name = $(ele).find(":selected").text();
+                        client_stakeholders[idx].company = $(ele).find(":selected").attr('company');
 						
 					}else{
 						
-						client_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(),  'role': "" , 'job_title': "", 'permissions': [] , 'type':type});
+						client_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(), 'company':$(ele).find(":selected").attr('company'),  'role': "" , 'job_title': "", 'permissions': [] , 'type':type});
 					}                   
 
                 }
@@ -530,15 +545,16 @@
 					if (typeof contractor_stakeholders[idx] !== 'undefined') {
 						contractor_stakeholders[idx].id = parseInt($(ele).find(":selected").attr('uuid'));
 						contractor_stakeholders[idx].name = $(ele).find(":selected").text();
+                        contractor_stakeholders[idx].company = $(ele).find(":selected").attr('company');
 						
 					}else{
 						
-						contractor_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(),  'role': "", 'job_title': "",'permissions': [] , 'type':type});
+						contractor_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(), 'company':$(ele).find(":selected").attr('company'), 'role': "", 'job_title': "",'permissions': [] , 'type':type});
 					}
                 }
             
             }).get();    
-			console.log(contractor_stakeholders);
+			
         }else if(type == 'designTeam'){
             // designTeam_stakeholders = [];
             $("select[name='"+type+"[]']").map(function (idx, ele) {
@@ -546,10 +562,10 @@
 					if (typeof designTeam_stakeholders[idx] !== 'undefined') {
 						designTeam_stakeholders[idx].id = parseInt($(ele).find(":selected").attr('uuid'));
 						designTeam_stakeholders[idx].name = $(ele).find(":selected").text();
-						
+						designTeam_stakeholders[idx].company = $(ele).find(":selected").attr('company');
 					}else{
 						
-						designTeam_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(),  'role': "", 'job_title': "",'permissions': [] , 'type':type});
+						designTeam_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(), 'company':$(ele).find(":selected").attr('company'), 'role': "", 'job_title': "",'permissions': [] , 'type':type});
 					}
 
                 }
@@ -562,10 +578,10 @@
 					if (typeof projectManager_stakeholders[idx] !== 'undefined') {
 						projectManager_stakeholders[idx].id = parseInt($(ele).find(":selected").attr('uuid'));
 						projectManager_stakeholders[idx].name = $(ele).find(":selected").text();
-						
+						projectManager_stakeholders[idx].company = $(ele).find(":selected").attr('company');
 					}else{
 						
-						projectManager_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(),  'role': "", 'job_title': "", 'permissions': [] , 'type':type});
+						projectManager_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(), 'company':$(ele).find(":selected").attr('company'), 'role': "", 'job_title': "", 'permissions': [] , 'type':type});
 					}					
 
                 }
@@ -617,27 +633,28 @@
         const contractors = {!! json_encode($contractors) !!};
         const design_teams = {!! json_encode($design_teams) !!};
         const project_managers = {!! json_encode($project_managers) !!};
-        //console.log(contractors);
+        const companies = {!! json_encode($companies) !!}
+
         var client_html = ``;
         for (let x in clients) {
-            client_html+=`<option value="${clients[x].id}"  uuid="${clients[x].user.id}">${clients[x].user_name}</option>`;           
+            client_html+=`<option value="${clients[x].id}" company="${clients[x].user.company_id ? companies[clients[x].user.company_id].name : ''}"  uuid="${clients[x].user.id}">${clients[x].user_name}</option>`;           
         }
 
         var contractor_html = ``;
         for (let x in contractors) {
-            contractor_html+=`<option value="${contractors[x].id}"  uuid="${contractors[x].user.id}">${contractors[x].user_name}</option>`;
+            contractor_html+=`<option value="${contractors[x].id}" company="${contractors[x].user.company_id ? companies[contractors[x].user.company_id].name : ''}" uuid="${contractors[x].user.id}">${contractors[x].user_name}</option>`;
         
         }
 
         var designTeam_html = ``;
         for (let x in design_teams) {
-            designTeam_html+=`<option value="${design_teams[x].id}"  uuid="${design_teams[x].user.id}">${design_teams[x].user_name}</option>`;
+            designTeam_html+=`<option value="${design_teams[x].id}" company="${design_teams[x].user.company_id ? companies[design_teams[x].user.company_id].name : ''}" uuid="${design_teams[x].user.id}">${design_teams[x].user_name}</option>`;
         }   
         
 
         var projectManager_html = ``;
         for (let x in project_managers) {
-            projectManager_html+=`<option value="${project_managers[x].id}"  uuid="${project_managers[x].user.id}">${project_managers[x].user_name}</option>`;
+            projectManager_html+=`<option value="${project_managers[x].id}" company="${project_managers[x].user.company_id ? companies[project_managers[x].user.company_id].name : ''}" uuid="${project_managers[x].user.id}">${project_managers[x].user_name}</option>`;
         }
 
         const listElement = document.getElementById(`${type}List`);
@@ -686,17 +703,19 @@ function stakeholderCard(users, title, grid){
             card.classList.add("stakeholder-card", "bg-gray-800", "rounded-lg", "p-4", "shadow-md", "cursor-pointer");
             card.onclick = () => openRoleAssignmentModal(stakeholder);
 
+            
+
             const stakeholderGroup = document.createElement("div");
             stakeholderGroup.classList.add("mb-3", "text-sm", "text-blue-500"); 
             stakeholderGroup.textContent = title;
 
             // Stakeholder info
             const name = document.createElement("h4");
-            name.classList.add("text-lg", "font-semibold", "text-gray-200");
+            name.classList.add("text-md", "mb-3", "font-semibold", "text-gray-200");
             name.textContent = stakeholder.name;
 
             const role = document.createElement("p");
-            role.classList.add("stakeholder-role", "text-sm", "text-gray-400");
+            role.classList.add("stakeholder-role", "text-md", "text-gray-400");
             role.textContent = stakeholder.role || "No role assigned";
 
             const permissions = document.createElement("div");
@@ -714,7 +733,18 @@ function stakeholderCard(users, title, grid){
 
             // Append elements to card
             card.appendChild(stakeholderGroup);
+            
+
+            if(stakeholder.company != ''){
+                $(name).append(`
+                    <span class="ml-2 px-3 py-1 border border-orange-500 text-xs rounded-full text-orange-300">
+                        ${stakeholder.company}
+                    </span>
+                `);
+            }
+
             card.appendChild(name);
+            
             card.appendChild(role);
             card.appendChild(permissions);
 
@@ -758,6 +788,7 @@ function renderStakeholderGrid() {
     grid.innerHTML = ""; // Clear existing content
 
     stakeholderCard(client_stakeholders, 'Client', grid);
+    console.log(contractor_stakeholders);
     stakeholderCard(contractor_stakeholders, 'Contractor Employee', grid);
     stakeholderCard(designTeam_stakeholders, 'Design Team Member', grid);
     stakeholderCard(projectManager_stakeholders, 'Project Manager', grid);

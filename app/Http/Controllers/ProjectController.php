@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjectRequest;
 use App\Http\Requests\UserRequest;
+use App\Models\Company;
 use App\Models\Contractor;
 use App\Models\Permission;
 use App\Models\Project;
@@ -84,6 +85,7 @@ class ProjectController extends Controller
         //dd($contractors[0]->user->id);
         $design_teams = $this->designTeamService->all();
         $project_managers = $this->projectmanagerService->all();
+        $companies = Company::where('active', true)->get()->keyBy('id');
         $roles = Role::with('permissions')->get();
         $role_permission_arr = [];
         if($roles->count() > 0){
@@ -131,7 +133,7 @@ class ProjectController extends Controller
                 \DB::rollback();
                 return response()->json(['error' => $e->getMessage()]);
             }              
-             return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$model , 'user'=>$user]);
+             return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$model , 'user'=>$user, 'company'=>$user->company]);
 
         }
 

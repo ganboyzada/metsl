@@ -25,6 +25,7 @@ class UserRequest extends FormRequest
             $id = request()->user_id;
             return [
                 'first_name' => 'required',
+                'company_id' => 'nullable',
                 'last_name' => 'required',
                 'mobile_phone' => 'required',
                 'office_phone' => 'required',
@@ -38,6 +39,7 @@ class UserRequest extends FormRequest
         }else{
             return [
                 'first_name' => 'required',
+                'company_id' => 'nullable',
                 'last_name' => 'required',
                 'mobile_phone' => 'required',
                 'office_phone' => 'required',
