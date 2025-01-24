@@ -57,4 +57,21 @@ class Correspondence extends Model
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
 
+
+    public function documentFiles(): belongsToMany
+    {
+        return $this->belongsToMany(ProjectDocumentFiles::class, 'correspondence_linked_documents', 
+        'correspondence_id', 'file_id')
+        ->withPivot('revision_id')
+        ->using(CorrespondenceLinkedDocuments::class);
+    } 
+
+    public function documentRevisions(): belongsToMany
+    {
+        return $this->belongsToMany(ProjectDocumentRevisions::class, 'correspondence_linked_documents', 
+        'correspondence_id', 'revision_id')
+        ->using(CorrespondenceLinkedDocuments::class);
+    } 
+
+
 }

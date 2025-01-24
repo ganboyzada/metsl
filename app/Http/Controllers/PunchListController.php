@@ -53,7 +53,20 @@ class PunchListController extends Controller
         $distribution_members = $distribution_members['users'];
         $responsible = $responsible['users'];*/
       // return $punch_list;
-        return view('metsl.pages.punch-list.edit', get_defined_vars());
+        return view('metsl.pages.punch-list.view', get_defined_vars());
+    }
+
+
+    public function view($id){
+        $punch_list_id = $id;
+        $punch_list = $this->punchListService->find($punch_list_id);
+        /*$distribution_members = $this->userService->getUsersOfProjectID(Session::get('projectID') , '');
+        $responsible = $this->userService->getUsersOfProjectID(Session::get('projectID') , '');
+        
+        $distribution_members = $distribution_members['users'];
+        $responsible = $responsible['users'];*/
+      // return $punch_list;
+        return view('metsl.pages.punch-list.view', get_defined_vars());
     }
 
     public function store(PunchListRequest  $request)
@@ -67,7 +80,8 @@ class PunchListController extends Controller
                 $all_data['closed_by'] = \Auth::user()->id;
 
                 $all_data['project_id'] = Session::get('projectID');
-
+                $all_data['status'] = 0;
+                $all_data['date_notified_at'] = date('Y-m-d');
                 $model = $this->punchListService->create($all_data);
             \DB::commit();
             // all good

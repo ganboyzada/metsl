@@ -5,6 +5,7 @@
 @endsection
 
 @section('content')
+
 <form action="{{ route('companies.update', $company->id) }}" class="py-10" method="POST">
     @csrf
     @method('PUT')
@@ -32,7 +33,7 @@
         <div>
             <label class="block text-sm mb-4 font-medium dark:text-gray-200">Active</label>
             <div class="checkbox-wrapper-51">
-                <input type="checkbox" name="active" id="cbx-51" {{ $company->active ? 'checked' : '' }}/>
+                <input type="checkbox" name="active" id="cbx-51"  {{ $company->active ? 'checked'  : '' }}/>
                 <label for="cbx-51" class="toggle">
                     <span>
                     <svg width="10px" height="10px" viewBox="0 0 10 10">

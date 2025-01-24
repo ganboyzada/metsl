@@ -170,6 +170,7 @@ class ProjectService
                 return [
                     'id'=> $client->id,
                     'name' => $client->name,
+                    'job_title'=>$client->allRoles[0]->pivot->job_title,
                     'role'=>$client->allRoles[0]->name,
                     'permissions' => $permissions
                 ];
@@ -177,6 +178,7 @@ class ProjectService
                 return [
                     'id'=> $client->id,
                     'name' => $client->name,
+                    'job_title'=>'',
                     'role'=>'',
                     'permissions' => []
                 ];
@@ -194,6 +196,7 @@ class ProjectService
                 return [
                     'id'=> $contractor->id,
                     'name' => $contractor->name,
+                    'job_title'=>$contractor->allRoles[0]->pivot->job_title,
                     'role'=>$contractor->allRoles[0]->name,
                     'permissions' => $permissions
                 ];
@@ -201,6 +204,7 @@ class ProjectService
                 return [
                     'id'=> $contractor->id,
                     'name' => $contractor->name,
+                    'job_title'=>'',
                     'role'=>'',
                     'permissions' => []
                 ];
@@ -220,6 +224,7 @@ class ProjectService
                 return [
                     'id'=> $design_team->id,
                     'name' => $design_team->name,
+                    'job_title'=>$design_team->allRoles[0]->pivot->job_title,
                     'role'=>$design_team->allRoles[0]->name,
                     'permissions' => $permissions
                 ];
@@ -227,6 +232,7 @@ class ProjectService
                 return [
                     'id'=> $design_team->id,
                     'name' => $design_team->name,
+                    'job_title'=>'',
                     'role'=>'',
                     'permissions' => []
                 ];
@@ -244,6 +250,7 @@ class ProjectService
                 return [
                     'id'=> $project_manager->id,
                     'name' => $project_manager->name,
+                    'job_title'=>$project_manager->allRoles[0]->pivot->job_title,
                     'role'=>$project_manager->allRoles[0]->name,
                     'permissions' => $permissions
                 ];
@@ -251,6 +258,7 @@ class ProjectService
                 return [
                     'id'=> $project_manager->id,
                     'name' => $project_manager->name,
+                    'job_title'=>'',
                     'role'=>'',
                     'permissions' => []
                 ];

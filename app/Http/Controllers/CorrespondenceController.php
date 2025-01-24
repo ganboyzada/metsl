@@ -17,6 +17,7 @@ use App\Services\ContractorService;
 use App\Services\CorrespondenceFileService;
 use App\Services\CorrespondenceService;
 use App\Services\DesignTeamService;
+use App\Services\ProjectDocumentFilesService;
 use App\Services\ProjectManagerService;
 use App\Services\ProjectService;
 use App\Services\UserService;
@@ -39,6 +40,7 @@ class CorrespondenceController extends Controller
         protected UserService $userService,
         protected CorrespondenceService $correspondenceService,
         protected CorrespondenceFileService $correspondenceFileService,
+        protected ProjectDocumentFilesService $projectDocumentFilesService
        
 
         )
@@ -57,8 +59,10 @@ class CorrespondenceController extends Controller
 
             }
           //  $next_number =  $this->correspondenceService->getNextNumber($type , $id);
+          $files = $this->projectDocumentFilesService->getNewestFilesByProjectId( $id);
 
         }
+        
         return view('metsl.pages.correspondence.create', get_defined_vars());
     }
 
@@ -88,7 +92,8 @@ class CorrespondenceController extends Controller
 
     public function edit($id){
         $correspondece = $this->correspondenceService->edit($id);
-        //return ($correspondece);
+          $files = $this->projectDocumentFilesService->getNewestFilesByProjectId( Session::get('projectID'));
+
         return view('metsl.pages.correspondence.edit', get_defined_vars());
 
     }
@@ -148,6 +153,7 @@ class CorrespondenceController extends Controller
 
     public function find($id){
         $correspondece = $this->correspondenceService->find($id);
+        
         if($correspondece->reply_correspondence_id == NULL){
             $others_correspondeces_realated = $this->correspondenceService->getCorrespondenceReplies($correspondece->project_id , $correspondece->id)->map(function($row){
                 $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];

@@ -177,7 +177,7 @@ class ProjectController extends Controller
         $permissions = Permission::all();
        // $c = Contractor::where('id',23)->with('user.permissions')->first();
         //dd($c->user->permissions);
-
+        //return get_defined_vars();
         return view('metsl.pages.projects..wizard.project-wizard-edit', get_defined_vars());
     }
 

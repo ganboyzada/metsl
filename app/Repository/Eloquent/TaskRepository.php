@@ -9,6 +9,7 @@ use App\Repository\TaskRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Storage;
 
 class TaskRepository extends BaseRepository implements TaskRepositoryInterface
 {
@@ -47,7 +48,9 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
                 'priority' => $task->priority,
                 'attachments' => $task->file != NULL ?true : false,
                 'description' => $task->description,
-                'done' => $task->done
+                'done' => $task->done,
+                'file_name' => $task->file,
+                'file' => $task->file != NULL ? Storage::url('/project'.$task->project_id.'/tasks/'.$task->file) : NULL
             ];
         });
     }

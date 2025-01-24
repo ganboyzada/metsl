@@ -51,4 +51,9 @@ class ProjectDocumentFilesService
         return $this->projectDocumentFilesRepository->project_document_files($project_id);
     }
 
+    public function getNewestFilesByProjectId($project_id)
+    {
+        return $this->projectDocumentFilesRepository->get_newest_files_by_project_document_id($project_id);
+    }
+
 }

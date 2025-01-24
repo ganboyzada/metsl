@@ -80,7 +80,7 @@ class DocumentRepository extends BaseRepository implements DocumentRepositoryInt
     
      
         else if(isset($request->orderBy) && $request->orderBy == 'upload_date'){
-            $sub2 = \DB::raw('(select project_document_id , MAX(upload_date) as last_upload_date from project_document_revisions group by project_document_id)last_upload_table');
+            $sub2 = \DB::raw('(select project_document_id , MAX(created_at) as last_upload_date from project_document_revisions group by project_document_id)last_upload_table');
             $query = $query->leftjoin($sub2,function($join){
                 $join->on('last_upload_table.project_document_id','=','id');       
             });

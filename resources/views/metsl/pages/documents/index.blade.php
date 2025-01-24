@@ -220,7 +220,7 @@
 			
 				html+=`<tr class="group hover:bg-gray-100 dark:hover:bg-gray-700" ${i==0 ? 'style="background-color: #ffd70026;"' : ''}>
                     <td class="py-2 px-4">${i + 1}</td>
-                    <td class="py-2 px-4">${ detail.title}</td>
+                    <td class="py-2 px-4">${ detail.title == null ? '-' : detail.title}</td>
                     <td class="py-2 px-4">${ detail.user.name}</td>
                     <td class="py-2 px-4">${ detail.created_date}</td>
                     <td class="py-2 px-4">Accepted</td>
@@ -312,7 +312,7 @@
 		if(all_documents.length > 0){
 			for(let i=0; i<all_documents.length; i++){
 				html+=`<div id="doc${i}" class="relative h-36 p-4 bg-gray-100 dark:bg-gray-800  shadow-md group transition transform hover:scale-105">
-					<h3 class="text-sm font-medium dark:text-gray-400 mb-2 truncate">${all_documents[i].title}</h3>
+					<h3 class="text-sm font-medium dark:text-gray-400 mb-2 truncate">${all_documents[i].title == null ? all_documents[i].number : all_documents[i].title}</h3>
 
 					<span class="flex absolute top-4 right-4 text-xs font-semibold text-blue-500 dark:text-blue-300">
 						${all_documents[i].created_date}

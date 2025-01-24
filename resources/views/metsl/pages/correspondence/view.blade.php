@@ -125,14 +125,20 @@
             <div>
                 <h3 class="text-sm font-medium dark:text-gray-400 mb-2">Linked Documents</h3>
                 <div class="grid grid-cols-2 gap-4">
-                @if($correspondece->files->count() > 0)
-                    @foreach($correspondece->files as $file)
+                @if($correspondece->documentFiles->count() > 0)
+                    @foreach($correspondece->documentFiles as $file)
                         <div class="bg-gray-100 dark:bg-gray-800 p-4  flex items-center justify-between">
                             <div class="flex items-center">
                                 <i data-feather="file" class="w-6 h-6 mr-3 dark:text-gray-400"></i>
                                 <p class="text-sm dark:text-gray-200">{{$file->file}}</p>
                             </div>
-                            <a target="_blank" href="{{Storage::url('project'.$correspondece->project_id.'/correspondence'.$correspondece->id.'/'.$file->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
+                            @if($file->pivot->revision_id == NULL || $file->pivot->revision_id == 0)
+                                <a target="_blank" href="{{Storage::url('project'.$correspondece->project_id.'/documents'.$file->project_document_id.'/'.$file->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
+                           
+                            @else
+                            <a target="_blank" href="{{Storage::url('project'.$correspondece->project_id.'/documents'.$file->project_document_id.'/revisions/'.$file->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
+
+                            @endif
                         </div>
             
                 

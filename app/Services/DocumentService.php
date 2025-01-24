@@ -48,19 +48,24 @@ class DocumentService
             }
             
             if(count($news) > 0){
-                $document =  $this->documentRepository->create($data);
-                $path = Storage::url('/project'.$data['project_id'].'/documents'.$document->id);
-                
-                \File::makeDirectory($path, $mode = 0777, true, true);  
 
-                $users =  $this->documentRepository->add_users_to_document($data,$document );
-    
-            
-
-                $document_id = $document->id;
+                foreach($news as $file_new){
+                    $document =  $this->documentRepository->create($data);
+                    $path = Storage::url('/project'.$data['project_id'].'/documents'.$document->id);
                     
-                $this->projectDocumentFilesService->createBulkFiles($data['project_id'] , $document->id ,$news);
+                    \File::makeDirectory($path, $mode = 0777, true, true);  
+
+                    $users =  $this->documentRepository->add_users_to_document($data,$document );
+        
                 
+
+                    $document_id = $document->id;
+                        
+                    $this->projectDocumentFilesService->createBulkFiles($data['project_id'] 
+                    , $document->id ,[$file_new]);
+                                    
+                }
+    
             }
             if(count($revisions) > 0){
                 foreach($revisions as $revision){

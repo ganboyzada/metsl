@@ -23,16 +23,18 @@ class CompanyController extends Controller
     // Store a newly created company in storage
     public function store(Request $request)
     {
-        $request->validate([
+        $data = $request->all();
+        $data['active'] = ($request->active) ? true : false;      
+        $err = $request->validate([
             'name' => 'required|string|max:255',
             'specialty' => 'required|string|max:255',
             'phone' => 'nullable|string|max:15',
             'email' => 'nullable|email|max:255',
             'address' => 'nullable|string|max:255',
-            'active' => 'required|boolean',
+            //'active' => 'required|boolean',
         ]);
-
-        Company::create($request->all());
+        //dd($err);
+        Company::create($data);
         return redirect()->route('companies')->with('success', 'Company created successfully.');
     }
 
@@ -46,17 +48,19 @@ class CompanyController extends Controller
     // Update the specified company in storage
     public function update(Request $request, $id)
     {
+        $data = $request->all();
+        $data['active'] = ($request->active) ? true : false;
         $request->validate([
             'name' => 'required|string|max:255',
             'specialty' => 'required|string|max:255',
             'phone' => 'nullable|string|max:15',
             'email' => 'nullable|email|max:255',
             'address' => 'nullable|string|max:255',
-            'active' => 'required|boolean',
+            //'active' => 'boolean',
         ]);
-
+        ///dd($request->all());
         $company = Company::findOrFail($id);
-        $company->update($request->all());
+        $company->update($data);
         return redirect()->route('companies')->with('success', 'Company updated successfully.');
     }
 

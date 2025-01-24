@@ -26,4 +26,9 @@ interface ProjectDocumentFilesRepositoryInterface
     * @return Collection
     */
     public function project_document_files($project_id): Collection;
+
+     /**
+    * @param integer $project_id
+    */
+    public function get_newest_files_by_project_document_id($project_id);
 }

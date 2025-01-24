@@ -32,8 +32,6 @@ class PackageRequest extends FormRequest
                 ],
                
                 "accessibles"    => ['required','array'],
-            
-
         
             ]; 
         }else{

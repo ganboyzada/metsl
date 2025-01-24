@@ -106,14 +106,19 @@ class PunchListService
 
     }
 
-    public function find($punch_list_id){
+    public function edit($punch_list_id){
         $punch_list =  $this->punchListRepository->with([ 'users:id' , 'files'])->find($punch_list_id);
         $punch_list->priority_val = $punch_list->priority->value;
         $punch_list->status_val = $punch_list->status->value;
         return $punch_list;
     }
 
-
+    public function find($punch_list_id){
+        $punch_list =  $this->punchListRepository->with([ 'users.userable' , 'files' , 'responsible.userable' ,'replies.user'])->find($punch_list_id);
+        $punch_list->priority_val = $punch_list->priority->value;
+        $punch_list->status_val = $punch_list->status->value;
+        return $punch_list;
+    }
     public function delete($id)
     {
         try{

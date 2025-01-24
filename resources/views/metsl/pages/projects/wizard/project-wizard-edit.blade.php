@@ -318,30 +318,42 @@
                         <div class="mb-4">
                             <label class="block text-gray-700 dark:text-gray-200 mb-1">image</label>
                             <input type="file" name="image" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" >
-                        </div>                    
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Name</label>
-                            <input type="text" name="first_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Surname</label>
-                            <input type="text" name="last_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Mobile Phone</label>
-                            <input type="text" name="mobile_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Office Phone</label>
-                            <input type="text" name="office_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Email (Login Credential)</label>
-                            <input type="email" name="email" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                        </div>
-                        <div class="mb-4">
-                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Specialty</label>
-                            <input type="text" name="specialty" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                        </div>      
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div class="md:col-span-2">
+                                <label for="company_id" class="block text-sm mb-4 font-medium dark:text-gray-200">Company (Optional)</label>
+                                <select name="company_id" id="user_company" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" id="company_id">
+                                    <option value="" selected>None</option>
+                                @foreach(\App\Models\Company::where('active', true)->get() as $company)
+                                    <option value="{{ $company->id }}">{{ $company->name }}</option>
+                                @endforeach
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-200 mb-1">Name</label>
+                                <input type="text" name="first_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-200 mb-1">Surname</label>
+                                <input type="text" name="last_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-200 mb-1">Mobile Phone</label>
+                                <input type="text" name="mobile_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                            </div>
+                            <div>
+                                <label class="block text-gray-700 dark:text-gray-200 mb-1">Office Phone</label>
+                                <input type="text" name="office_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-gray-700 dark:text-gray-200 mb-1">Email (Login Credential)</label>
+                                <input type="email" name="email" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                            </div>
+                            <div class="md:col-span-2">
+                                <label class="block text-gray-700 dark:text-gray-200 mb-1">Specialty</label>
+                                <input type="text" name="specialty" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                            </div>
                         </div>
                         <div class="flex justify-end mt-6">
                             <button type="button" onclick="closeCreateUserModal()" class="text-gray-600 dark:text-gray-300 mr-3">Cancel</button>
@@ -360,6 +372,10 @@
     
                     <!-- Role Assignment Form -->
                     <form id="roleAssignmentForm" onsubmit="saveRoleAssignment(event)">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 dark:text-gray-200 mb-1">Job title</label>
+                            <input type="text" id="job_title" name="job_title" class="w-full px-4 py-2 border dark:bg-gray-700 dark:text-gray-200" placeholder="e.g, Electrical Engineer">
+                        </div>                        
                         <div class="mb-4">
                             <label class="block text-gray-700 dark:text-gray-200 mb-1">Custom Role Name</label>
                             <input type="text" id="customRoleName" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" placeholder="Enter custom role name (optional)" disabled>
@@ -619,7 +635,7 @@ function map_user_type(type){
 						
 					}else{
 						
-						client_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(),  'role': "", 'permissions': [] , 'type':type});
+						client_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text() , 'job_title':'',  'role': "", 'permissions': [] , 'type':type});
 					}                   
 
                 }
@@ -634,7 +650,7 @@ function map_user_type(type){
 						
 					}else{
 						
-						contractor_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(),  'role': "", 'permissions': [] , 'type':type});
+						contractor_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text() , 'job_title':'',  'role': "", 'permissions': [] , 'type':type});
 					}
                 }
             
@@ -650,7 +666,7 @@ function map_user_type(type){
 						
 					}else{
 						
-						designTeam_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(),  'role': "", 'permissions': [] , 'type':type});
+						designTeam_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text() , 'job_title':'',  'role': "", 'permissions': [] , 'type':type});
 					}
 
                 }
@@ -666,7 +682,7 @@ function map_user_type(type){
 						
 					}else{
 						
-						projectManager_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(),  'role': "", 'permissions': [] , 'type':type});
+						projectManager_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text() , 'job_title':'',  'role': "", 'permissions': [] , 'type':type});
 					}					
 
                 }
@@ -796,6 +812,10 @@ function stakeholderCard(users, title, grid){
             name.classList.add("text-lg", "font-semibold", "text-gray-200");
             name.textContent = stakeholder.name;
 
+            const job_title = document.createElement("p");
+            job_title.classList.add( "text-sm", "text-gray-400");
+            job_title.textContent = stakeholder.job_title || "";
+
             const role = document.createElement("p");
             role.classList.add("stakeholder-role", "text-sm", "text-gray-400");
             role.textContent = stakeholder.role || "No role assigned";
@@ -857,7 +877,7 @@ function renderStakeholderGrid() {
     const grid = document.getElementById("stakeholderGrid");
     $('#Stakeholders').html('');
     grid.innerHTML = ""; // Clear existing content
-  
+    //console.log(contractor_stakeholders);
     stakeholderCard(client_stakeholders, 'Client', grid);
     stakeholderCard(contractor_stakeholders, 'Contractor Employee', grid);
     stakeholderCard(designTeam_stakeholders, 'Design Team Member', grid);
@@ -908,6 +928,8 @@ function openRoleAssignmentModal(stakeholder) {
     currentStakeholder = stakeholder;
     document.getElementById("modalStakeholderName").textContent = `Assign Role to ${stakeholder.name}`;
     document.getElementById("customRoleName").value = stakeholder.role || "";
+    document.getElementById("job_title").value = stakeholder.job_title || "";
+
     document.getElementById("presetRoleSelect").value = stakeholder.role; // Clear preset selection
     document.getElementById("customRoleName").disabled = true; // Initially disable custom role input
 
@@ -946,11 +968,13 @@ function saveRoleAssignment(event) {
 
     const role = document.getElementById("customRoleName").value || document.getElementById("presetRoleSelect").value;
     const permissions = Array.from(document.querySelectorAll("#roleAssignmentForm input[type='checkbox']:checked")).map(checkbox => checkbox.value);
+    const job_title = document.getElementById("job_title").value
 
     if (currentStakeholder) {
         // Save custom role and permissions to the stakeholder
         currentStakeholder.role = role || "Custom Role";
         currentStakeholder.permissions = permissions;
+        currentStakeholder.job_title = job_title;
     }
     console.log(contractor_stakeholders);
     closeRoleAssignmentModal();
