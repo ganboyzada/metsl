@@ -3,6 +3,8 @@
 @section('title', 'Correspondence - Create')
 
 @section('content')
+<div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
+<div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
 <div class="flex items-end mb-3">
     <h1 class="text-lg dark:text-gray-200">{{  $punch_list->title }} / <b>{{$punch_list->number}}</b></h1>
     <div class="ml-auto relative has-dropdown">
@@ -17,7 +19,14 @@
         <div
             class="dropdown absolute right-0 mt-2 w-48 bg-gray-800 text-gray-200  shadow-lg hidden"
         >
-            <a href="#" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Reply</a>
+            <button  data-modal="uploader-modal" class="modal-toggler  flex px-4 py-2 hover:bg-gray-700">
+                <i data-feather="corner-up-left" class="mr-2"></i> <span class="hidden md:inline">Add Reply</span>
+            </button>
+
+            <button  data-modal="status-modal" class="modal-toggler  flex px-4 py-2 hover:bg-gray-700">
+                <i data-feather="corner-up-left" class="mr-2"></i> <span class="hidden md:inline">Change Status</span>
+            </button>
+
         </div>
     </div>
 </div>
@@ -150,7 +159,7 @@
                 @foreach ($punch_list->replies as $reply)                
                     <tr class="border dark:border-gray-800">
                         <td class="px-6 py-4">{{$reply->title}}</td>
-                        <td class="px-6 py-4">{{$reply->description}}</td>
+                        <td class="px-6 py-4">{!! $reply->description !!}</td>
                         <td class="px-6 py-4">{{$reply->user->name}}</td>
                         <td class="px-6 py-4">{{$reply->created_date}}</td>
                         <td class="px-6 py-4">
@@ -160,7 +169,7 @@
                                     <i data-feather="file" class="w-6 h-6 mr-3 dark:text-gray-400"></i>
                                     <p class="text-sm dark:text-gray-200">{{$reply->file}}</p>
                                 </div>
-                                <a target="_blank" href="{{Storage::url('project'.$punch_list->project_id.'/punch_list'.$punch_list->id.'/replies/'.$file->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
+                                <a target="_blank" href="{{Storage::url('project'.$punch_list->project_id.'/punch_list'.$punch_list->id.'/replies/'.$reply->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
                             </div>  
                         </td>
                        
@@ -176,5 +185,9 @@
 </div>
 
 
+@include('metsl.pages.punch-list.ChageStatus')
+@include('metsl.pages.punch-list.addReply')
+<script>
 
+</script>
 @endsection

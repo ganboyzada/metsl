@@ -98,6 +98,8 @@ Route::middleware([
 	Route::post('/project/punch-list/update',  [PunchListController::class, "update"])->name(name: 'projects.punch-list.update');	
 	Route::get('/project/punch-list/destroy/{id}',  [PunchListController::class, "destroy"])->name(name: 'projects.punch-list.destroy');	
     Route::get('/project/punch-list/destroy-file/{id}',  [PunchListController::class, "destroyFile"])->name(name: 'projects.punch-list.destroy-file');	
+	Route::post('/project/punch-list/store_reply',  [PunchListController::class, "store_reply"])->name(name: 'projects.punch-list.store_reply');	
+	Route::post('/project/punch-list/change_status',  [PunchListController::class, "change_status"])->name(name: 'projects.punch-list.change_status');	
 
 
 	Route::get('/project/meetings/all',  [MeetingPlaningController::class, "ProjectMeeetings"])->name('projects.meetings.all');

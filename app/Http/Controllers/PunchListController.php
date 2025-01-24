@@ -200,4 +200,41 @@ class PunchListController extends Controller
         return redirect()->back()->with('success' , 'Item deleted successfully');
     }
 
+    public function store_reply(Request $request){
+        $data = $request->all();
+        $err = $request->validate([
+            'description_reply' => 'required|string|max:255',
+            'title' => 'required|',
+            'punch_list_id' => 'required',
+           
+        ]);
+        $data['created_by'] = \Auth::user()->id;
+        $data['created_date'] = date('Y-m-d');
+        $data['description'] = $request->description_reply;
+
+    
+        if($data['docs'] != NULL){
+            $file = $data['docs'];
+            $fileName = $file->getClientOriginalName();
+    
+            $path = Storage::disk('public')->path('project'.$data['project_id'].'/punch_list'.$data['punch_list_id'].'/replies');
+                
+            \File::makeDirectory($path, $mode = 0777, true, true);
+    
+            Storage::disk('public')->putFileAs( 'project'.$data['project_id'].'/punch_list'.$data['punch_list_id'].'/replies', $file, $fileName);
+            $data['file'] = $fileName;
+   
+        } 
+        
+
+        //dd($err);
+        $model = \App\Models\PunchlistReplies::create($data);
+        return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$model]);
+    }
+
+    public function change_status(Request $request){
+        \App\Models\PunchList::where('id',$request->id)->update(['status'=>$request->status]);
+        return response()->json(['success' => 'Form changed successfully.' ]);
+    }
+
 }
