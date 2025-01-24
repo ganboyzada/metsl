@@ -172,7 +172,7 @@ class ProjectService
                     'name' => $client->name,
                     'company'=> $client->company ? $client->company->name : '',
                     'role'=>$client->allRoles[0]->name,
-                    'job_title'=>$client->allRoles[0]->job_title,
+                    'job_title'=>$client->allRoles[0]->pivot->job_title,
                     'permissions' => $permissions
                 ];
             }else{
@@ -200,7 +200,7 @@ class ProjectService
                     'name' => $contractor->name,
                     'company'=> $contractor->company ? $contractor->company->name : '',
                     'role'=>$contractor->allRoles[0]->name,
-                    'job_title'=>$contractor->allRoles[0]->job_title,
+                    'job_title'=>$contractor->allRoles[0]->pivot->job_title,
                     'permissions' => $permissions
                 ];
             }else{
@@ -230,7 +230,7 @@ class ProjectService
                     'name' => $design_team->name,
                     'company'=> $design_team->company ? $design_team->company->name : '',
                     'role'=>$design_team->allRoles[0]->name,
-                    'job_title'=>$design_team->allRoles[0]->job_title,
+                    'job_title'=>$design_team->allRoles[0]->pivot->job_title,
                     'permissions' => $permissions
                 ];
             }else{
@@ -258,7 +258,7 @@ class ProjectService
                     'name' => $project_manager->name,
                     'company'=> $project_manager->company ? $project_manager->company->name : '',
                     'role'=>$project_manager->allRoles[0]->name,
-                    'job_title'=>$project_manager->allRoles[0]->job_title,
+                    'job_title'=>$project_manager->allRoles[0]->pivot->job_title,
                     'permissions' => $permissions
                 ];
             }else{
