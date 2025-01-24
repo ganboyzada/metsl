@@ -108,7 +108,7 @@
                 
             </div>
         
-            <button type="button" onclick="showStep(2); sendValueToReviewTab();" class="bg-blue-500 text-white px-4 py-2 mt-4">Next</button>
+            <button type="button" onclick="showStep(2); sendValueToReviewTab();" class="bg-blue-500 text-white px-5 py-2 mt-4">Next</button>
         </div>
 
         <!-- Step 2: Stakeholder Selection -->
@@ -162,15 +162,15 @@
             </div>
 
             <!-- Navigation Buttons -->
-            <button type="button" onclick="showStep(1)" class="bg-gray-500 text-white px-4 py-2 mt-4 mr-2">Back</button>
-            <button type="button" onclick="showStep(3)" class="bg-blue-500 text-white px-4 py-2 mt-4">Next</button>
+            <button type="button" onclick="showStep(1)" class="bg-gray-500 dark:bg-gray-700 text-white px-5 py-2 mt-4 mr-2">Back</button>
+            <button type="button" onclick="showStep(3)" class="bg-blue-500 text-white px-5 py-2 mt-4">Next</button>
         </div>
 
        
         <!-- Step 3: Role Assignment -->
         <div id="step3" class="wizard-step hidden">
-            <h2 class="text-2xl font-semibold mb-4">Role Assignment</h2>
-            <p class="mb-2 text-gray-700 dark:text-gray-200">Assign specific roles to the stakeholders selected in the previous step.</p>
+            <h2 class="text-2xl font-semibold mb-3">Role Assignment</h2>
+            <p class="mb-6 text-gray-500 dark:text-gray-400">Assign specific roles to the stakeholders selected in the previous step.</p>
 
             <!-- Stakeholder Grid -->
             <div id="stakeholderGrid" class="stakeholder-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
@@ -178,8 +178,8 @@
             </div>
 
             <!-- Navigation Buttons -->
-            <button type="button" onclick="showStep(2)" class="bg-gray-500 text-white px-4 py-2 mt-4 mr-2">Back</button>
-            <button type="button" onclick="showStep(4)" class="bg-blue-500 text-white px-4 py-2 mt-4">Next</button>
+            <button type="button" onclick="showStep(2)" class="bg-gray-500 dark:bg-gray-700 text-white px-5 py-2 mt-4 mr-2">Back</button>
+            <button type="button" onclick="showStep(4)" class="bg-blue-500 text-white px-5 py-2 mt-4">Next</button>
 
         </div>
 
@@ -189,8 +189,8 @@
         <div id="step4" class="wizard-step hidden">
             <h2 class="text-2xl font-semibold mb-4">Workflow Setup</h2>
             <!-- Optional fields like milestones, budget, notes -->
-            <button type="button" onclick="showStep(3)" class="bg-gray-500 text-white px-4 py-2 mt-4 mr-2">Back</button>
-            <button type="button" onclick="showStep(5)" class="bg-blue-500 text-white px-4 py-2 mt-4">Next</button>
+            <button type="button" onclick="showStep(3)" class="bg-gray-500 dark:bg-gray-700 text-white px-5 py-2 mt-4 mr-2">Back</button>
+            <button type="button" onclick="showStep(5)" class="bg-blue-500 text-white px-5 py-2 mt-4">Next</button>
         </div>
         --}}
 
@@ -200,7 +200,7 @@
             @include('metsl.pages.projects.wizard.review_step')
 
             <!-- Display summary of project details -->
-            <button type="button" onclick="showStep(3)" class="bg-gray-500 text-white px-4 py-2 mt-4 mr-2">Back</button>
+            <button type="button" onclick="showStep(3)" class="bg-gray-500 dark:bg-gray-700 text-white px-5 py-2 mt-4 mr-2">Back</button>
             <button type="submit"id="submit_project_form" class="bg-green-500 text-white px-4 py-2 mt-4">Submit Project</button>
         </div>
     </form>
@@ -700,10 +700,8 @@ function stakeholderCard(users, title, grid){
 
             // Create stakeholder card
             const card = document.createElement("div");
-            card.classList.add("stakeholder-card", "bg-gray-800", "rounded-lg", "p-4", "shadow-md", "cursor-pointer");
+            card.classList.add("stakeholder-card", "bg-gray-800", "rounded-xl", "p-4", "shadow-md", "cursor-pointer");
             card.onclick = () => openRoleAssignmentModal(stakeholder);
-
-            
 
             const stakeholderGroup = document.createElement("div");
             stakeholderGroup.classList.add("mb-3", "text-sm", "text-blue-500"); 
@@ -750,7 +748,6 @@ function stakeholderCard(users, title, grid){
 
             // Append card to grid
             grid.appendChild(card);
-
             
             let stakholder_review = `<div class="p-4 border  bg-gray-800 border-gray-700">
                 <div class="flex items-center mb-4">
@@ -778,6 +775,11 @@ function stakeholderCard(users, title, grid){
 
 
         });
+
+        $(grid).append(`
+                <div class="separator sm:col-span-2 md:col-span-3 lg:col-span-4  h-[1px] my-4 bg-gray-200 dark:bg-gray-800"></div>
+            
+            `);
     }
 }
 

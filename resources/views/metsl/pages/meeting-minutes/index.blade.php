@@ -48,13 +48,13 @@
         <table class="w-full text-left border-collapse border dark:border-gray-800">
             <thead class="bg-gray-100 dark:bg-gray-800 text-sm text-left">
                 <tr>
-                    <th class="px-4 py-2 font-light">Title</th>
+            
                     <th class="px-4 py-2 font-light">Meeting Type</th>
                     <th class="px-4 py-2 font-light">Planned Date</th>
                     <th class="px-4 py-2 font-light">Status</th>
-                    <th class="px-4 py-2 font-light">Start Time</th>
+                    <th class="px-4 py-2 font-light">Planned Start</th>
                     <th class="px-4 py-2 font-light">Participants</th>
-                    <th class="px-4 py-2 font-light">Overview</th>
+                    <th class="px-4 py-2 font-light">Agenda</th>
                     <th class="px-4 py-2 font-light">Action</th>
                 </tr>
             </thead>
@@ -97,7 +97,6 @@
 					let url = "{{ route('projects.meetings.edit', [':id']) }}".replace(':id', all_meetings[i].id);
 					html+=`<tr class="border-b dark:border-gray-800">
 							<td class="px-4 py-2"><a target="_blank" href="${url}">${all_meetings[i].name}</a></td>
-							<td class="px-4 py-2">${all_meetings[i].number}</td>
 							<td class="px-4 py-2">${all_meetings[i].planned_date}</td>
 							<td class="px-4 py-2">
 								<span class="px-3 py-1 rounded-full text-xs ${all_meetings[i].color} text-white">${all_meetings[i].status_text}</span>
