@@ -85,7 +85,11 @@ class UserService
 
         $users = $this->userRepository->get_users_of_project($project_id , $permission_id);
         foreach($users as $user){
-            $job_title = $user->allRoles[0]->pivot->job_title != NULL ?' - ('. $user->allRoles[0]->pivot->job_title.')' : '';
+            if(isset($user->allRoles[0])){
+                $job_title = $user->allRoles[0]->pivot->job_title != NULL ?' - ('. $user->allRoles[0]->pivot->job_title.')' : '';
+            } else{
+                $job_title='';
+            }
             $user->name = $user->name.' '.$job_title;
             if($permission_id != '' && $user->allPermissions->count() > 0 ){
                 $usArrers[] = $user;

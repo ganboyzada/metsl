@@ -89,7 +89,7 @@ class MeetingPlaningService
     }
 
     public function find($meeting_planing_id){
-        $punch_list =  $this->meetingPlaningRepository->with([ 'users:id' , 'files'])->find($meeting_planing_id);
+        $punch_list =  $this->meetingPlaningRepository->with([ 'users:name' , 'files'])->find($meeting_planing_id);
         return $punch_list;
     }
 

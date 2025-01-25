@@ -15,14 +15,16 @@
         <div class="col-span-1">
             <label for="meeting_type" class="block text-sm mb-2 font-medium dark:text-gray-200">Meeting Type</label>
             <select id="name" onchange="check_type(this)" name="name" class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200" required>
-                <option value="">select type</option>
+                <option value="">Select type</option>
                 @php
                 $meeting_types = \App\Models\MeetingTypes::where('project_id', \Session::get('projectID'))->get();
                 @endphp
+
+                
                 @foreach ($meeting_types as $meeting_type)
                     <option value="{{$meeting_type->name}}">{{$meeting_type->name}}</option>
                 @endforeach
-                @endphp
+                
                 <option value="0">Add New</option>
 
             </select>
@@ -195,7 +197,7 @@
         }else{
             $('#new-meeting-type').addClass('hidden');
         }
-        element.value = '';
+        // element.value = '';
     }
 
     $("#submit-meeting-type").on("click", function(event) {
