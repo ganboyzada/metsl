@@ -265,79 +265,79 @@
       });
 	 
 
- $("#meeting-planner-form").on("submit", function(event) {
-        const form = document.getElementById("meeting-planner-form");
-        const formData = new FormData(form); 
-            formData.append('purpose',tinyMCE.get('purpose').getContent());
-    
-            $('.error').hide();
-            $('.success').hide();
-            $('.err-msg').hide();
-            $(".error").html("");
-            $(".success").html("");
-            event.preventDefault();  
-            $.ajaxSetup({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                }
-            });
-            $.ajax({
-                url: "{{ route('projects.meetings.store') }}",
-                type: "POST",
-                data: formData,
-                dataType: 'json',
-                contentType: false,
-                processData: false,
-                cache: false,
-                beforeSend: function() {
-                    $(".submit_planing_meeting_form").prop('disabled', true);
-                },
-                success: function(data) {
-                    if (data.success) {
-                         
-                        $(".submit_planing_meeting_form").prop('disabled', false);
-                        
-                        $("#meeting-planner-form")[0].reset();
-						
-						window.scrollTo(0,0);
-
-                        $('.success').show();
-                        $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.success+'</div>');  
-						
-                        $('#file-list').html('');
-						
-						setInterval(function() {
-							location.reload();
-							}, 3000);                        
-
+    $("#meeting-planner-form").on("submit", function(event) {
+            const form = document.getElementById("meeting-planner-form");
+            const formData = new FormData(form); 
+                formData.append('purpose',tinyMCE.get('purpose').getContent());
+        
+                $('.error').hide();
+                $('.success').hide();
+                $('.err-msg').hide();
+                $(".error").html("");
+                $(".success").html("");
+                event.preventDefault();  
+                $.ajaxSetup({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
                     }
-                    else if(data.error){
-                        $(".submit_planing_meeting_form").prop('disabled', false);
-
-                        $('.error').show();
-                        $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.error+'</div>');
-                    }
-                },
-                error: function (err) {
-                    $.each(err.responseJSON.errors, function(key, value) {
-                            var el = $(document).find('[name="'+key + '"]');
-							el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
-                            if(el.length == 0){
-                                el = $(document).find('#file-upload');
-								el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">the documents must be pdf </div>'));
-								
-                            }
+                });
+                $.ajax({
+                    url: "{{ route('projects.meetings.store') }}",
+                    type: "POST",
+                    data: formData,
+                    dataType: 'json',
+                    contentType: false,
+                    processData: false,
+                    cache: false,
+                    beforeSend: function() {
+                        $(".submit_planing_meeting_form").prop('disabled', true);
+                    },
+                    success: function(data) {
+                        if (data.success) {
                             
-                        });
+                            $(".submit_planing_meeting_form").prop('disabled', false);
+                            
+                            $("#meeting-planner-form")[0].reset();
+                            
+                            window.scrollTo(0,0);
 
-                        $(".submit_planing_meeting_form").prop('disabled', false);
+                            $('.success').show();
+                            $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.success+'</div>');  
+                            
+                            $('#file-list').html('');
+                            
+                            setInterval(function() {
+                                location.reload();
+                                }, 3000);                        
+
+                        }
+                        else if(data.error){
+                            $(".submit_planing_meeting_form").prop('disabled', false);
+
+                            $('.error').show();
+                            $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.error+'</div>');
+                        }
+                    },
+                    error: function (err) {
+                        $.each(err.responseJSON.errors, function(key, value) {
+                                var el = $(document).find('[name="'+key + '"]');
+                                el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
+                                if(el.length == 0){
+                                    el = $(document).find('#file-upload');
+                                    el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">the documents must be pdf </div>'));
+                                    
+                                }
+                                
+                            });
+
+                            $(".submit_planing_meeting_form").prop('disabled', false);
 
 
-                }
-            });
-    
-      });
-	  
+                    }
+                });
+        
+        });
+        
 
 	$(".projectButton").on('click',function(event) {
         location.reload();

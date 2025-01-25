@@ -16,6 +16,8 @@ class MeetingPlan extends Model
             'status' => MeetingPlanStatusEnum::class
         ];
     }
+    
+    
     protected $fillable = ['number','name','location','link','planned_date','start_time','duration','timezone','purpose','created_by','project_id','status'];
 
     public function users(): belongsToMany
@@ -26,6 +28,11 @@ class MeetingPlan extends Model
     public function files(): hasMany
     {
         return $this->hasMany(MeetingPlanfiles::class, 'meeting_id');
+    }
+
+    public function notes(): hasMany
+    {
+        return $this->hasMany(MeetingPlanNotes::class, 'meeting_id');
     }
 
     public function project(): belongsTo

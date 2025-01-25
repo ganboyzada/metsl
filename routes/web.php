@@ -113,6 +113,7 @@ Route::middleware([
 	Route::get('/project/meetings/destroy/{id}',  [MeetingPlaningController::class, "destroy"])->name(name: 'projects.meetings.destroy');	
     Route::get('/project/meetings/destroy-file/{id}',  [MeetingPlaningController::class, "destroyFile"])->name(name: 'projects.meetings.destroy-file');	
 	Route::post('/project/meetings/type/store',  [MeetingPlaningController::class, "store_type"])->name(name: 'projects.meetings.type.store');	
+	Route::post('/project/meetings/store_notes',  [MeetingPlaningController::class, "store_notes"])->name(name: 'projects.meetings.store_notes');	
 
 
     Route::get('/project/stakeholders/all',  [StakeholderController::class, "stakeholders"])->name('projects.stakeholders.all');

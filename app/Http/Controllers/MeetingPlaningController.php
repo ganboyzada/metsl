@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\CorrespondenceStatusEnum;
+use App\Enums\MeetingPlanStatusEnum;
 use App\Enums\RevisionStatusEnum;
 use App\Http\Requests\CorrespondenceRequest;
 use App\Http\Requests\DocumentRequest;
@@ -71,13 +72,45 @@ class MeetingPlaningController extends Controller
     public function edit($id){
         $meeting_id = $id;
         $meeting = $this->meetingPlaningService->find($meeting_id);
+
+        $planned_date = $meeting->planned_date;
+        $start_time = $meeting->start_time;
+        $duration_minutes = (int)$meeting->duration; // Duration as an integer
+
+        $meeting_start = Carbon::createFromFormat('Y-m-d H:i:s', $planned_date.' '.$start_time);
+        $meeting_end = $meeting_start->copy()->addMinutes($duration_minutes);
+        $now = Carbon::now();
+
+        //dd($meeting_start.'-'.$meeting_end.'-'.$now);
+        // Determine meeting status dynamically
+        $meeting_status = null;
+
+        if ($now->lessThan($meeting_start)) {
+            $meeting_status = MeetingPlanStatusEnum::PLANNED;
+        } elseif ($now->between($meeting_start, $meeting_end)) {
+            $meeting_status = MeetingPlanStatusEnum::ONGOING;
+        } elseif ($now->greaterThan($meeting_end)) {
+            $meeting_status = MeetingPlanStatusEnum::DONE;
+        }
+
+
+
+
+        $meeting->status = $meeting_status ;
+
+
+        //return $meeting;
+        $reviewers = $this->userService->getUsersOfProjectID($meeting->project_id , 'participate_in_meetings');
+			
+        $users = $reviewers['users'];
         /*$distribution_members = $this->userService->getUsersOfProjectID(Session::get('projectID') , '');
         $responsible = $this->userService->getUsersOfProjectID(Session::get('projectID') , '');
         
         $distribution_members = $distribution_members['users'];
         $responsible = $responsible['users'];*/
       // return $punch_list;
-        return view('metsl.pages.meeting-minutes.edit', get_defined_vars());
+
+      return view('metsl.pages.meeting-minutes.edit', get_defined_vars());
     }
 
     public function update(MeetingPlaningRequest  $request)
@@ -125,8 +158,34 @@ class MeetingPlaningController extends Controller
         $meetingPlanings = $this->meetingPlaningService->getAllProjectMeetingPlaning($id , $request);
         $meetingPlanings->map(function($row){
 
-            $row->status_text = $row->status->text();
-            $row->color = $row->status->color();
+            $planned_date = $row->planned_date;
+            $start_time = $row->start_time;
+            $duration_minutes = (int)$row->duration; // Duration as an integer
+    
+            $meeting_start = Carbon::createFromFormat('Y-m-d H:i:s', $planned_date.' '.$start_time);
+            $meeting_end = $meeting_start->copy()->addMinutes($duration_minutes);
+            $now = Carbon::now();
+    
+            //dd($meeting_start.'-'.$meeting_end.'-'.$now);
+            // Determine meeting status dynamically
+            $meeting_status = null;
+    
+            if ($now->lessThan($meeting_start)) {
+                $meeting_status = MeetingPlanStatusEnum::PLANNED;
+            } elseif ($now->between($meeting_start, $meeting_end)) {
+                $meeting_status = MeetingPlanStatusEnum::ONGOING;
+            } elseif ($now->greaterThan($meeting_end)) {
+                $meeting_status = MeetingPlanStatusEnum::DONE;
+            }
+    
+    
+    
+    
+            $row->status = $meeting_status ;
+
+
+            $row->status_text = $meeting_status->text();
+            $row->color = $meeting_status->color();
             return $row;
         });
      
@@ -161,5 +220,31 @@ class MeetingPlaningController extends Controller
 
         }
     }  
+
+    public function store_notes(){
+
+        $data = request()->all();
+
+        $all_data = [];
+        $meeting = \App\Models\MeetingPlan::find($data['meeting_id']);
+        $meeting->notes()->delete();
+        
+        if(count($data['note']) > 0){
+            foreach($data['note'] as $index=>$note){
+                $insert_arr = [];
+                $insert_arr['note'] = $note; 
+                $insert_arr['type'] = $data['type'][$index]; 
+                $insert_arr['assign_user_id'] = $data['assign_user_id'][$index]; 
+                $insert_arr['deadline'] = $data['deadline'][$index]; 
+                $insert_arr['created_by'] = \Auth::user()->id; 
+                $insert_arr['created_date'] = date('Y-m-d'); 
+                $insert_arr['meeting_id'] = $data['meeting_id'];
+                $all_data[]=$insert_arr;
+            }
+        }
+
+        \App\Models\MeetingPlanNotes::insert($all_data);
+        return response()->json(['success' => 'Form submitted successfully.']);
+    }
 
 }

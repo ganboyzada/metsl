@@ -4,12 +4,13 @@ namespace App\Enums;
 
 enum  MeetingPlanStatusEnum: int
 {
+    case PLANNED = 3;
+
     case ONGOING = 0;
 
     case DONE = 1;
 
     case CANCELLED = 2;
-    case PLANNED = 3;
     case MISSED = 4;
 
     public function text(): string

@@ -3,7 +3,7 @@
     <div class="bg-white dark:bg-gray-800  shadow-lg max-w-3xl w-full p-6">
         <!-- Modal Header -->
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-semibold dark:text-gray-200">Upload Documents</h2>
+            <h2 class="text-xl font-semibold dark:text-gray-200">Change Status</h2>
             <button data-modal="status-modal" class="modal-toggler text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 transition">
                 <i data-feather="x" class="w-5 h-5"></i>
             </button>
