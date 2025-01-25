@@ -85,7 +85,7 @@
 
                 <div class="flex flex-wrap gap-4">
                 @foreach ( $meeting->files as $file )
-                    <span class="px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-800 inline-flex gap-2"><i data-feather="download"></i> {{ $file->file }}</span>
+                    <a href="#" class="px-3 py-1 rounded-full bg-gray-200 dark:bg-gray-800 inline-flex gap-2"><i data-feather="download"></i> {{ $file->file }}</a>
                 @endforeach
                 </div>
                 

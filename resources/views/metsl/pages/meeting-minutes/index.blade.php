@@ -54,7 +54,6 @@
                     <th class="px-4 py-2 font-light">Status</th>
                     <th class="px-4 py-2 font-light">Planned Start</th>
                     <th class="px-4 py-2 font-light">Participants</th>
-                    <th class="px-4 py-2 font-light">Agenda</th>
                     <th class="px-4 py-2 font-light">Action</th>
                 </tr>
             </thead>
@@ -94,6 +93,7 @@
 			let html =``;
 			if(all_meetings.length > 0){
 				for(let i=0;i<all_meetings.length;i++){
+                    console.log(all_meetings[i].users);
 					let url = "{{ route('projects.meetings.edit', [':id']) }}".replace(':id', all_meetings[i].id);
 					html+=`<tr class="border-b dark:border-gray-800">
 							<td class="px-4 py-2"><a target="_blank" href="${url}">${all_meetings[i].name}</a></td>
@@ -103,13 +103,12 @@
 							</td>
 							<td class="px-4 py-2">${all_meetings[i].start_time}</td>
 							<td class="px-4 py-2">${all_meetings[i].users}</td>
-							<td class="px-4 py-2">${all_meetings[i].purpose}</td>
                             <td class="px-4 py-2 flex items-center gap-3">
 								<button onclick="deleteMeetingPlaning(${all_meetings[i].id})" class="text-gray-500 dark:text-gray-400 hover:text-gray-300">
 									<i data-feather="trash" class="w-5 h-5"></i>
 								</button>
 								<a target="_blank" href="${url}" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
-									<i data-feather="edit" class="w-5 h-5"></i>
+									<i data-feather="eye" class="w-5 h-5"></i>
 								</a>
 							</td>
 					
