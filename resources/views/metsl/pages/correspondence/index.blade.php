@@ -108,7 +108,6 @@
 			});
         allDataLength = correspondenceData.length;	
        // alert(allDataLength);
-		console.log(correspondenceData);
         feather.replace();	
         loadedRows = 0;
         rowsToLoad = 4;
