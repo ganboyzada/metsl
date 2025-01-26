@@ -22,66 +22,69 @@
 
             <!-- Conference Link -->
             <div class="col-span-1">
-                <label for="conference-link" class="block text-sm mb-2 font-medium dark:text-gray-200">Conference Link</label>
-                <a href="{{ $meeting->link }}" class="px-3 py-1 rounded-full bg-blue-200 dark:bg-blue-900 inline-flex gap-2"><i data-feather="video"></i>{{ \Str::limit($meeting->link, 20) }}</a>
+                <label for="conference-link" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200">Conference Link</label>
+                <a href="{{ $meeting->link }}" class="text-xs px-2 py-1 rounded-full bg-blue-200 dark:bg-blue-900 inline-flex items-center gap-2">
+                    <i data-feather="video" class="min-w-5 h-5 w-5"></i>{{ \Str::limit($meeting->link, 20) }}</a>
             </div>
 
             <!-- Participants -->
-            <div>
-                <label for="participants" class="block text-sm mb-2 font-medium dark:text-gray-200">Participants</label>
+            <div class="lg:col-span-2">
+                <label for="participants" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200">Participants</label>
 
-                <div class="flex flex-wrap gap-4">
+                <div class="flex flex-wrap gap-3">
                 @foreach($meeting->users as $user)
-                <span class="px-3 py-1 rounded-full bg-blue-200 dark:bg-blue-900">{{ $user->name }}</span>
+                <span class="text-xs px-2 py-1 inline-flex items-center gap-1 rounded-full bg-gray-200 dark:bg-gray-800">
+                    <i data-feather="user" class="min-w-5 h-5 w-5"></i>
+                    {{ $user->name }}</span>
                 @endforeach
                 </div>
             </div>
 
             <div class="col-span-1">
-                <label for="endDate" class="block font-medium text-gray-700 dark:text-gray-200">Status</label>
-                <span class="px-3 py-1 rounded-full text-xs {{ $meeting->status->color() }} text-white">{{ $meeting->status->text() }}</span>
+                <label for="endDate" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200">Status</label>
+                <span class="px-3 py-1 font-bold rounded-full text-xs {{ $meeting->status->color() }} text-white">{{ strtoupper($meeting->status->text()) }}</span>
             </div>
 
             <!-- Meeting Location -->
             <div class="col-span-1">
-                <label for="meeting-location" class="block text-sm mb-2 font-medium dark:text-gray-200">Meeting Location:</label>
+                <label for="meeting-location" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200">Meeting Location:</label>
                 <p>{{ $meeting->location }}</p>
             </div>
 
             <!-- Planned Date -->
             <div class="col-span-1">
-                <label for="planned-date" class="block text-sm mb-2 font-medium dark:text-gray-200">Planned Date:</label>
+                <label for="planned-date" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200">Planned Date:</label>
                 <p>{{ $meeting->planned_date }}</p>
             </div>
 
             <!-- Start Time -->
             <div class="col-span-1">
-                <label for="start-time" class="block text-sm mb-2 font-medium dark:text-gray-200">Start Time:</label>
+                <label for="start-time" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200">Start Time:</label>
                 <p>{{ $meeting->start_time }}</p>
             </div>
 
             <!-- Duration -->
             <div class="col-span-1">
-                <label for="duration" class="block text-sm mb-2 font-medium dark:text-gray-200">Duration:</label>
+                <label for="duration" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200">Duration:</label>
                 <p>{{$meeting->duration }} minutes</p>
             </div>
 
             <!-- Time Zone -->
             <div class="col-span-1">
-                <label for="time-zone" class="block text-sm mb-2 font-medium dark:text-gray-200">Time Zone:</label>
+                <label for="time-zone" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200">Time Zone:</label>
                 <p>{{$meeting->timezone }}</p>
             </div>
 
             <!-- Meeting Purpose -->
             <div class="col-span-1">
-                <label for="meeting-purpose" class="block text-sm mb-2 font-medium dark:text-gray-200">Meeting Purpose:</label>
+                <label for="meeting-purpose" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200">Meeting Agenda:</label>
                 <div>{!! $meeting->purpose !!}</div>
             </div>
 
             <!-- Attachments -->
             <div class="col-span-1">
             
-                <label for="attachments" class="block text-sm mb-2 font-medium dark:text-gray-200">Attachments:</label>
+                <label for="attachments" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200">Attachments:</label>
 
                 <div class="flex flex-wrap gap-4">
                 @foreach ( $meeting->files as $file )
@@ -93,15 +96,15 @@
 
         </div>
 
-        <div class="lg:col-span-2 rounded-xl bg-gray-100 dark:bg-gray-800 p-5">
-            <h3 class="text-xl mb-4">Meeting Notes</h3>
+        <div class="lg:col-span-2 rounded-xl bg-gray-100 dark:bg-gray-800 py-5">
+            <h3 class="text-xl mb-4 px-5">Meeting Notes</h3>
             <form id="meeting-planner-form" method="POST" >
                 @csrf
                 <input type="hidden" id="project_id" name="project_id" value="{{ \Session::get('projectID') }}"/>
                 <input type="hidden" id="meeting_id" name="meeting_id" value="{{ $meeting->id }}"/>
                 <div class="overflow-x-auto">
-                    <table class="w-full border-collapse border border-gray-200 dark:border-gray-700" id="meeting-notes">
-                        <thead class="bg-gray-200 dark:bg-gray-700 text-sm text-left">
+                    <table class="w-full" id="meeting-notes">
+                        <thead class="bg-gray-200 dark:bg-gray-900/50 text-sm text-left">
                             <tr>
                                 <th class="px-2 py-1 font-light">ID</th>
                                 <th class="px-2 py-1 font-light">
@@ -122,30 +125,31 @@
                         <tbody>    
                             @if ($meeting->notes->count() > 0)
                                 @foreach ($meeting->notes as $index=>$note) 
-                                <tr class="meeting-note">
+                                <tr class="meeting-note ">
                                     <td class="px-2 py-2">{{ $index++ }}</td>
                                     <td class="px-2 py-2">
-                                        <input required value="{{ $note->note }}" type="text" placeholder="your note ..." name="note[]" id="note" class="rounded-full ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white"/>
+                                        <input required value="{{ $note->note }}" type="text" 
+                                            placeholder="Your note ..." name="note[]"
+                                            class="text-sm rounded-full ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white"/>
                                     </td>
                                     <td class="px-2 py-2">
-                                        <select name="type[]" id="task_type" class="rounded-full ps-3 pe-5 py-1 border bg-transparent font-bold border-blue-500 text-blue-500">
+                                        <select name="type[]" onchange="changeNoteType(event)" class="text-sm rounded-full ps-3 pe-8 py-1 border bg-transparent font-bold border-blue-500 text-blue-500">
                                             <option value="note" {{ $note->type == 'note' ? 'selected' : '' }}>Note</option>
                                             <option value="action" {{ $note->type == 'action' ? 'selected' : '' }}>Action</option>
                                         </select>
                                     </td>
                                     <td class="px-2 py-2">
                                     <!-- Will SHOW only when TYPE is ACTION -->
-                                        <select name="assign_user_id[]" id="assignee" class="rounded-full ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white">
+                                        <select name="assign_user_id[]" class="assignee {{ $note->type == 'note' ? 'hidden' : '' }} text-sm rounded-full max-w-48 ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white">
                                             <option value="">Select</option>    
                                             @foreach($users as $user)
                                                 <option value="{{ $user->id }}" {{ $note->assign_user_id == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
                                             @endforeach
-                                            
                                         </select>
                                     </td>
                                     <td class="px-2 py-2">
                                         <!-- Will SHOW only when TYPE is ACTION -->
-                                        <input type="date" name="deadline[]" value="{{ $note->deadline }}" class="rounded-full ps-3 pe-5 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white">
+                                        <input type="date" name="deadline[]" value="{{ $note->deadline }}" class="deadline {{ $note->type == 'note' ? 'hidden' : '' }} text-sm rounded-full ps-3 pe-5 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white">
                                     </td>
                                 </tr>
                                 @endforeach
@@ -153,17 +157,18 @@
                             <tr class="meeting-note">
                                 <td class="px-2 py-2">1</td>
                                 <td class="px-2 py-2">
-                                    <input required type="text" placeholder="your note ..." name="note[]" id="note" class="rounded-full ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white"/>
+                                    <input required type="text" placeholder="your note ..." name="note[]" 
+                                        class="text-sm rounded-full ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white"/>
                                 </td>
                                 <td class="px-2 py-2">
-                                    <select name="type[]" id="task_type" class="rounded-full ps-3 pe-5 py-1 border bg-transparent font-bold border-blue-500 text-blue-500">
+                                    <select name="type[]" id="task_type" class="text=sm rounded-full ps-3 pe-8 py-1 border bg-transparent font-bold border-blue-500 text-blue-500">
                                         <option value="note">Note</option>
                                         <option value="action">Action</option>
                                     </select>
                                 </td>
                                 <td class="px-2 py-2">
                                 <!-- Will SHOW only when TYPE is ACTION -->
-                                    <select name="assign_user_id[]" id="assignee" class="rounded-full ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white">
+                                    <select name="assign_user_id[]" class="assignee hidden rounded-full text-sm ps-3 pe-8 py-1 max-w-48 border-none bg-gray-200 dark:bg-gray-700 dark:text-white">
                                         <option value="">Select</option>    
                                         @foreach($users as $user)
                                             <option value="{{ $user->id }}">{{ $user->name }}</option>
@@ -173,7 +178,7 @@
                                 </td>
                                 <td class="px-2 py-2">
                                     <!-- Will SHOW only when TYPE is ACTION -->
-                                    <input type="date" name="deadline[]" class="rounded-full ps-3 pe-5 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white">
+                                    <input type="date" name="deadline[]" class="deadline hidden text-sm rounded-full ps-3 pe-5 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white">
                                 </td>
                             </tr>  
                             @endif
@@ -181,9 +186,10 @@
                         </tbody>
                     </table>
                 </div>
-                <button type="button" onclick="addNote()" class="mt-4 w-full py-3 px-4 bg-gray-200 dark:bg-gray-700 rounded-full hover:bg-orange-400 flex gap-4 justify-center"><i data-feather="plus-circle"></i>Add Note</button>
-
-                <button type="submit" class="submit_planing_meeting_form mt-6 py-3 px-4 bg-gray-200 dark:bg-gray-700 rounded-xl hover:bg-blue-500 flex gap-4 justify-center"><i data-feather="save"></i>Save Changes</button>
+                <div class="px-5">
+                    <button type="button" onclick="addNote()" class="mt-4 w-full py-2 px-4 bg-gray-200 dark:bg-gray-700 rounded-full hover:bg-blue-500/50 flex gap-4 justify-center"><i data-feather="plus-circle"></i>Add Note</button>
+                    <button type="submit" class="submit_planing_meeting_form mt-6 py-3 px-4 bg-gray-200 dark:bg-gray-700 rounded-xl hover:bg-blue-500 flex gap-4 justify-center"><i data-feather="save"></i>Save Changes</button>
+                </div>
             </form>
         </div>
     </div>
@@ -192,6 +198,20 @@
 
 @push('js')
 <script>
+
+    function changeNoteType(event){
+        let meeting_note = $(event.target).closest('tr');
+        console.log(meeting_note);
+
+        if(event.target.value=="note"){
+            meeting_note.find('.assignee').hide();
+            meeting_note.find('.deadline').hide();
+        } else{
+            meeting_note.find('.assignee').show();
+            meeting_note.find('.deadline').show();
+        }
+    }
+
     $("#meeting-planner-form").on("submit", function(event) {
         alert('ok');
         const form = document.getElementById("meeting-planner-form");
@@ -229,7 +249,7 @@
                         window.scrollTo(0,0);
 
                         $('.success').show();
-                        $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.success+'</div>');  
+                        $('.success').html('<div class= "text-white-500 px-2 py-1 text-sm font-semibold">'+data.success+'</div>');  
                         
                         $('#file-list').html('');
                         
@@ -272,17 +292,17 @@ function addNote(){
         <tr class="meeting-note">
             <td class="px-2 py-2">1</td>
             <td class="px-2 py-2">
-                <input required type="text" placeholder="your note ..." name="note[]" id="note" class="rounded-full ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white"/>
+                <input required type="text" placeholder="your note ..." name="note[]" id="note" class="text-sm rounded-full ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white"/>
             </td>
             <td class="px-2 py-2">
-                <select name="type[]" id="task_type" class="rounded-full ps-3 pe-5 py-1 border bg-transparent font-bold border-blue-500 text-blue-500">
+                <select name="type[]" id="task_type" onchange="changeNoteType(event)" class="text-sm rounded-full ps-3 pe-8 py-1 border bg-transparent font-bold border-blue-500 text-blue-500">
                     <option value="note">Note</option>
                     <option value="action">Action</option>
                 </select>
             </td>
             <td class="px-2 py-2">
             <!-- Will SHOW only when TYPE is ACTION -->
-                <select name="assign_user_id[]" id="assignee" class="rounded-full ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white">
+                <select name="assign_user_id[]" id="assignee" class="assignee hidden text-sm rounded-full max-w-48 ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white">
                     <option value="">Select</option>
                     `;
                     @foreach($users as $user)
@@ -293,7 +313,7 @@ function addNote(){
             </td>
             <td class="px-2 py-2">
                 <!-- Will SHOW only when TYPE is ACTION -->
-                <input type="date" name="deadline[]" class="rounded-full ps-3 pe-5 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white">
+                <input type="date" name="deadline[]" class="deadline hidden text-sm rounded-full ps-3 pe-5 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white">
             </td>
         </tr>
     `;
