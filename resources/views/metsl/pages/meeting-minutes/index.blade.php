@@ -11,13 +11,13 @@
                 <input
                     type="date"
                     id="start-date" value="{{ date_format(\Carbon\Carbon::today(), 'd.m.Y') }}"
-                    class="border-0 px-3 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
+                    class="border-0 px-3 py-2 bg-gray-200 dark:bg-gray-800 dark:text-gray-200"
                 />
                 <span class="mx-2 text-gray-500 dark:text-gray-400">to</span>
                 <input
                     type="date"
                     id="end-date" value="{{ date_format(\Carbon\Carbon::today(), 'd.m.Y') }}"
-                    class="border-0 px-3 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
+                    class="border-0 px-3 py-2 bg-gray-200 dark:bg-gray-800 dark:text-gray-200"
                 />
             </div>
 
@@ -28,7 +28,7 @@
                 type="text"
 				id="search"
                 placeholder="Search"
-                class="pl-10 pr-4 py-2 border-0 bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
+                class="pl-10 pr-4 py-2 border-0 bg-gray-200 dark:bg-gray-800 dark:text-gray-200"
             />
             </div>
         </div>

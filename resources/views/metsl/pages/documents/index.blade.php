@@ -6,7 +6,7 @@
 	<div class="flex flex-wrap lg:flex-nowrap gap-2 w-full md:w-auto">
 		<div class="relative flex items-center w-full sm:w-1/2 md:w-full">
             <input type="text" id="searchDocuments" placeholder="Search by Doc.No" oninput="get_documents()"
-                class="w-full pl-10 pr-4 py-2 border-0 bg-gray-200 dark:bg-gray-700 dark:text-gray-200" />
+                class="w-full pl-10 pr-4 py-2 border-0 bg-gray-200 dark:bg-gray-800 dark:text-gray-200" />
             <i data-feather="search" class="absolute left-2 top-2"></i>
         </div>
 		@php
@@ -14,7 +14,7 @@
 		@endphp
 		<div class="has-dropdown w-full sm:w-1/2 md:w-full relative inline-block text-left">
 			<!-- Dropdown Toggle Button -->
-			<button class="dropdown-toggle w-full flex gap-2 items-center px-3 py-2 bg-gray-200 dark:bg-gray-700">
+			<button class="dropdown-toggle w-full flex gap-2 items-center px-3 py-2 bg-gray-200 dark:bg-gray-800">
 				<i data-feather="folder" class="text-gray-500 dark:text-gray-400"></i>
 				<span class="text-sm font-semibold me-auto" id="current-doc-package">Choose a Package</span>
 				<i data-feather="chevron-down" class="text-gray-400 dark:text-gray-500"></i>
@@ -39,7 +39,7 @@
 				</div>
 			</div>
 		</div>
-		<button type="button" class="modal-toggler px-2 bg-gray-700 text-orange-400" data-modal="package-modal">
+		<button type="button" class="modal-toggler px-2 bg-gray-200 dark:bg-gray-800 text-orange-400" data-modal="package-modal">
 			<i data-feather="plus"></i>
 		</button>
 	</div>
@@ -311,10 +311,10 @@
 		let html = ``;
 		if(all_documents.length > 0){
 			for(let i=0; i<all_documents.length; i++){
-				html+=`<div id="doc${i}" class="relative h-36 p-4 bg-gray-100 dark:bg-gray-800  shadow-md group transition transform hover:scale-105">
+				html+=`<div id="doc${i}" class="relative h-36 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md group transition transform hover:scale-105">
 					<h3 class="text-sm font-medium dark:text-gray-400 mb-2 truncate">${all_documents[i].title == null ? all_documents[i].number : all_documents[i].title}</h3>
 
-					<span class="flex absolute top-4 right-4 text-xs font-semibold text-blue-500 dark:text-blue-300">
+					<span class="flex absolute bottom-10 right-4 text-xs font-semibold text-blue-500 dark:text-blue-300">
 						${all_documents[i].created_date}
 						<a onclick="delete_doc(${i} , ${all_documents[i].id})" href="#" class="text-red-500 dark:text-red-400 hover:text-red-300">
 							<i data-feather="trash" class="ms-2 w-5 h-5"></i>

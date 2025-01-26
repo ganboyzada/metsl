@@ -1,6 +1,6 @@
 <!-- Uploader Modal -->
-<div id="uploader-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-    <div class="bg-white dark:bg-gray-800  shadow-lg max-w-3xl w-full p-6">
+<div id="uploader-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg max-w-3xl w-full p-6">
         <!-- Modal Header -->
         <div class="flex justify-between items-center mb-4">
             <h2 class="text-xl font-semibold dark:text-gray-200">Upload Documents</h2>
@@ -21,7 +21,7 @@
             <!-- Drag and Drop Zone -->
             <div>
                 <label class="block mb-1">Attachments (PDF only)</label>
-                <div id="drop-zone" class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed  dark:bg-gray-800 dark:border-gray-700 border-gray-300">
+                <div id="drop-zone" class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed dark:border-gray-700 border-gray-300">
                     <div class="flex flex-col items-center justify-center">
                         <i data-feather="upload" class="w-10 h-10 text-gray-500"></i>
                         <p class="text-sm text-gray-500">Click to upload or drag and drop</p>
@@ -44,7 +44,7 @@
                         type="text"
 						name="number"
                         id="document-number"
-                        class="w-full px-3 py-2 border  dark:bg-gray-800 dark:text-gray-200"
+                        class="w-full px-3 py-2 dark:bg-gray-800 dark:text-gray-200"
                         placeholder="Extracted from file name"
                         readonly
                     />
@@ -52,7 +52,7 @@
                         <input
                             type="checkbox"
                             id="custom-number-toggle"
-                            class="mr-2 h-4 w-4 text-blue-500 border-gray-300 rounded"
+                            class="mr-2 h-4 w-4 text-blue-500 border-gray-300"
                         />
                         Custom Input
                     </label>
@@ -64,7 +64,7 @@
                 <div class="flex gap-2">  
                     <div class="w-1/3">
                         <label for="package" class="block text-sm font-medium dark:text-gray-200 mb-1">Package</label>
-                        <select name="package_id" id="package_id" class="w-full px-3 py-2 border dark:bg-gray-800 dark:text-gray-200">
+                        <select name="package_id" id="package_id" class="w-full px-3 py-2 dark:bg-gray-800 dark:text-gray-200">
 
                             @if ($packages->count() > 0)
                                 @foreach ($packages as $package)
@@ -79,7 +79,7 @@
                             type="text"
                             id="title"
                             name="title"
-                            class="w-full px-3 py-2 border  dark:bg-gray-800 dark:text-gray-200"
+                            class="w-full px-3 py-2 dark:bg-gray-800 dark:text-gray-200"
                             placeholder="Enter title"
                         />
                     </div>
@@ -88,7 +88,7 @@
             </div>
 
             <!-- Reviewers -->
-            <div class="mb-4">
+            <div class="mb-6">
                 <label for="reviewers" class="block text-sm font-medium dark:text-gray-200 mb-1">Reviewers</label>
                 <select id="reviewers" name="reviewers[]" multiple class="w-full px-3 py-2 border  dark:bg-gray-800 dark:text-gray-200">
                 </select>

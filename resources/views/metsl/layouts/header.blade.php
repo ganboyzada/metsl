@@ -7,15 +7,15 @@
             </a>
 
             <div class="toolbox flex flex-nowrap gap-2 absolute md:static left-0 top-[140%] w-[90vw] md:w-auto">
-                <div class="w-2/5 sm:w-auto has-dropdown relative inline-block text-left z-2">
+                <div class="w-1/2 sm:w-auto has-dropdown relative inline-block text-left z-2">
                     <!-- Dropdown Toggle Button -->
-                    <button class="dropdown-toggle w-full flex items-center px-4 py-2 bg-gray-200 dark:bg-gray-800">
+                    <button class="dropdown-toggle w-full flex items-center px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-800">
                         <span id="selected-project" class="flex flex-col items-start text-xs mr-2 font-medium me-auto">Project<b id="project-variable">{{  session('projectName')  }}</b></span>
-                        <i data-feather="chevron-down"></i>
+                        <i class="ms-auto" data-feather="chevron-down"></i>
                     </button>
 
                     <!-- Dropdown Menu -->
-                    <div  id="dropdown-toggle" class="dropdown absolute left-0 mt-2 min-w-full w-[130%] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg hidden">
+                    <div  id="dropdown-toggle" class="dropdown absolute left-0 rounded-lg mt-2 min-w-full w-[130%] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg hidden">
                         <ul class="py-2">
                             <!-- List of Projects (Replace these with dynamic content) -->
                             @if($projects->count() > 0) 
@@ -28,15 +28,11 @@
                             @endif
 
                             <li class="px-3 pt-2">
-                            <a href="{{ route('projects') }}" class="text-xs inline-flex w-full px-3 py-1 bg-gray-600 hover:bg-blue-700 text-white font-medium">
-                                All Projects
+                            <a href="{{ route('projects') }}" class="text-xs inline-flex w-full px-3 rounded-lg py-1 bg-gray-600 hover:bg-blue-700 text-white font-medium">
+                                My Projects
                             </a>
                             </li>
-                            <li class="px-3 pt-2">
-                            <a href="{{ route('projects.create') }}" class="text-xs inline-flex items-center w-full px-3 py-1 bg-blue-900 hover:bg-blue-700 text-white">
-                                <i data-feather="plus" class="mr-1"></i> New Project
-                            </a>
-                            </li>
+
                             <!-- Add more projects as needed -->
                         </ul>
                     </div>
@@ -98,14 +94,14 @@
                     </div>   
                 </button>
                 <!-- User Dropdown Menu -->
-                <div id="userDropdown" class="hidden absolute right-0 mt-2 w-52 bg-white dark:bg-gray-700 shadow-lg  py-2 z-10">
+                <div id="userDropdown" class="hidden absolute right-0 mt-2 w-52 bg-gray-100 rounded-lg dark:bg-gray-800 shadow-lg  py-2 z-[60]">
                     <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100/25"><i data-feather="user" class="mr-3"></i>Profile</a>
-                    <a href="{{ route('roles') }}" class="flex items-center px-4 py-2 hover:bg-gray-100/25">
+                    <a href="{{ route('roles') }}" class="flex items-center px-4 py-2 hover:bg-gray-200/25">
                         <i data-feather="git-pull-request" class="mr-3"></i>
                         Manage Roles
                         <i data-feather="lock" class="ml-auto w-4 h-4 text-blue-400"></i>
                     </a>
-                    <a href="{{ route('companies') }}" class="flex items-center px-4 py-2 hover:bg-gray-100/25">
+                    <a href="{{ route('companies') }}" class="flex items-center px-4 py-2 hover:bg-gray-200/25">
                         <i data-feather="list" class="mr-3"></i>
                         Companies
                         <i data-feather="lock" class="ml-auto w-4 h-4 text-blue-400"></i>

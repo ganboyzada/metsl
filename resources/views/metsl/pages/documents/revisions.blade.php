@@ -1,6 +1,6 @@
 <!-- Revisions Modal -->
-<div id="revisions-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-    <div class="bg-white dark:bg-gray-800  shadow-lg max-w-3xl w-full p-6">
+<div id="revisions-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg max-w-3xl w-full p-6">
         <!-- Modal Header -->
         <div class="flex justify-between items-center mb-4">
             <h2 id="revisions-title" class="text-xl font-semibold dark:text-gray-200">
@@ -15,9 +15,9 @@
 			<div class= "px-2 py-1 text-sm font-semibold">error occurred</div>
 		</div>
         <!-- Revisions Table -->
-        <table class="w-full text-sm text-left text-gray-600 dark:text-gray-300">
+        <table class="w-full border text-sm text-left text-gray-600 dark:text-gray-300">
             <thead>
-                <tr class="border-b dark:border-gray-700">
+                <tr class="bg-gray-200 dark:bg-gray-800 dark:border-gray-700 font-light">
                     <th class="py-2 px-4">#</th>
                     <th class="py-2 px-4">Title</th>
                     <th class="py-2 px-4">Uploaded By</th>
