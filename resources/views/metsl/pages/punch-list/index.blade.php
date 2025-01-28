@@ -210,11 +210,9 @@
 			status_list_labels = all.status_list_labels;
 			status_list_colors = all.status_list_colors;
             statusPieChart = all.statusPieChart;
-           
-                await runPieChart(status_list_labels , status_list_colors , statusPieChart);
-
-           
-            			
+        
+            await runPieChart(status_list_labels , status_list_colors , statusPieChart);
+			
 		}	
 	
     }
@@ -270,11 +268,9 @@
                     // Pie Chart
 
     }	
-
-	get_punch_list();
 	
 	async function get_punch_list(){
-        if(localStorage.getItem("project_tool") == 'punch_list'){
+        
 		var queryString = $("#filter-punch-list-form").serialize();
 		const search = $('#search_punsh_list').val();
 
@@ -283,41 +279,48 @@
 		
 		let fetchRes = await fetch(url);
 		const all_punch_lists = await fetchRes.json();
-		 
-			let html =``;
-			if(all_punch_lists.length > 0){
-				for(let i=0;i<all_punch_lists.length;i++){
-					let url = "{{ route('projects.punch-list.edit', [':id']) }}".replace(':id', all_punch_lists[i].id);
-					html+=`<tr class="border-b dark:border-gray-800">
-							<td class="px-4 py-2">${all_punch_lists[i].number}</td>
-							<td class="px-4 py-2">${all_punch_lists[i].title}</td>
-							<td class="px-4 py-2">${all_punch_lists[i].status_text}</td>
-							<td class="px-4 py-2">${all_punch_lists[i].responsible.name}</td>
-						
-							<td class="px-4 py-2">${all_punch_lists[i].priority_text}</td>
-							<td class="px-4 py-2">${all_punch_lists[i].date_notified_at ?? '-'}</td>
-							<td class="px-4 py-2">${all_punch_lists[i].date_resolved_at ?? '-'}</td>
-							<td class="px-4 py-2">${all_punch_lists[i].due_date ?? '-'}</td>
-							<td class="px-4 py-2">
-								<button onclick="deletePunchList(${all_punch_lists[i].id})" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
-									<i data-feather="delete" class="w-5 h-5"></i>
-								</button>
-								<a target="_blank" href="${url}" class="text-gray-500 dark:text-gray-400 hover:text-gray-300">
-									<i data-feather="file" class="w-5 h-5"></i>
-								</a>
-							</td>
-					
-							</tr>`;
-				}
-				
-			}
-			feather.replace();
-			$('#punch-lists-table').html(html);
-			feather.replace();			
-			
 
+
+		 
+        
+        if(localStorage.getItem("project_tool") == 'activities'){
+            await loadPunchListWidget(all_punch_lists)
+        } else{
+            await loadPunchList(all_punch_lists)
         }
+        
+        feather.replace();			
+
     }    
+
+    function loadPunchList(list){
+        let html =``;
+        if(list.length > 0){
+            for(let i=0;i<list.length;i++){
+                let url = "{{ route('projects.punch-list.edit', [':id']) }}".replace(':id', list[i].id);
+                html+=`<tr class="border-b dark:border-gray-800">
+                        <td class="px-4 py-2">${list[i].number}</td>
+                        <td class="px-4 py-2">${list[i].title}</td>
+                        <td class="px-4 py-2">${list[i].status_text}</td>
+                        <td class="px-4 py-2">${list[i].responsible.name}</td>
+                    
+                        <td class="px-4 py-2">${list[i].priority_text}</td>
+                        <td class="px-4 py-2">${list[i].date_notified_at ?? '-'}</td>
+                        <td class="px-4 py-2">${list[i].date_resolved_at ?? '-'}</td>
+                        <td class="px-4 py-2">${list[i].due_date ?? '-'}</td>
+                        <td class="px-4 py-2">
+                            <button onclick="deletePunchList(${list[i].id})" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
+                                <i data-feather="delete" class="w-5 h-5"></i>
+                            </button>
+                            <a target="_blank" href="${url}" class="text-gray-500 dark:text-gray-400 hover:text-gray-300">
+                                <i data-feather="file" class="w-5 h-5"></i>
+                            </a>
+                        </td>
+                
+                        </tr>`;
+            }	
+        } $('#punch-lists-table').html(html);
+    }
 
     async function deletePunchList(id){
         $('.error').hide(); 

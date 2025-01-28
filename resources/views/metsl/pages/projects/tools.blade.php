@@ -7,37 +7,29 @@
     </button>
 
     <!-- Dropdown Menu -->
-    <div class="dropdown absolute left-0 mt-2 w-max bg-gray-800 rounded-lg overflow-hidden text-gray-200 shadow-lg hidden">
+    <div class="dropdown absolute left-0 mt-2 w-max bg-gray-800 rounded-lg overflow-hidden text-gray-200 shadow-lg">
         <div data-tabs="project-tools" class="grid grid-cols-1 tab-links bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg text-left">
-            <button data-tab="activities" class="py-3 px-4" onclick="set_in_local_storage('activities');">
+            <button data-tab="activities" class="py-3 px-4" onclick="set_in_local_storage('activities'); ">
                 <i data-feather="activity" class="mr-2"></i> Activities
             </button>
-            <button data-tab="correspondence" class="py-3 px-4" onclick="set_in_local_storage('correspondence'); get_correspondences()">
+            <button data-tab="correspondence" class="py-3 px-4" onclick="set_in_local_storage('correspondence');">
                 <i data-feather="repeat" class="mr-2"></i> Correspondence
             </button>
-            <button data-tab="documents" class="py-3 px-4 "  onclick="set_in_local_storage('documents'); get_documents()">
+            <button data-tab="documents" class="py-3 px-4 "  onclick="set_in_local_storage('documents');">
                 <i data-feather="file-text" class="mr-2"></i> Documents
             </button>
-            <button data-tab="meetings" class=" py-3 px-4"  onclick="set_in_local_storage('meeting_planing'); get_meeting_planing()">
+            <button data-tab="meetings" class=" py-3 px-4"  onclick="set_in_local_storage('meeting_planing');">
                 <i data-feather="calendar" class="mr-2"></i> Meeting Minutes
             </button>
-            <button data-tab="stakeholders" class="py-3 px-4" onclick="set_in_local_storage('stakeholders'); get_stakeholders()">
+            <button data-tab="stakeholders" class="py-3 px-4" onclick="set_in_local_storage('stakeholders');">
                 <i data-feather="users" class="mr-2"></i> Stakeholders
             </button>
-            <button data-tab="punch-list" class="py-3 px-4"   onclick="set_in_local_storage('punch_list'); get_punch_list()">
+            <button data-tab="punch-list" class="py-3 px-4"   onclick="set_in_local_storage('punch_list');">
                 <i data-feather="list" class="mr-2"></i> Punch List
             </button>
-            <button data-tab="task-planner" class="py-3 px-4"   onclick="set_in_local_storage('task_planner'); get_tasks()">
+            <button data-tab="task-planner" class="py-3 px-4"   onclick="set_in_local_storage('task_planner');">
                 <i data-feather="check-circle" class="mr-2"></i> Last Planner
             </button>
-            {{--
-            <button data-tab="images" class="py-3 px-4">
-                <i data-feather="image" class="mr-2"></i> Project Images
-            </button>
-            <button data-tab="documents" class="py-3 px-4">
-                <i data-feather="type" class="mr-2"></i>  Official Documents
-            </button>
-            --}}
         </div>
     </div>
 </div>
@@ -51,7 +43,5 @@ async  function set_in_local_storage(tool){
    // get_reviewers();
 	//get_documents();
   //}
-
-
 }
 </script>

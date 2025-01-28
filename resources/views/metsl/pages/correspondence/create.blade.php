@@ -11,7 +11,7 @@
 
     <!-- Form -->
     <form id="correspondence-form" class="space-y-6"  method="POST" enctype="multipart/form-data">
-	@csrf
+	    @csrf
 		<input type="hidden" name="project_id" value="{{ \Session::get('projectID') }}"/>
 		<input type="hidden" value="{{$type ?? ''}}" name="type"/>
 		<input type="hidden" value="{{$reply_correspondence_id ?? ''}}" name="reply_correspondence_id"/>

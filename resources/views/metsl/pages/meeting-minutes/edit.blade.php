@@ -294,7 +294,7 @@ function addNote(){
     let users = {!! json_encode($users) !!}
     let html = `
         <tr class="meeting-note">
-            <td class="px-2 py-2">${noteCount+1}</td>
+            <td class="px-2 py-2">${noteCount}</td>
             <td class="px-2 py-2">
                 <input required type="text" placeholder="your note ..." name="note[]" id="note" class="text-sm rounded-full ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white"/>
             </td>

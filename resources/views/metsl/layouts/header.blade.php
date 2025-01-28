@@ -6,7 +6,7 @@
                 <img src="{{ asset('images/logo-light.png') }}" class="hidden dark:block" alt="">
             </a>
 
-            <div class="toolbox flex flex-nowrap gap-2 absolute md:static left-0 top-[140%] w-[90vw] md:w-auto">
+            <div class="toolbox flex flex-nowrap items-center gap-2 absolute md:static left-0 top-[140%] w-[90vw] md:w-auto">
                 <div class="w-1/2 sm:w-auto has-dropdown relative inline-block text-left z-2">
                     <!-- Dropdown Toggle Button -->
                     <button class="dropdown-toggle w-full flex items-center px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-800">
@@ -15,7 +15,7 @@
                     </button>
 
                     <!-- Dropdown Menu -->
-                    <div  id="dropdown-toggle" class="dropdown absolute left-0 rounded-lg mt-2 min-w-full w-[130%] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg hidden">
+                    <div  id="dropdown-toggle" class="dropdown absolute left-0 rounded-lg mt-2 min-w-full w-[130%] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg">
                         <ul class="py-2">
                             <!-- List of Projects (Replace these with dynamic content) -->
                             @if($projects->count() > 0) 
@@ -38,6 +38,7 @@
                     </div>
                 </div>
                 @include('metsl.pages.projects.tools')
+                <h1 class="hidden lg:inline text-lg ps-5 font-medium current-selected"></h1>
             </div>
 
             @yield('header')

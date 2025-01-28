@@ -645,3 +645,14 @@ li[data-group]{
         background: #b4c9eb;
     }
 }
+
+.dropdown{
+    max-height: 0;
+    opacity: 0;
+    transition: opacity 0.5s ease, max-height 0.3s ease;
+}
+
+.dropdown.active{
+    opacity: 1;
+    max-height: 500px;
+}

@@ -28,7 +28,7 @@ window.preload = preload;
 
 setTimeout(function(){
     $('#preloader').toggleClass('disabled');
-}, 2000);
+}, 1000);
 
 $(document).ready(function() {
     getLocalStorage();
@@ -43,9 +43,9 @@ $(document).ready(function() {
         // Add .active class to the clicked button
         $(this).addClass('active');
 
-        $(this).closest('.dropdown').toggleClass('hidden');
+        $(this).closest('.dropdown').toggleClass('active');
 
-        $(this).closest('.has-dropdown').find('.current-selected').text($(this).text());
+        $('.current-selected').text($(this).text());
         if (window.location.pathname !== "/") {
             setTimeout(function(){
                 window.location.href = '/';
@@ -59,11 +59,13 @@ $(document).ready(function() {
 
         $(`.tab-content#${target}`).removeClass('hidden');
 
+        getLocalStorage();
+
     });
 
     
     $(document).on('click', 'button.dropdown-toggle', function(){
-        $(this).closest('.has-dropdown').find('.dropdown').toggleClass('hidden');
+        $(this).closest('.has-dropdown').find('.dropdown').toggleClass('active');
     });
 
     $(document).on('click', 'button.modal-toggler', function(){
@@ -133,51 +135,93 @@ function handleFiles(files) {
     });
 }
 
-
-
 function getLocalStorage(){
     $('.tab-links button').removeClass('active');
     if(!$(".tab-content").hasClass("hidden")){
         $(".tab-content").addClass("hidden");
     }
 
-    if(localStorage.getItem("project_tool") == 'documents'){
-        $('.current-selected').html('Documents');
-        $('.tab-content#documents').removeClass('hidden');
-        $("[data-tab='documents']").addClass("active");
-        
-        
-    }
-    else if(localStorage.getItem("project_tool") == 'correspondence'){
-        $('.current-selected').html('Correspondence');	
-        $('.tab-content#correspondence').removeClass('hidden');
-        $("[data-tab='correspondence']").addClass("active");
+    switch (localStorage.getItem("project_tool")) {
+        case 'documents':
+            $('.current-selected').html('Documents')
+            $('.tab-content#documents').removeClass('hidden')
+            $("[data-tab='documents']").addClass("active")
+            try {
+                get_documents()
+            } catch (error) {
+                console.log(error)
+            }
 
-    }
-    else if(localStorage.getItem("project_tool") == 'meeting_planing'){
-        $('.current-selected').html('Meeting Minutes');
-        $('.tab-content#meetings').removeClass('hidden');
-        $("[data-tab='meetings']").addClass("active");
+            break;
+        case 'correspondence':
+            $('.current-selected').html('Correspondence');	
+            $('.tab-content#correspondence').removeClass('hidden');
+            $("[data-tab='correspondence']").addClass("active");
+            try {
+                get_correspondences()
+            } catch (error) {
+                console.log(error)
+            }
+            break;
+        case 'meeting_planing':
+            $('.current-selected').html('Meeting Minutes');
+            $('.tab-content#meetings').removeClass('hidden');
+            $("[data-tab='meetings']").addClass("active");
+            try {
+                get_meeting_planing()
+            } catch (error) {
+                console.log(error)
+            }
 
-    }
-    else if(localStorage.getItem("project_tool") == 'punch_list'){
-        $('.current-selected').html('Punch List');
-        $('.tab-content#punch-list').removeClass('hidden');
-        $("[data-tab='punch-list']").addClass("active");
-    }
-    else if(localStorage.getItem("project_tool") == 'stakeholders'){
-        $('.current-selected').html('Stakeholders');
-        $('.tab-content#stakeholders').removeClass('hidden');
-        $("[data-tab='stakeholders']").addClass("active");
+            break;
+        case 'punch_list':
+            $('.current-selected').html('Punch List');
+            $('.tab-content#punch-list').removeClass('hidden');
+            $("[data-tab='punch-list']").addClass("active");
+            try {
+                get_punch_list()
+            } catch (error) {
+                console.log(error)
+            }
 
-    }
-    else if(localStorage.getItem("project_tool") == 'task_planner'){
-        $('.current-selected').html('Task Planner');
-        $('.tab-content#task-planner').removeClass('hidden');
-        $("[data-tab='task-planner']").addClass("active");
+            break;
+        case 'stakeholders':
+            $('.current-selected').html('Stakeholders');
+            $('.tab-content#stakeholders').removeClass('hidden');
+            $("[data-tab='stakeholders']").addClass("active");
+            try {
+                get_stakeholders()
+            } catch (error) {
+                console.log(error)
+            }
 
-    }
+            break;
+        case 'task_planner':
+            $('.current-selected').html('Task Planner');
+            $('.tab-content#task-planner').removeClass('hidden');
+            $("[data-tab='task-planner']").addClass("active");
+            try {
+                get_tasks()
+            } catch (error) {
+                console.log(error)
+            }
 
+            break;
+        case 'activities':
+            $('.current-selected').html('Activities');
+            $('.tab-content#activities').removeClass('hidden');
+            $("[data-tab='activities']").addClass("active");
+            try {
+                get_correspondences()
+                get_punch_list()
+            } catch (error) {
+                console.log(error)
+            }
+            break;
+    
+        default:
+            break;
+    }
 }
 
 function toggleModal(modalId, action) {

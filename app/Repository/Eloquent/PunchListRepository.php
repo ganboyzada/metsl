@@ -172,7 +172,7 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
 
         })
 
-        ->with(['responsible:id,name'])->get();
+        ->with(['responsible:id,name', 'createdByUser:id,name'])->get();
   
       return $punchLists;
     }

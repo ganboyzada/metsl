@@ -8,7 +8,7 @@
         <!-- Right Section with Project List and Search -->
         <div data-tabs="project-tools" class="tab-view">
             <div class="tab-content hidden" id="activities">
-                Activities
+                @include('metsl.pages.activities')
             </div>
             <div class="tab-content hidden" id="correspondence">
                 @include('metsl.pages.correspondence.index')

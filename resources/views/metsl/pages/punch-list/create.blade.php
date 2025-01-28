@@ -130,6 +130,7 @@
 </div>
 <script>
  $("#snag-item-form").on("submit", function(event) {
+
         const form = document.getElementById("snag-item-form");
         const formData = new FormData(form); 
             formData.append('description',tinyMCE.get('description').getContent());
