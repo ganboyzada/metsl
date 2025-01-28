@@ -233,7 +233,7 @@ class MeetingPlaningController extends Controller
             foreach($data['note'] as $index=>$note){
                 $insert_arr = [];
                 $insert_arr['note'] = $note; 
-                $insert_arr['type'] = $data['type'][$index]; 
+                $insert_arr['type'] = isset($data['type'][$index]) ? 'action' : 'note';
                 $insert_arr['assign_user_id'] = $data['assign_user_id'][$index]; 
                 $insert_arr['deadline'] = $data['deadline'][$index]; 
                 $insert_arr['created_by'] = \Auth::user()->id; 

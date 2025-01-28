@@ -126,17 +126,18 @@
                             @if ($meeting->notes->count() > 0)
                                 @foreach ($meeting->notes as $index=>$note) 
                                 <tr class="meeting-note ">
-                                    <td class="px-2 py-2">{{ $index++ }}</td>
+                                    <td class="px-2 py-2">{{ $index + 1 }}</td>
                                     <td class="px-2 py-2">
                                         <input required value="{{ $note->note }}" type="text" 
                                             placeholder="Your note ..." name="note[]"
                                             class="text-sm rounded-full ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white"/>
                                     </td>
                                     <td class="px-2 py-2">
-                                        <select name="type[]" onchange="changeNoteType(event)" class="text-sm rounded-full ps-3 pe-8 py-1 border bg-transparent font-bold border-blue-500 text-blue-500">
-                                            <option value="note" {{ $note->type == 'note' ? 'selected' : '' }}>Note</option>
-                                            <option value="action" {{ $note->type == 'action' ? 'selected' : '' }}>Action</option>
-                                        </select>
+                                        <div class="checkbox-wrapper-34">
+                                            <input name="type[{{ $index }}]" {{ $note->type == 'action' ? 'checked' : '' }}
+                                                    onchange="changeNoteType(event)" class='tgl tgl-ios' id='toggle-{{ $index }}' type='checkbox'>
+                                            <label class='tgl-btn' for='toggle-{{ $index }}'></label>
+                                        </div>
                                     </td>
                                     <td class="px-2 py-2">
                                     <!-- Will SHOW only when TYPE is ACTION -->
@@ -161,10 +162,11 @@
                                         class="text-sm rounded-full ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white"/>
                                 </td>
                                 <td class="px-2 py-2">
-                                    <select name="type[]" id="task_type" class="text=sm rounded-full ps-3 pe-8 py-1 border bg-transparent font-bold border-blue-500 text-blue-500">
-                                        <option value="note">Note</option>
-                                        <option value="action">Action</option>
-                                    </select>
+                                    <div class="checkbox-wrapper-34">
+                                        <input name="type[0]" onchange="changeNoteType(event)" 
+                                                class='tgl tgl-ios' id='toggle-0' type='checkbox'>
+                                        <label class='tgl-btn' for='toggle-0'></label>
+                                    </div>
                                 </td>
                                 <td class="px-2 py-2">
                                 <!-- Will SHOW only when TYPE is ACTION -->
@@ -201,14 +203,14 @@
 
     function changeNoteType(event){
         let meeting_note = $(event.target).closest('tr');
-        console.log(meeting_note);
+        console.log('RESPONSE: ' + event.target.value);
 
-        if(event.target.value=="note"){
-            meeting_note.find('.assignee').hide();
-            meeting_note.find('.deadline').hide();
-        } else{
+        if(event.target.checked){
             meeting_note.find('.assignee').show();
             meeting_note.find('.deadline').show();
+        } else{    
+            meeting_note.find('.assignee').hide();
+            meeting_note.find('.deadline').hide();
         }
     }
 
@@ -285,20 +287,22 @@
     
     });
     
+let noteCount = parseInt({{ $meeting->notes->count() }});
 
 function addNote(){
+    noteCount++;
     let users = {!! json_encode($users) !!}
     let html = `
         <tr class="meeting-note">
-            <td class="px-2 py-2">1</td>
+            <td class="px-2 py-2">${noteCount+1}</td>
             <td class="px-2 py-2">
                 <input required type="text" placeholder="your note ..." name="note[]" id="note" class="text-sm rounded-full ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white"/>
             </td>
             <td class="px-2 py-2">
-                <select name="type[]" id="task_type" onchange="changeNoteType(event)" class="text-sm rounded-full ps-3 pe-8 py-1 border bg-transparent font-bold border-blue-500 text-blue-500">
-                    <option value="note">Note</option>
-                    <option value="action">Action</option>
-                </select>
+                <div class="checkbox-wrapper-34">
+                    <input name="type[${noteCount}]" onchange="changeNoteType(event)" class='tgl tgl-ios' id='toggle-n${noteCount}' type='checkbox'>
+                    <label class='tgl-btn' for='toggle-n${noteCount}'></label>
+                </div>
             </td>
             <td class="px-2 py-2">
             <!-- Will SHOW only when TYPE is ACTION -->
