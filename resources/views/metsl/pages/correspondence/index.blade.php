@@ -15,6 +15,7 @@
             </div>
             <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-200" >Add Filter</button>
         </div>
+        @permitted('add_correspondence')
         <!-- Create Button with Dropdown -->
         <div class="has-dropdown relative">
             <button
@@ -32,14 +33,16 @@
                // dd($enums_list);
                 @endphp
                 @foreach ($enums_list as $enum)
+                    @permitted('create_'.$enum->name)
                     <a href="{{ url('project/correspondence/create?type='.$enum->value) }}"
                          class="flex px-4 py-2 hover:bg-gray-700"><i class="mr-2" data-feather="{{$enum->dataFeather()}}"></i>{{$enum->name}}</a>
-
+                    @endpermitted
                 @endforeach
 
           
             </div>
         </div>
+        @endif
     </div>
 
     <!-- Correspondence Table -->
@@ -54,7 +57,6 @@
                     <th class="px-6 py-3 font-light">Created by</th>
                     <th class="px-6 py-3 font-light">Created at</th>
                     <th class="px-6 py-3 font-light">Status</th>
-                    <td class="px-6 py-3 font-light">Actions</td>
                 </tr>
             </thead>
             <tbody id="table-body">
@@ -150,12 +152,6 @@
                     <td class="px-6 py-3">${row.created_date}</td>
                     <td class="px-6 py-3">
                         <span class="px-3 py-1 rounded-full text-xs font-bold ${row.status_color[1]}">${row.status_color[0]}</span>
-                    </td>
-                    <td class="px-4 py-2 inline-flex space-x-4 items-center">
-                        <button onclick="deleteCorrespondence(${row.id}  , ${i})" class="text-red-500 dark:text-red-400 hover:text-red-300">
-                            <i data-feather="trash" class="w-5 h-5"></i>
-                        </button>
-                        
                     </td>
                 `;
 

@@ -5,10 +5,12 @@
     <div class="mb-4 lg:mb-0 lg:w-1/6 bg-gray-100 dark:bg-gray-800 px-5 py-4 rounded-xl">
         <div class="flex items-center pb-7">
             <h2 class="text-md font-semibold me-auto">Task Groups</h2>
+            @permitted('create_task_planner')
             <button id="add-group-btn" class="ms-2 px-3 py-1 rounded-full text-sm inline-flex border border-gray-600 dark:bg-gray-700 whitespace-nowrap">
                 <i class="w-5 h-5 mr-2" data-feather="folder-plus"></i>
                 Create
             </button>
+            @endpermitted
         </div>
         
         <ul id="group-list" class="space-y-3">
@@ -30,14 +32,16 @@
                 <span id="current-month" class="text-lg font-semibold text-gray-700 dark:text-gray-200"></span>
             </div>
             <div class="flex items-center">
+                @permitted('create_task_planner')
                 <button id="add-task-btn" class="md:mr-3 text-sm md:text-md inline-flex items-center font-semibold py-2 px-3 md:px-4 bg-blue-200 text-blue-800 hover:bg-blue-500 hover:text-white dark:bg-blue-800 dark:hover:bg-blue-600 dark:text-blue-200 rounded-lg md:rounded-full">
                     <i data-feather="plus"></i> Add Task
                 </button>   
+                @endpermitted
 
                 <button id="zoom-in-btn" class="hidden md:block py-2 px-4 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 rounded-s-full">
                     <i data-feather="zoom-in"></i>
                 </button>
-                <button id="zoom-reset-btn" class="hidden md:block mx-1 py-2 px-2 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200">
+                <button id="zoom-reset-btn" class="hidden md:block mx-1 py-2 px-2 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 rounded-none">
                     <i data-feather="minimize-2"></i>
                 </button>
                 <button id="zoom-out-btn" class="hidden md:block py-2 px-4 bg-gray-200 text-gray-700 hover:bg-gray-300 dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-gray-200 rounded-e-full">
@@ -337,7 +341,7 @@
 
 ];
 
-    get_groups();
+
     async function get_groups() {
         groups = [];
 		let url =`/project/groups/all`;
@@ -365,7 +369,6 @@
         console.log(all_groups);
     }
 
-    get_tasks();
     async function get_tasks() { 
         tasks = [];
 		let url =`/project/tasks/all`;

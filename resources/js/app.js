@@ -201,6 +201,7 @@ function getLocalStorage(){
             $('.tab-content#task-planner').removeClass('hidden');
             $("[data-tab='task-planner']").addClass("active");
             try {
+                get_groups()
                 get_tasks()
             } catch (error) {
                 console.log(error)

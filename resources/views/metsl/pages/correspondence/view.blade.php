@@ -15,9 +15,11 @@
         </button>
         <!-- Dropdown Menu -->
         <div
-            class="dropdown absolute right-0 mt-2 w-48 bg-gray-800 text-gray-200  shadow-lg hidden"
+            class="dropdown absolute right-0 mt-2 w-48 bg-gray-800 text-gray-200  shadow-lg"
         >
+            @permitted('reply_'.$correspondece->type->value)
             <a href="{{ url('project/correspondence/create?type='.$correspondece->type->value.'&correspondece='.$correspondece->id) }}" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Reply</a>
+            @endpermitted
         </div>
     </div>
 </div>

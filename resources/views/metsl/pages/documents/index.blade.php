@@ -21,7 +21,7 @@
 			</button>
 
 			<!-- Dropdown Menu -->
-			<div class="dropdown absolute left-0 min-w-full w-max bg-gray-800 text-gray-200 shadow-lg hidden">
+			<div class="dropdown absolute left-0 min-w-full w-max bg-gray-800 text-gray-200 shadow-lg">
 				<div  class="text-sm grid grid-cols-1 tab-links bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg text-left">
 		
 					
@@ -39,9 +39,11 @@
 				</div>
 			</div>
 		</div>
+		@permitted('add_document_packages')
 		<button type="button" class="modal-toggler px-2 bg-gray-200 dark:bg-gray-800 text-orange-400" data-modal="package-modal">
 			<i data-feather="plus"></i>
 		</button>
+		@endpermitted
 	</div>
     
 
@@ -75,9 +77,11 @@
 			</div>
 		</div>
         
+		@permitted('add_documents')
 		<button onclick="reset_model();" data-modal="uploader-modal" class="modal-toggler bg-blue-500 h-full text-white px-3 py-2 hover:bg-blue-600 flex gap-1 items-center transition duration-200">
 			<i data-feather="file-plus" class="w-5 h-5"></i> <span class="hidden md:inline">Add Document</span>
 		</button>
+		@endpermitted
     </div>
 </div>
 
@@ -149,9 +153,11 @@
 				var file_url = 	`{{asset('storage/project${detail.project_id}/documents${detail.id}/${detail.files[i].file}')}}`;	
 				html+=`<li  class="flex justify-between" id="li${i}">
 				<a target="_blank" href="${file_url}">${detail.files[i].file}(${(detail.files[i].size /1024 ).toFixed(2) } KB)</a>
+				
 				<a onclick="delete_file(${i} , ${detail.files[i].id})" href="#" class="text-red-500 dark:text-red-400 hover:text-red-300">
 					<i data-feather="delete" class="w-5 h-5"></i>
 				</a>
+				
 				</li>`;
 	
 			}
@@ -316,9 +322,11 @@
 
 					<span class="flex absolute bottom-10 right-4 text-xs font-semibold text-blue-500 dark:text-blue-300">
 						${all_documents[i].created_date}
+						{{--
 						<a onclick="delete_doc(${i} , ${all_documents[i].id})" href="#" class="text-red-500 dark:text-red-400 hover:text-red-300">
 							<i data-feather="trash" class="ms-2 w-5 h-5"></i>
 						</a>
+						--}}
 					</span>
 					
 						<i data-feather="file-text" class="w-12 h-12 text-gray-400 dark:text-gray-500"></i>

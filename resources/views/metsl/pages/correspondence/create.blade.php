@@ -6,7 +6,7 @@
 <div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
 <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
 
-<div class="p-6 bg-white dark:bg-gray-900 dark:text-gray-200  shadow-md">
+<div class="dark:text-gray-200">
     <h2 class="text-2xl font-semibold mb-6">Create Correspondence</h2>
 
     <!-- Form -->

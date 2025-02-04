@@ -33,6 +33,7 @@
             </div>
         </div>
 
+        @permitted('add_meeting_planing')
         <!-- Plan Meeting Button -->
         <a href="{{ route('projects.meetings.create') }}"
             id="plan-meeting-button"
@@ -41,6 +42,7 @@
             <i data-feather="video" class="mr-2"></i>
             Plan a Meeting
         </a>
+        @endpermitted
     </div>
 
     <!-- Meetings Table -->
@@ -104,9 +106,6 @@
 							<td class="px-4 py-2">${all_meetings[i].start_time}</td>
 							<td class="px-4 py-2">${all_meetings[i].users}</td>
                             <td class="px-4 py-2 flex items-center gap-3">
-								<button onclick="deleteMeetingPlaning(${all_meetings[i].id})" class="text-gray-500 dark:text-gray-400 hover:text-gray-300">
-									<i data-feather="trash" class="w-5 h-5"></i>
-								</button>
 								<a target="_blank" href="${url}" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
 									<i data-feather="eye" class="w-5 h-5"></i>
 								</a>

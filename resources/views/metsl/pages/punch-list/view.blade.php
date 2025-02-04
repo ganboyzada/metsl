@@ -17,16 +17,19 @@
         </button>
         <!-- Dropdown Menu -->
         <div
-            class="dropdown absolute right-0 mt-2 w-48 bg-gray-800 text-gray-200  shadow-lg hidden"
+            class="dropdown absolute right-0 mt-2 w-48 bg-gray-800 text-gray-200  shadow-lg"
         >
+            @permitted('responsible_punch_list')
             <button  data-modal="uploader-modal" class="modal-toggler  flex px-4 py-2 hover:bg-gray-700">
                 <i data-feather="corner-up-left" class="mr-2"></i> <span class="hidden md:inline">Add Reply</span>
             </button>
+            @endpermitted
 
+            @permitted('update_punch_list_status')
             <button  data-modal="status-modal" class="modal-toggler  flex px-4 py-2 hover:bg-gray-700">
                 <i data-feather="corner-up-left" class="mr-2"></i> <span class="hidden md:inline">Change Status</span>
             </button>
-
+            @endpermitted
         </div>
     </div>
 </div>

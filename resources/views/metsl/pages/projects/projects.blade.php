@@ -20,10 +20,12 @@
             <i data-feather="search" class="absolute left-3"></i>
         </div>
 
+        @permitted('create_projects')
         <!-- Create Company Button -->
         <a href="{{ route('projects.create') }}" class="inline-flex bg-blue-900 text-white px-3 py-2  hover:bg-blue-600">
         <i data-feather="plus" class="mr-1"></i> Create Project
         </a>
+        @endpermitted
     </div>
 
     <!-- Responsive Grid for Companies -->

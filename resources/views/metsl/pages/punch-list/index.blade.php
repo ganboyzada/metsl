@@ -22,7 +22,7 @@
             </button>
 
             <!-- Dropdown -->
-            <div id="filter-dropdown" class="dropdown hidden absolute mt-2 z-10 bg-white dark:bg-gray-800 shadow-lg w-52">
+            <div id="filter-dropdown" class="dropdown absolute mt-2 z-10 bg-white dark:bg-gray-800 shadow-lg w-52">
                 <ul class="divide-y divide-gray-200 dark:divide-gray-700">
                     <li>
                         <button  type="button"
@@ -106,7 +106,9 @@
     </form>
 	</div>
 
+    @permitted('add_punch_list')
     <a href="{{ route('projects.punch-list.create') }}" class="inline-flex px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"><i data-feather="plus" class="mr-2"></i> Create</a>
+    @endpermitted
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 text-gray-600 dark:text-gray-300">
@@ -309,11 +311,8 @@
                         <td class="px-4 py-2">${list[i].date_resolved_at ?? '-'}</td>
                         <td class="px-4 py-2">${list[i].due_date ?? '-'}</td>
                         <td class="px-4 py-2">
-                            <button onclick="deletePunchList(${list[i].id})" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
-                                <i data-feather="delete" class="w-5 h-5"></i>
-                            </button>
                             <a target="_blank" href="${url}" class="text-gray-500 dark:text-gray-400 hover:text-gray-300">
-                                <i data-feather="file" class="w-5 h-5"></i>
+                                <i data-feather="eye" class="w-5 h-5"></i>
                             </a>
                         </td>
                 

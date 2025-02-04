@@ -28,9 +28,9 @@
                             @endif
 
                             <li class="px-3 pt-2">
-                            <a href="{{ route('projects') }}" class="text-xs inline-flex w-full px-3 rounded-lg py-1 bg-gray-600 hover:bg-blue-700 text-white font-medium">
-                                My Projects
-                            </a>
+                                <a href="{{ route('projects') }}" class="text-xs inline-flex w-full px-3 rounded-lg py-1 bg-gray-600 hover:bg-blue-700 text-white font-medium">
+                                    My Projects
+                                </a>
                             </li>
 
                             <!-- Add more projects as needed -->
@@ -97,16 +97,20 @@
                 <!-- User Dropdown Menu -->
                 <div id="userDropdown" class="hidden absolute right-0 mt-2 w-52 bg-gray-100 rounded-lg dark:bg-gray-800 shadow-lg  py-2 z-[60]">
                     <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100/25"><i data-feather="user" class="mr-3"></i>Profile</a>
+                    @permitted('modify_presets')
                     <a href="{{ route('roles') }}" class="flex items-center px-4 py-2 hover:bg-gray-200/25">
                         <i data-feather="git-pull-request" class="mr-3"></i>
                         Manage Roles
                         <i data-feather="lock" class="ml-auto w-4 h-4 text-blue-400"></i>
                     </a>
+                    @endpermitted
+                    @permitted('modify_companies')
                     <a href="{{ route('companies') }}" class="flex items-center px-4 py-2 hover:bg-gray-200/25">
                         <i data-feather="list" class="mr-3"></i>
                         Companies
                         <i data-feather="lock" class="ml-auto w-4 h-4 text-blue-400"></i>
                     </a>
+                    @endpermitted
                     <!-- Dark/Light Mode Toggle -->
                     <button onclick="toggleDarkMode()" class="flex w-full items-center px-4 py-2 hover:bg-gray-100/25">
                         <i data-feather="moon" class="mr-3"></i>Toggle Theme
