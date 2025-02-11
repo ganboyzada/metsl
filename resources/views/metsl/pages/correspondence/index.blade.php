@@ -15,7 +15,6 @@
             </div>
             <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-200" >Add Filter</button>
         </div>
-        @permitted('add_correspondence')
         <!-- Create Button with Dropdown -->
         <div class="has-dropdown relative">
             <button
@@ -33,16 +32,19 @@
                // dd($enums_list);
                 @endphp
                 @foreach ($enums_list as $enum)
-                    @permitted('create_'.$enum->name)
+                @php
+                    $expression = 'create_'.$enum->name;
+
+                @endphp
+                    @if(checkIfUserHasThisPermission(Session::get('projectID') ,$expression))
                     <a href="{{ url('project/correspondence/create?type='.$enum->value) }}"
                          class="flex px-4 py-2 hover:bg-gray-700"><i class="mr-2" data-feather="{{$enum->dataFeather()}}"></i>{{$enum->name}}</a>
-                    @endpermitted
+                    @endif
                 @endforeach
 
           
             </div>
         </div>
-        @endif
     </div>
 
     <!-- Correspondence Table -->
@@ -87,6 +89,7 @@
 			  return item;
 			});
         allDataLength = correspondenceData.length;	
+        console.log(correspondenceData);
         document.getElementById('table-body').innerHTML='';
 		await loadRows();
         feather.replace();	

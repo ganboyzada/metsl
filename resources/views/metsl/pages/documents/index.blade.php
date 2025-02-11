@@ -10,7 +10,15 @@
             <i data-feather="search" class="absolute left-2 top-2"></i>
         </div>
 		@php
+
 			$packages = \App\Models\Package::where('project_id',Session::get('projectID'))->get();
+			if(!auth()->user()->is_admin){
+				$packages2 = \App\Models\Package::join('package_assignees', 'packages.id', '=', 'package_assignees.package_id')
+				->where('project_id',Session::get('projectID'))->where('user_id',auth()->user()->id)->select('packages.*')->get();
+
+			}else{
+				$packages2 = $packages;
+			}
 		@endphp
 		<div class="has-dropdown w-full sm:w-1/2 md:w-full relative inline-block text-left">
 			<!-- Dropdown Toggle Button -->
@@ -39,11 +47,15 @@
 				</div>
 			</div>
 		</div>
-		@permitted('add_document_packages')
+		@php
+			$expression = 'add_document_packages';
+
+		@endphp
+		@if(checkIfUserHasThisPermission(Session::get('projectID') ,$expression))
 		<button type="button" class="modal-toggler px-2 bg-gray-200 dark:bg-gray-800 text-orange-400" data-modal="package-modal">
 			<i data-feather="plus"></i>
 		</button>
-		@endpermitted
+		@endif
 	</div>
     
 
@@ -77,11 +89,11 @@
 			</div>
 		</div>
         
-		@permitted('add_documents')
+		@if(checkIfUserHasThisPermission(Session::get('projectID') ,'add_documents'))
 		<button onclick="reset_model();" data-modal="uploader-modal" class="modal-toggler bg-blue-500 h-full text-white px-3 py-2 hover:bg-blue-600 flex gap-1 items-center transition duration-200">
 			<i data-feather="file-plus" class="w-5 h-5"></i> <span class="hidden md:inline">Add Document</span>
 		</button>
-		@endpermitted
+		@endif
     </div>
 </div>
 
@@ -95,6 +107,7 @@
 @include('metsl.pages.documents.revisions')
 @include('metsl.pages.documents.uploader')
 @include('metsl.pages.documents.comments')
+<input type="text" id="comments_permission" value="{{ checkIfUserHasThisPermission(Session::get('projectID') , 'add_revision_comment') }}"/>
 
 <script>
 	
@@ -267,9 +280,12 @@
 							</a>`;
 					   
 						}
-                        html+=`<button class="text-yellow-500 hover:text-yellow-700 comment-button" onclick="show_comment(${revisions[i].id})">
-                            <i data-feather="message-circle" stroke-width="2" class="w-5 h-5"></i>
-                        </button>`;
+						if($('#comments_permission').val()){
+							html+=`<button class="text-yellow-500 hover:text-yellow-700 comment-button" onclick="show_comment(${revisions[i].id})">
+								<i data-feather="message-circle" stroke-width="2" class="w-5 h-5"></i>
+							</button>`;
+						}
+
 						if(revisions[i].status ==0 || revisions[i].status == 2){
 							html+=`<button onclick="update_status(${revisions[i].id} , 1)" class="text-green-500 hover:text-green-700">
 								<i data-feather="check" stroke-width="2" class="w-5 h-5"></i>

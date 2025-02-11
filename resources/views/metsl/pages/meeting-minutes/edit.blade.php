@@ -215,7 +215,7 @@
     }
 
     $("#meeting-planner-form").on("submit", function(event) {
-        alert('ok');
+        //alert('ok');
         const form = document.getElementById("meeting-planner-form");
         const formData = new FormData(form); 
     

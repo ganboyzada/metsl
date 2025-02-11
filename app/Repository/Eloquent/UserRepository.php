@@ -97,6 +97,30 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
 
     }
 
+
+        /**
+     * @param int $project_id
+    * @param int $permission_id
+    * @return Model
+    */    
+    public function check_if_user_of_project_has_this_permission($project_id , $permission_id): Model
+    {
+        $auth_user_id = \Auth::user()->id;
+            return $this->model->where('users.id',$auth_user_id)->whereHas('projects', function ($query) use ($project_id) {
+                $query->where(function ($q) use ($project_id) {
+                    $q->where('projects.id',$project_id);
+                });
+            })
+            ->with(['allPermissions'=>function($query)use($project_id , $permission_id){
+                $query->wherePivot('project_id',$project_id);
+                $query->wherePivot('permission_id',$permission_id);
+                }])
+                ->select('users.id')
+                ->first();
+       
+
+    }
+
    /**
     * @param int $project_id
     * @param \Request $request

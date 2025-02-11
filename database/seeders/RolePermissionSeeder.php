@@ -13,19 +13,34 @@ class RolePermissionSeeder extends Seeder
      */
     public function run(): void
     {
+        $role = Role::create(['name' => 'projects','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'view_all_projects','guard_name' => 'sanctum']);
+        $role->givePermissionTo($permission);
+        $permission = Permission::create(['name' => 'create_projects','guard_name' => 'sanctum']);
+        $role->givePermissionTo($permission);
+
+
+        $role = Role::create(['name' => 'Roles','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'modify_presets','guard_name' => 'sanctum']);
+        $role->givePermissionTo($permission);
+
+        $role = Role::create(['name' => 'companies','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'modify_companies','guard_name' => 'sanctum']);
+        $role->givePermissionTo($permission);
 
 
         $role = Role::create(['name' => 'correspondence','guard_name' => 'sanctum']);
-        $permission = Permission::create(['name' => 'add_correspondence','guard_name' => 'sanctum']);
+        /*$permission = Permission::create(['name' => 'add_correspondence','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission); 
 
         $permission = Permission::create(['name' => 'assign_correspondence','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
+		*/
 
         $permission = Permission::create(['name' => 'distribution_members_correspondence','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
         
-        $permission = Permission::create(['name' => 'view_all_RFI_correspondence','guard_name' => 'sanctum']);
+        /*$permission = Permission::create(['name' => 'view_all_RFI_correspondence','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
 
         $permission = Permission::create(['name' => 'view_all_RFV_correspondence','guard_name' => 'sanctum']);
@@ -33,7 +48,7 @@ class RolePermissionSeeder extends Seeder
 
         $permission = Permission::create(['name' => 'view_all_RFC_correspondence','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
-
+*/
 
 
         $role = Role::create(['name' => 'documents','guard_name' => 'sanctum']);
@@ -51,11 +66,11 @@ class RolePermissionSeeder extends Seeder
         $role->givePermissionTo($permission);
 		
 		
-        $permission = Permission::create(['name' => 'add_document_revision','guard_name' => 'sanctum']);
+        /*$permission = Permission::create(['name' => 'add_document_revision','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);	
 
         $permission = Permission::create(['name' => 'view_all_document_revisions','guard_name' => 'sanctum']);
-        $role->givePermissionTo($permission);
+        $role->givePermissionTo($permission);*/
 
         $permission = Permission::create(['name' => 'add_revision_comment','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);

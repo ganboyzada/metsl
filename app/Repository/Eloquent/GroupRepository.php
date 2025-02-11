@@ -5,6 +5,7 @@ namespace App\Repository\Eloquent;
 use App\Models\Group;
 use App\Repository\GroupRepositoryInterface;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Session;
 
 class GroupRepository extends BaseRepository implements GroupRepositoryInterface
 {
@@ -27,7 +28,10 @@ class GroupRepository extends BaseRepository implements GroupRepositoryInterface
     */
     public function all_groups($project_id) :Collection
     {
-        return $this->model->where('project_id',$project_id)->get(['id', 'name','color']);
+        if(checkIfUserHasThisPermission(Session::get('projectID') , 'create_task_planner')){
+            return $this->model->where('project_id',$project_id)->get(['id', 'name','color']);
+        }
+        
     }
  
  

@@ -10,5 +10,8 @@ interface ProjectRepositoryInterface
     public function change_status($id , $status): bool;
 
    
-      
+   /**
+    * @return Collection
+    */
+    public function projects_of_user() :Collection;      
 }

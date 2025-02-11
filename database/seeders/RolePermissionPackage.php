@@ -13,10 +13,9 @@ class RolePermissionPackage extends Seeder
     public function run(): void
     {
         $role = Role::create(['name' => 'Package','guard_name' => 'sanctum']);
-        $permission = Permission::create(['name' => 'create_package','guard_name' => 'sanctum']);
+        $permission = Permission::create(['name' => 'modify_package','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission); 
-        $permission = Permission::create(['name' => 'ediet_package','guard_name' => 'sanctum']);
-        $role->givePermissionTo($permission);
+
        
         
     }

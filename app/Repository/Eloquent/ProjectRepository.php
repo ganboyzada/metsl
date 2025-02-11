@@ -33,6 +33,18 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     {
         return $this->model->where('id',$id)->update(['status'=>$status]);
     }
+
+   /**
+    * @return Collection
+    */
+    public function projects_of_user() :Collection{
+        return $this->model->whereHas('stakholders', function ($query) {
+            $query->where(function ($q) {
+                $q->where('user_id', auth()->user()->id);
+            });
+        })->get();
+
+    }
  
  
 }

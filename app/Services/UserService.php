@@ -83,26 +83,60 @@ class UserService
         $permission = Permission::where('name' , $permission_item)->first();
         $permission_id = (isset($permission->id)) ? $permission->id :'';
 
+        $auth_user_id = \Auth::user()->id;
         $users = $this->userRepository->get_users_of_project($project_id , $permission_id);
-        foreach($users as $user){
-            if(isset($user->allRoles[0])){
-                $job_title = $user->allRoles[0]->pivot->job_title != NULL ?' - ('. $user->allRoles[0]->pivot->job_title.')' : '';
-            } else{
-                $job_title='';
+        if($users->count() > 0){
+            foreach($users as $user){
+                if($auth_user_id != $user->id){
+                    if(isset($user->allRoles[0])){
+                        $job_title = $user->allRoles[0]->pivot->job_title != NULL ?' - ('. $user->allRoles[0]->pivot->job_title.')' : '';
+                    } else{
+                        $job_title='';
+                    }
+                    $user->name = $user->name.' '.$job_title;
+                    if($permission_id != '' && $user->allPermissions->count() > 0 ){
+                        $usArrers[] = $user;
+                    }else if($permission_item == ''){
+                        $usArrers[] = $user;
+                    } 
+                }
+
             }
-            $user->name = $user->name.' '.$job_title;
-            if($permission_id != '' && $user->allPermissions->count() > 0 ){
-                $usArrers[] = $user;
-            }else if($permission_item == ''){
-                $usArrers[] = $user;
-            } 
         }
+
     
 
 
         return ['users'=> $usArrers];
 
     }
+
+
+
+    public function checkIfUserHasThisPermission($project_id , $permission_item = ''){
+        $usArrers = [];
+        $permission = Permission::where('name' , $permission_item)->first();
+        $permission_id = (isset($permission->id)) ? $permission->id :'';
+
+        $auth_user_id = \Auth::user()->id;
+        $user = $this->userRepository->check_if_user_of_project_has_this_permission($project_id , $permission_id);
+        if(isset($user->id) && $user->allPermissions->count() > 0){
+            return true;
+        }
+    
+
+
+        return false;
+
+    }
+
+
+
+
+
+
+
+
 
     public function getAllProjectStakeholders($project_id , $request){
         $all_stakholders = $this->userRepository->get_stakeholders_of_project($project_id , $request);

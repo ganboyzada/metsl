@@ -57,7 +57,8 @@ class DocumentRevisionController extends Controller
     
     public function store_comment(RevisionRequest  $request)
     {
-        if($request->validated()){
+
+        if(checkIfUserHasThisPermission(Session::get('projectID') , 'add_revision_comment') && $request->validated()){
             \DB::beginTransaction();
             try{
                 $all_data = request()->all();

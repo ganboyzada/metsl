@@ -26,6 +26,11 @@ class RolePermissionCorrespondenceTypesSeeder extends Seeder
             $role->givePermissionTo($permission); 
 
             $permission = Permission::create(['name' => 'reply_'.$enum->value,'guard_name' => 'sanctum']);
+            $role->givePermissionTo($permission); 
+
+
+
+            $permission = Permission::create(['name' => 'view_'.$enum->value,'guard_name' => 'sanctum']);
             $role->givePermissionTo($permission);             
         }
        

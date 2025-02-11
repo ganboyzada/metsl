@@ -79,9 +79,9 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
         if(isset($data['closed_by'])){
             $punchLists=$punchLists->when($data['closed_by'] , function($q) use($data){
                 $q->where(function($query) use($data){
-                    $query->whereHas('closedByUser',function($q) use($data){
-                        $q->whereIn('users.id',$data['closed_by']);
-                    });
+                    //$query->whereHas('closedByUser',function($q) use($data){
+                        $query->whereIn('closed_by ',$data['closed_by']);
+                    ///});
                 });    
 
             });            
@@ -90,9 +90,9 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
         if(isset($data['creator'])){
             $punchLists=$punchLists->when($data['creator'] , function($q) use($data){
                 $q->where(function($query) use($data){
-                    $query->whereHas('createdByUser',function($q) use($data){
-                        $q->whereIn('users.id',$data['creator']);
-                    });
+                   // $query->whereHas('createdByUser',function($q) use($data){
+                        $query->whereIn('created_by',$data['creator']);
+                   // });
                 });    
             });
         }
@@ -170,11 +170,35 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
             
         });
 
-        })
+        });
 
-        ->with(['responsible:id,name', 'createdByUser:id,name'])->get();
+        if(checkIfUserHasThisPermission($project_id , 'view_all_punch_list')){
+
+            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->get();
   
-      return $punchLists;
+            return $punchLists;
+        }        
+        else if(!auth()->user()->is_admin){
+
+            $punchLists = $punchLists->where(function($q){
+                $q->whereHas('users', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                });
+
+                $q->orwhere('responsible_id',auth()->user()->id);
+                $q->orwhere('created_by',auth()->user()->id);
+
+                
+            });
+
+            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->get();
+  
+            return $punchLists;
+              
+
+        }
+
+        
     }
 
     

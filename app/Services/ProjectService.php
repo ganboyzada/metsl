@@ -8,6 +8,7 @@ use App\Models\DesignTeam;
 use App\Models\ProjectManager;
 use App\Repository\ProjectRepositoryInterface;
 use Illuminate\Database\QueryException;
+use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 
 class ProjectService
@@ -101,7 +102,13 @@ class ProjectService
 
     public function all()
     {
-        return $this->ProjectRepository->all();
+        if(checkIfUserHasThisPermission(Session::get('projectID') ,'view_all_projects')){
+            return $this->ProjectRepository->all();
+        }else{
+            return $this->ProjectRepository->projects_of_user();
+        }
+        
+        
     }
 
     public function projectsOfCompany($company_id)
@@ -125,6 +132,7 @@ class ProjectService
         'stakholders.allPermissions'=>function($query)use($id){
             $query->wherePivot('project_id',$id);
         },
+        'stakholders.company',
         'files'
 
          

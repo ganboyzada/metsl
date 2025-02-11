@@ -65,7 +65,7 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
                 throw new \Exception('Record not find'); 
             }
             //dd($data['linked_documents']);
-            if(count($data['linked_documents']) > 0){
+            if(isset($data['linked_documents']) && count($data['linked_documents']) > 0){
                 $correspondence->documentFiles()->detach();
                 foreach($data['linked_documents'] as $doc){
                     $ids = explode('-' , $doc);
@@ -94,7 +94,7 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
         $sub = \DB::raw('(select  reply_correspondence_id as replyCorespondenceId  , MAX(created_date) as last_upload_date
          from correspondences where reply_correspondence_id is not null group by reply_correspondence_id)last_upload_table');
 
-        return $this->model->where('project_id',$project_id)->where('reply_correspondence_id',NULL)
+        $modal =  $this->model->where('project_id',$project_id)->where('reply_correspondence_id',NULL)
         ->leftjoin($sub,function($join){
             $join->on('last_upload_table.replyCorespondenceId','=','id');       
         })
@@ -119,9 +119,9 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
                     $q->where('name', 'LIKE', "%".$request->search."%");
                 });
 
-                $q->orWhereHas('ReceivedFrom',function($q)use($request){
+                /*$q->orWhereHas('ReceivedFrom',function($q)use($request){
                     $q->where('name', 'LIKE', "%".$request->search."%");
-                });
+                });*/
 
                 $q->orWhereHas('distributionMembers',function($q)use($request){
                     $q->where('name', 'LIKE', "%".$request->search."%");
@@ -137,8 +137,49 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
             });
             */
 
-        })
-        ->with(['assignees:id,name' , 'CreatedBy:id,name'])->get();
+        });
+
+        if(!auth()->user()->is_admin){
+
+            $modal = $modal->where(function($q)use($project_id){
+                $q->whereHas('assignees', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                });
+
+                $q->orWhereHas('distributionMembers', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                });
+                
+                $q->orwhere('created_by', auth()->user()->id);
+
+
+                $enums_list = \App\Enums\CorrespondenceTypeEnum::cases();
+                foreach ($enums_list as $enum) {
+                    if(checkIfUserHasThisPermission($project_id , 'view_'.$enum->value)){
+                        $modal = $modal->orwhere('type' , $enum->value);
+    
+                    }
+                }
+
+
+
+
+            });
+            
+
+
+
+            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->get();
+
+            return $modal;           
+
+        }else{
+            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->get();
+
+            return $modal;
+        }
+        
+
     }
 
     

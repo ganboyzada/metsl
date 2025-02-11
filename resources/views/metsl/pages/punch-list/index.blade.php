@@ -105,10 +105,12 @@
         <div id="filters-container" class="flex items-center space-x-2"></div>
     </form>
 	</div>
-
-    @permitted('add_punch_list')
+    @php
+        $expression='add_punch_list';
+    @endphp
+    @if(checkIfUserHasThisPermission(Session::get('projectID') ,$expression))
     <a href="{{ route('projects.punch-list.create') }}" class="inline-flex px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"><i data-feather="plus" class="mr-2"></i> Create</a>
-    @endpermitted
+    @endif
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-6 text-gray-600 dark:text-gray-300">
@@ -141,6 +143,7 @@
     </div>
 </div>
 
+
 <div class="overflow-x-auto">
     <table class="w-full text-left border-collapse border dark:border-gray-800">
         <thead class="bg-gray-100 dark:bg-gray-800 text-sm text-left">
@@ -161,9 +164,10 @@
         </tbody>
     </table>
 </div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-
+    
     async  function getChangedParticipates(){
 		let fetchRes = await fetch(`{{url('project/punch-list/allParticipates')}}`);
 		const all = await fetchRes.json();

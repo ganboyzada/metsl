@@ -43,6 +43,7 @@ class CorrespondenceRequest extends FormRequest
                 "assignees"    => ['required','array'],
                 "distribution"    => ['required','array'],
                 'docs' => 'nullable',
+                'linked_documents' => 'nullable',
 
             ]; 
         }else{
@@ -65,7 +66,8 @@ class CorrespondenceRequest extends FormRequest
                 'cost_impact' => 'required',
                 "assignees"    => ['required','array'],
                 "distribution"    => ['required','array'],
-                'docs' => 'required',
+                'docs' => 'nullable',
+                'linked_documents' => 'nullable',
         
             ]; 
         }

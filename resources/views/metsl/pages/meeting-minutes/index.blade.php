@@ -33,7 +33,10 @@
             </div>
         </div>
 
-        @permitted('add_meeting_planing')
+        @php
+        $expression='add_meeting_planing';
+        @endphp
+        @if(checkIfUserHasThisPermission(Session::get('projectID') ,$expression))
         <!-- Plan Meeting Button -->
         <a href="{{ route('projects.meetings.create') }}"
             id="plan-meeting-button"
@@ -42,9 +45,8 @@
             <i data-feather="video" class="mr-2"></i>
             Plan a Meeting
         </a>
-        @endpermitted
+        @endif
     </div>
-
     <!-- Meetings Table -->
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse border dark:border-gray-800">
@@ -64,6 +66,8 @@
             </tbody>
         </table>
     </div>
+
+    
 </div>
 <script>
 	$(".projectButton").on('click',function(event) {

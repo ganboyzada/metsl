@@ -13,17 +13,21 @@
                         <span id="selected-project" class="flex flex-col items-start text-xs mr-2 font-medium me-auto">Project<b id="project-variable">{{  session('projectName')  }}</b></span>
                         <i class="ms-auto" data-feather="chevron-down"></i>
                     </button>
-
+                    @php
+                        $projects_ids = \App\Models\ProjectUser::where('user_id', auth()->user()->id)->pluck('project_id')->toArray();
+                    @endphp
                     <!-- Dropdown Menu -->
                     <div  id="dropdown-toggle" class="dropdown absolute left-0 rounded-lg mt-2 min-w-full w-[130%] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg">
                         <ul class="py-2">
                             <!-- List of Projects (Replace these with dynamic content) -->
                             @if($projects->count() > 0) 
                                 @foreach($projects as $project)
-
+                                    @if (in_array($project->id, $projects_ids) || auth()->user()->is_admin)
                                     <li>
                                         <button onclick="selectProject('{{ $project->name }}' , '{{ $project->id }}')" class="block text-xs w-full text-left px-4 py-2 hover:bg-black/10 projectButton">{{ $project->name }}</button>
-                                    </li>
+                                    </li>                                       
+                                    @endif
+
                                 @endforeach
                             @endif
 
@@ -97,20 +101,21 @@
                 <!-- User Dropdown Menu -->
                 <div id="userDropdown" class="hidden absolute right-0 mt-2 w-52 bg-gray-100 rounded-lg dark:bg-gray-800 shadow-lg  py-2 z-[60]">
                     <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100/25"><i data-feather="user" class="mr-3"></i>Profile</a>
-                    @permitted('modify_presets')
+                    @if(checkIfUserHasThisPermission(Session::get('projectID') ,'modify_presets'))
                     <a href="{{ route('roles') }}" class="flex items-center px-4 py-2 hover:bg-gray-200/25">
                         <i data-feather="git-pull-request" class="mr-3"></i>
                         Manage Roles
                         <i data-feather="lock" class="ml-auto w-4 h-4 text-blue-400"></i>
                     </a>
-                    @endpermitted
-                    @permitted('modify_companies')
+					@endif
+					@if(checkIfUserHasThisPermission(Session::get('projectID') ,'modify_companies'))
+
                     <a href="{{ route('companies') }}" class="flex items-center px-4 py-2 hover:bg-gray-200/25">
                         <i data-feather="list" class="mr-3"></i>
                         Companies
                         <i data-feather="lock" class="ml-auto w-4 h-4 text-blue-400"></i>
                     </a>
-                    @endpermitted
+                    @endif
                     <!-- Dark/Light Mode Toggle -->
                     <button onclick="toggleDarkMode()" class="flex w-full items-center px-4 py-2 hover:bg-gray-100/25">
                         <i data-feather="moon" class="mr-3"></i>Toggle Theme

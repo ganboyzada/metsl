@@ -32,27 +32,71 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
     */
     public function all_tasks($project_id) :Collection
     {
-        return $this->model->where('project_id',$project_id)->with('assignees:id,name')->get()->map(function($task){
-            $end = Carbon::parse($task->end_date);
-            $start = Carbon::parse($task->start_date);
+        $tasks =  $this->model->where('project_id',$project_id)
+        ->with('assignees:id,name');
+        if(checkIfUserHasThisPermission($project_id , 'create_task_planner')){
+            $tasks = $tasks->get()->map(function($task){
+                $end = Carbon::parse($task->end_date);
+                $start = Carbon::parse($task->start_date);
 
-            $diff = $start->diffInDays($end);
-            return [
-                'id' => $task->id,
-                'title' => $task->subject,
-                'groupId'=> $task->group_id,
-                'start'=> $task->start_date,
-                'end'=> $task->end_date,
-                'duration'=>$diff,
-                'assignees' => $task->assignees->pluck('name')->toArray(),
-                'priority' => $task->priority,
-                'attachments' => $task->file != NULL ?true : false,
-                'description' => $task->description,
-                'done' => $task->done,
-                'file_name' => $task->file,
-                'file' => $task->file != NULL ? Storage::url('/project'.$task->project_id.'/tasks/'.$task->file) : NULL
-            ];
-        });
+                $diff = $start->diffInDays($end);
+                return [
+                    'id' => $task->id,
+                    'title' => $task->subject,
+                    'groupId'=> $task->group_id,
+                    'start'=> $task->start_date,
+                    'end'=> $task->end_date,
+                    'duration'=>$diff,
+                    'assignees' => $task->assignees->pluck('name')->toArray(),
+                    'priority' => $task->priority,
+                    'attachments' => $task->file != NULL ?true : false,
+                    'description' => $task->description,
+                    'done' => $task->done,
+                    'file_name' => $task->file,
+                    'file' => $task->file != NULL ? Storage::url('/project'.$task->project_id.'/tasks/'.$task->file) : NULL
+                ];
+            });
+            return $tasks;
+
+        }        
+        else if(!auth()->user()->is_admin){
+            $tasks = $tasks->where(function($q){
+                $q->whereHas('assignees', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                });
+                $q->orwhere('created_by', auth()->user()->id);
+
+
+                
+            });
+
+            $tasks = $tasks->get()->map(function($task){
+                $end = Carbon::parse($task->end_date);
+                $start = Carbon::parse($task->start_date);
+
+                $diff = $start->diffInDays($end);
+                return [
+                    'id' => $task->id,
+                    'title' => $task->subject,
+                    'groupId'=> $task->group_id,
+                    'start'=> $task->start_date,
+                    'end'=> $task->end_date,
+                    'duration'=>$diff,
+                    'assignees' => $task->assignees->pluck('name')->toArray(),
+                    'priority' => $task->priority,
+                    'attachments' => $task->file != NULL ?true : false,
+                    'description' => $task->description,
+                    'done' => $task->done,
+                    'file_name' => $task->file,
+                    'file' => $task->file != NULL ? Storage::url('/project'.$task->project_id.'/tasks/'.$task->file) : NULL
+                ];
+            });
+            return $tasks;
+
+
+        }
+        
+        
     }
  
         /**

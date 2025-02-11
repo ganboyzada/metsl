@@ -578,6 +578,7 @@
                     const opt = document.createElement('option');
                     opt.value = data.data.id;
                     opt.uuid = data.user.id;
+                    opt.company = (data.company != null)?data.company.name : '';
                     opt.setAttribute("uuid",data.user.id);
                     opt.innerHTML = data.data.user_name;
                     select.appendChild(opt);

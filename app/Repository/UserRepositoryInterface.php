@@ -23,6 +23,14 @@ interface UserRepositoryInterface
     */    
     public function get_users_of_project($project_id , $permission_id): Collection;
 
+
+        /**
+    * @param int $project_id
+    * @param int $permission_id
+    * @return Model
+    */    
+    public function check_if_user_of_project_has_this_permission($project_id , $permission_id): Model;
+
     /**
      * @param int $project_id
      *  @param \Request $request
