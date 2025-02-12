@@ -23,4 +23,11 @@ interface DocumentRepositoryInterface
     * 
     */
     public function get_all_project_documents($project_id , $request): Collection;  
+
+        /**
+    * @param integer $id
+    * @return bool
+    */
+
+    public function change_status($id , $status): bool;
 }

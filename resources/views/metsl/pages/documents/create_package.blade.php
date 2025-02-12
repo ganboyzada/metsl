@@ -35,12 +35,15 @@
             </div>
 
             <!-- Submit Button -->
+            @if(checkIfUserHasThisPermission(Session::get('projectID') ,'modify_package'))
+
             <button
                 type="submit" id="submit_upload_form"
                 class="flex gap-x-2 bg-blue-500 text-white px-4 py-2  hover:bg-blue-600 transition"
             >   <i data-feather="upload"></i>
-                Upload
+                Save
             </button>
+            @endif
         </form>
     </div>
 </div>

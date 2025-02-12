@@ -7,6 +7,7 @@ use App\Models\User;
 if (!function_exists('checkIfUserHasThisPermission')) {
     function checkIfUserHasThisPermission($project_id , $permission_item = '')
     {
+		//dd($project_id);
         $permission = Permission::where('name' , $permission_item)->first();
         $permission_id = (isset($permission->id)) ? $permission->id :'';
 

@@ -126,6 +126,14 @@ class DocumentRepository extends BaseRepository implements DocumentRepositoryInt
     }
 
     
-  
+    /**
+    * @param integer $id
+    * @return bool
+    */
+    public function change_status($id , $status) :bool
+    {
+        //throw new \Exception('error');
+        return $this->model->where('id',$id)->update(['status'=>$status]);
+    }  
  
 }

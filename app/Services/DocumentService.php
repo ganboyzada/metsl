@@ -25,11 +25,21 @@ class DocumentService
         try {
             $project_id = $data['project_id'];
             $files = [];
+            $old_numbers = [];
+            $old_files = [];
             $document_files = $this->projectDocumentFilesService->getAllFiles($project_id);
             if($document_files->count()  > 0){
                 foreach($document_files as $file){
-                    $files[$file->file] = array('id'=>$file->id , 'project_document_id'=>$file->project_document_id);;
-
+                    $old_numbers[$file->ProjectDocument->number] = array('id'=>$file->id , 
+                    'project_document_id'=>$file->project_document_id , 
+                    'document_number'=>$file->ProjectDocument->number ,
+                    'file'=>$file->file
+                );
+                    $old_files[$file->file] = array('id'=>$file->id , 
+                    'project_document_id'=>$file->project_document_id , 
+                    'document_number'=>$file->ProjectDocument->number ,
+                    'file'=>$file->file
+                );
                 }
             }
 
@@ -37,10 +47,18 @@ class DocumentService
             $news = [];
             if(isset($data['docs'])){
                 foreach($data['docs'] as $doc){
-                    if(array_key_exists($doc->getClientOriginalName() , $files)){
-                        $revisions[] = array('id'=> $files[$doc->getClientOriginalName()]['id'] ,
-                         'project_document_id'=> $files[$doc->getClientOriginalName()]['project_document_id'] ,'doc'=>$doc);
-                    } else{
+                    if(array_key_exists($doc->getClientOriginalName() , $old_files)){
+                        $revisions[] = array('id'=> $old_files[$doc->getClientOriginalName()]['id'] ,
+                         'project_document_id'=> $old_files[$doc->getClientOriginalName()]['project_document_id'] ,
+                         'doc'=>$doc , 'number'=>$old_files[$doc->getClientOriginalName()]['document_number']);
+                    }
+                    
+                    else if( array_key_exists($data['number'], $old_numbers)){
+                        $revisions[] = array('id'=> $old_numbers[$data['number']]['id'] ,
+                         'project_document_id'=> $old_numbers[$data['number']]['project_document_id'] ,
+                         'doc'=>$doc , 'number'=>$old_numbers[$data['number']]['document_number']);
+                    }
+                    else{
                         $news[] = $doc;
                     }                   
                     
@@ -144,6 +162,11 @@ class DocumentService
         }catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
-    }    
+    }  
+    
+    public function updateStatus($id , $status){
+        return $this->documentRepository->change_status($id , $status);
+
+    }
 
 }

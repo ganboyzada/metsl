@@ -93,6 +93,7 @@
                 <select id="reviewers" name="reviewers[]" multiple class="w-full px-3 py-2 border  dark:bg-gray-800 dark:text-gray-200">
                 </select>
             </div>
+            @if(checkIfUserHasThisPermission(Session::get('projectID') ,'add_documents'))
 
             <!-- Submit Button -->
             <button
@@ -101,6 +102,7 @@
             >   <i data-feather="upload"></i>
                 Upload
             </button>
+            @endif
         </form>
     </div>
 </div>

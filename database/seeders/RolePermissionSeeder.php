@@ -75,6 +75,9 @@ class RolePermissionSeeder extends Seeder
         $permission = Permission::create(['name' => 'add_revision_comment','guard_name' => 'sanctum']);
         $role->givePermissionTo($permission);
 
+        $permission = Permission::create(['name' => 'accept_reject_document','guard_name' => 'sanctum']);
+        $role->givePermissionTo($permission);
+
 
         $role = Role::create(['name' => 'metting planing','guard_name' => 'sanctum']);
         $permission = Permission::create(['name' => 'view_all_meeting_planing','guard_name' => 'sanctum']);

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('title')->nullable();
             $table->string('number')->nullable();
-			$table->integer('status')->default(1);
+			$table->integer('status')->default(0);
             $table->date('created_date')->nullable();
 
             $table->unsignedBiginteger('created_by')->unsigned();

@@ -48,7 +48,7 @@
 			</div>
 		</div>
 		@php
-			$expression = 'add_document_packages';
+			$expression = 'modify_package';
 
 		@endphp
 		@if(checkIfUserHasThisPermission(Session::get('projectID') ,$expression))
@@ -58,7 +58,10 @@
 		@endif
 	</div>
     
+	<input type="text" id="comments_permission" value="{{ checkIfUserHasThisPermission(Session::get('projectID') , 'add_revision_comment') }}"/>
 
+	<input type="text" id="accept_reject_document" value="{{ checkIfUserHasThisPermission(Session::get('projectID') , 'accept_reject_document') }}"/>
+	
     <!-- Order By and Filter -->
     <div class="flex items-end gap-4">
         <div>
@@ -103,11 +106,9 @@
 
 </div>
 @include('metsl.pages.documents.create_package')
-
 @include('metsl.pages.documents.revisions')
 @include('metsl.pages.documents.uploader')
 @include('metsl.pages.documents.comments')
-<input type="text" id="comments_permission" value="{{ checkIfUserHasThisPermission(Session::get('projectID') , 'add_revision_comment') }}"/>
 
 <script>
 	
@@ -231,7 +232,6 @@
 		let url2 = 	`{{url('/project/documents/revisions/${id}')}}`	;
 		let fetchRes2 = await fetch(url2);
 		let revisions = await fetchRes2.json();
-
 		if(detail.files.length > 0){
 			html+=``;
 			for(var i=0;i<detail.files.length;i++){
@@ -242,10 +242,37 @@
                     <td class="py-2 px-4">${ detail.title == null ? '-' : detail.title}</td>
                     <td class="py-2 px-4">${ detail.user.name}</td>
                     <td class="py-2 px-4">${ detail.created_date}</td>
-                    <td class="py-2 px-4">Accepted</td>
+					
+                    <td class="py-2 px-4">`;
+						if(detail.status == 0){
+							html+=`Pending`;
+						}else if(detail.status == 1){
+							html+=`Accepted`;
+						}else{
+							html+=`Rejected`;
+							
+						}
+						
+				
+				html+=`</td>
                     <td class="py-2 px-4 flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
                        `;
 						
+						if($('#accept_reject_document').val() == 1){
+							if(detail.status ==0 || detail.status == 2){
+								html+=`<button onclick="update_doc_status(${detail.id} , 1)" class="text-green-500 hover:text-green-700">
+									<i data-feather="check" stroke-width="2" class="w-5 h-5"></i>
+								</button>`;
+								
+							}
+							if(detail.status ==0 || detail.status == 1){
+							
+							html+=`<button  onclick="update_doc_status(${detail.id} , 2)" class="text-red-500 hover:text-red-700">
+								<i data-feather="x-circle" stroke-width="2" class="w-5 h-5"></i>
+							</button>`;
+							}
+						}
+
 							   html+=`<a target="_blank" href="${ file_url }" class="text-blue-500 hover:text-blue-700">
 								<i data-feather="download" stroke-width="2" class="w-5 h-5"></i>
 							</a>`;
@@ -280,24 +307,28 @@
 							</a>`;
 					   
 						}
-						if($('#comments_permission').val()){
+						if($('#comments_permission').val() == 1){
 							html+=`<button class="text-yellow-500 hover:text-yellow-700 comment-button" onclick="show_comment(${revisions[i].id})">
 								<i data-feather="message-circle" stroke-width="2" class="w-5 h-5"></i>
 							</button>`;
 						}
 
+						if($('#accept_reject_document').val() == 1){
 						if(revisions[i].status ==0 || revisions[i].status == 2){
 							html+=`<button onclick="update_status(${revisions[i].id} , 1)" class="text-green-500 hover:text-green-700">
 								<i data-feather="check" stroke-width="2" class="w-5 h-5"></i>
 							</button>`;
 							
 						}
+						
 						if(revisions[i].status ==0 || revisions[i].status == 1){
 						
 							html+=`<button  onclick="update_status(${revisions[i].id} , 2)" class="text-red-500 hover:text-red-700">
 								<i data-feather="x-circle" stroke-width="2" class="w-5 h-5"></i>
 							</button>`;
-						}	
+						}
+						}
+							
                 
                     html+=`</td>
                 </tr>`;

@@ -86,6 +86,7 @@ Route::middleware([
 	Route::get('/project/documents/revisions/{id}',  [DocumentController::class, "ProjectDocumentsRevisions"])->name('projects.documents.revisions');
 	Route::get('/project/documents/delete/{id}',  [DocumentController::class, "delete"])->name('projects.documents.delete');
 	Route::get('/project/documents/delete_file/{id}',  [DocumentController::class, "delete_file"])->name('projects.documents.delete_file');
+    Route::get('/project/documents/files/update_status',  [DocumentController::class, "update_status"])->name('projects.documents.file.update_status');
 
 
 	Route::get('/project/punch-list/all',  [PunchListController::class, "PunchList"])->name('projects.punch-list.all');

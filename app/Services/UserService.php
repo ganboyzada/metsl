@@ -87,7 +87,7 @@ class UserService
         $users = $this->userRepository->get_users_of_project($project_id , $permission_id);
         if($users->count() > 0){
             foreach($users as $user){
-                if($auth_user_id != $user->id){
+               // if($auth_user_id != $user->id){
                     if(isset($user->allRoles[0])){
                         $job_title = $user->allRoles[0]->pivot->job_title != NULL ?' - ('. $user->allRoles[0]->pivot->job_title.')' : '';
                     } else{
@@ -99,7 +99,7 @@ class UserService
                     }else if($permission_item == ''){
                         $usArrers[] = $user;
                     } 
-                }
+                //}
 
             }
         }

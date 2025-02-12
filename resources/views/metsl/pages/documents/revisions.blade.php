@@ -67,6 +67,19 @@
 		}
 		get_revisions(current_document_id);
 	}
+    async function update_doc_status(id , status){
+		let url = 	`{{url('project/documents/files/update_status?id=${id}&status=${status}')}}`	;
+		let newurl = url.replace('amp;','');
+		let fetchRes = await fetch(newurl);
+		if(fetchRes.status != 200){
+			$('#error_div').show();
+			//$('#error_div').css('display','block !important');
+                   
+			
+		}
+		get_revisions(current_document_id);
+	}
+
     $("#commentWizard").on("submit", function(event) {
             const form = document.getElementById("commentWizard");
             const formData = new FormData(form); 

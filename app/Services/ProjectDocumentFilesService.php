@@ -22,7 +22,7 @@ class ProjectDocumentFilesService
                 Storage::disk('public')->putFileAs('project'.$project_id.'/documents'.$document_id, $file, $fileName);
 
 
-                return ['file'=>$fileName , 'project_document_id'=>$document_id, 'type'=>$file->extension() , 'size'=>$file->getSize()];
+                return ['file'=>$fileName , 'project_document_id'=>$document_id, 'type'=>$file->extension() , 'size'=>$file->getSize() , 'status'=>0];
 
             } , $uploadeedfiles);
 
@@ -54,6 +54,11 @@ class ProjectDocumentFilesService
     public function getNewestFilesByProjectId($project_id)
     {
         return $this->projectDocumentFilesRepository->get_newest_files_by_project_document_id($project_id);
+    }
+
+    public function updateStatus($id , $status){
+        return $this->projectDocumentFilesRepository->change_status($id , $status);
+
     }
 
 }

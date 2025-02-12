@@ -34,14 +34,7 @@ class ProjectDocumentFilesRepository extends BaseRepository implements ProjectDo
             throw new \Exception($e->getMessage());
         }  
     }
-   /**
-    * @param integer $id
-    * @return bool
-    */
-    public function change_status($id , $status) :bool
-    {
-        return $this->model->where('id',$id)->update(['status'=>$status]);
-    }
+ 
 
        /**
     * @param integer $project_id
@@ -49,7 +42,7 @@ class ProjectDocumentFilesRepository extends BaseRepository implements ProjectDo
     */
     public function project_document_files($project_id): Collection
     {
-        return $this->model->whereRelation('project', 'projects.id', '=', $project_id)->get(['project_document_id', 'file' , 'id']);
+        return $this->model->whereRelation('project', 'projects.id', '=', $project_id)->with('ProjectDocument')->get(['project_document_id', 'file' , 'id']);
     }
 
     /**
@@ -75,6 +68,16 @@ class ProjectDocumentFilesRepository extends BaseRepository implements ProjectDo
         , 'last_upload_table.revision_id as revisionid' , 'last_upload_table.file as revision_file' ]);
 
         
+    }
+
+    /**
+    * @param integer $id
+    * @return bool
+    */
+    public function change_status($id , $status) :bool
+    {
+        //throw new \Exception('error');
+        return $this->model->where('id',$id)->update(['status'=>$status]);
     }
 
 }

@@ -55,6 +55,7 @@ class DocumentController extends Controller
                 $all_data['created_by'] = \Auth::user()->id;
 
                 $all_data['created_date'] = date('Y-m-d');
+                $all_data['status'] = 0;
 
                 $model = $this->documentService->create($all_data);
             \DB::commit();
@@ -74,7 +75,7 @@ class DocumentController extends Controller
         if (Session::has('projectID') && Session::has('projectName')){
             $id = Session::get('projectID');     
             $reviewers = $this->userService->getUsersOfProjectID($id , 'review_documents');
-            $accessibles = $this->userService->getUsersOfProjectID($id , '');
+            $accessibles = $this->userService->getUsersOfProjectID($id , 'add_documents');
 		
             $users = $reviewers['users'];
             $accessibles = $accessibles['users'];
@@ -177,6 +178,10 @@ class DocumentController extends Controller
             return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$package]);
 
         }
-    }    
+    } 
+    
+    public function update_status(Request $request){
+        return $this->documentService->updateStatus($request->id , $request->status);
+    }
 
 }
