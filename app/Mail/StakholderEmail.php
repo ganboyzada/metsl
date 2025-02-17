@@ -13,13 +13,20 @@ class StakholderEmail extends Mailable
 {
     use Queueable, SerializesModels;
     private $name;
+    private $job_title;
+    private $pass;
+
+    private $email;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(string $name)
+    public function __construct(string $name , string $job_title ,string $email , string $pass)
     {
         $this->name = $name;
+        $this->job_title = $job_title;
+        $this->pass = $pass;
+        $this->email = $email;
 
     
     }
@@ -41,7 +48,7 @@ class StakholderEmail extends Mailable
     {
         return new Content(
             view: 'emails.team-invitation2',
-            with: ['name' => $this->name],
+            with: ['name' => $this->name , 'job_title' => $this->job_title , 'email' => $this->email , 'pass' => $this->pass],
         );
     }
 

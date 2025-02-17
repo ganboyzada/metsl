@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\ProjectStatusEnum;
 use App\Enums\ProjectStatusTextColorEnum;
 use App\Enums\ProjectStatusTextValueEnum;
+use Hash;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\belongsToMany;
@@ -31,15 +32,40 @@ class Project extends Model
     public  static function boot(){
         parent::boot();
         static::pivotSynced(function ($model, $relationName, $changes) {
-            /*
+            
             if(count($changes['attached']) > 0){
+                
                 foreach($changes['attached'] as $stakholder_id){
                     $user = User::find($stakholder_id); 
+                    $job_title = 'stakeholder';
+                    if($user->userable_type == Client::class){
+                        $job_title = 'Client';
+                    }elseif($user->userable_type == Contractor::class){
+                        $job_title = 'Contractor';
+
+                    }elseif($user->userable_type == ProjectManager::class){
+                        $job_title = 'ProjectManager';
+                    
+                    }elseif($user->userable_type == DesignTeam::class){
+                        $job_title = 'DesignTeam';
+
+                    }
+                    if($user->send_email_before == 0){
+                        $pass = str()->random(8);
+                        $user->password = Hash::make($pass);
+                        $user->save();
+                    }else{
+                        $pass = '';;
+                    }
+                    
+                    //dd($user);
                     $project_name = $model->name;
-                    $m = \Mail::to($user->email)->send(new StakholderEmail($project_name)); 
+                    $m = \Mail::to($user->email)->send(new StakholderEmail($project_name , $job_title , $user->email ,$pass )); 
+                    $user->send_email_before = 1;
+                        $user->save();
                 }
             }
-                */
+                
 
         });    
     
