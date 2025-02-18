@@ -80,7 +80,7 @@ table{
 .company-card{
     img{
         height: 100px;
-        width: 100px;
+        min-width: 100px;
         border-radius: 1rem;
     }
 }
