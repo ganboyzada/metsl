@@ -88,7 +88,7 @@
 </div>
 
 <div id="add-task-modal" class="fixed z-50 inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
-    <div class="bg-white dark:bg-gray-800 shadow-lg p-5 min-w-1/3 max-w-full max-h-[90%] overflow-y-scroll">
+    <div class="bg-white dark:bg-gray-800 shadow-lg p-5 min-w-1/3 max-w-full max-h-[90%] overflow-y-scroll rounded-lg">
         <h3 class="text-lg font-semibold mb-4">Add New Task</h3>
         <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
 
