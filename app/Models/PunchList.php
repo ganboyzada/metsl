@@ -50,6 +50,6 @@ class PunchList extends Model
     public function replies(): hasMany
     {
 
-        return $this->hasMany(PunchListReplies::class, 'punch_list_id');
+        return $this->hasMany(PunchlistReplies::class, 'punch_list_id');
     }
 }
