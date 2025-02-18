@@ -175,8 +175,8 @@
 				for(let i=0;i<all_stakeholders.length;i++){
 					let url = "{{ route('projects.stakeholders.edit', [':id']) }}".replace(':id', all_stakeholders[i].id);
                     let url_delete = "{{ route('projects.stakeholders.destroy', [':id']) }}".replace(':id', all_stakeholders[i].id);
-					html+=`	<div class="company-card bg-gray-100 dark:bg-gray-800 dark:text-gray-100 shadow  p-5 flex gap-3">
-						<a href="#"><img src="${all_stakeholders[i].userable.image}" alt="user_photo" class="h-10 w-10"></a>
+					html+=`	<div class="company-card bg-gray-100 dark:bg-gray-800 dark:text-gray-100 shadow  p-5 flex gap-3 rounded-lg">
+						<a href="#"><img src="${all_stakeholders[i].userable.image}" alt="user_photo" class="h-10 min-w-10"></a>
 						<div>
                             <a onclick="openCreateUserModal('${i}')" href="#"><h3 class="text-lg font-semibold">${all_stakeholders[i].userable.first_name} ${all_stakeholders[i].userable.last_name}</h3></a>
                             <p class="text-sm text-gray-600 dark:text-gray-300">${all_stakeholders[i].email}</p>
