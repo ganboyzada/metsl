@@ -1,4 +1,4 @@
-<header class="fixed z-50 w-[100vw] h-[7rem] md:h-[4rem] left-0 top-0 bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-200 shadow px-6 py-2">
+<header class="fixed z-50 w-[100vw] h-[7rem] md:h-[4rem] left-0 top-0 bg-white dark:bg-gray-900 text-gray-600 dark:text-gray-200 shadow px-3 px-md-6 py-2">
     <div class="flex justify-between items-start md:items-center">
         <div class="relative flex flex-col md:flex-row md:items-center gap-3">
             <a href="/" class="block relative md:mt-[-6px] w-24">

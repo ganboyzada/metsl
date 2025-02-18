@@ -1,9 +1,9 @@
 <!-- Uploader Modal -->
 <div id="uploader-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-    <div class="bg-white dark:bg-gray-800  shadow-lg max-w-3xl w-full p-6">
+    <div class="bg-white dark:bg-gray-900  shadow-lg max-w-3xl w-full max-h-[90%] overflow-y-scroll p-6">
         <!-- Modal Header -->
         <div class="flex justify-between items-center mb-4">
-            <h2 class="text-xl font-semibold dark:text-gray-200">Upload Documents</h2>
+            <h2 class="text-xl font-semibold dark:text-gray-200">Reply to issue</h2>
             <button data-modal="uploader-modal" class="modal-toggler text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 transition">
                 <i data-feather="x" class="w-5 h-5"></i>
             </button>
@@ -16,8 +16,6 @@
 			<input type="hidden" value="{{ $punch_list->id }}" id="punchlistt_id" name="punch_list_id"/>
 
             
-            
-
             <!-- Drag and Drop Zone -->
             <div>
                 <label class="block mb-1">Attachment</label>

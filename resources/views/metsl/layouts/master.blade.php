@@ -19,7 +19,7 @@
             @include('metsl.layouts.header')
 
             <!-- Content -->
-            <main class="relative z-5 p-6 bg-white dark:bg-gray-900 dark:text-gray-200">
+            <main class="relative z-5 px-3 px-md-6 py-6 bg-white dark:bg-gray-900 dark:text-gray-200">
                 @yield('content')
 
                 @include('metsl.modals.members')
