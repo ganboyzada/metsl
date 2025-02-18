@@ -58,9 +58,9 @@
 		@endif
 	</div>
     
-	<input type="text" id="comments_permission" value="{{ checkIfUserHasThisPermission(Session::get('projectID') , 'add_revision_comment') }}"/>
+	<input type="hidden" id="comments_permission" value="{{ checkIfUserHasThisPermission(Session::get('projectID') , 'add_revision_comment') }}"/>
 
-	<input type="text" id="accept_reject_document" value="{{ checkIfUserHasThisPermission(Session::get('projectID') , 'accept_reject_document') }}"/>
+	<input type="hidden" id="accept_reject_document" value="{{ checkIfUserHasThisPermission(Session::get('projectID') , 'accept_reject_document') }}"/>
 	
     <!-- Order By and Filter -->
     <div class="flex items-end gap-4">
