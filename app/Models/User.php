@@ -90,6 +90,11 @@ class User extends Authenticatable
          return $this->belongsToMany(Project::class, 'projects_users', 'user_id', 'project_id');
     } 
 
+    public function packages(): BelongsToMany
+    {
+         return $this->belongsToMany(Package::class, 'package_assignees', 'user_id', 'package_id');
+    } 
+
     public function allRoles()
     {
         return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id','role_id')           

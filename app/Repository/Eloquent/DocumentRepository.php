@@ -105,15 +105,21 @@ class DocumentRepository extends BaseRepository implements DocumentRepositoryInt
         if(checkIfUserHasThisPermission($project_id , 'view_all_documents')){
             return $query->get();
         }else if(!auth()->user()->is_admin){
+            //dd(auth()->user()->packages()->pluck('packages.id')->toArray());
             $query = $query->where(function($q){
                 $q->whereHas('reviewers', function ($query) {
                     $query->where('user_id', auth()->user()->id);
                 });
 
                 $q->orwhere('created_by', auth()->user()->id);
+                $q->orWhere(function($q){
+                        $q->whereIn('package_id', auth()->user()->packages()->pluck('packages.id')->toArray());
+                });
 
                 
             });
+
+            
             return $query->get();
 
         }

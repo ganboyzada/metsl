@@ -233,7 +233,13 @@ class PunchListController extends Controller
     }
 
     public function change_status(Request $request){
-        \App\Models\PunchList::where('id',$request->id)->update(['status'=>$request->status]);
+        if($request->status == 2){
+            \App\Models\PunchList::where('id',$request->id)->update(['status'=>$request->status,'date_resolved_at'=>Carbon::now()->format('Y-m-d')]);
+
+        }else{
+            \App\Models\PunchList::where('id',$request->id)->update(['status'=>$request->status]);
+
+        }
         return response()->json(['success' => 'Form changed successfully.' ]);
     }
 

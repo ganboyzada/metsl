@@ -38,7 +38,7 @@ class ProjectRepository extends BaseRepository implements ProjectRepositoryInter
     * @return Collection
     */
     public function projects_of_user() :Collection{
-        return $this->model->whereHas('stakholders', function ($query) {
+        return $this->model->with(['user'])->whereHas('stakholders', function ($query) {
             $query->where(function ($q) {
                 $q->where('user_id', auth()->user()->id);
             });

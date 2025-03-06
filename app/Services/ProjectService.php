@@ -103,7 +103,7 @@ class ProjectService
     public function all()
     {
         if(checkIfUserHasThisPermission(Session::get('projectID') ,'view_all_projects')){
-            return $this->ProjectRepository->all();
+            return $this->ProjectRepository->with(['user'])->all();
         }else{
             return $this->ProjectRepository->projects_of_user();
         }
@@ -179,8 +179,8 @@ class ProjectService
                     'id'=> $client->id,
                     'name' => $client->name,
                     'company'=> $client->company ? $client->company->name : '',
-                    'role'=>$client->allRoles[0]->name,
-                    'job_title'=>$client->allRoles[0]->pivot->job_title,
+                    'role'=>$client->allRoles[0]?->name??null,
+                    'job_title'=>$client->allRoles[0]?->pivot->job_title?? null,
                     'permissions' => $permissions
                 ];
             }else{
@@ -289,6 +289,17 @@ class ProjectService
         
     }
 
+    public function find_api($id)
+    {
+        $project =  $this->ProjectRepository->with([
+        'stakholders','user'
+
+         
+        ])->find($id);
+
+       return $project;
+        
+    }
     public function delete($id)
     {
         try{

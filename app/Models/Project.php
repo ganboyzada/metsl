@@ -27,7 +27,7 @@ class Project extends Model
     protected $table = 'projects';
    // protected $with = ['contractors']; 
 
-    protected $fillable = ['name', 'description','logo','start_date' ,'end_date','status'];
+    protected $fillable = ['name', 'description','logo','start_date' ,'end_date','status','created_by'];
 
     public  static function boot(){
         parent::boot();
@@ -153,6 +153,12 @@ class Project extends Model
     {
         return $this->belongsToMany(User::class, 'projects_users', 'project_id', 'user_id')->where('userable_type','App\Models\ProjectManager');
     } 
+
+    
+    public function user()
+    {
+        return $this->belongsTo(User::class , 'created_by');
+    }
 	
 	
 	 public function usersViaRole() {

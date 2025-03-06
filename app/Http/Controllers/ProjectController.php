@@ -80,24 +80,26 @@ class ProjectController extends Controller
 		
 		//$proj = Project::with('contractors')->where('id',6)->first();
 		//return $proj;
-        $clients = $this->clientService->all();
-        $contractors = $this->contractorService->all();
-        //dd($contractors[0]->user->id);
-        $design_teams = $this->designTeamService->all();
-        $project_managers = $this->projectmanagerService->all();
-        $companies = Company::where('active', true)->get()->keyBy('id');
-        $roles = Role::with('permissions')->get();
-        $role_permission_arr = [];
-        if($roles->count() > 0){
-            foreach($roles as $role){
-                $role_permission_arr[$role->name] = $role->permissions->pluck('name')->toArray();
+        if(checkIfUserHasThisPermission(Session::get('projectID') ,'create_projects')){
+            $clients = $this->clientService->all();
+            $contractors = $this->contractorService->all();
+            //dd($contractors[0]->user->id);
+            $design_teams = $this->designTeamService->all();
+            $project_managers = $this->projectmanagerService->all();
+            $companies = Company::where('active', true)->get()->keyBy('id');
+            $roles = Role::with('permissions')->get();
+            $role_permission_arr = [];
+            if($roles->count() > 0){
+                foreach($roles as $role){
+                    $role_permission_arr[$role->name] = $role->permissions->pluck('name')->toArray();
+                }
             }
-        }
-        $permissions = Permission::all();
-       // $c = Contractor::where('id',23)->with('user.permissions')->first();
-        //dd($c->user->permissions);
+            $permissions = Permission::all();
+        // $c = Contractor::where('id',23)->with('user.permissions')->first();
+            //dd($c->user->permissions);
 
-        return view('metsl.pages.projects..wizard.project-wizard', get_defined_vars());
+            return view('metsl.pages.projects..wizard.project-wizard', get_defined_vars());
+        }
     }
 
 
@@ -146,6 +148,7 @@ class ProjectController extends Controller
             try{
                 $all_data = request()->all();
                 $all_data['all_stakholders'] = json_decode($all_data['all_stakholders']);
+                $all_data['created_by'] = \Auth::user()->id;
                 $model = $this->projectService->create($all_data);
             \DB::commit();
             // all good

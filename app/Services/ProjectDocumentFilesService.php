@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Repository\CorrespondenceFileRepositoryInterface;
 use App\Repository\ProjectDocumentFilesRepositoryInterface;
+use Carbon\Carbon;
 use Illuminate\Support\Facades\Storage;
 
 class ProjectDocumentFilesService
@@ -22,7 +23,7 @@ class ProjectDocumentFilesService
                 Storage::disk('public')->putFileAs('project'.$project_id.'/documents'.$document_id, $file, $fileName);
 
 
-                return ['file'=>$fileName , 'project_document_id'=>$document_id, 'type'=>$file->extension() , 'size'=>$file->getSize() , 'status'=>0];
+                return ['file'=>$fileName , 'project_document_id'=>$document_id, 'type'=>$file->extension() , 'size'=>$file->getSize(), 'created_at'=>Carbon::now() , 'status'=>0];
 
             } , $uploadeedfiles);
 
