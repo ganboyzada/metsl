@@ -292,7 +292,9 @@ class ProjectService
     public function find_api($id)
     {
         $project =  $this->ProjectRepository->with([
-        'stakholders','user'
+        'stakholders','user','correspondences'=>function($query){
+            $query->where('status','!=', 'Closed');
+        }
 
          
         ])->find($id);

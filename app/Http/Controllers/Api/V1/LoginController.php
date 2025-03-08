@@ -21,7 +21,7 @@ class LoginController extends Controller
     {
         if($request->validated()){
             $input = $request->all();
-            $user = User::where(['email' => $input['email']])->with('userable')->first();
+            $user = User::where(['email' => $input['email']])->where('is_admin', '!=', 1)->with('userable')->first();
 
             if (isset($user) && $user->userable->status == 1) {
                 if (Hash::check($input['password'], $user->password)) {
@@ -56,6 +56,7 @@ class LoginController extends Controller
 
 
     public function profile(){
+        //dd(auth()->user()->is_admin);
         $user = User::where(['id' => auth()->user()->id])->with('userable')->first();
         return $this->sendResponse([new UserProfileResource($user)], "You are successfully logged in");
     }

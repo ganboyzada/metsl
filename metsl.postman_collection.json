@@ -1,0 +1,678 @@
+{
+	"info": {
+		"_postman_id": "d85c19a3-c338-42ea-a79c-977db1eb3eb7",
+		"name": "metsl",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "1191717"
+	},
+	"item": [
+		{
+			"name": "projects",
+			"item": [
+				{
+					"name": "my projects",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "bearer 1|XeTtRC0jrRqRB4Npo7t7U4yWHSsLc0G0prsTdnrBd2423c95",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/v1/my-projects",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"my-projects"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "my projects",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/v1/my-projects",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"v1",
+										"my-projects"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.12"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 06 Mar 2025 11:03:17 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "POST, GET, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Content-Type, X-Auth-Token, Origin, Authorization"
+								},
+								{
+									"key": "phpdebugbar-id",
+									"value": "X03c8b6406ec10bce0b4e3b05b91dc1dc"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": {\n        \"type\": \"success\",\n        \"message\": \"Fetch All Projects.\",\n        \"code\": 200,\n        \"error\": false\n    },\n    \"data\": [\n        {\n            \"id\": 2,\n            \"name\": \"test2\",\n            \"description\": \"<p>dcs sdfs</p>\",\n            \"start_date\": \"2025-01-23\",\n            \"end_date\": \"2025-02-01\",\n            \"logo\": \"http://127.0.0.1:8000/images/default100.png\",\n            \"created_by\": null,\n            \"project_members\": [\n                {\n                    \"id\": 5,\n                    \"first_name\": \"pm2\",\n                    \"last_name\": \"pm2\",\n                    \"user_name\": \"pm2 pm2\",\n                    \"image\": \"http://127.0.0.1:8000/storage/projectManager2/185ae4c1276a388d0cc0159e3281f193.png\",\n                    \"email\": \"pm2@gmail.com\",\n                    \"address\": null,\n                    \"mobile_phone\": \"787987878\",\n                    \"office_phone\": \"87988798\",\n                    \"status\": 1,\n                    \"user_type\": \"Project Manager\"\n                },\n                {\n                    \"id\": 2,\n                    \"first_name\": \"contractor 1\",\n                    \"last_name\": \"contractor 1\",\n                    \"user_name\": \"contractor 1 contractor 1\",\n                    \"image\": \"http://127.0.0.1:8000/images/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.webp\",\n                    \"email\": \"contractor1@gmail.com\",\n                    \"address\": null,\n                    \"mobile_phone\": \"contractor 1\",\n                    \"office_phone\": \"contractor 1\",\n                    \"status\": 1,\n                    \"user_type\": \"Contractor\"\n                }\n            ]\n        },\n        {\n            \"id\": 3,\n            \"name\": \"project 1\",\n            \"description\": \"<p>project 1</p>\",\n            \"start_date\": \"2025-02-01\",\n            \"end_date\": \"2025-03-28\",\n            \"logo\": \"/storage/project3/8fc7083baa62af90e833315222258ffd.jpg\",\n            \"created_by\": null,\n            \"project_members\": [\n                {\n                    \"id\": 2,\n                    \"first_name\": \"contractor 1\",\n                    \"last_name\": \"contractor 1\",\n                    \"user_name\": \"contractor 1 contractor 1\",\n                    \"image\": \"http://127.0.0.1:8000/images/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.webp\",\n                    \"email\": \"contractor1@gmail.com\",\n                    \"address\": null,\n                    \"mobile_phone\": \"contractor 1\",\n                    \"office_phone\": \"contractor 1\",\n                    \"status\": 1,\n                    \"user_type\": \"Contractor\"\n                },\n                {\n                    \"id\": 12,\n                    \"first_name\": \"c5\",\n                    \"last_name\": \"c5\",\n                    \"user_name\": \"c55c2\",\n                    \"image\": \"http://127.0.0.1:8000/images/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.webp\",\n                    \"email\": \"c5@gmail.com\",\n                    \"address\": null,\n                    \"mobile_phone\": \"78979872\",\n                    \"office_phone\": \"7878789\",\n                    \"status\": 1,\n                    \"user_type\": \"Contractor\"\n                },\n                {\n                    \"id\": 3,\n                    \"first_name\": \"client1\",\n                    \"last_name\": \"client1\",\n                    \"user_name\": \"client1 client1\",\n                    \"image\": \"http://127.0.0.1:8000/images/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.webp\",\n                    \"email\": \"client1@client1.com\",\n                    \"address\": null,\n                    \"mobile_phone\": \"client1\",\n                    \"office_phone\": \"client1\",\n                    \"status\": 1,\n                    \"user_type\": \"Client\"\n                },\n                {\n                    \"id\": 7,\n                    \"first_name\": \"c\",\n                    \"last_name\": \"c\",\n                    \"user_name\": \"c c\",\n                    \"image\": \"http://127.0.0.1:8000/images/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.webp\",\n                    \"email\": \"c@c.com\",\n                    \"address\": null,\n                    \"mobile_phone\": \"c\",\n                    \"office_phone\": \"c\",\n                    \"status\": 1,\n                    \"user_type\": \"Client\"\n                },\n                {\n                    \"id\": 8,\n                    \"first_name\": \"dt2\",\n                    \"last_name\": \"dt2\",\n                    \"user_name\": \"dt2 dt2\",\n                    \"image\": \"http://127.0.0.1:8000/images/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.webp\",\n                    \"email\": \"dt2@gmail.com\",\n                    \"address\": null,\n                    \"mobile_phone\": \"01213212\",\n                    \"office_phone\": \"123132132123\",\n                    \"status\": 1,\n                    \"user_type\": \"Design Team\"\n                },\n                {\n                    \"id\": 6,\n                    \"first_name\": \"dt\",\n                    \"last_name\": \"dt\",\n                    \"user_name\": \"dt dt\",\n                    \"image\": \"http://127.0.0.1:8000/images/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.webp\",\n                    \"email\": \"dt@dt.com\",\n                    \"address\": null,\n                    \"mobile_phone\": \"dt\",\n                    \"office_phone\": \"dt\",\n                    \"status\": 1,\n                    \"user_type\": \"Design Team\"\n                },\n                {\n                    \"id\": 4,\n                    \"first_name\": \"pm1\",\n                    \"last_name\": \"pm1\",\n                    \"user_name\": \"pm1 pm1\",\n                    \"image\": \"http://127.0.0.1:8000/images/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.webp\",\n                    \"email\": \"pm1@gmail.com\",\n                    \"address\": null,\n                    \"mobile_phone\": \"pm1\",\n                    \"office_phone\": \"pm1\",\n                    \"status\": 1,\n                    \"user_type\": \"Project Manager\"\n                },\n                {\n                    \"id\": 5,\n                    \"first_name\": \"pm2\",\n                    \"last_name\": \"pm2\",\n                    \"user_name\": \"pm2 pm2\",\n                    \"image\": \"http://127.0.0.1:8000/storage/projectManager2/185ae4c1276a388d0cc0159e3281f193.png\",\n                    \"email\": \"pm2@gmail.com\",\n                    \"address\": null,\n                    \"mobile_phone\": \"787987878\",\n                    \"office_phone\": \"87988798\",\n                    \"status\": 1,\n                    \"user_type\": \"Project Manager\"\n                }\n            ]\n        },\n        {\n            \"id\": 9,\n            \"name\": \"new3\",\n            \"description\": \"<p>sjdkfjsd</p>\",\n            \"start_date\": \"2025-03-06\",\n            \"end_date\": \"2025-03-16\",\n            \"logo\": \"/storage/project9/b45e55a067446d871a47c76d32d1ba80.jpg\",\n            \"created_by\": \"Test User\",\n            \"project_members\": [\n                {\n                    \"id\": 4,\n                    \"first_name\": \"pm1\",\n                    \"last_name\": \"pm1\",\n                    \"user_name\": \"pm1 pm1\",\n                    \"image\": \"http://127.0.0.1:8000/images/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.webp\",\n                    \"email\": \"pm1@gmail.com\",\n                    \"address\": null,\n                    \"mobile_phone\": \"pm1\",\n                    \"office_phone\": \"pm1\",\n                    \"status\": 1,\n                    \"user_type\": \"Project Manager\"\n                },\n                {\n                    \"id\": 5,\n                    \"first_name\": \"pm2\",\n                    \"last_name\": \"pm2\",\n                    \"user_name\": \"pm2 pm2\",\n                    \"image\": \"http://127.0.0.1:8000/storage/projectManager2/185ae4c1276a388d0cc0159e3281f193.png\",\n                    \"email\": \"pm2@gmail.com\",\n                    \"address\": null,\n                    \"mobile_phone\": \"787987878\",\n                    \"office_phone\": \"87988798\",\n                    \"status\": 1,\n                    \"user_type\": \"Project Manager\"\n                }\n            ]\n        }\n    ]\n}"
+						}
+					]
+				},
+				{
+					"name": "project statics",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "bearer 1|XeTtRC0jrRqRB4Npo7t7U4yWHSsLc0G0prsTdnrBd2423c95",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/v1/my-projects",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"my-projects"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "project statiocs",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/v1/project-statics/2",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"v1",
+										"project-statics",
+										"2"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.12"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 06 Mar 2025 12:29:33 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "POST, GET, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Content-Type, X-Auth-Token, Origin, Authorization"
+								},
+								{
+									"key": "phpdebugbar-id",
+									"value": "Xb2bed0f9edb2f9a57d701e7f51ffe1a7"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": {\n        \"type\": \"success\",\n        \"message\": \"Fetch All Statics.\",\n        \"code\": 200,\n        \"error\": false\n    },\n    \"data\": {\n        \"submittals\": {\n            \"next_week\": 0,\n            \"prev_week\": 0\n        },\n        \"snag_list\": {\n            \"next_week\": 0,\n            \"prev_week\": 0\n        },\n        \"correspondence\": {\n            \"next_week\": 0,\n            \"prev_week\": 0\n        }\n    }\n}"
+						}
+					]
+				},
+				{
+					"name": "project Detail",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "bearer 1|XeTtRC0jrRqRB4Npo7t7U4yWHSsLc0G0prsTdnrBd2423c95",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/v1/project-detail/2",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"project-detail",
+								"2"
+							]
+						}
+					},
+					"response": [
+						{
+							"name": "project detail",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/v1/project-detail/9",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"v1",
+										"project-detail",
+										"9"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.12"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Thu, 06 Mar 2025 11:09:55 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "POST, GET, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Content-Type, X-Auth-Token, Origin, Authorization"
+								},
+								{
+									"key": "phpdebugbar-id",
+									"value": "X23f1a39c774c4375aab82051cd766e69"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": {\n        \"type\": \"success\",\n        \"message\": \"project retrieved successfully.\",\n        \"code\": 200,\n        \"error\": false\n    },\n    \"data\": {\n        \"id\": 9,\n        \"name\": \"new3\",\n        \"description\": \"<p>sjdkfjsd</p>\",\n        \"start_date\": \"2025-03-06\",\n        \"end_date\": \"2025-03-16\",\n        \"logo\": \"/storage/project9/b45e55a067446d871a47c76d32d1ba80.jpg\",\n        \"created_by\": \"Test User\",\n        \"project_members\": [\n            {\n                \"id\": 4,\n                \"first_name\": \"pm1\",\n                \"last_name\": \"pm1\",\n                \"user_name\": \"pm1 pm1\",\n                \"image\": \"http://127.0.0.1:8000/images/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.webp\",\n                \"email\": \"pm1@gmail.com\",\n                \"address\": null,\n                \"mobile_phone\": \"pm1\",\n                \"office_phone\": \"pm1\",\n                \"status\": 1,\n                \"user_type\": \"Project Manager\"\n            },\n            {\n                \"id\": 5,\n                \"first_name\": \"pm2\",\n                \"last_name\": \"pm2\",\n                \"user_name\": \"pm2 pm2\",\n                \"image\": \"http://127.0.0.1:8000/storage/projectManager2/185ae4c1276a388d0cc0159e3281f193.png\",\n                \"email\": \"pm2@gmail.com\",\n                \"address\": null,\n                \"mobile_phone\": \"787987878\",\n                \"office_phone\": \"87988798\",\n                \"status\": 1,\n                \"user_type\": \"Project Manager\"\n            }\n        ]\n    }\n}"
+						},
+						{
+							"name": "project Detail",
+							"originalRequest": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8000/api/v1/project-detail/2",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8000",
+									"path": [
+										"api",
+										"v1",
+										"project-detail",
+										"2"
+									]
+								}
+							},
+							"status": "OK",
+							"code": 200,
+							"_postman_previewlanguage": "json",
+							"header": [
+								{
+									"key": "Host",
+									"value": "127.0.0.1:8000"
+								},
+								{
+									"key": "Connection",
+									"value": "close"
+								},
+								{
+									"key": "X-Powered-By",
+									"value": "PHP/8.2.12"
+								},
+								{
+									"key": "Cache-Control",
+									"value": "no-cache, private"
+								},
+								{
+									"key": "Date",
+									"value": "Sat, 08 Mar 2025 14:03:30 GMT"
+								},
+								{
+									"key": "Content-Type",
+									"value": "application/json"
+								},
+								{
+									"key": "Access-Control-Allow-Origin",
+									"value": "*"
+								},
+								{
+									"key": "Access-Control-Allow-Methods",
+									"value": "POST, GET, OPTIONS, PUT, DELETE"
+								},
+								{
+									"key": "Access-Control-Allow-Headers",
+									"value": "Content-Type, X-Auth-Token, Origin, Authorization"
+								},
+								{
+									"key": "phpdebugbar-id",
+									"value": "X156029a57b6c8105f73989828b2994ec"
+								}
+							],
+							"cookie": [],
+							"body": "{\n    \"status\": {\n        \"type\": \"success\",\n        \"message\": \"project retrieved successfully.\",\n        \"code\": 200,\n        \"error\": false\n    },\n    \"data\": {\n        \"id\": 2,\n        \"name\": \"test2\",\n        \"description\": \"<p>dcs sdfs</p>\",\n        \"start_date\": \"2025-01-23\",\n        \"end_date\": \"2025-02-01\",\n        \"logo\": \"http://127.0.0.1:8000/images/default100.png\",\n        \"created_by\": null,\n        \"project_members\": [\n            {\n                \"id\": 5,\n                \"first_name\": \"pm2\",\n                \"last_name\": \"pm2\",\n                \"user_name\": \"pm2 pm2\",\n                \"image\": \"http://127.0.0.1:8000/storage/projectManager2/185ae4c1276a388d0cc0159e3281f193.png\",\n                \"email\": \"pm2@gmail.com\",\n                \"address\": null,\n                \"mobile_phone\": \"787987878\",\n                \"office_phone\": \"87988798\",\n                \"status\": 1,\n                \"user_type\": \"Project Manager\"\n            },\n            {\n                \"id\": 2,\n                \"first_name\": \"contractor 1\",\n                \"last_name\": \"contractor 1\",\n                \"user_name\": \"contractor 1 contractor 1\",\n                \"image\": \"http://127.0.0.1:8000/images/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.webp\",\n                \"email\": \"contractor1@gmail.com\",\n                \"address\": null,\n                \"mobile_phone\": \"contractor 1\",\n                \"office_phone\": \"contractor 1\",\n                \"status\": 1,\n                \"user_type\": \"Contractor\"\n            }\n        ],\n        \"open_issued\": [\n            {\n                \"id\": 1,\n                \"number \": \"RFI-001\",\n                \"subject\": \"marina emad\",\n                \"type\": \"RFI\",\n                \"status\": \"Draft\",\n                \"program_impact\": \"Yes\",\n                \"cost_impact\": \"Yes\",\n                \"description\": \"<p>gjj</p>\",\n                \"created_date\": \"2025-01-24\"\n            }\n        ]\n    }\n}"
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "UserLogin",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "email",
+							"value": "pm2@gmail.com",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "password",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/loginUser",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"loginUser"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "UserLogin",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "email",
+									"value": "pm2@gmail.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "password",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/v1/loginUser",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"loginUser"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Host",
+							"value": "127.0.0.1:8000"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/8.2.12"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 06 Mar 2025 09:35:42 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "POST, GET, OPTIONS, PUT, DELETE"
+						},
+						{
+							"key": "Access-Control-Allow-Headers",
+							"value": "Content-Type, X-Auth-Token, Origin, Authorization"
+						},
+						{
+							"key": "phpdebugbar-id",
+							"value": "Xf2958b1adcd42e8ebe69ea0cbe971f5a"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": {\n        \"type\": \"success\",\n        \"message\": \"You are successfully logged in\",\n        \"code\": 200,\n        \"error\": false\n    },\n    \"data\": [\n        {\n            \"id\": 5,\n            \"first_name\": \"pm2\",\n            \"last_name\": \"pm2\",\n            \"user_name\": \"pm2 pm2\",\n            \"image\": \"http://127.0.0.1:8000/storage/projectManager2/185ae4c1276a388d0cc0159e3281f193.png\",\n            \"email\": \"pm2@gmail.com\",\n            \"address\": null,\n            \"mobile_phone\": \"787987878\",\n            \"office_phone\": \"87988798\",\n            \"status\": 1,\n            \"user_type\": \"Project Manager\",\n            \"access_token\": \"1|XeTtRC0jrRqRB4Npo7t7U4yWHSsLc0G0prsTdnrBd2423c95\"\n        }\n    ]\n}"
+				}
+			]
+		},
+		{
+			"name": "Logout",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "Bearer 3|YkmtubL9xNf6EoVxxXPIYCZP5cbMU7NSt2gpGWcf6ee0e299",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/logout",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"logout"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "profile",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "bearer 1|XeTtRC0jrRqRB4Npo7t7U4yWHSsLc0G0prsTdnrBd2423c95",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://127.0.0.1:8000/api/v1/profile",
+					"protocol": "http",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "8000",
+					"path": [
+						"api",
+						"v1",
+						"profile"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "profile",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8000/api/v1/profile",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8000",
+							"path": [
+								"api",
+								"v1",
+								"profile"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Host",
+							"value": "127.0.0.1:8000"
+						},
+						{
+							"key": "Connection",
+							"value": "close"
+						},
+						{
+							"key": "X-Powered-By",
+							"value": "PHP/8.2.12"
+						},
+						{
+							"key": "Cache-Control",
+							"value": "no-cache, private"
+						},
+						{
+							"key": "Date",
+							"value": "Thu, 06 Mar 2025 09:42:04 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Access-Control-Allow-Origin",
+							"value": "*"
+						},
+						{
+							"key": "Access-Control-Allow-Methods",
+							"value": "POST, GET, OPTIONS, PUT, DELETE"
+						},
+						{
+							"key": "Access-Control-Allow-Headers",
+							"value": "Content-Type, X-Auth-Token, Origin, Authorization"
+						},
+						{
+							"key": "phpdebugbar-id",
+							"value": "X20bbdbc348ec32f8710dd4033717ef2a"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"status\": {\n        \"type\": \"success\",\n        \"message\": \"You are successfully logged in\",\n        \"code\": 200,\n        \"error\": false\n    },\n    \"data\": [\n        {\n            \"id\": 5,\n            \"first_name\": \"pm2\",\n            \"last_name\": \"pm2\",\n            \"user_name\": \"pm2 pm2\",\n            \"image\": \"http://127.0.0.1:8000/storage/projectManager2/185ae4c1276a388d0cc0159e3281f193.png\",\n            \"email\": \"pm2@gmail.com\",\n            \"address\": null,\n            \"mobile_phone\": \"787987878\",\n            \"office_phone\": \"87988798\",\n            \"status\": 1\n        }\n    ]\n}"
+				}
+			]
+		}
+	]
+}
