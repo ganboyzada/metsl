@@ -3,6 +3,7 @@ namespace App\Repository;
 
 use App\Model\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 interface PunchListRepositoryInterface
@@ -23,6 +24,13 @@ interface PunchListRepositoryInterface
     * 
     */
     public function get_all_project_Punch_list($project_id , $request): Collection; 
+    
+     /**
+    * @param int $project_id 
+    * @return LengthAwarePaginator
+    * 
+    */
+    public function get_all_project_Punch_list_paginate($project_id): LengthAwarePaginator;
     
     /**
     * @param int $projectID 

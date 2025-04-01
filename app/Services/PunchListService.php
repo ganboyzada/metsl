@@ -87,7 +87,10 @@ class PunchListService
         return $this->punchListRepository->get_all_project_Punch_list($project_id , $request);
 
     }
+    public function getAllProjectPunchListPaginate($project_id){
+        return $this->punchListRepository->get_all_project_Punch_list_paginate($project_id);
 
+    }
     public function getStatusPieChart($project_id){
         $data =  $this->punchListRepository->get_status_pie_chart($project_id)->map(function($row){
             $row->status_text = $row->status->text();

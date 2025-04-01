@@ -4,13 +4,14 @@ namespace App\Repository\Eloquent;
 
 use App\Mail\StakholderEmail;
 use App\Models\Permission;
-use App\Models\PunchList;
 use App\Models\ProjectDocumentFiles;
 use App\Models\ProjectDocumentRevisions;
+use App\Models\PunchList;
 use App\Models\Role;
 use App\Models\User;
 use App\Repository\PunchListRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class PunchListRepository extends BaseRepository implements PunchListRepositoryInterface
@@ -150,27 +151,29 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
                 });
                         
             }) ; 
-        }          
-        $punchLists=$punchLists->when($data['search'] , function($q) use($data){
-        $q->where(function($query) use($data){
-                $query->whereAny(
-                    [
-                        'number',
-                        'title',
-                        'date_notified_at',
-                        'location',
-                        'date_resolved_at',
-                        'description',
-                        'due_date',
-                        'status',
-                       ],
-                    'LIKE',
-                    "%".$data['search']."%"
-                );
-            
-        });
+        }    
+        if(isset($data['search'])){        
+            $punchLists=$punchLists->when($data['search'] , function($q) use($data){
+            $q->where(function($query) use($data){
+                    $query->whereAny(
+                        [
+                            'number',
+                            'title',
+                            'date_notified_at',
+                            'location',
+                            'date_resolved_at',
+                            'description',
+                            'due_date',
+                            'status',
+                        ],
+                        'LIKE',
+                        "%".$data['search']."%"
+                    );
+                
+            });
 
-        });
+            });
+        }
 
         if(checkIfUserHasThisPermission($project_id , 'view_all_punch_list')){
 
@@ -201,6 +204,46 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
         
     }
 
+    
+    /**
+    * @param int $project_id 
+    * @return LengthAwarePaginator
+    * 
+    */
+    public function get_all_project_Punch_list_paginate($project_id): LengthAwarePaginator{
+  
+        $punchLists =  $this->model->where('project_id',$project_id);
+
+        
+
+        if(checkIfUserHasThisPermission($project_id , 'view_all_punch_list')){
+
+            $punchLists=$punchLists->paginate(10);
+  
+            return $punchLists;
+        }        
+        else if(!auth()->user()->is_admin){
+
+            $punchLists = $punchLists->where(function($q){
+                $q->whereHas('users', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                });
+
+                $q->orwhere('responsible_id',auth()->user()->id);
+                $q->orwhere('created_by',auth()->user()->id);
+
+                
+            });
+
+            $punchLists=$punchLists->paginate(perPage: 10);
+  
+            return $punchLists;
+              
+
+        }
+
+        
+    }
     
      /**
     * @param int $project_id

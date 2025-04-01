@@ -11,7 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 use App\Models\Permission;
 
-
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 
 class AppServiceProvider extends ServiceProvider
@@ -31,7 +32,19 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
-
+        // Collection::macro('paginate', function($perPage, $page = null, $pageName = 'page') {
+        //     $page = $page ?: LengthAwarePaginator::resolveCurrentPage($pageName);
+        //     return new LengthAwarePaginator(
+        //         $this->forPage($page, $perPage), // $items
+        //         $this->count(),                  // $total
+        //         $perPage,
+        //         $page,
+        //         [                                // $options
+        //             'path' => LengthAwarePaginator::resolveCurrentPath(),
+        //             'pageName' => $pageName,
+        //         ]
+        //     );
+        // });
         $all_projects = \App\Models\Project::get(['id' , 'name']);
         if(isset($all_projects[($all_projects->count() - 1)]->id)){
             $id= $all_projects[($all_projects->count() - 1)]->id;

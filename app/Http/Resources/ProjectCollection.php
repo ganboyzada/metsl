@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 
-class InvoiceCollection extends ResourceCollection
+class ProjectCollection extends ResourceCollection
 {
     /**
      * The resource that this resource collects.

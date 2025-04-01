@@ -24,20 +24,7 @@ class UserProfileCollection extends ResourceCollection
     {
         return [
             'data' => $this->collection,
-            'links' => [
-                "first_page_url" => $this->url(1),
-                "last_page_url" => $this->url($this->lastPage()),
-                "prev_page_url" => $this->previousPageUrl(),
-                "next_page_url" => $this->nextPageUrl()
-            ],
-            'meta' => [
-                "current_page" => $this->currentPage(),
-                'from' => $this->firstItem(),
-                "last_page" => $this->lastPage(),
-                "per_page" => $this->perPage(),
-                'to' => $this->lastItem(),
-                "total" => $this->total()
-            ]
+
 
         ];
     }

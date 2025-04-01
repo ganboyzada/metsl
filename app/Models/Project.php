@@ -142,7 +142,10 @@ class Project extends Model
     {
         return $this->hasMany(Correspondence::class);
     } 
-
+    public function punchLists(): HasMany
+    {
+        return $this->hasMany(PunchList::class);
+    } 
 
     public function designTeams(): BelongsToMany
     {

@@ -10,6 +10,11 @@ enum  PunchListStatusEnum: int
 
     case ACCEPTED = 2;
 
+    public static function values(): array
+    {
+        return array_column(self::cases(), 'value');
+    }
+
     public function text(): string
     {
         return match($this) 

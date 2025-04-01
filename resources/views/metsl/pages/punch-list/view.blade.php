@@ -19,13 +19,16 @@
         <div
             class="dropdown absolute right-0 mt-2 w-48 bg-gray-800 text-gray-200  shadow-lg"
         >
-            @if(checkIfUserHasThisPermission(Session::get('projectID') ,'responsible_punch_list'))
+            @if(checkIfUserHasThisPermission(Session::get('projectID') ,'responsible_punch_list') ||
+            checkIfUserHasThisPermission(Session::get('projectID') ,'distribution_members_punch_list') ||
+            $punch_list->created_by == auth()->user()->id
+            )
             <button  data-modal="uploader-modal" class="modal-toggler  flex px-4 py-2 hover:bg-gray-700">
                 <i data-feather="corner-up-left" class="mr-2"></i> <span class="hidden md:inline">Add Reply</span>
             </button>
             @endif
 
-            @if(checkIfUserHasThisPermission(Session::get('projectID') ,'update_punch_list_status'))
+            @if(checkIfUserHasThisPermission(Session::get('projectID') ,'update_punch_list_status') || $punch_list->created_by == auth()->user()->id)
             <button  data-modal="status-modal" class="modal-toggler  flex px-4 py-2 hover:bg-gray-700">
                 <i data-feather="corner-up-left" class="mr-2"></i> <span class="hidden md:inline">Change Status</span>
             </button>

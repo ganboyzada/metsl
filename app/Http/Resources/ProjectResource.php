@@ -35,9 +35,13 @@ class ProjectResource extends JsonResource
             return UserProfileResource::collection($this->stakholders);
         });
 
-        $resource['open_issued'] = $this->whenLoaded('correspondences', function () {
-            return correspondencesResource::collection($this->correspondences);
-        });
+        // $resource['open_issued'] = $this->whenLoaded('correspondences', function () {
+        //     return correspondencesResource::collection($this->correspondences);
+        // });
+
+        // $resource['snag_list'] = $this->whenLoaded('punchLists', function () {
+        //     return punchListsResource::collection($this->punchLists);
+        // });
 
         return $resource;
     }

@@ -7,6 +7,7 @@ use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Routing\Controller as BaseController;
 
 class Controller extends BaseController
@@ -47,7 +48,10 @@ class Controller extends BaseController
         if ($request->filled('page')) {
             $path .= $class . 'Collection';
             $limit = $request->get('limit', 10);
-            $items = new $path($items->paginate($limit));
+            $items = new $path($items);
+
+
+            
         } else {
             $path .= $class . 'Resource';
             if ($request->filled('limit')) {
