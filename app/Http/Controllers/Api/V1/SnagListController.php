@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PunchListRequest;
 use App\Http\Requests\ReplyRequest;
 use App\Http\Requests\StatusRequest;
 use App\Http\Resources\ProjectResource;
@@ -14,6 +15,7 @@ use App\Models\ProjectDocument;
 use App\Models\PunchList;
 use App\Services\ProjectService;
 use App\Services\PunchListService;
+use App\Services\UserService;
 use Carbon\Carbon;
 use DateTime;
 use Illuminate\Http\Request;
@@ -25,6 +27,7 @@ class SnagListController extends Controller
     public function __construct(
         protected ProjectService $projectService,
         protected PunchListService $punchListService,
+        protected UserService $userService,
 
         )
     {
@@ -171,6 +174,64 @@ class SnagListController extends Controller
             return $this->sendResponse(new punchListResource($punch_list), "Punch List retrieved successfully."); 
         }
         return $this->sendResponse(['status' => false], "You are not allowed to update.");
+    }
+
+
+
+    public function getParticipates($project_id){
+            
+            $next_number =  $this->punchListService->getNextNumber($project_id);
+
+            $distribution_members = $this->userService->getUsersOfProjectID($project_id , 'distribution_members_punch_list');
+            $responsible = $this->userService->getUsersOfProjectID($project_id , 'responsible_punch_list');
+			
+            $distribution_members = $distribution_members['users'];
+            $responsible = $responsible['users'];
+
+            $res =  ['distribution_members'=>$distribution_members, 'responsible'=>$responsible  , 'next_number'=>$next_number];
+            return $this->sendResponse($res, "Data retrieved successfully."); 
+        
+
+    }
+
+
+    public function store(PunchListRequest  $request)
+    {
+
+        if($request->validated()){
+            \DB::beginTransaction();
+            try{
+                $all_data = request()->all();
+                $all_data['created_by'] = \Auth::user()->id;
+                $all_data['closed_by'] = \Auth::user()->id;
+
+                $all_data['status'] = 0;
+                $all_data['date_notified_at'] = date('Y-m-d');
+                $model = $this->punchListService->create($all_data);
+            \DB::commit();
+            // all good
+            } catch (\Exception $e) {
+                \DB::rollback();
+                return $this->sendError( $e->getMessage());
+            }
+
+                       
+            $punch_list = $this->punchListService->find($model->id);
+            return $this->sendResponse(new punchListResource($punch_list), "Punch List created successfully."); 
+
+        }
+    }
+
+
+    public function destroy($id){
+        try{
+            $this->punchListService->delete($id);
+            return $this->sendResponse(['status' => true], "deleted successfully.");
+        } catch (\Exception $e) {
+            \DB::rollback();
+            return $this->sendError( $e->getMessage());
+        }
+        
     }
  
   

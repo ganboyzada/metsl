@@ -29,6 +29,9 @@ Route::group(['middleware' => ['cors','auth:sanctum']], function () {
     Route::get('status-periority-options',  [SnagListController::class, "statusPeriorityOptions"]);
     Route::post('add-reply',  [SnagListController::class, "storeReply"]);
     Route::post('update-status',  [SnagListController::class, "updateStatus"]);
+    Route::get('get-participates/{id}',  [SnagListController::class, "getParticipates"]);
+    Route::post('store-snag-list',  [SnagListController::class, "store"]);
+    Route::delete('delete-snag-list/{id}',  [SnagListController::class, "destroy"]);
 
 
 
