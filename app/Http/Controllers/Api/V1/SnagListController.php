@@ -217,7 +217,7 @@ class SnagListController extends Controller
 
                 $all_data['status'] = 0;
                 $all_data['date_notified_at'] = date('Y-m-d');
-                dd($all_data);
+               // dd($all_data);
                 $model = $this->punchListService->create($all_data);
             \DB::commit();
             // all good
