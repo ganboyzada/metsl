@@ -64,6 +64,16 @@ class SnagListController extends Controller
             return $this->sendResponse(['status' => false], "You are not allowed to update.");
 
         }
+
+        else if($permission == 'delete' && isset($punch_list->id)){
+            if( $punch_list->created_by == auth()->user()->id){
+
+                return $this->sendResponse(['status' => true], "You are allowed to delete.");
+
+            }
+            return $this->sendResponse(['status' => false], "You are not allowed to delete.");
+
+        }        
         else if($permission == 'create'){
             
             if(checkIfUserHasThisPermission($project_id ,'add_punch_list')){
@@ -224,13 +234,18 @@ class SnagListController extends Controller
 
 
     public function destroy($id){
-        try{
-            $this->punchListService->delete($id);
-            return $this->sendResponse(['status' => true], "deleted successfully.");
-        } catch (\Exception $e) {
-            \DB::rollback();
-            return $this->sendError( $e->getMessage());
+
+        $punch_list = $this->punchListService->find($id);
+        if(isset($punch_list->id) && $punch_list->created_by == auth()->user()->id){
+            try{
+                $this->punchListService->delete($id);
+                return $this->sendResponse(['status' => true], "deleted successfully.");
+            } catch (\Exception $e) {
+                \DB::rollback();
+                return $this->sendError( $e->getMessage());
+            }
         }
+        return $this->sendResponse(['status' => false], "You are not allowed to add reply.");
         
     }
  
