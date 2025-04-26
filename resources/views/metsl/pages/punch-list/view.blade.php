@@ -103,7 +103,7 @@
 				@foreach($punch_list->users as $user)
 					<div class="flex items-center">
 						<img src="{{$user->userable->image}}" alt="Profile" class="w-10 h-10 rounded-full mr-4">
-                        <p class="  dark:text-gray-200">{{$punch_list->responsible->userable->first_name}} {{$punch_list->responsible->userable->last_name}}</p>
+                        <p class="  dark:text-gray-200">{{$user->userable->first_name}} {{$user->userable->last_name}}</p>
 					</div>
 					
 				@endforeach
