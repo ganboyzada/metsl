@@ -3,6 +3,11 @@
 @section('title', 'Punch List - Create')
 
 @section('content')
+<style>
+    [type=checkbox]:checked+img{
+        border: 4px solid red !important;
+    }
+    </style>
 <div class="p-6">
     <h1 class="text-2xl font-semibold mb-6 dark:text-gray-200">Add a Punch Item</h1>
 	<div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
@@ -136,6 +141,42 @@
             
 
         </div>
+        @if (isset($drawings) && $drawings->count() > 0)
+                <h2 class="text-2xl font-semibold mb-6 dark:text-gray-200">drawings</h2>
+        @endif        
+        <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 border-2 border-dotted overflow-y-auto p-5" 
+        style="height:300px;">
+
+            @if (isset($drawings) && $drawings->count() > 0)
+                @foreach ($drawings as $drawing)
+                <div class="sm:col-span-1 text-center" id="draw{{ $drawing->id }}">
+                    <label class="relative cursor-pointer group">
+                        <!-- Hidden checkbox -->
+                        <input type="checkbox" name="drawings[]" value="{{ $drawing->id }}" class="peer absolute opacity-0 w-0 h-0" />
+                    
+                        <!-- Image -->
+                        <img
+                          alt="Image 1"
+                          class="rounded-lg border-4 border-transparent peer-checked:border-blue-500 transition drawing"
+                          style="width:30%;height:150px;margin:auto; " src="{{ Storage::url('project'.$drawing->project_id.'/drawings/'.$drawing->image) }}"
+            
+            
+                        />
+                        <a target="_blank" href="{{ Storage::url('project'.$drawing->project_id.'/drawings/'.$drawing->image) }}">
+                            {{ $drawing->title }}</a>
+                
+                      </label>   
+                        
+                    
+            
+                </div>
+                    
+                @endforeach
+                
+            @endif
+
+
+        </div>
         <button
         type="submit"
         class="submit_punch_list_form px-4 py-2 mt-5 bg-blue-500 text-white hover:bg-blue-600"
@@ -206,7 +247,7 @@
 							el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
                             if(el.length == 0){
                                 el = $(document).find('#file-upload');
-								el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">the documents must be pdf </div>'));
+								el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">the documents required </div>'));
 								
                             }
                             

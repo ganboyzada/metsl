@@ -46,9 +46,43 @@ class PunchListController extends Controller
     {
     }
 
+    public function imageUI(){
+        return view('metsl.pages.punch-list.image_ui',get_defined_vars());
+    }
+
+        public function upload(Request $request)
+    {
+        $data = $request->input('image');
+        $imageName = $request->input('name');
+
+        $project_id = $request->input('project_id');
+        $punch_list_id = $request->input('punch_list_id');
+
+        if (preg_match('/^data:image\/(\w+);base64,/', $data, $type)) {
+            $data = substr($data, strpos($data, ',') + 1);
+            $type = strtolower($type[1]); // jpg, png, gif
+
+            $imageName = pathinfo($imageName, PATHINFO_FILENAME) . '.' . $type;
+            $data = base64_decode($data);
+            // dd($data);
+
+            //  $path = public_path('img/' . $imageName);
+
+            //  file_put_contents($path, $data);
+
+            //Storage::disk('public')->putFileAs( 'project3/punch_list1', $data, $imageName);
+            Storage::disk('public')->put("project$project_id/punch_list$punch_list_id/$imageName", $data);
+
+            return response()->json(['success' => true, 'filename' => $imageName]);
+        }
+
+        return response()->json(['error' => 'Invalid image data'], 400);
+    }
+
     public function create(){
         if (Session::has('projectID') && Session::has('projectName')){
             $id = Session::get('projectID');
+            $drawings = $this->projectDrawingsService->all($id);
          
           //  $next_number =  $this->correspondenceService->getNextNumber($type , $id);
           $files = $this->projectDocumentFilesService->getNewestFilesByProjectId( $id);
@@ -73,6 +107,8 @@ class PunchListController extends Controller
     public function edit($id){
         $punch_list_id = $id;
         $punch_list = $this->punchListService->find($punch_list_id);
+      //  return $punch_list;
+
         /*$distribution_members = $this->userService->getUsersOfProjectID(Session::get('projectID') , '');
         $responsible = $this->userService->getUsersOfProjectID(Session::get('projectID') , '');
         
@@ -250,6 +286,17 @@ class PunchListController extends Controller
     public function delete_drawings($id){
         $this->projectDrawingsService->delete($id);
        // return redirect()->back()->with('success' , 'Item deleted successfully');
+    }
+
+    public function delete_assigned_drawings($punchlist_id , $id){
+        try{
+            $punch_list = $this->punchListService->find($punchlist_id);
+            return $punch_list->drawings()->detach($id);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+        
+
     }
     public function destroyFile($id){
         $this->punchListFilesService->delete($id);

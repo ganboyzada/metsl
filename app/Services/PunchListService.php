@@ -33,6 +33,7 @@ class PunchListService
         try {
             $project_id = $data['project_id'];
             $modal =  $this->punchListRepository->create($data);
+            $modal->drawings()->sync($data['drawings']);
             $path = Storage::url('/project'.$data['project_id'].'/punch_list'.$modal->id);
             
             \File::makeDirectory($path, $mode = 0777, true, true);  
@@ -118,7 +119,7 @@ class PunchListService
     }
 
     public function find($punch_list_id){
-        $punch_list =  $this->punchListRepository->with([ 'users.userable' , 'files' , 'responsible.userable' ,'replies.user','documentFiles'])->find($punch_list_id);
+        $punch_list =  $this->punchListRepository->with([ 'users.userable' , 'files' , 'responsible.userable' ,'replies.user','documentFiles','drawings'])->find($punch_list_id);
         $punch_list->priority_val = $punch_list->priority->value;
         $punch_list->status_val = $punch_list->status->value;
         return $punch_list;

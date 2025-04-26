@@ -41,6 +41,7 @@ class PunchListRequest extends FormRequest
                 "participates"    => ['required','array'],
                 'docs' => 'nullable',
                 "docs.*"  => ["nullable", "mimes:jpeg,bmp,png,gif,svg,pdf"],
+                'drawings'=> 'nullable',
 
         
             ]; 
@@ -61,8 +62,10 @@ class PunchListRequest extends FormRequest
                 'project_id'=>'required',
                 'description'=>'required',
                 "participates"    => ['required','array'],
-                'docs' => 'required',
-                "docs.*"  => ["required", "mimes:jpeg,bmp,png,gif,svg,pdf"],
+                'docs' => 'nullable',
+                "docs.*"  => ["nullable", "mimes:jpeg,bmp,png,gif,svg,pdf"],
+                'drawings'=> 'nullable',
+
 
         
             ]; 
