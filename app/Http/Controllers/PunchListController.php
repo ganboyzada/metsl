@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Enums\CorrespondenceStatusEnum;
 use App\Enums\RevisionStatusEnum;
 use App\Http\Requests\CorrespondenceRequest;
-use App\Http\Requests\DocumentRequest;
+use App\Http\Requests\DrawingRequest;
 use App\Http\Requests\MeetingPlaningRequest;
 use App\Http\Requests\PunchListRequest;
 use App\Services\ClientService;
@@ -13,7 +13,9 @@ use App\Services\ContractorService;
 use App\Services\DesignTeamService;
 use App\Services\DocumentService;
 use App\Services\MeetingPlaningService;
+use App\Services\ProjectDocumentFilesService;
 use App\Services\ProjectDocumentRevisionsService;
+use App\Services\ProjectDrawingsService;
 use App\Services\ProjectManagerService;
 use App\Services\ProjectService;
 use App\Services\PunchListFilesService;
@@ -34,15 +36,39 @@ class PunchListController extends Controller
 
         protected PunchListService $punchListService,
         protected userService $userService,
-        protected PunchListFilesService $punchListFilesService
+        protected PunchListFilesService $punchListFilesService,
+        protected ProjectDocumentFilesService $projectDocumentFilesService,
+        protected ProjectDrawingsService $projectDrawingsService,
+        protected ProjectService $projectService , 
+   
 
         )
     {
     }
 
     public function create(){
-        return view('metsl.pages.punch-list.create');
+        if (Session::has('projectID') && Session::has('projectName')){
+            $id = Session::get('projectID');
+         
+          //  $next_number =  $this->correspondenceService->getNextNumber($type , $id);
+          $files = $this->projectDocumentFilesService->getNewestFilesByProjectId( $id);
+
+        }
+        return view('metsl.pages.punch-list.create',get_defined_vars());
     }
+
+    public function drawings(){
+        if (Session::has('projectID') && Session::has('projectName')){
+            $id = Session::get('projectID');
+            $drawings = $this->projectDrawingsService->all($id);
+         
+
+          //  $next_number =  $this->correspondenceService->getNextNumber($type , $id);
+
+        }
+        return view('metsl.pages.punch-list.drawings',get_defined_vars());
+    }
+    
 
     public function edit($id){
         $punch_list_id = $id;
@@ -83,6 +109,32 @@ class PunchListController extends Controller
                 $all_data['status'] = 0;
                 $all_data['date_notified_at'] = date('Y-m-d');
                 $model = $this->punchListService->create($all_data);
+            \DB::commit();
+            // all good
+            } catch (\Exception $e) {
+                \DB::rollback();
+                return response()->json(['error' => $e->getMessage()]);
+            }
+
+                       
+            return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$model]);
+
+        }
+    }
+
+
+    public function create_drawings(DrawingRequest  $request)
+    {
+
+        if($request->validated()){
+            \DB::beginTransaction();
+            try{
+                $all_data = request()->all();
+
+
+                $all_data['project_id'] = Session::get('projectID');
+
+                $model = $this->projectDrawingsService->createBulkFiles($all_data['project_id'] ,$all_data['title'] ,$all_data['docs']);
             \DB::commit();
             // all good
             } catch (\Exception $e) {
@@ -194,6 +246,10 @@ class PunchListController extends Controller
     public function destroy($id){
         $this->punchListService->delete($id);
         
+    }
+    public function delete_drawings($id){
+        $this->projectDrawingsService->delete($id);
+       // return redirect()->back()->with('success' , 'Item deleted successfully');
     }
     public function destroyFile($id){
         $this->punchListFilesService->delete($id);

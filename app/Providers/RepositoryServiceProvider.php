@@ -22,6 +22,7 @@ use App\Repository\Eloquent\MeetingPlaningFilesRepository;
 use App\Repository\Eloquent\MeetingPlaningRepository;
 use App\Repository\Eloquent\ProjectDocumentFilesRepository;
 use App\Repository\Eloquent\ProjectDocumentRevisionsRepository;
+use App\Repository\Eloquent\ProjectDrawingsRepository;
 use App\Repository\Eloquent\ProjectFileRepository;
 use App\Repository\Eloquent\ProjectManagerRepository;
 use App\Repository\Eloquent\ProjectRepository;
@@ -35,6 +36,7 @@ use App\Repository\MeetingPlaningFilesRepositoryInterface;
 use App\Repository\MeetingPlaningRepositoryInterface;
 use App\Repository\ProjectDocumentFilesRepositoryInterface;
 use App\Repository\ProjectDocumentRevisionsRepositoryInterface;
+use App\Repository\ProjectDrawingsRepositoryInterface;
 use App\Repository\ProjectFileRepositoryInterface;
 use App\Repository\ProjectManagerRepositoryInterface;
 use App\Repository\ProjectRepositoryInterface;
@@ -54,6 +56,7 @@ use App\Services\MeetingPlaningFilesService;
 use App\Services\MeetingPlaningService;
 use App\Services\ProjectDocumentFilesService;
 use App\Services\ProjectDocumentRevisionsService;
+use App\Services\ProjectDrawingsService;
 use App\Services\ProjectFileService;
 use App\Services\ProjectManagerService;
 use App\Services\ProjectService;
@@ -150,6 +153,15 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(ProjectDocumentFilesService::class, function ($app) {
             return new ProjectDocumentFilesService($app->make(ProjectDocumentFilesRepositoryInterface::class));
         });
+
+
+
+        
+        $this->app->bind(ProjectDrawingsRepositoryInterface::class, ProjectDrawingsRepository::class);
+        $this->app->bind(ProjectDrawingsService::class, function ($app) {
+            return new ProjectDrawingsService($app->make(ProjectDrawingsRepositoryInterface::class));
+        });
+
 
         $this->app->bind(ProjectDocumentRevisionsRepositoryInterface::class, ProjectDocumentRevisionsRepository::class);
         $this->app->bind(ProjectDocumentRevisionsService::class, function ($app) {

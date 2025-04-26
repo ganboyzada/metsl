@@ -52,4 +52,19 @@ class PunchList extends Model
 
         return $this->hasMany(PunchlistReplies::class, 'punch_list_id');
     }
+
+    public function documentFiles(): belongsToMany
+    {
+        return $this->belongsToMany(ProjectDocumentFiles::class, 'punch_list_linked_documents', 
+        'punchList_id', 'file_id')
+        ->withPivot('revision_id')
+        ->using(PunchListLinkedDocuments::class);
+    } 
+
+    public function drawings(): belongsToMany
+    {
+        return $this->belongsToMany(ProjectDrawings::class, 'punch_list_drawings', 
+        'punchList_id', 'drawing_id')
+        ->using(PunchListDrawings::class);
+    } 
 }

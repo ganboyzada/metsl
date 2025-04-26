@@ -91,6 +91,10 @@ Route::middleware([
 
 	Route::get('/project/punch-list/all',  [PunchListController::class, "PunchList"])->name('projects.punch-list.all');
     Route::get('/project/punch-list/create', [PunchListController::class, "create"])->name('projects.punch-list.create');
+    Route::get('/project/punch-list/drawings', [PunchListController::class, "drawings"])->name('projects.punch-list.drawings');
+    Route::post('/project/punch-list/createDrawings', [PunchListController::class, "create_drawings"])->name('projects.punch-list.drawings.create');
+    Route::get('/project/punch-list/deleteDrawings/{id}', [PunchListController::class, "delete_drawings"])->name('projects.punch-list.drawings.delete');
+
     Route::get('/project/punch-list/participates',  [PunchListController::class, "getParticipates"])->name('projects.punch-list.participates');	
 	Route::post('/project/punch-list/store',  [PunchListController::class, "store"])->name(name: 'projects.punch-list.store');	
     Route::get('/project/punch-list/edit/{id}', [PunchListController::class, "edit"])->name('projects.punch-list.edit');

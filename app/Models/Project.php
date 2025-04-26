@@ -146,7 +146,10 @@ class Project extends Model
     {
         return $this->hasMany(PunchList::class);
     } 
-
+    public function drawings(): HasMany
+    {
+        return $this->hasMany(ProjectDrawings::class);
+    } 
     public function designTeams(): BelongsToMany
     {
         return $this->belongsToMany(User::class, 'projects_users', 'project_id', 'user_id')->where('userable_type','App\Models\DesignTeam');

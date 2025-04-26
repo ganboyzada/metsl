@@ -45,6 +45,38 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
         }    
     }
 
+
+       /**
+    * @param array $data 
+    * @param Model $punchlist 
+    * 
+    */
+    public function add_Linked_documents_to_punchlist($data , $punchlist): void
+    {
+        try{
+            if(!$punchlist){
+                throw new \Exception('Record not find'); 
+            }
+            //dd($data['linked_documents']);
+            if(isset($data['linked_documents']) && count($data['linked_documents']) > 0){
+                $punchlist->documentFiles()->detach();
+                foreach($data['linked_documents'] as $doc){
+                    $ids = explode('-' , $doc);
+                    $file_id = $ids[0];
+                    $revision_id = $ids[1] ?? NULL;
+                    $punchlist->documentFiles()->attach($file_id, ['revision_id'=>$revision_id]);
+
+                }
+            }
+            
+
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }    
+       // dd('ok');
+    }
+
+
            /**
     * @param int $projectID 
     * @return mixed

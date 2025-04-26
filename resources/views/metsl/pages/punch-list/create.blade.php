@@ -11,11 +11,11 @@
 		@csrf
 		<input type="hidden" name="project_id" value="{{ \Session::get('projectID') }}"/>
 
-        <div class="flex flex-wrap md:flex-nowrap items-start gap-6">
+        
 
-            <div class="w-full md:w-3/5 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
                 <!-- Title (Required) -->
-                <div class="sm:col-span-2">
+                <div class="sm:col-span-1">
                     <label for="title" class="block text-sm mb-2 font-medium dark:text-gray-200">Title <span class="text-red-500">*</span></label>
                     <input
                         type="text"
@@ -27,7 +27,7 @@
                 </div>
 
                 <!-- Number (#) (Required) -->
-                <div>
+                <div class="sm:col-span-1">
                     <label for="number" class="block text-sm mb-2 font-medium dark:text-gray-200">Number (#) <span class="text-red-500">*</span></label>
                     <input
                         type="text"
@@ -39,7 +39,7 @@
                 </div>
 
                 <!-- Responsible Member (Single Selector) (Required) -->
-                <div class="md:col-span-2">
+                <div class="md:col-span-1">
                     <label for="responsible-member" class="block text-sm mb-2 font-medium dark:text-gray-200">Responsible Member <span class="text-red-500">*</span></label>
                     <select id="responsible-member" name="responsible_id" class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200" required>
                 
@@ -47,7 +47,7 @@
                 </div>
 
                 <!-- Priority -->
-                <div>
+                <div  class="sm:col-span-1">
                     <label for="priority" class="block text-sm mb-2 font-medium dark:text-gray-200">Priority</label>
                     <select id="priority" name="priority" class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200">
                         @php
@@ -60,15 +60,10 @@
                 </div>
 
                 <!-- Distribution Members (Multiple Selector) -->
-                <div class="sm:col-span-2 md:col-span-3">
-                    <label for="distribution-members" class="block text-sm mb-2 font-medium dark:text-gray-200">Distribution Members</label>
-                    <select id="distribution-members"  name="participates[]" multiple class="choices w-full border dark:bg-gray-800 dark:text-gray-200">
-                
-                    </select>
-                </div>
+     
 
                 <!-- Location -->
-                <div class="md:col-span-2">
+                <div class="md:col-span-1">
                     <label for="location" class="block text-sm mb-2 font-medium dark:text-gray-200">Location</label>
                     <input
                         type="text"
@@ -78,7 +73,7 @@
                     />
                 </div>
 
-                <div>
+                <div class="md:col-span-1">
                     <label for="due_date" class="block text-sm mb-2 font-medium dark:text-gray-200">Due Date</label>
                     <input
                         type="date"
@@ -87,18 +82,30 @@
                         class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200"
                         required
                     />
-                </div>		
+                </div>	
+            </div>
+            <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">    
+                
+                <div class="sm:col-span-2">
+                    <label for="distribution-members" class="block text-sm mb-2 font-medium dark:text-gray-200">Distribution Members</label>
+                    <select id="distribution-members"  name="participates[]" multiple class="choices w-full border dark:bg-gray-800 dark:text-gray-200">
+                
+                    </select>
+                </div>                
+                <div class="sm:col-span-2">
+                    <label for="linked_documents" class="block text-sm font-medium mb-1">Linked Documents</label>
+                    <select id="linked_documents" name="linked_documents[]" multiple class="w-full"></select>
+                </div>
+
+
                 <!-- Submit Button -->
-                <button
-                    type="submit"
-                    class="submit_punch_list_form px-4 py-2 mt-5 bg-blue-500 text-white hover:bg-blue-600"
-                >
-                    Submit Item
-                </button>
+             
             </div>
 
-            <div class="w-full md:w-2/5">
-                <div class="mb-4">
+            <div class="flex flex-wrap md:flex-nowrap items-start gap-6">
+
+          
+                <div class="w-full md:w-2/5 mb-4">
                     <label for="description" class="block text-sm mb-2 dark:text-gray-200">Description</label>
                     <textarea
                         id="description" name="description"
@@ -107,8 +114,12 @@
                         placeholder="Enter description"
                     ></textarea>
                 </div>
+
+
+
+
                 <!-- Attachments (Dropzone) -->
-                <div>
+                <div  class=" w-full md:w-2/5 mb-4">
                     <label class="block mb-2 text-sm">Attachments (PDF, JPG, JPEG, PNG)</label>
                     <div id="drop-zone" class="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed  dark:bg-gray-800 dark:border-gray-700 border-gray-300">
                         <div class="flex flex-col items-center justify-center">
@@ -122,9 +133,15 @@
                         <!-- Uploaded files will appear here -->
                     </ul>
                 </div>
-            </div>
+            
 
         </div>
+        <button
+        type="submit"
+        class="submit_punch_list_form px-4 py-2 mt-5 bg-blue-500 text-white hover:bg-blue-600"
+    >
+        Submit Item
+    </button>
 
     </form>
 </div>
@@ -227,6 +244,14 @@
 			});	
 			reviewers_obj.clearStore();
 			reviewers_obj.setChoices(reviewers);
+
+
+            let files =  {!! json_encode($files) !!};
+			const allfiles = files.map(function(item) {
+			  return {'value' : item.file_id+'-'+item.revisionid  , 'label' : item.project_document.number};
+			});	
+			linked_documents.clearStore();
+			linked_documents.setChoices(allfiles);	
 		
 	}
 			
@@ -237,6 +262,8 @@
 	document.addEventListener('DOMContentLoaded', () => {
 		distribution_obj = populateChoices2('distribution-members', [], true);	
 		reviewers_obj = populateChoices2('responsible-member', []);		
+        linked_documents = populateChoices2('linked_documents', [], false);		
+
 		
     }); 
 

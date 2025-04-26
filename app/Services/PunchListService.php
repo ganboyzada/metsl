@@ -37,6 +37,7 @@ class PunchListService
             
             \File::makeDirectory($path, $mode = 0777, true, true);  
            $users =  $this->punchListRepository->add_users_to_Punch_list($data,$modal );
+		   $this->punchListRepository->add_Linked_documents_to_punchlist($data,$modal);
           // dd($users);
             if(isset($data['docs'])){
                 
@@ -110,14 +111,14 @@ class PunchListService
     }
 
     public function edit($punch_list_id){
-        $punch_list =  $this->punchListRepository->with([ 'users:id' , 'files'])->find($punch_list_id);
+        $punch_list =  $this->punchListRepository->with([ 'users:id' , 'files','documentFiles'])->find($punch_list_id);
         $punch_list->priority_val = $punch_list->priority->value;
         $punch_list->status_val = $punch_list->status->value;
         return $punch_list;
     }
 
     public function find($punch_list_id){
-        $punch_list =  $this->punchListRepository->with([ 'users.userable' , 'files' , 'responsible.userable' ,'replies.user'])->find($punch_list_id);
+        $punch_list =  $this->punchListRepository->with([ 'users.userable' , 'files' , 'responsible.userable' ,'replies.user','documentFiles'])->find($punch_list_id);
         $punch_list->priority_val = $punch_list->priority->value;
         $punch_list->status_val = $punch_list->status->value;
         return $punch_list;

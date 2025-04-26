@@ -17,6 +17,14 @@ interface PunchListRepositoryInterface
     */
     public function add_users_to_Punch_list($data , $punshList);  
 
+
+     /**
+    * @param array $data 
+    * @param Model $punchlist 
+    * 
+    */
+    public function add_Linked_documents_to_punchlist($data , $punchlist): void;
+
             /**
     * @param int $project_id
     * @param \Request $request

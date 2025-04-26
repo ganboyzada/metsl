@@ -41,40 +41,40 @@
 <!-- Correspondence Information -->
  <div class="pt-4 bg-white dark:bg-gray-900 ">
 
-    <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
+    <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
         <!-- Number -->
-        <div>
+        <div class="sm:col-span-1">
             <h3 class="text-sm font-medium dark:text-gray-400">Number</h3>
             <p class="text-lg font-semibold dark:text-gray-200">{{$punch_list->number}}</p>
         </div>
 
         <!-- Subject -->
-        <div>
+        <div class="sm:col-span-1">
             <h3 class="text-sm font-medium dark:text-gray-400">Subject</h3>
             <p class="text-lg font-semibold dark:text-gray-200">{{$punch_list->title}}</p>
         </div>
 
         <!-- Status -->
-        <div>
+        <div class="sm:col-span-1">
             <h3 class="text-sm font-medium dark:text-gray-400 mb-2">Status</h3>
             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $punch_list->status->color()}}">{{$punch_list->status->name}}</span>
 
         </div>
 
         <!-- Programme Impact -->
-        <div>
+        <div class="sm:col-span-1">
             <h3 class="text-sm font-medium dark:text-gray-400">priority</h3>
             {!! $punch_list->priority->color()   !!}
         </div>
 
         <!-- Cost Impact -->
-        <div>
+        <div class="sm:col-span-1">
             <h3 class="text-sm font-medium dark:text-gray-400">Location</h3>
             <p class="text-lg font-semibold dark:text-gray-200">{{$punch_list->location}}</p>
         </div>
 
 
-        <div>
+        <div class="sm:col-span-1">
             <h3 class="text-sm font-medium dark:text-gray-400">Due Date</h3>
             <p class="text-lg font-semibold dark:text-gray-200">{{$punch_list->due_date}}</p>
         </div>
@@ -111,17 +111,46 @@
 			@endif	
             </div>
         </div>
+
+        <div>
+            <h3 class="text-sm font-medium dark:text-gray-400 mb-1">Description</h3>
+            <p class="text-lg dark:text-gray-200">{!! $punch_list->description   !!}.</p>
+        </div>
+        
+
     </div>
 
     <!-- Description -->
     <div class="mb-6">
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <div>
-                <h3 class="text-sm font-medium dark:text-gray-400 mb-1">Description</h3>
-                <p class="text-lg dark:text-gray-200">{!! $punch_list->description   !!}.</p>
-            </div>
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        
+            <div  class=" sm:col-span-2 mb-6">
+                <h3 class="text-sm font-medium dark:text-gray-400 mb-2">Linked Documents</h3>
+                <div class="grid grid-cols-2 gap-4">
+                @if($punch_list->documentFiles->count() > 0)
+                    @foreach($punch_list->documentFiles as $file)
+                        <div class="bg-gray-100 dark:bg-gray-800 p-4  flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i data-feather="file" class="w-6 h-6 mr-3 dark:text-gray-400"></i>
+                                <p class="text-sm dark:text-gray-200">{{$file->file}}</p>
+                            </div>
+                            @if($file->pivot->revision_id == NULL || $file->pivot->revision_id == 0)
+                                <a target="_blank" href="{{Storage::url('project'.$punch_list->project_id.'/documents'.$file->project_document_id.'/'.$file->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
+                           
+                            @else
+                            <a target="_blank" href="{{Storage::url('project'.$punch_list->project_id.'/documents'.$file->project_document_id.'/revisions/'.$file->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
+    
+                            @endif
+                        </div>
             
-            <div>
+                
+                    @endforeach
+                    
+                
+                @endif
+                </div>
+            </div>
+            <div  class=" sm:col-span-2 mb-6">
                 <h3 class="text-sm font-medium dark:text-gray-400 mb-2">Attached Files</h3>
                 <div class="grid grid-cols-2 gap-4">
                 @if($punch_list->files->count() > 0)

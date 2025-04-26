@@ -109,7 +109,10 @@
         $expression='add_punch_list';
     @endphp
     @if(checkIfUserHasThisPermission(Session::get('projectID') ,$expression))
-    <a href="{{ route('projects.punch-list.create') }}" class="inline-flex px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"><i data-feather="plus" class="mr-2"></i> Create</a>
+    <a href="{{ route('projects.punch-list.drawings') }}" class="inline-flex px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"><i data-feather="plus" class="mr-2"></i> Drawings</a>
+
+
+    <a href="{{ route('projects.punch-list.create') }}" class="inline-flex px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"><i data-feather="plus" class="mr-2"></i> Create New</a>
     @endif
 </div>
 

@@ -14,6 +14,7 @@ class BaseRepository implements EloquentRepositoryInterface
      */     
      protected $model;
      protected $with = [];       
+     protected $where = [];  
 
     /**      
      * BaseRepository constructor.      
@@ -30,7 +31,7 @@ class BaseRepository implements EloquentRepositoryInterface
     public function all() {
        // $this->newQuery()->eagerLoadRelations();
        try{
-            return $this->model->with($this->with)->get();
+            return $this->model->with($this->with)->where($this->where)->get();
 
         }catch (\Exception $e) {
             throw new \Exception($e->getMessage());
@@ -104,6 +105,14 @@ class BaseRepository implements EloquentRepositoryInterface
         }
 
         $this->with = is_array($relations) ? $relations : [];
+
+        return $this;
+    }
+
+    public function where($conditions) {
+  
+
+        $this->where = is_array($conditions) ? $conditions : [];
 
         return $this;
     }
