@@ -289,7 +289,17 @@
 
 
 <script>
-    	async  function get_participates(){
+    	
+	document.addEventListener('DOMContentLoaded', () => {
+		distribution_obj = populateChoices2('distribution-members', [], true);	
+		reviewers_obj = populateChoices2('responsible-member', []);		
+        linked_documents = populateChoices2('linked_documents', [], false);		
+
+		
+    }); 
+
+    
+    async  function get_participates(){
 		let fetchRes = await fetch(`{{url('project/punch-list/participates')}}`);
 		const all = await fetchRes.json();
 		$('[name="number"]').val(all.next_number);
@@ -703,14 +713,6 @@ function searchDrawings(search){
 		
 
 	
-	
-	document.addEventListener('DOMContentLoaded', () => {
-		distribution_obj = populateChoices2('distribution-members', [], true);	
-		reviewers_obj = populateChoices2('responsible-member', []);		
-        linked_documents = populateChoices2('linked_documents', [], false);		
-
-		
-    }); 
 
 	
 
