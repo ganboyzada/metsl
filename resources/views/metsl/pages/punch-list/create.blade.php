@@ -303,7 +303,7 @@
 
         
 		let fetchRes = await fetch(`{{url('project/punch-list/participates')}}`);
-        console.log(fetchRes.json());
+        console.log(fetchRes.json);
 		// const all = await fetchRes.json();
 		// $('[name="number"]').val(all.next_number);
 
