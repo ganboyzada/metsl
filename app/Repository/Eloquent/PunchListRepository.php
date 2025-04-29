@@ -84,7 +84,10 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
     public function get_next_number($projectID): mixed
     {
         $model = $this->model->where('project_id',$projectID)->orderby('id','desc')->first();
-        return (int)$model->number; 
+        if(isset($model->number)){
+            return (int)$model->number; 
+        }
+        
     } 
 
 
