@@ -289,6 +289,35 @@
 
 
 <script>
+    	async  function get_participates(){
+		let fetchRes = await fetch(`{{url('project/punch-list/participates')}}`);
+		const all = await fetchRes.json();
+		$('[name="number"]').val(all.next_number);
+
+		let reviewers = all.distribution_members.map(function(item) {
+		  return {'value' : item.id , 'label' : item.name};
+		});
+			distribution_obj.clearStore();
+			distribution_obj.setChoices(reviewers);	
+
+			reviewers = all.responsible.map(function(item) {
+			  return {'value' : item.id , 'label' : item.name};
+			});	
+			reviewers_obj.clearStore();
+			reviewers_obj.setChoices(reviewers);
+
+
+            let files =  {!! json_encode($files) !!};
+			const allfiles = files.map(function(item) {
+			  return {'value' : item.file_id+'-'+item.revisionid  , 'label' : item.project_document.number};
+			});	
+			linked_documents.clearStore();
+			linked_documents.setChoices(allfiles);	
+		
+	}
+			
+
+	get_participates();
     
    function createDraggablePin(xPercent, yPercent , labelcontent , number) {
 
@@ -672,35 +701,7 @@ function searchDrawings(search){
 		
 	});
 		
-	async  function get_participates(){
-		// let fetchRes = await fetch(`{{url('project/punch-list/participates')}}`);
-		// const all = await fetchRes.json();
-		// $('[name="number"]').val(all.next_number);
 
-		// let reviewers = all.distribution_members.map(function(item) {
-		//   return {'value' : item.id , 'label' : item.name};
-		// });
-		// 	distribution_obj.clearStore();
-		// 	distribution_obj.setChoices(reviewers);	
-
-		// 	reviewers = all.responsible.map(function(item) {
-		// 	  return {'value' : item.id , 'label' : item.name};
-		// 	});	
-		// 	reviewers_obj.clearStore();
-		// 	reviewers_obj.setChoices(reviewers);
-
-
-            let files =  {!! json_encode($files) !!};
-			const allfiles = files.map(function(item) {
-			  return {'value' : item.file_id+'-'+item.revisionid  , 'label' : item.project_document.number};
-			});	
-			linked_documents.clearStore();
-			linked_documents.setChoices(allfiles);	
-		
-	}
-			
-
-	get_participates();
 	
 	
 	document.addEventListener('DOMContentLoaded', () => {
