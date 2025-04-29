@@ -28,10 +28,10 @@ interface PunchListRepositoryInterface
             /**
     * @param int $project_id
     * @param \Request $request
-    * @return Collection
+    * @return LengthAwarePaginator
     * 
     */
-    public function get_all_project_Punch_list($project_id , $request): Collection; 
+    public function get_all_project_Punch_list($project_id , $request): LengthAwarePaginator; 
     
      /**
     * @param int $project_id 

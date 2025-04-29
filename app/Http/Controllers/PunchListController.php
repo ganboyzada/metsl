@@ -288,7 +288,7 @@ class PunchListController extends Controller
             return $row;
         });
      
-        return $punchLists;
+        return response()->json($punchLists);
     }
 
 

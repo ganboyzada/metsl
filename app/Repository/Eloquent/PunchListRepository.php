@@ -96,10 +96,10 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
     /**
     * @param int $project_id 
     * @param \Request $request
-    * @return Collection
+    * @return LengthAwarePaginator
     * 
     */
-    public function get_all_project_Punch_list($project_id , $request): Collection{
+    public function get_all_project_Punch_list($project_id , $request): LengthAwarePaginator{
         $data = $request->all();
        // dd($data);
         $punchLists =  $this->model->where('project_id',$project_id);
@@ -215,7 +215,7 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
 
         if(checkIfUserHasThisPermission($project_id , 'view_all_punch_list')){
 
-            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->get();
+            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->paginate(10);
   
             return $punchLists;
         }        
@@ -232,7 +232,7 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
                 
             });
 
-            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->get();
+            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->paginate(10);
   
             return $punchLists;
               

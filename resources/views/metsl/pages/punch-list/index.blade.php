@@ -166,10 +166,14 @@
            
         </tbody>
     </table>
+
+    <div id="pagination" class="flex gap-2 mt-4"></div>
+
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
+    let reviewers_obj = [];
     
     async  function getChangedParticipates(){
 		let fetchRes = await fetch(`{{url('project/punch-list/allParticipates')}}`);
@@ -186,7 +190,6 @@
 
 	getAllParticipates();
     getAllStatusPeriority();
-    let reviewers_obj = [];
     let reviewers = {};
 	let priority = {};
 	let status = {};
@@ -278,29 +281,37 @@
 
     }	
 	
-	async function get_punch_list(){
-        
-		var queryString = $("#filter-punch-list-form").serialize();
-		const search = $('#search_punsh_list').val();
+    async function get_punch_list(page = 1) {
+    const queryString = $("#filter-punch-list-form").serialize();
+    const search = $('#search_punsh_list').val();
 
-		let url =`project/punch-list/all?${queryString}`;
-		//alert(url);
-		
-		let fetchRes = await fetch(url);
-		const all_punch_lists = await fetchRes.json();
+    let url = `project/punch-list/all?page=${page}&${queryString}`;
 
+    let fetchRes = await fetch(url);
+    const response = await fetchRes.json(); // full paginated response
+    const all_punch_lists = response.data;
 
-		 
-        
-        if(localStorage.getItem("project_tool") == 'activities'){
-            await loadPunchListWidget(all_punch_lists)
-        } else{
-            await loadPunchList(all_punch_lists)
+    if (localStorage.getItem("project_tool") == 'activities') {
+        await loadPunchListWidget(all_punch_lists);
+    } else {
+        await loadPunchList(all_punch_lists);
+    }
+
+    renderPagination(response); // handle pagination UI
+    feather.replace();
+}
+function renderPagination(data) {
+    let html = '';
+    if (data.last_page > 1) {
+        for (let i = 1; i <= data.last_page; i++) {
+            html += `<button onclick="get_punch_list(${i})" class="px-2 py-1 border ${data.current_page === i ? 'bg-blue-500 text-white' : 'bg-white'}">
+                        ${i}
+                    </button>`;
         }
-        
-        feather.replace();			
-
-    }    
+    }
+    $('#pagination').html(html);
+}
+  
 
     function loadPunchList(list){
         let html =``;
@@ -413,7 +424,7 @@
         filterDropdown.addEventListener('click', (event) => {
             const target = event.target.closest('button[data-filter]');
             if (target) {
-                $(target).closest('.dropdown').toggleClass('hidden');
+                $(target).closest('.dropdown').toggleClass('active');
 
                 const filterName = target.getAttribute('data-filter');
                 const filterType = target.getAttribute('data-filter-type');
@@ -424,6 +435,7 @@
 
                 let input = null
                 let options = null;
+               // alert(filterType);
                 switch (filterType) {
                     case 'multi-select':
                         input = document.createElement('select');
