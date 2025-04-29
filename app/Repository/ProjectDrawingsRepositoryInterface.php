@@ -15,6 +15,12 @@ interface ProjectDrawingsRepositoryInterface
     public function create_bulk_files($data): bool;
 
 
-
+    /**
+    * @param int $project_id 
+    * @param \Request $request
+    * @return Collection
+    * 
+    */
+    public function searchDrawings($project_id , $request): Collection;
 
 }

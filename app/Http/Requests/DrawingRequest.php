@@ -45,7 +45,7 @@ class DrawingRequest extends FormRequest
                     'required',
                     Rule::unique('project_drawings' , 'title')->where(fn ($query) => $query->where('project_id', request()->project_id))
                 ],
-
+                'description' => ['required'],
                 'docs' => ['required','array'],
                 "docs.*"  => ["required","mimes:jpeg,png,jpg,gif"],
 

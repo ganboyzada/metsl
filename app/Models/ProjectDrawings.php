@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 class ProjectDrawings extends Model
 {
-    protected $fillable = ['title','image', 'project_id'];
+    protected $fillable = ['title','description','image', 'project_id'];
 
     public function project(): BelongsTo
     {

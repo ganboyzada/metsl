@@ -64,13 +64,7 @@ class PunchListController extends Controller
 
             $imageName = pathinfo($imageName, PATHINFO_FILENAME) . '.' . $type;
             $data = base64_decode($data);
-            // dd($data);
 
-            //  $path = public_path('img/' . $imageName);
-
-            //  file_put_contents($path, $data);
-
-            //Storage::disk('public')->putFileAs( 'project3/punch_list1', $data, $imageName);
             Storage::disk('public')->put("project$project_id/punch_list$punch_list_id/$imageName", $data);
 
             return response()->json(['success' => true, 'filename' => $imageName]);
@@ -170,7 +164,7 @@ class PunchListController extends Controller
 
                 $all_data['project_id'] = Session::get('projectID');
 
-                $model = $this->projectDrawingsService->createBulkFiles($all_data['project_id'] ,$all_data['title'] ,$all_data['docs']);
+                $model = $this->projectDrawingsService->createBulkFiles($all_data['project_id'] ,$all_data['title'],$all_data['description'] ,$all_data['docs']);
             \DB::commit();
             // all good
             } catch (\Exception $e) {
@@ -278,6 +272,20 @@ class PunchListController extends Controller
      
         return $punchLists;
     }
+
+
+    public function drawings_search(Request $request){
+        $id = Session::get('projectID');
+        $drawings = $this->projectDrawingsService->search_drawings($id , $request);
+        $drawings->map(function($row){
+
+            $row->image = Storage::url('project'.$row->project_id.'/drawings/'.$row->image);
+            return $row;
+        });
+     
+        return $drawings;
+    }
+
 
     public function destroy($id){
         $this->punchListService->delete($id);

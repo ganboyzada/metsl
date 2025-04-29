@@ -4,10 +4,78 @@
 
 @section('content')
 <style>
-    [type=checkbox]:checked+img{
+    [type=radio]:checked+img{
         border: 4px solid red !important;
     }
     </style>
+
+<style>
+    #image-container {
+      position: relative;
+      display: inline-block;
+      border: 1px solid #ccc;
+    }
+    #myImage {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+
+    #coords-list {
+      margin-top: 20px;
+      font-family: monospace;
+    }
+
+
+    .pin {
+  /*position: absolute;*/
+  width: 24px;
+  height: 24px;
+  background-image: url({{ asset("images/marker-icon.png") }}); /* 🔁 Replace with your file */
+  background-size: cover;
+  background-repeat: no-repeat;
+  transform: translate(-50%, -100%); /* Tip of marker points to click */
+  cursor: pointer;
+  z-index: 10000000;
+
+}
+.pin-wrapper {
+  position: absolute;
+  cursor: pointer;
+}
+
+.pin-label {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+  white-space: nowrap;
+  bottom: -3px;
+
+
+
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s;
+}
+.pin-wrapper:hover .pin-label,
+.pin-label.always-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+
+.choices {
+    z-index:0 !important;
+
+}
+
+  </style>
+
 <div class="p-6">
     <h1 class="text-2xl font-semibold mb-6 dark:text-gray-200">Add a Punch Item</h1>
 	<div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
@@ -141,21 +209,34 @@
             
 
         </div>
-        @if (isset($drawings) && $drawings->count() > 0)
-                <h2 class="text-2xl font-semibold mb-6 dark:text-gray-200">drawings</h2>
-        @endif        
+
+
+
+        <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
+        <div class="sm:col-span-1">
+            <label for="drawings_search" class="block text-sm mb-2 font-medium dark:text-gray-200">Search Drawing Title</label>
+            <input
+                type="text" oninput="searchDrawings(this.value)"
+                id="drawings_search" name="drawings_search"
+                class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200"
+                placeholder="Enter drawings search"
+                required
+            />
+        </div>
+        </div>
+        
         <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 border-2 border-dotted overflow-y-auto p-5" 
-        style="height:300px;">
+        style="height:300px;" id="drawing_list">
 
             @if (isset($drawings) && $drawings->count() > 0)
                 @foreach ($drawings as $drawing)
                 <div class="sm:col-span-1 text-center" id="draw{{ $drawing->id }}">
                     <label class="relative cursor-pointer group">
                         <!-- Hidden checkbox -->
-                        <input type="checkbox" name="drawings[]" value="{{ $drawing->id }}" class="peer absolute opacity-0 w-0 h-0" />
+                        <input type="radio" id="{{ $drawing->id }}" name="drawing" value="{{ $drawing->id }}" class="peer absolute opacity-0 w-0 h-0" />
                     
                         <!-- Image -->
-                        <img
+                        <img onclick="get_image({{ $drawing->id }} , '{{ Storage::url('project'.$drawing->project_id.'/drawings/'.$drawing->image) }}')"
                           alt="Image 1"
                           class="rounded-lg border-4 border-transparent peer-checked:border-blue-500 transition drawing"
                           style="width:30%;height:150px;margin:auto; " src="{{ Storage::url('project'.$drawing->project_id.'/drawings/'.$drawing->image) }}"
@@ -185,8 +266,229 @@
     </button>
 
     </form>
+
+    <div id="roleAssignmentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 max-h-[90vh] overflow-y-scroll p-6 max-w-7xl">
+            <h3></h3>
+            <div id="image-container">
+              <img src="" id="myImage" alt="Image">
+            </div>
+            
+
+
+            <div class="flex justify-end mt-6">
+                <button type="button" onclick="closeRoleAssignmentModal()" class="text-gray-600 dark:text-gray-300 mr-3">Cancel</button>
+                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+            </div>
+        
+        </div>
+    </div>
+
 </div>
+
+
 <script>
+    
+  function createDraggablePin(xPercent, yPercent , labelcontent) {
+
+    const wrapper = document.createElement('div');
+    if(labelcontent != null){
+        wrapper.classList.add('pin-wrapper');
+    }else{
+        wrapper.classList.add('pin-wrapper');
+        wrapper.classList.add('pin-wrapper2');
+
+    }
+    
+    wrapper.style.position = 'absolute';
+    wrapper.style.left = `${xPercent}%`;
+    wrapper.style.top = `${yPercent}%`;
+    wrapper.style.transform = 'translate(-50%, -100%)';
+
+
+
+    const pin = document.createElement('img');
+    pin.src = '{{ asset("images/marker-icon.png") }}'; // Replace with your marker
+    pin.classList.add('pin');
+    //pin.style.position = 'absolute';
+    pin.style.width = '24px';
+    pin.style.height = '24px';
+    pin.style.transform = 'translate(-50%, -100%)';
+    pin.style.left = `${xPercent}%`;
+    pin.style.top = `${yPercent}%`;
+    //container.appendChild(pin);
+    wrapper.appendChild(pin);
+
+    if(labelcontent != null){
+        const label = document.createElement('span');
+        label.classList.add('pin-label');
+        label.innerHTML  = 'labelText<a href="https://example.com" target="_blank">View Details</a>';
+        label.classList.add('pin-label', 'always-visible');
+
+        wrapper.appendChild(label);
+
+        label.querySelectorAll('a').forEach(link => {
+        link.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent pin/image click handlers
+        });
+        });
+    }
+
+
+ 
+  container.appendChild(wrapper);
+
+
+
+  // Drag support
+  let isDragging = false;
+  let currentDraggedWrapper = null;
+
+    pin.addEventListener('mousedown', (e) => {
+    isDragging = true;
+    currentDraggedWrapper = wrapper;
+    e.preventDefault();
+    e.stopPropagation();
+    });
+
+    document.addEventListener('mousemove', (e) => {
+    if (!isDragging || !currentDraggedWrapper) return;
+
+    const rect = image.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    const xPercent = (x / rect.width) * 100;
+    const yPercent = (y / rect.height) * 100;
+
+    console.log(xPercent+'//'+yPercent);
+
+    currentDraggedWrapper.style.left = `${xPercent}%`;
+    currentDraggedWrapper.style.top = `${yPercent}%`;
+    });
+
+    document.addEventListener('mouseup', () => {
+    isDragging = false;
+    currentDraggedWrapper = null;
+    });
+
+  // Optional: remove on click
+  pin.addEventListener('click', (e) => {
+    e.stopPropagation();
+    alert('ok');
+    wrapper.remove();
+  });
+
+
+  return wrapper;
+}
+
+
+    const container = document.getElementById('image-container');
+    const image = document.getElementById('myImage');
+
+
+
+    function get_image(id , image_url){
+    $('#myImage').attr('src', image_url);
+    $('.pin-wrapper2').remove();
+
+
+    const savedPins = [
+        { x: 30.5, y: 40.2 }
+    ];
+
+    image.addEventListener('load', () => {
+        savedPins.forEach(coord => {
+            createDraggablePin(coord.x, coord.y , 1);
+        });
+    });
+
+    document.getElementById("roleAssignmentModal").classList.remove("hidden");
+}
+
+
+    
+    const pins = []; // Store pin coordinates
+            let currentPin = null; // Holds the last placed pin
+            image.addEventListener('click', function (e) {
+                const rect = image.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                const xPercent = (x / rect.width) * 100;
+                const yPercent = (y / rect.height) * 100;
+
+                // 🔄 Remove previous pin if exists
+                if (currentPin) {
+                    currentPin.remove();
+                    
+                }
+
+                currentPin = createDraggablePin(xPercent, yPercent , null);
+                alert(xPercent.toFixed(2)+'//'+yPercent.toFixed(2));
+                // Save and show coordinates
+                // const coords = { x: xPercent.toFixed(2), y: yPercent.toFixed(2) };
+                // pins.push(coords);
+
+                // const listItem = document.createElement('li');
+                // listItem.textContent = `Pin ${pins.length}: x = ${coords.x}%, y = ${coords.y}%`;
+                // logList.appendChild(listItem);
+
+
+            // console.log(x+'//'+y);
+            });
+
+
+
+
+    function closeRoleAssignmentModal() {
+        document.getElementById("roleAssignmentModal").classList.add("hidden");
+    }
+function searchDrawings(search){
+    let html=``;
+    $.ajax({
+        url: "{{ route('projects.punch-list.drawings.search') }}",
+        type: "GET",
+        data: {search:search},
+        dataType: 'json',
+        success: function(list) {
+            if(list.length > 0){
+                for(let i=0;i<list.length;i++){
+
+                    html+=`   <div class="sm:col-span-1 text-center" id="draw${list[i].id}">
+                    <label class="relative cursor-pointer group">
+                        <!-- Hidden checkbox -->
+                        <input type="radio" id="${list[i].id}" name="drawing" value="${list[i].id}" class="peer absolute opacity-0 w-0 h-0" />
+                    
+                        <!-- Image -->
+                        <img
+                          alt="Image 1"
+                          class="rounded-lg border-4 border-transparent peer-checked:border-blue-500 transition drawing"
+                          style="width:30%;height:150px;margin:auto; " src="${list[i].image}"
+            
+            
+                        />
+                        <a target="_blank" href="${list[i].image}">
+                            ${list[i].title}</a>
+                
+                      </label>   
+                        
+                    
+            
+                </div>`;
+                }
+
+            }
+
+           // 
+           
+
+                $("#drawing_list").html(html);
+        }
+    })
+}
+
  $("#snag-item-form").on("submit", function(event) {
 
         const form = document.getElementById("snag-item-form");

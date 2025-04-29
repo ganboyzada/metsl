@@ -89,14 +89,16 @@ Route::middleware([
     Route::get('/project/documents/files/update_status',  [DocumentController::class, "update_status"])->name('projects.documents.file.update_status');
 
 
-	Route::get('/project/punch-list/image_ui',  [PunchListController::class, "imageUI"])->name('projects.punch-list.imageui');
-    Route::post('/upload-image', [PunchListController::class, 'upload']);
+	// Route::get('/project/punch-list/image_ui',  [PunchListController::class, "imageUI"])->name('projects.punch-list.imageui');
+    // Route::post('/upload-image', [PunchListController::class, 'upload']);
 
 	Route::get('/project/punch-list/all',  [PunchListController::class, "PunchList"])->name('projects.punch-list.all');
     Route::get('/project/punch-list/create', [PunchListController::class, "create"])->name('projects.punch-list.create');
     Route::get('/project/punch-list/drawings', [PunchListController::class, "drawings"])->name('projects.punch-list.drawings');
     Route::post('/project/punch-list/createDrawings', [PunchListController::class, "create_drawings"])->name('projects.punch-list.drawings.create');
     Route::get('/project/punch-list/deleteDrawings/{id}', [PunchListController::class, "delete_drawings"])->name('projects.punch-list.drawings.delete');
+    Route::get('/project/punch-list/searchDrawings', [PunchListController::class, "drawings_search"])->name('projects.punch-list.drawings.search');
+
     Route::get('/project/punch-list/deleteAssignedDrawings/{punchlist_id}/{id}', [PunchListController::class, "delete_assigned_drawings"])->name('projects.punch-list.assigned_drawings.delete');
 
     Route::get('/project/punch-list/participates',  [PunchListController::class, "getParticipates"])->name('projects.punch-list.participates');	

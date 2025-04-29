@@ -15,16 +15,16 @@ class ProjectDrawingsService
     ) {
     }
 
-    public function createBulkFiles($project_id ,$title ,  $uploadeedfiles)
+    public function createBulkFiles($project_id ,$title , $description ,  $uploadeedfiles)
     {
         \DB::beginTransaction();
         try {         
-            $docs = array_map(function($file) use($project_id,$title , $uploadeedfiles ){
+            $docs = array_map(function($file) use($project_id,$title,$description , $uploadeedfiles ){
                 $fileName = $file->getClientOriginalName();
                 Storage::disk('public')->putFileAs('project'.$project_id.'/drawings', $file, $fileName);
 
 
-                return ['image'=>$fileName ,  'project_id'=>$project_id,  'title'=>$title];
+                return ['image'=>$fileName ,  'project_id'=>$project_id,  'title'=>$title,  'description'=>$description];
 
             } , $uploadeedfiles);
 
@@ -52,6 +52,15 @@ class ProjectDrawingsService
     {
         try{
             return $this->projectDrawingsRepository->where(['project_id'=>$project_id])->all();
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function search_drawings($project_id , $request)
+    {
+        try{
+            return $this->projectDrawingsRepository->searchDrawings($project_id , $request);
         }catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }

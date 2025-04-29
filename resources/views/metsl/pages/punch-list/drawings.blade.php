@@ -27,7 +27,15 @@
                     />
                 </div>
 
-
+                <div class="w-full md:w-2/5 mb-4">
+                    <label for="description" class="block text-sm mb-2 dark:text-gray-200">Description</label>
+                    <textarea
+                        id="description" name="description"
+                        class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200"
+                        rows="4"
+                        placeholder="Enter description"
+                    ></textarea>
+                </div>
 
 
                 <!-- Attachments (Dropzone) -->
@@ -67,6 +75,8 @@
                     <a target="_blank" href="{{ Storage::url('project'.$drawing->project_id.'/drawings/'.$drawing->image) }}">
                         <img style="width:40%;margin:auto; " src="{{ Storage::url('project'.$drawing->project_id.'/drawings/'.$drawing->image) }}"/>
                         <p>{{ $drawing->title }}</p>
+                        <small>{!! $drawing->description !!}</small>
+                    </br>
                     </a>    
                         <button onclick="deleteDrawing({{ $drawing->id }})"
                              class="text-red-500 dark:text-red-400 text-center">
@@ -107,6 +117,8 @@
 
         const form = document.getElementById("snag-item-form");
         const formData = new FormData(form); 
+        formData.append('description',tinyMCE.get('description').getContent());
+
     
             $('.error').hide();
             $('.success').hide();

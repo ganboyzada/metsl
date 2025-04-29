@@ -1,6 +1,6 @@
 <div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
 <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
-<div class="flex gap-4 items-center mb-4">
+<div class="flex flex-wrap gap-4 items-center mb-4">
 
     <!-- Search and Actions -->
     <div class="flex items-center mr-auto">

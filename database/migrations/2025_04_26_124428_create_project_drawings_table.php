@@ -18,6 +18,8 @@ return new class extends Migration
                  ->on('projects')->onDelete('cascade');
 
             $table->string('title')->nullable();     
+            $table->text('description')->nullable();     
+
             $table->string('image')->nullable();     
 
 

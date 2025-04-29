@@ -36,6 +36,33 @@ class ProjectDrawingsRepository extends BaseRepository implements ProjectDrawing
             throw new \Exception($e->getMessage());
         }  
     }
+    /**
+    * @param int $project_id 
+    * @param \Request $request
+    * @return Collection
+    * 
+    */
+    public function searchDrawings($project_id , $request): Collection{
+        $modal =  $this->model->where('project_id',$project_id)
+        ->when($request->search , function($query) use($request){
+            $query->where(function($q) use($request){
+                $q->whereAny(
+                    [
+                        'title',
+              
+                        'description'
+                       ],
+                    'LIKE',
+                    "%".$request->search."%"
+                );
+
+            });
+
+
+        })->get();
+        return $modal;
+
+    }
  
 
 
