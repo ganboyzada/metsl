@@ -11,21 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('punch_list_drawings', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBiginteger('punchList_id')->unsigned();
-            $table->foreign('punchList_id')->references('id')
-                 ->on('punch_lists')->onDelete('cascade');
-
+        Schema::table('punch_lists', function (Blueprint $table) {
             $table->unsignedBiginteger('drawing_id')->unsigned()->nullable();
             $table->foreign('drawing_id')->references('id')
                 ->on('project_drawings')->onDelete('cascade');
 
 
             $table->double('pin_x')->nullable();    
-            $table->double('pin_y')->nullable();    
-                
-            $table->timestamps();
+            $table->double('pin_y')->nullable();  
         });
     }
 
@@ -34,6 +27,8 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('punch_list_drawings');
+        Schema::table('punch_lists', function (Blueprint $table) {
+            //
+        });
     }
 };

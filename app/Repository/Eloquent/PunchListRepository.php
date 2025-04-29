@@ -83,7 +83,8 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
     */
     public function get_next_number($projectID): mixed
     {
-        return $this->model->where('project_id',$projectID)->count();
+        $model = $this->model->where('project_id',$projectID)->orderby('id','desc')->first();
+        return (int)$model->number; 
     } 
 
 

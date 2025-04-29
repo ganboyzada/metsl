@@ -24,25 +24,9 @@ class PunchListRequest extends FormRequest
     {
         if(isset(request()->id)){
             return [
-                'number' => [
-                    'required',
-                    Rule::unique('punch_lists' , 'number')->where(fn ($query) => $query->where('project_id', request()->project_id)->where('id','!=', request()->id))
-                ],                     
-                'title' => 'required',
-                'location'=>'required',
-                //'cost_impact'=>'required',
-                'priority'=>'required',
-                'responsible_id'=>'required',
-                //'date_notified_at' => 'required|date_format:Y-m-d',
-                //'date_resolved_at' => 'required|date_format:Y-m-d',
-                'due_date' => 'required|date_format:Y-m-d',
-                'project_id'=>'required',
-                'description'=>'required',
-                "participates"    => ['required','array'],
-                'docs' => 'nullable',
-                "docs.*"  => ["nullable", "mimes:jpeg,bmp,png,gif,svg,pdf"],
-                'drawings'=> 'nullable',
-
+                'id'=> 'required',
+                'pin_x'=> 'required',
+                'pin_y'=> 'required'
         
             ]; 
         }else{
@@ -64,7 +48,9 @@ class PunchListRequest extends FormRequest
                 "participates"    => ['required','array'],
                 'docs' => 'nullable',
                 "docs.*"  => ["nullable", "mimes:jpeg,bmp,png,gif,svg,pdf"],
-                'drawings'=> 'nullable',
+                'drawing_id'=> 'required',
+                'pin_x'=> 'required',
+                'pin_y'=> 'required'
 
 
         

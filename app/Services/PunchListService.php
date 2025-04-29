@@ -22,9 +22,9 @@ class PunchListService
         // dd($type);
          $count = $this->punchListRepository->get_next_number($id);
          if($count){
-             return 'punch_list_'.$count+1;    
+             return $count+1;    
          }else{
-             return 'punch_list_1';
+             return '1';
          }
      }
     public function create(array $data)
@@ -33,7 +33,7 @@ class PunchListService
         try {
             $project_id = $data['project_id'];
             $modal =  $this->punchListRepository->create($data);
-            $modal->drawings()->sync($data['drawings']);
+           // $modal->drawings()->sync($data['drawings']);
             $path = Storage::url('/project'.$data['project_id'].'/punch_list'.$modal->id);
             
             \File::makeDirectory($path, $mode = 0777, true, true);  
@@ -61,19 +61,18 @@ class PunchListService
     {
         \DB::beginTransaction();
         try {
-            $project_id = $data['project_id'];
+          //  $project_id = $data['project_id'];
             $id = $data['id'];
             $this->punchListRepository->update($data , $id);
             $modal =  $this->punchListRepository->find($data['id']);
-            $path = Storage::url('/project'.$data['project_id'].'/punch_list'.$modal->id);
+        //     $path = Storage::url('/project'.$data['project_id'].'/punch_list'.$modal->id);
             
-            \File::makeDirectory($path, $mode = 0777, true, true);  
-           $users =  $this->punchListRepository->add_users_to_Punch_list($data,$modal );
-          // dd($users);
-            if(isset($data['docs'])){
+        //     \File::makeDirectory($path, $mode = 0777, true, true);  
+        //    $users =  $this->punchListRepository->add_users_to_Punch_list($data,$modal );
+        //     if(isset($data['docs'])){
                 
-                $this->punchListFilesService->createBulkFiles($data['project_id'] , $modal->id ,$data['docs']);
-            }           
+        //         $this->punchListFilesService->createBulkFiles($data['project_id'] , $modal->id ,$data['docs']);
+        //     }           
             \DB::commit();
         } catch (\Exception $e) {
             \DB::rollback();
@@ -91,6 +90,10 @@ class PunchListService
     }
     public function getAllProjectPunchListPaginate($project_id){
         return $this->punchListRepository->get_all_project_Punch_list_paginate($project_id);
+
+    }
+    public function getAllProjectPunchListByDrawingId($project_id , $drawing_id){
+        return $this->punchListRepository->where(['project_id' => $project_id , 'drawing_id' => $drawing_id])->all();
 
     }
     public function getStatusPieChart($project_id){
@@ -119,7 +122,7 @@ class PunchListService
     }
 
     public function find($punch_list_id){
-        $punch_list =  $this->punchListRepository->with([ 'users.userable' , 'files' , 'responsible.userable' ,'replies.user','documentFiles','drawings'])->find($punch_list_id);
+        $punch_list =  $this->punchListRepository->with([ 'users.userable' , 'files' , 'responsible.userable' ,'replies.user','documentFiles','drawing'])->find($punch_list_id);
         $punch_list->priority_val = $punch_list->priority->value;
         $punch_list->status_val = $punch_list->status->value;
         return $punch_list;

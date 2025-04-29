@@ -128,10 +128,12 @@ class PunchListController extends Controller
     public function store(PunchListRequest  $request)
     {
 
+
         if($request->validated()){
             \DB::beginTransaction();
             try{
                 $all_data = request()->all();
+               // dd($all_data);
                 $all_data['created_by'] = \Auth::user()->id;
                 $all_data['closed_by'] = \Auth::user()->id;
 
@@ -178,6 +180,21 @@ class PunchListController extends Controller
         }
     }
 
+    public function getAllPunchListByDrawingId(Request $request , $drawing_id){
+        $project_id = Session::get('projectID');
+        $punchLists = $this->punchListService->getAllProjectPunchListByDrawingId($project_id , $drawing_id);
+        $punchLists->map(function($row){
+
+            $row->x = $row->pin_x;
+            $row->y = $row->pin_y;
+
+            return $row;
+        });
+     
+
+        return $punchLists;
+
+    }
 
     public function update(PunchListRequest  $request)
     {
@@ -288,6 +305,7 @@ class PunchListController extends Controller
 
 
     public function destroy($id){
+       // dd('ok');
         $this->punchListService->delete($id);
         
     }

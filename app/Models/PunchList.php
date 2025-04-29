@@ -18,7 +18,7 @@ class PunchList extends Model
             'priority'=> PunchListPriorityEnum::class
         ];
     }
-    protected $fillable = ['number','title','location','cost_impact','priority','responsible_id','description','created_by','closed_by','project_id','status','date_notified_at','date_resolved_at','due_date'];
+    protected $fillable = ['number','title','location','cost_impact','priority','responsible_id','description','created_by','closed_by','project_id','status','date_notified_at','date_resolved_at','due_date','drawing_id','pin_x','pin_y'];
 
     public function users(): belongsToMany
     {
@@ -61,10 +61,8 @@ class PunchList extends Model
         ->using(PunchListLinkedDocuments::class);
     } 
 
-    public function drawings(): belongsToMany
+    public function drawing(): belongsTo
     {
-        return $this->belongsToMany(ProjectDrawings::class, 'punch_list_drawings', 
-        'punchList_id', 'drawing_id')
-        ->using(PunchListDrawings::class);
+        return $this->belongsTo(ProjectDrawings::class, 'drawing_id'); 
     } 
 }

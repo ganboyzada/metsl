@@ -98,11 +98,15 @@ Route::middleware([
     Route::post('/project/punch-list/createDrawings', [PunchListController::class, "create_drawings"])->name('projects.punch-list.drawings.create');
     Route::get('/project/punch-list/deleteDrawings/{id}', [PunchListController::class, "delete_drawings"])->name('projects.punch-list.drawings.delete');
     Route::get('/project/punch-list/searchDrawings', [PunchListController::class, "drawings_search"])->name('projects.punch-list.drawings.search');
+    Route::get('/project/punch-list/drawingImage/{id}',  [PunchListController::class, "getAllPunchListByDrawingId"])->name('projects.punch-list.all_punch_list_by_drawing_id');	
 
     Route::get('/project/punch-list/deleteAssignedDrawings/{punchlist_id}/{id}', [PunchListController::class, "delete_assigned_drawings"])->name('projects.punch-list.assigned_drawings.delete');
 
     Route::get('/project/punch-list/participates',  [PunchListController::class, "getParticipates"])->name('projects.punch-list.participates');	
 	Route::post('/project/punch-list/store',  [PunchListController::class, "store"])->name(name: 'projects.punch-list.store');	
+    Route::post('/project/punch-list/update_pin',  [PunchListController::class, "update"])->name(name: 'projects.punch-list.update_pin');	
+
+
     Route::get('/project/punch-list/edit/{id}', [PunchListController::class, "edit"])->name('projects.punch-list.edit');
     Route::get('/project/punch-list/allParticipates',  [PunchListController::class, "getAllParticipates"])->name('projects.punch-list.all_participates');	
     Route::get('/project/punch-list/allStatusPeriorityOption',  [PunchListController::class, "getStatusPeriorityOption"])->name('projects.punch-list.all_status_periority_option');	

@@ -177,41 +177,7 @@
 <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4 border-2 border-dotted overflow-y-auto p-5" 
 style="height:300px;">
 
-    @if (isset($punch_list->drawings) && $punch_list->drawings->count() > 0)
-        @foreach ($punch_list->drawings as $drawing)
-        <div class="sm:col-span-1 text-center" id="draw{{ $drawing->id }}">
-            <label class="relative cursor-pointer group">
-                <a target="_blank" href="{{ Storage::url('project'.$drawing->project_id.'/drawings/'.$drawing->image) }}">
-                <!-- Hidden checkbox -->
-            
-                <!-- Image -->
-                <img
-                  alt="Image 1"
-                  class="rounded-lg border-4 border-transparent peer-checked:border-blue-500 transition drawing"
-                  style="width:30%;height:150px;margin:auto; " src="{{ Storage::url('project'.$drawing->project_id.'/drawings/'.$drawing->image) }}"
-    
-    
-                />
-                
-                    <p>{{ $drawing->title }}</p>
-                
-                
-                </a>
 
-                <button onclick="deleteDrawing({{$punch_list->id}} , {{ $drawing->id }})"
-                    class="text-red-500 dark:text-red-400 text-center">
-                   <i data-feather="trash" class="w-5 h-5" style="margin:auto;"></i>
-               </button>
-        
-              </label>   
-                
-            
-    
-        </div>
-            
-        @endforeach
-        
-    @endif
 
 
 </div>

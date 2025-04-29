@@ -34,7 +34,7 @@
   background-image: url({{ asset("images/marker-icon.png") }}); /* 🔁 Replace with your file */
   background-size: cover;
   background-repeat: no-repeat;
-  transform: translate(-50%, -100%); /* Tip of marker points to click */
+  /*transform: translate(-50%, -100%); *//* Tip of marker points to click */
   cursor: pointer;
   z-index: 10000000;
 
@@ -54,7 +54,7 @@
   border-radius: 6px;
   font-size: 12px;
   white-space: nowrap;
-  bottom: -3px;
+  bottom: -27px;
 
 
 
@@ -84,7 +84,8 @@
 		@csrf
 		<input type="hidden" name="project_id" value="{{ \Session::get('projectID') }}"/>
 
-        
+            <input type="hidden" name="pin_x"/>
+            <input type="hidden" name="pin_y"/>       
 
             <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
                 <!-- Title (Required) -->
@@ -211,6 +212,7 @@
         </div>
 
 
+   
 
         <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
         <div class="sm:col-span-1">
@@ -220,7 +222,7 @@
                 id="drawings_search" name="drawings_search"
                 class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200"
                 placeholder="Enter drawings search"
-                required
+                
             />
         </div>
         </div>
@@ -233,7 +235,7 @@
                 <div class="sm:col-span-1 text-center" id="draw{{ $drawing->id }}">
                     <label class="relative cursor-pointer group">
                         <!-- Hidden checkbox -->
-                        <input type="radio" id="{{ $drawing->id }}" name="drawing" value="{{ $drawing->id }}" class="peer absolute opacity-0 w-0 h-0" />
+                        <input type="radio" id="{{ $drawing->id }}" name="drawing_id" value="{{ $drawing->id }}" class="peer absolute opacity-0 w-0 h-0" />
                     
                         <!-- Image -->
                         <img onclick="get_image({{ $drawing->id }} , '{{ Storage::url('project'.$drawing->project_id.'/drawings/'.$drawing->image) }}')"
@@ -277,8 +279,7 @@
 
 
             <div class="flex justify-end mt-6">
-                <button type="button" onclick="closeRoleAssignmentModal()" class="text-gray-600 dark:text-gray-300 mr-3">Cancel</button>
-                <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+                <button type="button" onclick="closeRoleAssignmentModal()" class="text-gray-600 dark:text-gray-300 mr-3">Save</button>
             </div>
         
         </div>
@@ -289,98 +290,168 @@
 
 <script>
     
-  function createDraggablePin(xPercent, yPercent , labelcontent) {
+   function createDraggablePin(xPercent, yPercent , labelcontent , number) {
 
-    const wrapper = document.createElement('div');
-    if(labelcontent != null){
-        wrapper.classList.add('pin-wrapper');
-    }else{
-        wrapper.classList.add('pin-wrapper');
-        wrapper.classList.add('pin-wrapper2');
+        const wrapper = document.createElement('div');
+        if(labelcontent != null){
+            wrapper.classList.add('pin-wrapper');
+        }else{
+            wrapper.classList.add('pin-wrapper');
+            wrapper.classList.add('pin-wrapper2');
 
-    }
+        }
+        
+        wrapper.style.position = 'absolute';
+        wrapper.style.left = `${xPercent}%`;
+        wrapper.style.top = `${yPercent}%`;
+        wrapper.style.transform = 'translate(-50%, -100%)';
+
+
+
+        const pin = document.createElement('img');
+        pin.src = '{{ asset("images/marker-icon.png") }}'; // Replace with your marker
+        pin.classList.add('pin');
+        //pin.style.position = 'relative';
+        //pin.style.width = '24px';
+        //pin.style.height = '24px';
+        //pin.style.transform = 'translate(-50%, -100%)';
+        pin.style.left = `${xPercent}%`;
+        pin.style.top = `${yPercent}%`;
+        //container.appendChild(pin);
+        wrapper.appendChild(pin);
+        if(labelcontent != null){
+            const label = document.createElement('span');
+            label.classList.add('pin-label');
+            label.innerHTML  = `Number ${number} <a href="{{ url('/project/punch-list/edit') }}/${labelcontent}" target="_blank">View Details</a>`;
+            label.classList.add('pin-label', 'always-visible');
+
+            wrapper.appendChild(label);
+
+            label.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', (e) => {
+                e.stopPropagation(); // Prevent pin/image click handlers
+            });
+            });
+        }
+
+
     
-    wrapper.style.position = 'absolute';
-    wrapper.style.left = `${xPercent}%`;
-    wrapper.style.top = `${yPercent}%`;
-    wrapper.style.transform = 'translate(-50%, -100%)';
+        container.appendChild(wrapper);
 
 
 
-    const pin = document.createElement('img');
-    pin.src = '{{ asset("images/marker-icon.png") }}'; // Replace with your marker
-    pin.classList.add('pin');
-    //pin.style.position = 'absolute';
-    pin.style.width = '24px';
-    pin.style.height = '24px';
-    pin.style.transform = 'translate(-50%, -100%)';
-    pin.style.left = `${xPercent}%`;
-    pin.style.top = `${yPercent}%`;
-    //container.appendChild(pin);
-    wrapper.appendChild(pin);
+        // Drag support
+        let isDragging = false;
+        let wasDragged = false;
+        let currentDraggedWrapper = null;
 
-    if(labelcontent != null){
-        const label = document.createElement('span');
-        label.classList.add('pin-label');
-        label.innerHTML  = 'labelText<a href="https://example.com" target="_blank">View Details</a>';
-        label.classList.add('pin-label', 'always-visible');
+        let pin__x = null;
+        let pin__y = null;
 
-        wrapper.appendChild(label);
-
-        label.querySelectorAll('a').forEach(link => {
-        link.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent pin/image click handlers
+        pin.addEventListener('mousedown', (e) => {
+        isDragging = true;
+        wasDragged = false;
+        currentDraggedWrapper = wrapper;
+        e.preventDefault();
+        e.stopPropagation();
         });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging || !currentDraggedWrapper) return;
+
+            wasDragged = true; // Mark that the mouse moved
+
+            const rect = image.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            const xPercent = (x / rect.width) * 100;
+            const yPercent = (y / rect.height) * 100;
+
+            pin__x = xPercent;
+            pin__y = yPercent;
+
+            currentDraggedWrapper.style.left = `${xPercent}%`;
+            currentDraggedWrapper.style.top = `${yPercent}%`;
+
+            if (labelcontent == null) {
+                $('[name="pin_x"]').val(xPercent);
+                $('[name="pin_y"]').val(yPercent);
+            }
         });
+
+
+        document.addEventListener('mouseup', () => {
+    if (!wasDragged || !isDragging || !currentDraggedWrapper) {
+        isDragging = false;
+        currentDraggedWrapper = null;
+        return;
     }
 
-
- 
-  container.appendChild(wrapper);
-
-
-
-  // Drag support
-  let isDragging = false;
-  let currentDraggedWrapper = null;
-
-    pin.addEventListener('mousedown', (e) => {
-    isDragging = true;
-    currentDraggedWrapper = wrapper;
-    e.preventDefault();
-    e.stopPropagation();
-    });
-
-    document.addEventListener('mousemove', (e) => {
-    if (!isDragging || !currentDraggedWrapper) return;
-
-    const rect = image.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-
-    const xPercent = (x / rect.width) * 100;
-    const yPercent = (y / rect.height) * 100;
-
-    console.log(xPercent+'//'+yPercent);
-
-    currentDraggedWrapper.style.left = `${xPercent}%`;
-    currentDraggedWrapper.style.top = `${yPercent}%`;
-    });
-
-    document.addEventListener('mouseup', () => {
     isDragging = false;
     currentDraggedWrapper = null;
+
+    if (labelcontent != null) {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+            }
+        });
+        $.ajax({
+            url: "{{ route('projects.punch-list.update_pin') }}",
+            type: "POST",
+            data: {
+                id: labelcontent,
+                pin_x: pin__x,
+                pin_y: pin__y,
+                "_token": "{{ csrf_token() }}"
+            },
+            dataType: 'json',
+            success: function(data) {
+                if (data.success) {
+                    $('.success').show();
+                    $('.success').html('<div class="text-white-500 px-2 py-1 text-sm font-semibold">Pin coordination has been changed for punch number ' + number + '</div>');
+                } else if (data.error) {
+                    $('.error').show();
+                    $('.error').html('<div class="text-white-500 px-2 py-1 text-sm font-semibold">' + data.error + '</div>');
+                }
+            },
+            error: function(err) {
+                $.each(err.responseJSON.errors, function(key, value) {
+                    var el = $(document).find('[name="' + key + '"]');
+                    el.after($('<div class="err-msg text-red-500 px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
+                });
+            }
+        });
+    }
+});
+
+    // Optional: remove on click
+    pin.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if(labelcontent == null){
+            wrapper.remove();
+
+        }else{
+            const confirmed = confirm('Are you sure you want to delete this punch?');
+            if (confirmed) {
+                $('.error').hide(); 
+                $('.success').hide();
+                let url =`/project/punch-list/destroy/${labelcontent}`;		
+                let fetchRes =  fetch(url);
+                console.log(fetchRes);
+                    wrapper.remove();
+                    $('.success').show();
+                    $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
+                
+                
+            }
+        }
+
     });
 
-  // Optional: remove on click
-  pin.addEventListener('click', (e) => {
-    e.stopPropagation();
-    alert('ok');
-    wrapper.remove();
-  });
 
-
-  return wrapper;
+    return wrapper;
 }
 
 
@@ -388,24 +459,40 @@
     const image = document.getElementById('myImage');
 
 
+    let imageLoaded = false; // Track if listener already added
 
-    function get_image(id , image_url){
-    $('#myImage').attr('src', image_url);
-    $('.pin-wrapper2').remove();
+    async function get_image(id , image_url){
+
+        let savedPins = [];
+        let fetchRes = await fetch(`{{url('project/punch-list/drawingImage/${id}')}}`);
+        const all = await fetchRes.json();
 
 
-    const savedPins = [
-        { x: 30.5, y: 40.2 }
-    ];
+        $('#myImage').attr('src', image_url);
 
-    image.addEventListener('load', () => {
-        savedPins.forEach(coord => {
-            createDraggablePin(coord.x, coord.y , 1);
-        });
-    });
 
-    document.getElementById("roleAssignmentModal").classList.remove("hidden");
-}
+
+        savedPins = all;
+        console.log(savedPins);
+
+        // image.addEventListener('load', () => {
+        //     savedPins.forEach(coord => {
+        //         createDraggablePin(coord.x, coord.y , coord.id , coord.number);
+        //     });
+        // });
+
+
+        image.onload = () => {
+            // Clear existing pins before adding new ones
+            document.querySelectorAll('.pin-wrapper').forEach(el => el.remove());
+
+            savedPins.forEach(coord => {
+                createDraggablePin(coord.x, coord.y , coord.id , coord.number);
+            });
+        };
+
+        document.getElementById("roleAssignmentModal").classList.remove("hidden");
+    }
 
 
     
@@ -425,8 +512,10 @@
                     
                 }
 
-                currentPin = createDraggablePin(xPercent, yPercent , null);
-                alert(xPercent.toFixed(2)+'//'+yPercent.toFixed(2));
+                currentPin = createDraggablePin(xPercent, yPercent , null , null);
+                $('[name="pin_x"]').val(xPercent);
+                $('[name="pin_y"]').val(yPercent);
+                //alert(xPercent.toFixed(2)+'//'+yPercent.toFixed(2));
                 // Save and show coordinates
                 // const coords = { x: xPercent.toFixed(2), y: yPercent.toFixed(2) };
                 // pins.push(coords);
@@ -459,10 +548,10 @@ function searchDrawings(search){
                     html+=`   <div class="sm:col-span-1 text-center" id="draw${list[i].id}">
                     <label class="relative cursor-pointer group">
                         <!-- Hidden checkbox -->
-                        <input type="radio" id="${list[i].id}" name="drawing" value="${list[i].id}" class="peer absolute opacity-0 w-0 h-0" />
+                        <input type="radio" id="${list[i].id}" name="drawing_id" value="${list[i].id}" class="peer absolute opacity-0 w-0 h-0" />
                     
                         <!-- Image -->
-                        <img
+                        <img  onclick="get_image(${list[i].id} , '${list[i].image}')"
                           alt="Image 1"
                           class="rounded-lg border-4 border-transparent peer-checked:border-blue-500 transition drawing"
                           style="width:30%;height:150px;margin:auto; " src="${list[i].image}"
@@ -489,12 +578,18 @@ function searchDrawings(search){
     })
 }
 
- $("#snag-item-form").on("submit", function(event) {
+    $("#snag-item-form").on("submit", function(event) {
 
-        const form = document.getElementById("snag-item-form");
-        const formData = new FormData(form); 
+        if($('[name="pin_x"]').val() == '' ||  $('[name="pin_y"]').val() == '' ){
+            $('.error').show();
+            $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">Please Chose Drawing and set The coordinations</div>');
+            event.preventDefault();
+
+        }else{
+            const form = document.getElementById("snag-item-form");
+            const formData = new FormData(form); 
             formData.append('description',tinyMCE.get('description').getContent());
-    
+        
             $('.error').hide();
             $('.success').hide();
             $('.err-msg').hide();
@@ -519,20 +614,20 @@ function searchDrawings(search){
                 },
                 success: function(data) {
                     if (data.success) {
-                         
+                        
                         $(".submit_punch_list_form").prop('disabled', false);
                         
                         $("#snag-item-form")[0].reset();
-						
-						window.scrollTo(0,0);
+                        
+                        window.scrollTo(0,0);
 
                         $('.success').show();
                         $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.success+'</div>');  
-						
+                        
                         $('#file-list').html('');
-						setInterval(function() {
-							location.reload();
-						}, 3000);						
+                        setInterval(function() {
+                            location.reload();
+                        }, 3000);						
 
 
                     }
@@ -546,11 +641,11 @@ function searchDrawings(search){
                 error: function (err) {
                     $.each(err.responseJSON.errors, function(key, value) {
                             var el = $(document).find('[name="'+key + '"]');
-							el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
+                            el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
                             if(el.length == 0){
                                 el = $(document).find('#file-upload');
-								el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">the documents required </div>'));
-								
+                                el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">the documents required </div>'));
+                                
                             }
                             
                         });
@@ -560,8 +655,10 @@ function searchDrawings(search){
 
                 }
             });
+
+        }
     
-      });
+    });
 	  
 
 	$(".projectButton").on('click',function(event) {
