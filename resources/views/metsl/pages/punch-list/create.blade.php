@@ -437,12 +437,16 @@
             if (confirmed) {
                 $('.error').hide(); 
                 $('.success').hide();
-                let url =`/project/punch-list/destroy/${labelcontent}`;		
-                let fetchRes =  fetch(url);
-                console.log(fetchRes);
-                    wrapper.remove();
-                    $('.success').show();
-                    $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
+
+                wrapper.remove();
+
+
+                // let url =`/project/punch-list/destroy/${labelcontent}`;		
+                // let fetchRes =  fetch(url);
+                // console.log(fetchRes);
+                    
+                //     $('.success').show();
+                //     $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
                 
                 
             }
