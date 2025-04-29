@@ -482,12 +482,12 @@
                 wrapper.remove();
 
 
-                // let url =`/project/punch-list/destroy/${labelcontent}`;		
-                // let fetchRes =  fetch(url);
-                // console.log(fetchRes);
+                let url =`/project/punch-list/destroy/${labelcontent}`;		
+                let fetchRes =  fetch(url);
+                console.log(fetchRes);
                     
-                //     $('.success').show();
-                //     $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
+                    $('.success').show();
+                    $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
                 
                 
             }
@@ -509,15 +509,15 @@
     async function get_image(id , image_url){
 
         let savedPins = [];
-       // let fetchRes = await fetch(`{{url('project/punch-list/drawingImage/${id}')}}`);
-       // const all = await fetchRes.json();
+       let fetchRes = await fetch(`{{url('project/punch-list/drawingImage/${id}')}}`);
+       const all = await fetchRes.json();
 
 
         $('#myImage').attr('src', image_url);
 
 
 
-        //savedPins = all;
+        savedPins = all;
         console.log(savedPins);
 
         // image.addEventListener('load', () => {
