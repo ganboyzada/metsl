@@ -215,7 +215,7 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
 
         if(checkIfUserHasThisPermission($project_id , 'view_all_punch_list')){
 
-            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->paginate(1);
+            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->paginate(10);
   
             return $punchLists;
         }        
@@ -232,7 +232,7 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
                 
             });
 
-            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->paginate(1);
+            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->paginate(10);
   
             return $punchLists;
               
