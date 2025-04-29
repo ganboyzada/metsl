@@ -21,11 +21,7 @@ class PunchListService
     public function getNextNumber($id){
         // dd($type);
          $count = $this->punchListRepository->get_next_number($id);
-         if($count){
-             return $count+1;    
-         }else{
-             return '1';
-         }
+         return $count;
      }
     public function create(array $data)
     {

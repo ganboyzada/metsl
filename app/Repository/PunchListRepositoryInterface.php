@@ -42,9 +42,9 @@ interface PunchListRepositoryInterface
     
     /**
     * @param int $projectID 
-    * @return mixed
+    * @return int
     */
-    public function get_next_number($projectID): mixed;
+    public function get_next_number($projectID): int;
 
         /**
     * @param int $project_id
