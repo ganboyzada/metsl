@@ -290,7 +290,13 @@
 
 <script>
     	
+        document.addEventListener('DOMContentLoaded', () => {
+		distribution_obj = populateChoices2('distribution-members', [], true);	
+		reviewers_obj = populateChoices2('responsible-member', []);		
+        linked_documents = populateChoices2('linked_documents', [], false);		
 
+		
+    }); 
     
    function createDraggablePin(xPercent, yPercent , labelcontent , number) {
 
@@ -712,13 +718,7 @@ function searchDrawings(search){
 
 		
 
-    document.addEventListener('DOMContentLoaded', () => {
-		distribution_obj = populateChoices2('distribution-members', [], true);	
-		reviewers_obj = populateChoices2('responsible-member', []);		
-        linked_documents = populateChoices2('linked_documents', [], false);		
 
-		
-    }); 
 
 </script>
 @endsection
