@@ -468,15 +468,15 @@
     async function get_image(id , image_url){
 
         let savedPins = [];
-        let fetchRes = await fetch(`{{url('project/punch-list/drawingImage/${id}')}}`);
-        const all = await fetchRes.json();
+       // let fetchRes = await fetch(`{{url('project/punch-list/drawingImage/${id}')}}`);
+       // const all = await fetchRes.json();
 
 
         $('#myImage').attr('src', image_url);
 
 
 
-        savedPins = all;
+        //savedPins = all;
         console.log(savedPins);
 
         // image.addEventListener('load', () => {
