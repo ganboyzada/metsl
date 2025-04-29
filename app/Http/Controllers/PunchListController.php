@@ -222,6 +222,7 @@ class PunchListController extends Controller
     }    
 
     public function getParticipates(Request $request){
+        dd('ok');
         if (Session::has('projectID') && Session::has('projectName')){
             $id = Session::get('projectID');     
             $next_number =  $this->punchListService->getNextNumber($id);
