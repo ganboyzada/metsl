@@ -42,7 +42,7 @@ class PunchListRequest extends FormRequest
                 'responsible_id'=>'required',
                // 'date_notified_at' => 'required|date_format:Y-m-d',
                // 'date_resolved_at' => 'required|date_format:Y-m-d',
-                'due_date' => 'required|date_format:Y-m-d',
+                'due_days' => 'required|integer',
                 'project_id'=>'required',
                 'description'=>'required',
                 "participates"    => ['required','array'],

@@ -139,7 +139,12 @@ class PunchListController extends Controller
 
                 $all_data['project_id'] = Session::get('projectID');
                 $all_data['status'] = 0;
+                $all_data['due_date'] = Carbon::now()->addDays((int)$all_data['due_days'])->toDateString();
                 $all_data['date_notified_at'] = date('Y-m-d');
+                //dd($all_data);
+                $id = Session::get('projectID');     
+                $next_number =  $this->punchListService->getNextNumber($id);
+                $all_data['number'] = $next_number;
                 $model = $this->punchListService->create($all_data);
             \DB::commit();
             // all good

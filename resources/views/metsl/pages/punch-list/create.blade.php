@@ -104,7 +104,7 @@
                 <div class="sm:col-span-1">
                     <label for="number" class="block text-sm mb-2 font-medium dark:text-gray-200">Number (#) <span class="text-red-500">*</span></label>
                     <input
-                        type="text"
+                        type="text" readonly
                         id="number" name="number"
                         class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200"
                         placeholder="Enter number"
@@ -148,14 +148,20 @@
                 </div>
 
                 <div class="md:col-span-1">
-                    <label for="due_date" class="block text-sm mb-2 font-medium dark:text-gray-200">Due Date</label>
-                    <input
-                        type="date"
-                        name="due_date"
-                        id="due_date"
-                        class="w-full px-4 py-2 border dark:bg-gray-800 dark:text-gray-200"
-                        required
-                    />
+                    <label for="due_days" class="block text-sm mb-2 font-medium dark:text-gray-200">Due Days</label>
+                    <select id="due_days" required name="due_days" class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200">
+                        <option value="1">1 day</option>
+                        <option value="2">2 day</option>
+                        <option value="3">3 day</option>
+                        <option value="4">4 day</option>
+                        <option value="5">5 day</option>
+                        <option value="7">7 day</option>
+                        <option value="14">14 day</option>
+                        <option value="21">21 day</option>
+                        <option value="30">30 day</option>
+
+                    </select>
+            
                 </div>	
             </div>
             <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">    
