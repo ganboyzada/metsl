@@ -23,8 +23,8 @@
 
     .pin {
   /*position: absolute;*/
-  width: 24px;
-  height: 24px;
+  width: 34px;
+  height: 34px;
   background-image: url({{ asset("images/marker-icon.png") }}); /* 🔁 Replace with your file */
   background-size: cover;
   background-repeat: no-repeat;
@@ -73,34 +73,58 @@
 <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
 <div class="flex items-end mb-3">
     <h1 class="text-lg dark:text-gray-200">{{  $punch_list->title }} / <b>{{$punch_list->number}}</b></h1>
-    <div class="ml-auto relative has-dropdown">
-        <button type="button"
-            class="dropdown-toggle flex items-center px-4 py-2 bg-blue-500 text-white  hover:bg-blue-600 focus:outline-none"
+    @if ($punch_list->status_val != 2)
+    @if ((auth()->user()->is_admin || $punch_list->created_by == auth()->user()->id))
+        <div class="ml-auto relative has-dropdown">
+            <button type="button"
+                class="dropdown-toggle flex items-center px-4 py-2 bg-blue-500 text-white  hover:bg-blue-600 focus:outline-none"
+                >
+                <i data-feather="loader" class="mr-2"></i>
+                Action 		
+
+            </button>
+            <!-- Dropdown Menu -->
+            <div
+                class="dropdown absolute right-0 mt-2 w-48 bg-gray-800 text-gray-200  shadow-lg"
             >
-            <i data-feather="loader" class="mr-2"></i>
-            Action 		
+                <button  data-modal="uploader-modal" class="modal-toggler  flex px-4 py-2 hover:bg-gray-700">
+                    <i data-feather="corner-up-left" class="mr-2"></i> <span class="hidden md:inline">Add Reply</span>
+                </button> 
 
-        </button>
-        <!-- Dropdown Menu -->
-        <div
-            class="dropdown absolute right-0 mt-2 w-48 bg-gray-800 text-gray-200  shadow-lg"
-        >
-            @if(checkIfUserHasThisPermission(Session::get('projectID') ,'responsible_punch_list') ||
-            checkIfUserHasThisPermission(Session::get('projectID') ,'distribution_members_punch_list') ||
-            $punch_list->created_by == auth()->user()->id
-            )
-            <button  data-modal="uploader-modal" class="modal-toggler  flex px-4 py-2 hover:bg-gray-700">
-                <i data-feather="corner-up-left" class="mr-2"></i> <span class="hidden md:inline">Add Reply</span>
-            </button>
-            @endif
 
-            @if(checkIfUserHasThisPermission(Session::get('projectID') ,'update_punch_list_status') || $punch_list->created_by == auth()->user()->id)
-            <button  data-modal="status-modal" class="modal-toggler  flex px-4 py-2 hover:bg-gray-700">
-                <i data-feather="corner-up-left" class="mr-2"></i> <span class="hidden md:inline">Change Status</span>
-            </button>
-            @endif
+            </div>
         </div>
-    </div>
+    @elseif((checkIfUserHasThisPermission(Session::get('projectID') ,'responsible_punch_list') ||
+    checkIfUserHasThisPermission(Session::get('projectID') ,'distribution_members_punch_list')
+    ) && $punch_list->status_val  == 0)
+            <div class="ml-auto relative has-dropdown">
+                <button type="button"
+                    class="dropdown-toggle flex items-center px-4 py-2 bg-blue-500 text-white  hover:bg-blue-600 focus:outline-none"
+                    >
+                    <i data-feather="loader" class="mr-2"></i>
+                    Action 		
+
+                </button>
+                <!-- Dropdown Menu -->
+                <div
+                    class="dropdown absolute right-0 mt-2 w-48 bg-gray-800 text-gray-200  shadow-lg"
+                >
+                    <button  data-modal="uploader-modal" class="modal-toggler  flex px-4 py-2 hover:bg-gray-700">
+                        <i data-feather="corner-up-left" class="mr-2"></i> <span class="hidden md:inline">Add Reply</span>
+                    </button> 
+
+
+                </div>
+            </div>               
+    @endif
+    
+
+    @endif
+
+
+
+
+
 </div>
 
 
@@ -240,9 +264,8 @@
         @if (isset($punch_list->drawing))
         <h2 class="text-2xl font-semibold mb-6 dark:text-gray-200">drawing</h2>
         @endif        
-        <div class="w-full border-2 border-dotted overflow-y-auto p-5" >
-
-            <div id="image-container">
+        <div class="w-full border-2 border-dotted overflow-y-auto p-5" style="position: relative; height: auto; display: flex; justify-content: center; align-items: center;">
+            <div id="image-container" style="position: relative;">
                 <img src="{{ Storage::url('project'.$punch_list->drawing->project_id.'/drawings/'.$punch_list->drawing->image) }}" id="myImage" alt="Image">
               </div>
 
@@ -277,14 +300,17 @@
                         <td class="px-6 py-4">{{$reply->user->name}}</td>
                         <td class="px-6 py-4">{{$reply->created_date}}</td>
                         <td class="px-6 py-4">
+                            @if ($reply->file != NULL)
+                                <div class="bg-gray-100 dark:bg-gray-800 p-4  flex items-center justify-between">
+                                    <div class="flex items-center">
+                                        <i data-feather="file" class="w-6 h-6 mr-3 dark:text-gray-400"></i>
+                                        <p class="text-sm dark:text-gray-200">{{$reply->file}}</p>
+                                    </div>
 
-                            <div class="bg-gray-100 dark:bg-gray-800 p-4  flex items-center justify-between">
-                                <div class="flex items-center">
-                                    <i data-feather="file" class="w-6 h-6 mr-3 dark:text-gray-400"></i>
-                                    <p class="text-sm dark:text-gray-200">{{$reply->file}}</p>
-                                </div>
-                                <a target="_blank" href="{{Storage::url('project'.$punch_list->project_id.'/punch_list'.$punch_list->id.'/replies/'.$reply->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
-                            </div>  
+                                    <a target="_blank" href="{{Storage::url('project'.$punch_list->project_id.'/punch_list'.$punch_list->id.'/replies/'.$reply->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
+                                </div>                                 
+                            @endif
+
                         </td>
                        
                     </tr>
@@ -298,9 +324,19 @@
     </div>
 </div>
 
+@if ($punch_list->status_val != 2)
+    @if ((auth()->user()->is_admin || $punch_list->created_by == auth()->user()->id))
+        @include('metsl.pages.punch-list.addReply')
+    @elseif((checkIfUserHasThisPermission(Session::get('projectID') ,'responsible_punch_list') ||
+    checkIfUserHasThisPermission(Session::get('projectID') ,'distribution_members_punch_list')
+    ) && $punch_list->status_val  == 0)
+        @include('metsl.pages.punch-list.addReply')              
+    @endif
 
-@include('metsl.pages.punch-list.ChageStatus')
-@include('metsl.pages.punch-list.addReply')
+
+@endif
+
+
 <script>
     function createDraggablePin(xPercent, yPercent , labelcontent , number) {
         //alert(number);
@@ -434,43 +470,48 @@
         });
         }
         });
-
-        // Optional: remove on click
-        pin.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if(labelcontent == null){
-            wrapper.remove();
-
-        }else{
-            const confirmed = confirm('Are you sure you want to delete this punch?');
-            if (confirmed) {
-                $('.error').hide(); 
-                $('.success').hide();
-
+        let user  = '{{ auth()->user()->is_admin }}';
+        if(user == 1){
+            // Optional: remove on click
+            pin.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if(labelcontent == null){
                 wrapper.remove();
 
+            }else{
+                const confirmed = confirm('Are you sure you want to delete this punch?');
+                if (confirmed) {
+                    $('.error').hide(); 
+                    $('.success').hide();
 
-                let url =`/project/punch-list/destroy/${labelcontent}`;		
-                let fetchRes =  fetch(url);
-                console.log(fetchRes);
-                    if(labelcontent == current_punchlist_id){
-                        $('.success').show();
-                        $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
-                        setInterval(function() {
-                            window.location.href = "{{ route('home') }}";
-                        }, 3000);	
-                    }else{
-                        $('.success').show();
-                        $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
-                
-                    }
-    
-                
+                    wrapper.remove();
+
+
+                    let url =`/project/punch-list/destroy/${labelcontent}`;		
+                    let fetchRes =  fetch(url);
+                    console.log(fetchRes);
+                        if(labelcontent == current_punchlist_id){
+                            $('.success').show();
+                            $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
+                            setInterval(function() {
+                                window.location.href = "{{ route('home') }}";
+                            }, 3000);	
+                        }else{
+                            $('.success').show();
+                            $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
+                    
+                        }
+        
+                    
+                }
             }
+
+            });
+
+
         }
 
-        });
-
+            
 
         return wrapper;
     }

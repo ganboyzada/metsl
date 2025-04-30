@@ -338,8 +338,9 @@ class PunchListController extends Controller
     public function store_reply(Request $request){
         $data = $request->all();
         $err = $request->validate([
+            'status' => 'required|in:0,1,2',
             'description_reply' => 'required|string|max:255',
-            'title' => 'required|',
+            'title' => 'required',
             'punch_list_id' => 'required',
            
         ]);
@@ -348,7 +349,7 @@ class PunchListController extends Controller
         $data['description'] = $request->description_reply;
 
     
-        if($data['docs'] != NULL){
+        if(isset($data['docs']) && $data['docs'] != NULL){
             $file = $data['docs'];
             $fileName = $file->getClientOriginalName();
     
@@ -360,7 +361,13 @@ class PunchListController extends Controller
             $data['file'] = $fileName;
    
         } 
-        
+        if($request->status == 2){
+            \App\Models\PunchList::where('id',$request->punch_list_id)->update(['status'=>$request->status,'date_resolved_at'=>Carbon::now()->format('Y-m-d')]);
+
+        }else{
+            \App\Models\PunchList::where('id',$request->punch_list_id)->update(['status'=>$request->status]);
+
+        }       
 
         //dd($err);
         $model = \App\Models\PunchlistReplies::create($data);

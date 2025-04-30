@@ -5,10 +5,11 @@ namespace App\Enums;
 enum  PunchListStatusEnum: int
 {
     case PENDING = 0;
+    case REVIEW = 1;
 
-    case REJECTED = 1;
+    case CLOSED = 2;
 
-    case ACCEPTED = 2;
+
 
     public static function values(): array
     {
@@ -20,8 +21,9 @@ enum  PunchListStatusEnum: int
         return match($this) 
         {
             self::PENDING => 'Pending',
-            self::REJECTED => 'Rejected',
-            self::ACCEPTED => 'Accepted',
+            self::CLOSED => 'Closed',
+            self::REVIEW => 'Review',
+
         };
     }
 
@@ -30,8 +32,8 @@ enum  PunchListStatusEnum: int
         return match($this) 
         {
             self::PENDING => '#374151',
-            self::REJECTED => '#ff5a5a',
-            self::ACCEPTED => '#4ab342'
+            self::CLOSED => '#ff5a5a',
+            self::REVIEW => '#4ab342'
         };
     }
 }

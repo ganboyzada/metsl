@@ -55,9 +55,11 @@ class SnagListController extends Controller
             return $this->sendResponse(['status' => false], "You are not allowed to add reply.");
 
         }
-        else if($permission == 'update' && isset($punch_list->id)){
-            if(checkIfUserHasThisPermission($project_id ,'update_punch_list_status') || $punch_list->created_by == auth()->user()->id){
-
+        else if($permission == 'update'  && isset($punch_list->id)){
+            if(checkIfUserHasThisPermission($project_id ,'responsible_punch_list') ||
+            checkIfUserHasThisPermission($project_id ,'distribution_members_punch_list') ||
+            $punch_list->created_by == auth()->user()->id
+            ){
                 return $this->sendResponse(['status' => true], "You are allowed to update.");
 
             }
@@ -171,8 +173,12 @@ class SnagListController extends Controller
     public function updateStatus(StatusRequest $request){
 
         $punch_list = $this->punchListService->find($request->punch_list_id);
-        if(checkIfUserHasThisPermission($punch_list->project_id ,'update_punch_list_status') 
-        || $punch_list->created_by == auth()->user()->id){
+        
+        if(checkIfUserHasThisPermission($punch_list->project_id ,'responsible_punch_list') ||
+            checkIfUserHasThisPermission($punch_list->project_id ,'distribution_members_punch_list') ||
+            $punch_list->created_by == auth()->user()->id
+            ){
+
             if($request->status == 2){
                 \App\Models\PunchList::where('id',$request->punch_list_id)->update(['status'=>$request->status,'date_resolved_at'=>Carbon::now()->format('Y-m-d')]);
 

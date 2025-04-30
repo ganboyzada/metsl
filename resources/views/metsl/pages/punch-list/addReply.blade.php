@@ -16,6 +16,39 @@
 			<input type="hidden" value="{{ $punch_list->id }}" id="punchlistt_id" name="punch_list_id"/>
 
             
+            <div>
+                <label for="status" class="block text-sm mb-2 font-medium dark:text-gray-200">Change status To</label>
+                <select id="status" name="status" class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200" required >
+                    <option value="">select Status</option>
+                    @if ($punch_list->status_val != 2)
+					@php
+					$enums_list = \App\Enums\PunchListStatusEnum::cases();
+					@endphp
+					@foreach ($enums_list as $enum)
+                    @if((auth()->user()->is_admin || $punch_list->created_by == auth()->user()->id) && $enum->value != $punch_list->status_val &&  ( $enum->value == 0 ||  $enum->value == 2))
+                        <option value="{{$enum->value}}"  {{  $enum->value == $punch_list->status_val ? 'selected':'' }} >{{$enum->text()}}</option> 
+                    @elseif((checkIfUserHasThisPermission(Session::get('projectID') ,'responsible_punch_list') ||
+                            checkIfUserHasThisPermission(Session::get('projectID') ,'distribution_members_punch_list'))
+                            && !auth()->user()->is_admin  && ($enum->value == 1)
+                            )
+
+                        <option value="{{$enum->value}}"  {{  $enum->value == $punch_list->status_val ? 'selected':'' }} >{{$enum->text()}}</option> 
+                    @endif
+
+
+
+
+
+
+
+						
+					@endforeach
+                    @endif
+					
+                </select>
+            </div>
+
+
             <!-- Drag and Drop Zone -->
             <div>
                 <label class="block mb-1">Attachment</label>

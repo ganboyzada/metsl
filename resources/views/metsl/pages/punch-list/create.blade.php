@@ -29,8 +29,8 @@
 
     .pin {
   /*position: absolute;*/
-  width: 24px;
-  height: 24px;
+  width: 34px;
+  height: 34px;
   background-image: url({{ asset("images/marker-icon.png") }}); /* 🔁 Replace with your file */
   background-size: cover;
   background-repeat: no-repeat;
@@ -441,33 +441,38 @@
 });
 
     // Optional: remove on click
-    pin.addEventListener('click', (e) => {
-        e.stopPropagation();
-        if(labelcontent == null){
-            wrapper.remove();
+    let user  = '{{ auth()->user()->is_admin }}';
+    if(user == 1){
 
-        }else{
-            const confirmed = confirm('Are you sure you want to delete this punch?');
-            if (confirmed) {
-                $('.error').hide(); 
-                $('.success').hide();
-
+        pin.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if(labelcontent == null){
                 wrapper.remove();
 
+            }else{
+                const confirmed = confirm('Are you sure you want to delete this punch?');
+                if (confirmed) {
+                    $('.error').hide(); 
+                    $('.success').hide();
 
-                let url =`/project/punch-list/destroy/${labelcontent}`;		
-                let fetchRes =  fetch(url);
-                console.log(fetchRes);
+                    wrapper.remove();
+
+
+                    let url =`/project/punch-list/destroy/${labelcontent}`;		
+                    let fetchRes =  fetch(url);
+                    console.log(fetchRes);
+                        
+                        $('.success').show();
+                        $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
                     
-                    $('.success').show();
-                    $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
-                
-                
+                    
+                }
             }
-        }
 
-    });
+        });
 
+        
+    }
 
     return wrapper;
 }
