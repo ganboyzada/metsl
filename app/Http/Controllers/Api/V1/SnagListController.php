@@ -290,7 +290,7 @@ class SnagListController extends Controller
  
 
     public function getDrawings(Request $request , $id){
-        $drawings = $this->projectDrawingsService->all($id);
+        $drawings = $this->projectDrawingsService->search_drawings($id , $request);
         $res = $this->getList($drawings, $request, 'Drawing');
 
         return $this->sendResponse(
