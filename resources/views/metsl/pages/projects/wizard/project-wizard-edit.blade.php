@@ -525,6 +525,8 @@
                 },
                 error: function (err) {
                     $.each(err.responseJSON.errors, function(key, value) {
+                        $('.error').show();
+                        $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+value[0]+'</div>');
                             var el = $(document).find('[name="'+key + '"]');
                             if(el.length == 0){
                                 el = $(document).find('[id="'+key + '"]');
@@ -594,6 +596,8 @@
             },
             error: function (err) {
                 $.each(err.responseJSON.errors, function(key, value) {
+                    $('.error').show();
+                    $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+value[0]+'</div>');
                         var el = $(document).find('[name="'+key + '"]');
                         el.after($('<span class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</span>'));
                         

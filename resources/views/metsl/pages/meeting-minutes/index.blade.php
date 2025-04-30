@@ -47,6 +47,8 @@
         </a>
         @endif
     </div>
+
+
     <!-- Meetings Table -->
     <div class="overflow-x-auto">
         <table class="w-full text-left border-collapse border dark:border-gray-800">
@@ -65,9 +67,11 @@
 
             </tbody>
         </table>
+        <div id="pagination_meetings" class="flex gap-2 mt-4"></div>
+
     </div>
 
-    
+
 </div>
 <script>
 	$(".projectButton").on('click',function(event) {
@@ -80,17 +84,21 @@
 	$("#search , #start-date , #end-date").on('input',function(event) {
 		get_meeting_planing();
 	});
-	async function get_meeting_planing(){
+	async function get_meeting_planing(page = 1){
         if(localStorage.getItem("project_tool") == 'meeting_planing'){
 		const search = $('#search').val();
 		const startDate = $('#start-date').val();
 		const endDate = $('#end-date').val();
 		
-		let url =`project/meetings/all?search=${search}&start_date=${startDate}&end_date=${endDate}`;
-		//alert(url);
-		
-		let fetchRes = await fetch(url);
-		const all_meetings = await fetchRes.json();
+		let url =`project/meetings/all?page=${page}&search=${search}&start_date=${startDate}&end_date=${endDate}`;
+
+
+        let fetchRes = await fetch(url);
+        const response = await fetchRes.json(); // full paginated response
+        const all_meetings = response.data;
+        renderPaginationMeeting(response); // handle pagination UI
+
+
 		 correspondenceData = all_meetings.map(function(item) {
 			let namesString = item.users.map((user) => `${user.name}`).join(", ");
 			item.users = namesString;
@@ -124,7 +132,18 @@
 			
         }
 	}
-
+    function renderPaginationMeeting(data) {
+       
+    let html = '';
+    if (data.last_page > 1) {
+        for (let i = 1; i <= data.last_page; i++) {
+            html += `<button onclick="get_meeting_planing(${i})" class="px-2 py-1 border ${data.current_page === i ? 'bg-blue-500 text-white' : 'bg-white'}">
+                        ${i}
+                    </button>`;
+        }
+    }
+    $('#pagination_meetings').html(html);
+}
     async function deleteMeetingPlaning(id){
         $('.error').hide(); 
         $('.success').hide();

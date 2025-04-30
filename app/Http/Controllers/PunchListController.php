@@ -8,6 +8,7 @@ use App\Http\Requests\CorrespondenceRequest;
 use App\Http\Requests\DrawingRequest;
 use App\Http\Requests\MeetingPlaningRequest;
 use App\Http\Requests\PunchListRequest;
+use App\Models\PunchList;
 use App\Services\ClientService;
 use App\Services\ContractorService;
 use App\Services\DesignTeamService;
@@ -256,9 +257,9 @@ class PunchListController extends Controller
 
     public function getStatusPeriorityOption(Request $request){
         if (Session::has('projectID') && Session::has('projectName')){
-            $id = Session::get('projectID');     
+            $projectId = Session::get('projectID');     
             $priority_list = [];           
-            $statusPieChart = $this->punchListService->getStatusPieChart($id);
+            $statusPieChart = $this->punchListService->getStatusPieChart($projectId);
             $enums_list = \App\Enums\PunchListPriorityEnum::cases();
             foreach ($enums_list as $enum){
                 $priority_list[] = ['label'=>$enum->name , 'value'=>$enum->value];
@@ -274,10 +275,86 @@ class PunchListController extends Controller
                 $status_list_colors[] = $enum->color();
                 $status_list_values[] = $statusPieChart[$enum->text()] ?? 0;
 
-            }                 
+            }       
+            $punlists_overdue_count= PunchList::where('status','!=',2)->where('project_id',$projectId)
+            ->whereDate('due_date', '<', now()->toDateString())->count();           
+            
+            $overdue = [];
+            $assignees = [];
+            $next_7_days = [];
+            $more_7_days = [];          
+            $punlists = PunchList::join('users','users.id','=','punch_lists.responsible_id')
+            ->where('status','!=',2)->where('project_id',$projectId)
+            ->whereDate('due_date', '<', now()->toDateString())->groupBy('users.id')
+            ->select(\DB::raw('count(*) as total , users.*'))->get();
+            
+            if($punlists->count() > 0){
+                foreach ($punlists as $punlist){
+                    $assignees[] = $punlist->name;
+                    $overdue[$punlist->id] = $punlist->total;
+                    $next_7_days[$punlist->id] = 0;
+                    $more_7_days[$punlist->id] = 0;
+                }
+
+            }
+    
+            $sevenDaysLater = Carbon::now()->addDays(7)->toDateString();
+            
+            $punlists = PunchList::join('users', 'users.id', '=', 'punch_lists.responsible_id')
+                ->select(\DB::raw('count(*) as total , users.*'))
+                ->where('status', '!=', 2)
+                ->where('project_id', $projectId)
+                ->whereDate('due_date', '>', now()->toDateString())
+                ->whereDate('due_date', '<', $sevenDaysLater)
+                ->groupBy('responsible_id')
+                ->get();
+
+                if($punlists->count() > 0){
+                    foreach ($punlists as $punlist){
+                        if(!in_array($punlist->name , $assignees)){
+                            $assignees[] = $punlist->name;
+                            $overdue[$punlist->id] = 0;
+                            $more_7_days[$punlist->id] = 0;
+
+                        }
+
+                        $next_7_days[$punlist->id] = $punlist->total;
+                    }
+    
+                }
+
+                $sevenDaysLater = Carbon::now()->addDays(7)->toDateString();
+            
+                $punlists = PunchList::join('users', 'users.id', '=', 'punch_lists.responsible_id')
+                    ->select(\DB::raw('count(*) as total , users.*'))
+                    ->where('status', '!=', 2)
+                    ->where('project_id', $projectId)
+                    ->whereDate('due_date', '>', now()->toDateString())
+                    ->whereDate('due_date', '>=', $sevenDaysLater)
+                    ->groupBy('responsible_id')
+                    ->get();
+    
+                    if($punlists->count() > 0){
+                        foreach ($punlists as $punlist){
+                            if(!in_array($punlist->name , $assignees)){
+                                $assignees[] = $punlist->name;
+                                $overdue[$punlist->id] = 0;
+                                $next_7_days[$punlist->id] = 0;
+    
+                            }
+    
+                            $more_7_days[$punlist->id] = $punlist->total;
+                        }
+        
+                    }
+
             return ['priority'=> $priority_list, 
             'status'=> $status_list , 'status_list_labels'=>$status_list_labels , 
-            'status_list_colors'=>$status_list_colors , 'statusPieChart'=>$status_list_values];
+            'status_list_colors'=>$status_list_colors , 'statusPieChart'=>$status_list_values,
+        
+            'assignees'=>$assignees , 'overdue'=>array_values($overdue) , 'next_7_days'=>array_values($next_7_days) , 
+            'more_7_days'=>array_values($more_7_days) , 'punlists_overdue_count'=>$punlists_overdue_count
+            ];
         }
 
     }

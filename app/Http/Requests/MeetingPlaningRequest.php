@@ -29,7 +29,7 @@ class MeetingPlaningRequest extends FormRequest
                     Rule::unique('meeting_plans' , 'number')->where(fn ($query) => $query->where('project_id', request()->project_id)->where('id','!=', request()->id))
                 ], */                    
                 'name' => 'required',
-                'link' => ['required','regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
+                'link' => ['nullable','regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
                 'location'=>'required',
                 'planned_date'=>'required',
                 'start_time'=>'required',
@@ -49,7 +49,7 @@ class MeetingPlaningRequest extends FormRequest
                     Rule::unique('meeting_plans' , 'number')->where(fn ($query) => $query->where('project_id', request()->project_id))
                 ],  */                   
                 'name' => 'required',
-                'link' => ['required','regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
+                'link' => ['nullable','regex:/^(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?$/'],
                 'location'=>'required',
                 'planned_date'=>'required',
                 'start_time'=>'required',
@@ -57,8 +57,8 @@ class MeetingPlaningRequest extends FormRequest
                 'timezone'=>'required',
                 'purpose'=>'required',
                 "participates"    => ['required','array'],
-                'docs' => 'required',
-                "docs.*"  => ["required", "mimes:jpeg,bmp,png,gif,svg,pdf"],
+                'docs' => 'nullable',
+                "docs.*"  => ["nullable", "mimes:jpeg,bmp,png,gif,svg,pdf"],
 
         
             ]; 

@@ -3,14 +3,15 @@
 namespace App\Repository\Eloquent;
 
 use App\Mail\StakholderEmail;
-use App\Models\Permission;
 use App\Models\MeetingPlan;
+use App\Models\Permission;
 use App\Models\ProjectDocumentFiles;
 use App\Models\ProjectDocumentRevisions;
 use App\Models\Role;
 use App\Models\User;
 use App\Repository\MeetingPlaningRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningRepositoryInterface
@@ -58,10 +59,10 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
     /**
     * @param int $project_id 
     * @param \Request $request
-    * @return Collection
+    * @return LengthAwarePaginator
     * 
     */
-    public function get_all_project_meeting_planing($project_id , $request): Collection{
+    public function get_all_project_meeting_planing($project_id , $request): LengthAwarePaginator{
         $data = $request->all();
         if( $data['end_date'] == ''){
          
@@ -111,7 +112,7 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
                        
             });
             if(checkIfUserHasThisPermission($project_id , 'view_all_meeting_planing')){
-                $meetingPlanings = $meetingPlanings->with(['users:id,name'])->get();
+                $meetingPlanings = $meetingPlanings->with(['users:id,name'])->paginate(10);
   
                 return $meetingPlanings;
             }
@@ -130,7 +131,7 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
     
                 
                 
-                $meetingPlanings = $meetingPlanings->with(['users:id,name'])->get();
+                $meetingPlanings = $meetingPlanings->with(['users:id,name'])->paginate(10);
   
                 return $meetingPlanings;  
                 

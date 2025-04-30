@@ -193,7 +193,7 @@
                     @php
                         //dd($meeting);
                     @endphp
-                    @if($meeting->created_by == auth()->user()->id)
+                    @if($meeting->created_by == auth()->user()->id || auth()->user()->is_admin)
                     <button type="submit" class="submit_planing_meeting_form mt-6 py-3 px-4 bg-gray-200 dark:bg-gray-700 rounded-xl hover:bg-blue-500 flex gap-4 justify-center"><i data-feather="save"></i>Save Changes</button>
                     @endif
                 </div>

@@ -3,6 +3,7 @@ namespace App\Repository;
 
 use App\Model\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 interface MeetingPlaningRepositoryInterface
@@ -19,10 +20,10 @@ interface MeetingPlaningRepositoryInterface
             /**
     * @param int $project_id
     * @param \Request $request
-    * @return Collection
+    * @return LengthAwarePaginator
     * 
     */
-    public function get_all_project_meeting_planing($project_id , $request): Collection; 
+    public function get_all_project_meeting_planing($project_id , $request): LengthAwarePaginator; 
     
     /**
     * @param int $projectID 

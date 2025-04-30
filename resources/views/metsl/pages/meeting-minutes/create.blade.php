@@ -52,7 +52,7 @@
         <!-- Meeting Location -->
         <div class="col-span-1">
             <label for="meeting-location" class="block text-sm mb-2 font-medium dark:text-gray-200">Meeting Location</label>
-            <input
+            <input required
                 type="text"
 				name="location"
                 id="meeting-location"
@@ -144,7 +144,7 @@
         <!-- Participants -->
         <div>
             <label for="participants" class="block text-sm mb-2 font-medium dark:text-gray-200">Participants</label>
-            <select id="participants" name="participates[]" multiple class="choices w-full border dark:bg-gray-800 dark:text-gray-200">
+            <select id="participants"  name="participates[]" multiple class="participates choices w-full border dark:bg-gray-800 dark:text-gray-200">
             </select>
         </div>
 
@@ -251,6 +251,8 @@
                 },
                 error: function (err) {
                     $.each(err.responseJSON.errors, function(key, value) {
+                        $('.error').show();
+                        $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+value[0]+'</div>');
                             var el = $(document).find(`[name="new-meeting-type"]`);
 							el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
                        
@@ -320,13 +322,18 @@
                     },
                     error: function (err) {
                         $.each(err.responseJSON.errors, function(key, value) {
+                                $('.error').show();
+                                $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+value[0]+'</div>');
+
+
                                 var el = $(document).find('[name="'+key + '"]');
                                 el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
-                                if(el.length == 0){
-                                    el = $(document).find('#file-upload');
-                                    el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">the documents must be pdf </div>'));
+                                
+                                // if(el.length == 0){
+                                //     el = $(document).find('#file-upload');
+                                //     el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">the documents are required </div>'));
                                     
-                                }
+                                // }
                                 
                             });
 

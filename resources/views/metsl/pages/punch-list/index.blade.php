@@ -142,7 +142,7 @@
     <!-- Total Overdue Items -->
     <div class="p-4 bg-gray-100 dark:bg-gray-800">
         <h3 class="mb-2 text-lg font-medium">Total Overdue Snag List Items</h3>
-        <p class="text-4xl font-bold">5</p>
+        <p class="text-4xl font-bold punlists_overdue_count">0</p>
     </div>
 </div>
 
@@ -196,6 +196,11 @@
 	let status_list_labels = {};
 	let status_list_colors = {};
     let statusPieChart = {};
+
+    let assigness =  {};
+    let overdue  =  {};
+    let next_7_days =  {};
+    let more_7_days =  {};
  
 	async  function getAllParticipates(){
 
@@ -222,8 +227,17 @@
 			status_list_labels = all.status_list_labels;
 			status_list_colors = all.status_list_colors;
             statusPieChart = all.statusPieChart;
-        
+            assigness = all.assignees;
+            overdue  = all.overdue;
+            next_7_days = all.next_7_days;
+            more_7_days = all.more_7_days;       
+            $('.punlists_overdue_count').html(all.punlists_overdue_count);
             await runPieChart(status_list_labels , status_list_colors , statusPieChart);
+
+
+
+
+            await runParChart(assigness , overdue , next_7_days , more_7_days);
 			
 		}	
 	
@@ -276,6 +290,93 @@
                     
                 }
             });            
+        }
+                    // Pie Chart
+
+    }	
+
+    
+    let par_chart;
+    function runParChart(assigness , overdue , next_7_days , more_7_days){
+        if(par_chart){
+            let data_set = [
+                {
+                    label: 'Overdue',
+                    data: overdue,
+                    backgroundColor: '#ff5a5a', // Red
+                },
+                {
+                    label: 'Next 7 days',
+                    data: next_7_days,
+                    backgroundColor: '#3b82f6', // blue
+                },
+                {
+                    label: 'Nore than 7 Days',
+                    data: more_7_days,
+                    backgroundColor: '#374151', // gray
+                },
+            ];
+            console.log(data_set);
+            par_chart.data.labels = assigness;
+            par_chart.data.datasets = data_set;
+            par_chart.update();
+        }else{
+            // Bar Chart
+            console.log(assigness);
+            const barCtx = document.getElementById('assignee-bar-chart').getContext('2d');
+            par_chart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: assigness,
+                    datasets: [
+                        {
+                            label: 'Overdue',
+                            data: overdue,
+                            backgroundColor: '#ff5a5a', // Red
+                        },
+                        {
+                            label: 'Open',
+                            data: next_7_days,
+                            backgroundColor: '#3b82f6', // blue
+                        },
+                        {
+                            label: 'Closed',
+                            data: more_7_days,
+                            backgroundColor: '#374151', // gray
+                        },
+                    ],
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false, // Disable aspect ratio for height control
+                    borderRadius: 9999,
+                    barThickness: 20,
+                    barPercentage: 0.6,
+                    plugins: {
+                        legend: {
+                            labels: {
+                                color: getLabelColor(), // Dynamically set legend label color
+                            },
+                        },
+                    },
+                    scales: {
+                        x: {
+                            ticks: {
+                                color: getLabelColor(), // Dynamically set x-axis label color
+                            },
+                        },
+                        y: {
+                            ticks: {
+                                color: getLabelColor(), // Dynamically set y-axis label color
+                            },
+                        },
+                    },
+                },
+            });
+
+                
+        
+        
         }
                     // Pie Chart
 
@@ -364,57 +465,6 @@ function renderPagination(data) {
     }
 
 
-    // Bar Chart
-    const barCtx = document.getElementById('assignee-bar-chart').getContext('2d');
-    new Chart(barCtx, {
-        type: 'bar',
-        data: {
-            labels: ['GMI - Granite & Marble', 'J. Seamer & Son', 'Trunk Flooring'],
-            datasets: [
-                {
-                    label: 'Overdue',
-                    data: [6, 1, 3],
-                    backgroundColor: '#ff5a5a', // Red
-                },
-                {
-                    label: 'Open',
-                    data: [4, 2, 5],
-                    backgroundColor: '#3b82f6', // blue
-                },
-                {
-                    label: 'Closed',
-                    data: [1, 3, 2],
-                    backgroundColor: '#374151', // gray
-                },
-            ],
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false, // Disable aspect ratio for height control
-            borderRadius: 9999,
-            barThickness: 20,
-            barPercentage: 0.6,
-            plugins: {
-                legend: {
-                    labels: {
-                        color: getLabelColor(), // Dynamically set legend label color
-                    },
-                },
-            },
-            scales: {
-                x: {
-                    ticks: {
-                        color: getLabelColor(), // Dynamically set x-axis label color
-                    },
-                },
-                y: {
-                    ticks: {
-                        color: getLabelColor(), // Dynamically set y-axis label color
-                    },
-                },
-            },
-        },
-    });
 
     document.addEventListener('DOMContentLoaded', () => {
         const filterDropdown = document.getElementById('filter-dropdown');
