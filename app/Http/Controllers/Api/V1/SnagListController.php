@@ -13,6 +13,8 @@ use App\Http\Resources\UserProfileResource;
 use App\Models\Correspondence;
 use App\Models\ProjectDocument;
 use App\Models\PunchList;
+use App\Services\ProjectDocumentFilesService;
+use App\Services\ProjectDrawingsService;
 use App\Services\ProjectService;
 use App\Services\PunchListService;
 use App\Services\UserService;
@@ -28,6 +30,8 @@ class SnagListController extends Controller
         protected ProjectService $projectService,
         protected PunchListService $punchListService,
         protected UserService $userService,
+        protected ProjectDocumentFilesService $projectDocumentFilesService,
+        protected ProjectDrawingsService $projectDrawingsService,
 
         )
     {
@@ -112,7 +116,7 @@ class SnagListController extends Controller
         return $this->sendResponse(new punchListResource($punch_list), "Punch List retrieved successfully.");        
     }
 
-    public function statusPeriorityOptions(){
+    public function statusPeriorityOptions($id){
         $statusEnums = \App\Enums\PunchListStatusEnum::cases();
         $perioritiesEnums = \App\Enums\PunchListPriorityEnum::cases();   
         $status = [];
@@ -123,7 +127,26 @@ class SnagListController extends Controller
         foreach ($perioritiesEnums as $enum){
             $periorities[$enum->value] = $enum->text();
         }
-        $res = ['status' => (object) $status , 'periorities' => $periorities];
+
+        $linked_documents = [];
+        $files = $this->projectDocumentFilesService->getNewestFilesByProjectId( $id);
+       // return $files;
+        if($files->count() > 0){
+            foreach($files as $file){
+                if($file->revisionid == NULL || $file->revisionid == 0){
+                    $url = asset(Storage::url('project'.$id.'/documents'.$file->project_document_id.'/'.$file->file));
+                }else{
+                    $url = asset(Storage::url('project'.$id.'/documents'.$file->project_document_id.'/revisions/'.$file->file));
+                }
+                $linked_documents[] = [
+                    'id' => $file->file_id.'-'.$file->revisionid,
+                    'file' => $file->projectDocument->number,
+                    'url'=>$url
+                ];
+            }
+
+        }
+        $res = ['status' => (object) $status , 'periorities' => $periorities , 'linked_documents' => $linked_documents];
         return $this->sendResponse(
             $res,
             "Fetch All options."
@@ -139,7 +162,10 @@ class SnagListController extends Controller
             $punch_list->created_by == auth()->user()->id
             ){
 
-
+               // dd($punch_list->created_by);
+                if(($punch_list->created_by != auth()->user()->id) && ($request->status == 0 || $request->status == 2)){
+                    return $this->sendError("this status of admin or creator only .", [], 401);
+                }
                 $data = $request->all();
                 $data['created_by'] = \Auth::user()->id;
                 $data['created_date'] = date('Y-m-d');
@@ -159,7 +185,13 @@ class SnagListController extends Controller
         
                 } 
                 
-
+                if($request->status == 2){
+                    \App\Models\PunchList::where('id',$request->punch_list_id)->update(['status'=>$request->status,'date_resolved_at'=>Carbon::now()->format('Y-m-d')]);
+        
+                }else{
+                    \App\Models\PunchList::where('id',$request->punch_list_id)->update(['status'=>$request->status]);
+        
+                }   
                 //dd($err);
                 $model = \App\Models\PunchlistReplies::create($data);
                 $reply = \App\Models\PunchlistReplies::with(['punchList','user'])->find($model->id);
@@ -256,5 +288,33 @@ class SnagListController extends Controller
         
     }
  
+
+    public function getDrawings(Request $request , $id){
+        $drawings = $this->projectDrawingsService->all($id);
+        $res = $this->getList($drawings, $request, 'Drawing');
+
+        return $this->sendResponse(
+            $res,
+            "Fetch All Drawings."
+        );
+
+    }
+
+
+    public function getSnagsDrawing(Request $request , $project_id, $id){
+        $punchLists = $this->punchListService->getAllProjectPunchListByDrawingId($project_id , $id);
+        $res = $this->getList($punchLists, $request, 'punchList');
+        // $result['data'] = $res->items();
+        // $result['pagination'] =  [
+        //         'current_page' => $res->currentPage(),
+        //         'total_pages' => $res->lastPage(),
+        //         'per_page' => $res->perPage(),
+        //         'total' => $res->total()
+        // ];
+        return $this->sendResponse(
+            $res,
+            "Fetch All SnalLists."
+        );
+    }
   
 }

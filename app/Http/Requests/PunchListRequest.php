@@ -46,6 +46,8 @@ class PunchListRequest extends FormRequest
                 'project_id'=>'required',
                 'description'=>'required',
                 "participates"    => ['required','array'],
+                "linked_documents"    => ['required','array'],
+                "linked_documents.*"  => ["required"],
                 'docs' => 'nullable',
                 "docs.*"  => ["nullable", "mimes:jpeg,bmp,png,gif,svg,pdf"],
                 'drawing_id'=> 'required',

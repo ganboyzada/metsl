@@ -33,6 +33,8 @@ class punchListResource extends JsonResource
             "date_notified_at" => $this->date_notified_at,
             "date_resolved_at" => $this->date_resolved_at,
             "due_date" => $this->due_date,
+            "pin_x" => $this->pin_x,
+            "pin_y" => $this->pin_y,
             "status"=> $this->status->text(),
             "priority"=> $this->priority->text(),
             "responsible"=>$this->responsible->name,
@@ -51,6 +53,12 @@ class punchListResource extends JsonResource
             ),
             
         ];
+        $resource['linked_documents'] = $this->whenLoaded('documentFiles', function () {
+            return  LinkedDocumentsResource::collection($this->documentFiles);
+        });
+        $resource['drawing'] = $this->whenLoaded('drawing', function () {
+            return new DrawingResource($this->drawing);
+        });
 
 
         $resource['replies'] = $this->whenLoaded('replies', function () {

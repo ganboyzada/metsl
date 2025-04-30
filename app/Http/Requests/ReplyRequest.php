@@ -23,12 +23,12 @@ class ReplyRequest extends FormRequest
     public function rules(): array
     {
         return [
-
+            'status' => 'required|in:0,1,2',
             'description_reply' => ['required', 'max:255'],         
             'title' => 'required',
             'punch_list_id' => ['required', 'exists:punch_lists,id'],  
             'project_id' => ['required', 'exists:projects,id'], 
-            'docs'=>'nullable' 
+            'docs'=>["nullable", "mimes:jpeg,bmp,png,gif,svg,pdf"], 
 
         ]; 
     }
