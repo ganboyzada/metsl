@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjectRequest;
 use App\Http\Requests\UserRequest;
+use App\Mail\StakholderEmail;
 use App\Models\Company;
 use App\Models\Contractor;
 use App\Models\Permission;
@@ -46,6 +47,14 @@ class ProjectController extends Controller
         if (Session::has('projectID') && Session::has('projectName')){
             $id = Session::get('projectID');
         }    
+
+        $project_name = 'asd2';
+        $job_title = 'asd3';
+        $email = 'marina3mad100@gmail.com';
+        $pass = '12345678';
+        $m = \Mail::to('marina3mad100@gmail.com')->send(new StakholderEmail($project_name , $job_title , $email ,$pass ));
+
+            
         return view('metsl.pages.projects.project', get_defined_vars());
     }
     
