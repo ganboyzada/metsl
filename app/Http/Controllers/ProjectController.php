@@ -53,7 +53,7 @@ class ProjectController extends Controller
         $email = 'marina3mad100@gmail.com';
         $pass = '12345678';
         $m = \Mail::to('marina3mad100@gmail.com')->send(new StakholderEmail($project_name , $job_title , $email ,$pass ));
-
+        dd($m);
             
         return view('metsl.pages.projects.project', get_defined_vars());
     }
