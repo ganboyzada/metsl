@@ -362,85 +362,85 @@
         let pin__x = null;
         let pin__y = null;
 
-        pin.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        wasDragged = false;
-        currentDraggedWrapper = wrapper;
-        e.preventDefault();
-        e.stopPropagation();
-        });
+//         pin.addEventListener('mousedown', (e) => {
+//         isDragging = true;
+//         wasDragged = false;
+//         currentDraggedWrapper = wrapper;
+//         e.preventDefault();
+//         e.stopPropagation();
+//         });
 
-        document.addEventListener('mousemove', (e) => {
-            if (!isDragging || !currentDraggedWrapper) return;
+//         document.addEventListener('mousemove', (e) => {
+//             if (!isDragging || !currentDraggedWrapper) return;
 
-            wasDragged = true; // Mark that the mouse moved
+//             wasDragged = true; // Mark that the mouse moved
 
-            const rect = image.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
+//             const rect = image.getBoundingClientRect();
+//             const x = e.clientX - rect.left;
+//             const y = e.clientY - rect.top;
 
-            const xPercent = (x / rect.width) * 100;
-            const yPercent = (y / rect.height) * 100;
+//             const xPercent = (x / rect.width) * 100;
+//             const yPercent = (y / rect.height) * 100;
 
-            pin__x = xPercent;
-            pin__y = yPercent;
+//             pin__x = xPercent;
+//             pin__y = yPercent;
 
-            currentDraggedWrapper.style.left = `${xPercent}%`;
-            currentDraggedWrapper.style.top = `${yPercent}%`;
+//             currentDraggedWrapper.style.left = `${xPercent}%`;
+//             currentDraggedWrapper.style.top = `${yPercent}%`;
 
-            if (labelcontent == null) {
-                $('[name="pin_x"]').val(xPercent);
-                $('[name="pin_y"]').val(yPercent);
-            }
-        });
+//             if (labelcontent == null) {
+//                 $('[name="pin_x"]').val(xPercent);
+//                 $('[name="pin_y"]').val(yPercent);
+//             }
+//         });
 
 
-        document.addEventListener('mouseup', () => {
-    if (!wasDragged || !isDragging || !currentDraggedWrapper) {
-        isDragging = false;
-        currentDraggedWrapper = null;
-        return;
-    }
+//         document.addEventListener('mouseup', () => {
+//     if (!wasDragged || !isDragging || !currentDraggedWrapper) {
+//         isDragging = false;
+//         currentDraggedWrapper = null;
+//         return;
+//     }
 
-    isDragging = false;
-    currentDraggedWrapper = null;
+//     isDragging = false;
+//     currentDraggedWrapper = null;
 
-    if (labelcontent != null) {
-        $.ajaxSetup({
-            headers: {
-                'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-            }
-        });
-        $.ajax({
-            url: "{{ route('projects.punch-list.update_pin') }}",
-            type: "POST",
-            data: {
-                id: labelcontent,
-                pin_x: pin__x,
-                pin_y: pin__y,
-                "_token": "{{ csrf_token() }}"
-            },
-            dataType: 'json',
-            success: function(data) {
-                if (data.success) {
-                    $('.success').show();
-                    $('.success').html('<div class="text-white-500 px-2 py-1 text-sm font-semibold">Pin coordination has been changed for punch number ' + number + '</div>');
-                } else if (data.error) {
-                    $('.error').show();
-                    $('.error').html('<div class="text-white-500 px-2 py-1 text-sm font-semibold">' + data.error + '</div>');
-                }
-            },
-            error: function(err) {
-                $.each(err.responseJSON.errors, function(key, value) {
-                    $('.error').show();
-                    $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+value[0]+'</div>');
-                    var el = $(document).find('[name="' + key + '"]');
-                    el.after($('<div class="err-msg text-red-500 px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
-                });
-            }
-        });
-    }
-});
+//     if (labelcontent != null) {
+//         $.ajaxSetup({
+//             headers: {
+//                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+//             }
+//         });
+//         $.ajax({
+//             url: "{{ route('projects.punch-list.update_pin') }}",
+//             type: "POST",
+//             data: {
+//                 id: labelcontent,
+//                 pin_x: pin__x,
+//                 pin_y: pin__y,
+//                 "_token": "{{ csrf_token() }}"
+//             },
+//             dataType: 'json',
+//             success: function(data) {
+//                 if (data.success) {
+//                     $('.success').show();
+//                     $('.success').html('<div class="text-white-500 px-2 py-1 text-sm font-semibold">Pin coordination has been changed for punch number ' + number + '</div>');
+//                 } else if (data.error) {
+//                     $('.error').show();
+//                     $('.error').html('<div class="text-white-500 px-2 py-1 text-sm font-semibold">' + data.error + '</div>');
+//                 }
+//             },
+//             error: function(err) {
+//                 $.each(err.responseJSON.errors, function(key, value) {
+//                     $('.error').show();
+//                     $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+value[0]+'</div>');
+//                     var el = $(document).find('[name="' + key + '"]');
+//                     el.after($('<div class="err-msg text-red-500 px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
+//                 });
+//             }
+//         });
+//     }
+// });
 
     // Optional: remove on click
     let user  = '{{ auth()->user()->is_admin }}';
@@ -651,7 +651,7 @@ function searchDrawings(search){
                         
                         $('#file-list').html('');
                         setInterval(function() {
-                            location.reload();
+                            window.location.href="{{ route('home') }}";
                         }, 3000);						
 
 
@@ -671,11 +671,11 @@ function searchDrawings(search){
 
                             var el = $(document).find('[name="'+key + '"]');
                             el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
-                            if(el.length == 0){
-                                el = $(document).find('#file-upload');
-                                el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">the documents required </div>'));
+                            // if(el.length == 0){
+                            //     el = $(document).find('#file-upload');
+                            //     el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">the documents required </div>'));
                                 
-                            }
+                            // }
                             
                         });
 
@@ -712,8 +712,9 @@ function searchDrawings(search){
 			distribution_obj.clearStore();
 			distribution_obj.setChoices(reviewers);	
 
+
 			reviewers = all.responsible.map(function(item) {
-			  return {'value' : item.id , 'label' : item.name};
+			  return {'value' : item.id , 'label' : item.name , 'selected' : true};
 			});	
 			reviewers_obj.clearStore();
 			reviewers_obj.setChoices(reviewers);
