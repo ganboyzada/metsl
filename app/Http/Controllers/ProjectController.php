@@ -73,7 +73,7 @@ class ProjectController extends Controller
          $response->withCookie(cookie('projectID', $request->projectID, 60));
 
 
-        return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$response]);
+        return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$request->cookie('projectID')]);
     }
 
     public function allProjects(){
