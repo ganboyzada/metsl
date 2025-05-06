@@ -66,11 +66,11 @@ class ProjectController extends Controller
          Session::put('projectID', $request->projectID);
          Session::put('projectName', $request->projectName);
 
-         Cookie::queue('projectName', 'ttt', 60);
-         Cookie::queue('projectID', $request->projectID, 60);
+         cookie('projectName', 'ttt', 60);
+         cookie('projectID', $request->projectID, 60);
 
 
-        return response()->json(['success' => 'Form submitted successfully.' , 'data'=>request()->cookie('projectID')]);
+        return response()->json(['success' => 'Form submitted successfully.' , 'data'=>request()->cookie('projectName')]);
     }
 
     public function allProjects(){
