@@ -16,6 +16,8 @@
                     @php
                         $projects_ids = \App\Models\ProjectUser::where('user_id', auth()->user()->id)->pluck('project_id')->toArray();
                     @endphp
+
+                    <input type="text" id="selected_project_id"/>
                     <!-- Dropdown Menu -->
                     <div  id="dropdown-toggle" class="dropdown absolute left-0 rounded-lg mt-2 min-w-full w-[130%] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg">
                         <ul class="py-2">
@@ -183,7 +185,27 @@
         });
 
  
+        async function selectProject(projectName , projectId) {
+            $('#selected_project_id').val(projectId);
+            let url = `project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
 
+            let fetchRes = await fetch(url);
+
+
+            // $.ajax({
+            //     url: "{{ route('projects.store_id_session') }}",
+            //     data: { projectID: projectId ,  projectName:projectName}
+            // });
+            //alert('ok2');
+            const selectedProjectElement = document.getElementById("project-variable");
+            selectedProjectElement.textContent = projectName; // Update the displayed project name
+            const dropdown = document.getElementById('dropdown-toggle');
+            dropdown.classList.toggle('active');
+			$('[name="project_id"]').val(projectId);
+            //alert(projectId);
+ 
+            //toggleDropdown(); // Close the dropdown after selection
+        }
 		
  	
 		
