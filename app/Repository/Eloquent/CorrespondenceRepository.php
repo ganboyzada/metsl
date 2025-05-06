@@ -170,12 +170,12 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
 
 
 
-            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->paginate(1);
+            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->paginate(10);
 
             return $modal;           
 
         }else{
-            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->paginate(1);
+            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->paginate(10);
 
             return $modal;
         }
