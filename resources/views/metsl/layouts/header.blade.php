@@ -188,7 +188,7 @@
                 url: "{{ route('projects.store_id_session') }}",
                 data: { projectID: projectId ,  projectName:projectName}
             });
-            alert('ok2');
+            //alert('ok2');
             const selectedProjectElement = document.getElementById("project-variable");
             selectedProjectElement.textContent = projectName; // Update the displayed project name
             const dropdown = document.getElementById('dropdown-toggle');
