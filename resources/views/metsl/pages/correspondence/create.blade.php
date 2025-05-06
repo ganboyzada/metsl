@@ -188,8 +188,8 @@
 						
                         $('#file-list').html();
 						setInterval(function() {
-							location.reload();
-							}, 3000);
+                            window.location.href="{{ route('home') }}";
+                        }, 3000);	
 
 
                     }
