@@ -70,23 +70,11 @@
 </div>
 
 <script>
-    async function set_projectID_correspondence(){
-        var projectId = $('#selected_project_id').val();
-        var projectName = $('#selected_project_name').val();
-        // let url = `/project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
-
-        // let fetchRes = await fetch(url);
-        get_correspondences();
-    }
 	$(".projectButton").on('click',function(event) {
-        
-        set_projectID_correspondence();
-        
-		// loadedRows = 0;
-       
-		// if(localStorage.getItem("project_tool") == 'correspondence'){
-		// 	get_correspondences();
-		// }
+		loadedRows = 0;
+		if(localStorage.getItem("project_tool") == 'correspondence'){
+			get_correspondences();
+		}
 	});
 
     let allDataLength = 0;
