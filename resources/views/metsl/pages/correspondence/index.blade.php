@@ -78,16 +78,16 @@
         // let fetchRes = await fetch(url);
         get_correspondences();
     }
-	$(".projectButton").on('click',function(event) {
+	// $(".projectButton").on('click',function(event) {
         
-        set_projectID_correspondence();
+    //     set_projectID_correspondence();
         
-		// loadedRows = 0;
+	// 	// loadedRows = 0;
        
-		// if(localStorage.getItem("project_tool") == 'correspondence'){
-		// 	get_correspondences();
-		// }
-	});
+	// 	// if(localStorage.getItem("project_tool") == 'correspondence'){
+	// 	// 	get_correspondences();
+	// 	// }
+	// });
 
     let allDataLength = 0;
 
