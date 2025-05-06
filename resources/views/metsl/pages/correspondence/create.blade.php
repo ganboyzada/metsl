@@ -17,7 +17,7 @@
 		<input type="hidden" value="{{$reply_correspondence_id ?? ''}}" name="reply_correspondence_id"/>
 		
         <!-- Grid Layout for Fields -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Number -->
             <div>
                 <label for="correspondence-number" class="block text-sm font-medium mb-1">Number</label>
@@ -43,17 +43,31 @@
             </div>
 
             <!-- Status -->
-            <div>
+            <div style="display: none">
                 <label for="status" class="block text-sm font-medium mb-1">Status</label>
-                <select
+                <select 
                     id="status" name="status"
                     class="w-full px-4 py-2 border  dark:bg-gray-800 dark:text-gray-200 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
                 >
 					@php
 					$status_list = \App\Enums\CorrespondenceStatusEnum::cases();
+                    $i = 0;
 					@endphp
+
 					@foreach ($status_list as $status)
-						<option value="{{$status->value}}">{{$status->name}}</option>
+                        @if ($reply_correspondence_id == NULL && $i == 0)
+
+                        <option value="{{$status->value}}">{{$status->name}}</option>
+
+                        @elseif($reply_correspondence_id != NULL && $i == 1)
+
+                        <option value="{{$status->value}}">{{$status->name}}</option>
+                            
+                        @endif
+                        @php
+                            $i++;
+                        @endphp
+						
 					@endforeach
                 </select>
             </div>
