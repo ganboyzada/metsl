@@ -67,13 +67,12 @@ class ProjectController extends Controller
          Session::put('projectName', $request->projectName);
 
          cookie('projectName', 'ttt', 60);
-         cookie('id', $request->projectID, 60);
+         cookie('projectID', $request->projectID, 60);
 
-         $response = new \Illuminate\Http\Response('Set Cookie');
-         $response->withCookie(cookie('projectID', $request->projectID, 60));
+         $request->session()->put('projectID', $request->projectID);
+         $request->session()->put('projectName', $request->projectName);
 
-
-        return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$request->cookie('id')]);
+        return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$request->session('projectID')]);
     }
 
     public function allProjects(){
