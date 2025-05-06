@@ -131,25 +131,40 @@
 	async function get_correspondences(page = 1){
         let tool_temp = localStorage.getItem("project_tool");
 		if(tool_temp == 'correspondence' || tool_temp == 'activities'){
-            const type = $('[name="type"]').val();
 
-            let url = `project/correspondence/all?page=${page}`;
-
-            let fetchRes = await fetch(url);
-            const response = await fetchRes.json(); // full paginated response
-            const all_correspondes = response.data;
-
-            correspondenceData = all_correspondes.map(function(item) {
-                let namesString = item.assignees.map((user) => `${user.name}`).join(", ");
-                item.assignees = namesString;
-                return item;
-            });
             if(tool_temp == 'correspondence'){
+                const type = $('[name="type"]').val();
+
+                let url = `project/correspondence/all?page=${page}`;
+
+                let fetchRes = await fetch(url);
+                const response = await fetchRes.json(); // full paginated response
+                const all_correspondes = response.data;
+
+                correspondenceData = all_correspondes.map(function(item) {
+                    let namesString = item.assignees.map((user) => `${user.name}`).join(", ");
+                    item.assignees = namesString;
+                    return item;
+                });
                 await loadRows();
+                renderPaginationCorrespondence(response);
             } else{
+
+                let url = `project/correspondence/all_open?page=${page}`;
+
+                let fetchRes = await fetch(url);
+                const response = await fetchRes.json(); // full paginated response
+                const all_correspondes = response.data;
+
+                correspondenceData = all_correspondes.map(function(item) {
+                    let namesString = item.assignees.map((user) => `${user.name}`).join(", ");
+                    item.assignees = namesString;
+                    return item;
+                });
                 await loadWidgetCorrespondence();
+                renderPaginationCorrespondenceWidget(response);
             }
-            renderPaginationCorrespondence(response);
+            
             
             feather.replace();
 		}		

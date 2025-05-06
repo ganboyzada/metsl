@@ -17,45 +17,50 @@
                 <!-- Rows will be dynamically loaded -->
             </tbody>
         </table>
+        <div id="pagination_correspondence_widget" class="flex gap-2 mt-4"></div>
     </div>
 </div>
 
 <script>
 
 function loadWidgetCorrespondence() {
-    const fragment = document.createDocumentFragment();
-    const widgetCorrespondenceTable = document.getElementById('widget-correspondence-table');
-    
-    if(correspondenceData.length > 0){
-        
-        for (let i = 0; i < correspondenceData.length; i++) {
-            
+    let html =``;
+		if(correspondenceData.length > 0){ 
+   
+			for(let i=0;i<correspondenceData.length;i++){
                 const row = correspondenceData[i];
-                const tr = document.createElement('tr');
-                tr.classList.add('border-b','dark:border-gray-800','hover:shadow-lg','hover:bg-gray-100','hover:dark:bg-gray-700' , `corespondence_row${i}`);
+              
                 let url = "{{ route('projects.correspondence.view', [':id']) }}".replace(':id', row.id);
                 let url2 = "{{ route('projects.correspondence.edit', [':id']) }}".replace(':id', row.id);
 
-                tr.innerHTML = `
-                    <td class="px-2 py-2 lg:px-4 lg:py-2">${row.number}</td>
-                    <td class="px-2 py-2 lg:px-4 lg:py-2"><a class="underline" href="${url}">${row.subject}</a></td>
-                    <td class="px-2 py-2 lg:px-4 lg:py-2">${(row.created_by != null) ? row.created_by.name : ''}</td>
-                    <td class="px-2 py-2 lg:px-4 lg:py-2">${row.created_date}</td>
-                    <td class="px-2 py-2 lg:px-4 lg:py-2">
+                html+=`<tr>
+                    <td class="px-6 py-3">${row.number}</td>
+                    <td class="px-6 py-3"><a class="underline" href="${url}">${row.subject}</a></td>
+
+                    <td class="px-6 py-3">${(row.created_by != null) ? row.created_by.name : ''}</td>
+                    <td class="px-6 py-3">${row.created_date}</td>
+                    <td class="px-6 py-3">
                         <span class="px-3 py-1 rounded-full text-xs font-bold ${row.status_color[1]}">${row.status_color[0]}</span>
-                    </td>
+                    </td></tr>
                 `;
 
-                fragment.appendChild(tr);
-                allDataLength = allDataLength - 1;
-        }
-    }else{
-        widgetCorrespondenceTable.innerHTML='';
-    }
-    widgetCorrespondenceTable.innerHTML='';
+			}
+		}
+        $('#widget-correspondence-table').html(html);
 
-    widgetCorrespondenceTable.appendChild(fragment);
-    loadedRows += rowsToLoad;
+}
+
+
+function renderPaginationCorrespondenceWidget(data) {
+    let html = '';
+    if (data.last_page > 1) {
+        for (let i = 1; i <= data.last_page; i++) {
+            html += `<button onclick="get_correspondences(${i})" class="px-2 py-1 border ${data.current_page === i ? 'bg-blue-500 text-white' : 'bg-white'}">
+                        ${i}
+                    </button>`;
+        }
+    }
+    $('#pagination_correspondence_widget').html(html);
 }
 
 </script>

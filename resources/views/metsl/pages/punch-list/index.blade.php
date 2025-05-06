@@ -391,22 +391,32 @@
     }	
 	
     async function get_punch_list(page = 1) {
-    const queryString = $("#filter-punch-list-form").serialize();
-    const search = $('#search_punsh_list').val();
 
-    let url = `project/punch-list/all?page=${page}&${queryString}`;
-
-    let fetchRes = await fetch(url);
-    const response = await fetchRes.json(); // full paginated response
-    const all_punch_lists = response.data;
 
     if (localStorage.getItem("project_tool") == 'activities') {
+        let url = `project/punch-list/all_open?page=${page}`;
+
+        let fetchRes = await fetch(url);
+        const response = await fetchRes.json(); // full paginated response
+        const all_punch_lists = response.data;
+
         await loadPunchListWidget(all_punch_lists);
+        renderPaginationPunch(response);
     } else {
+
+        const queryString = $("#filter-punch-list-form").serialize();
+        const search = $('#search_punsh_list').val();
+
+        let url = `project/punch-list/all?page=${page}&${queryString}`;
+
+        let fetchRes = await fetch(url);
+        const response = await fetchRes.json(); // full paginated response
+        const all_punch_lists = response.data;        
         await loadPunchList(all_punch_lists);
+        renderPagination(response);
     }
 
-    renderPagination(response); // handle pagination UI
+     // handle pagination UI
     feather.replace();
 }
 function renderPagination(data) {

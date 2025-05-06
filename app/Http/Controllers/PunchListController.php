@@ -381,6 +381,17 @@ class PunchListController extends Controller
             $row->status_color = $row->status->color();
 
             $row->priority_text = $row->priority->color();
+            $dueDate = Carbon::parse($row->due_date); // example due date
+            $today = Carbon::today();
+
+            // Compare dates
+            if ($today->greaterThan($dueDate)) {
+                $diff = $today->diffInDays($dueDate);
+                $row->label = "Overdue by $diff days";
+            } else {
+                $diff = $today->diffInDays($dueDate);
+                 $row->label = "Remain $diff days";
+            }
             return $row;
         });
      
