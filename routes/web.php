@@ -164,10 +164,11 @@ Route::middleware([
     Route::get('/project/destroy/{id}',  [ProjectController::class, "destroy"])->name('projects.destroy');	
 
     Route::get('/clear-cache', function() {
-        Artisan::call('cache:clear');
-        Artisan::call('config:clear');
-        Artisan::call('view:clear');
-        Artisan::call('route:clear'); // Avoid caching if using closures
-        Artisan::call('config:cache');
-        return "Cache is cleared";
+        // Artisan::call('cache:clear');
+        // Artisan::call('config:clear');
+        // Artisan::call('view:clear');
+        // Artisan::call('route:clear'); // Avoid caching if using closures
+        // Artisan::call('config:cache');
+        // return "Cache is cleared";
+        return request()->session()->all();
     })->name('clear.cache');
