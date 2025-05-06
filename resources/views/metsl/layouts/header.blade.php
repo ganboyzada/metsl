@@ -17,8 +17,8 @@
                         $projects_ids = \App\Models\ProjectUser::where('user_id', auth()->user()->id)->pluck('project_id')->toArray();
                     @endphp
 
-                    <input type="hidden" id="selected_project_id" value="{{ \Session::get('projectID') }}"/>
-                    <input type="hidden" id="selected_project_name" value="{{ \Session::get('projectName') }}"/>
+                    <input type="text" id="selected_project_id" value="{{ \Session::get('projectID') }}"/>
+                    <input type="text" id="selected_project_name" value="{{ \Session::get('projectName') }}"/>
                     <!-- Dropdown Menu -->
                     <div  id="dropdown-toggle" class="dropdown absolute left-0 rounded-lg mt-2 min-w-full w-[130%] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg">
                         <ul class="py-2">
@@ -198,12 +198,13 @@
                 url: "{{ route('projects.store_id_session') }}",
                 data: { projectID: projectId ,  projectName:projectName},
                 success: function(data) {
+                    console.log(data);
                     const selectedProjectElement = document.getElementById("project-variable");
                     selectedProjectElement.textContent = projectName; // Update the displayed project name
                     const dropdown = document.getElementById('dropdown-toggle');
                     dropdown.classList.toggle('active');
                     $('[name="project_id"]').val(projectId);
-                    location.reload();
+                    //location.reload();
 
                 }
             });

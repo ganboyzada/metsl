@@ -61,6 +61,7 @@ class ProjectController extends Controller
     public function storeIdSession(Request $request){
          session(['projectID' => $request->projectID]);
          session(['projectName' => $request->projectName]);
+
         return $request->session()->all();
     }
 
