@@ -22,6 +22,7 @@ use App\Services\UserService;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Cookie;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use View;
@@ -64,6 +65,10 @@ class ProjectController extends Controller
 
          Session::put('projectID', $request->projectID);
          Session::put('projectName', $request->projectName);
+
+         Cookie::queue('projectID', $request->projectName, 60);
+         Cookie::queue('projectName', $request->projectID, 60);
+
 
         return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$request->session()->all()]);
     }
