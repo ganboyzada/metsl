@@ -61,10 +61,11 @@
                     <th class="px-6 py-3 font-light">Status</th>
                 </tr>
             </thead>
-            <tbody id="table-body">
+            <tbody id="table-body-correspondence">
                 <!-- Rows will be dynamically loaded -->
             </tbody>
         </table>
+        <div id="pagination_correspondence" class="flex gap-2 mt-4"></div>
     </div>
 </div>
 
@@ -81,72 +82,80 @@
 	async function search(e){
 		loadedRows = 0;
 		const search = $('[name="search"]').val();
-		let fetchRes = await fetch(`{{url('project/correspondence/all?search=${search}')}}`);
-		const all_correspondes = await fetchRes.json();
+
+        let url = `project/correspondence/all?page=${page}&search=${search}`;
+
+        let fetchRes = await fetch(url);
+        const response = await fetchRes.json(); // full paginated response
+        const all_correspondes = response.data;
+
 		 correspondenceData = all_correspondes.map(function(item) {
 			let namesString = item.assignees.map((user) => `${user.name}`).join(", ");
 			item.assignees = namesString;
 			  return item;
 			});
         allDataLength = correspondenceData.length;	
-        console.log(correspondenceData);
-        document.getElementById('table-body').innerHTML='';
 		await loadRows();
+        renderPaginationCorrespondence(response);
         feather.replace();	
 
 	}
     
+
+    function renderPaginationCorrespondence(data) {
+    let html = '';
+    if (data.last_page > 1) {
+        for (let i = 1; i <= data.last_page; i++) {
+            html += `<button onclick="get_correspondences(${i})" class="px-2 py-1 border ${data.current_page === i ? 'bg-blue-500 text-white' : 'bg-white'}">
+                        ${i}
+                    </button>`;
+        }
+    }
+    $('#pagination_correspondence').html(html);
+}
     // Populate Assignees, Distribution Members, and Received From
 	let correspondenceData = [];
 
-	async function get_correspondences(){
+	async function get_correspondences(page = 1){
         let tool_temp = localStorage.getItem("project_tool");
 		if(tool_temp == 'correspondence' || tool_temp == 'activities'){
             const type = $('[name="type"]').val();
-            let fetchRes = await fetch(`{{url('project/correspondence/all')}}`);
-            const all_correspondes = await fetchRes.json();
+
+            let url = `project/correspondence/all?page=${page}`;
+
+            let fetchRes = await fetch(url);
+            const response = await fetchRes.json(); // full paginated response
+            const all_correspondes = response.data;
 
             correspondenceData = all_correspondes.map(function(item) {
                 let namesString = item.assignees.map((user) => `${user.name}`).join(", ");
                 item.assignees = namesString;
                 return item;
             });
-            allDataLength = correspondenceData.length;	
-        
-            loadedRows = 0;
-            rowsToLoad = 4;
-
             if(tool_temp == 'correspondence'){
                 await loadRows();
             } else{
                 await loadWidgetCorrespondence();
             }
+            renderPaginationCorrespondence(response);
             
             feather.replace();
 		}		
     }
 
-    const tableBody = document.getElementById('table-body');
-    let loadedRows = 0;
-    let rowsToLoad = 4;
     
     // Lazy load rows
     function loadRows() {
-       // alert((Math.min(loadedRows + rowsToLoad, correspondenceData.length)));
-        const fragment = document.createDocumentFragment();
-       
+        let html =``;
 		if(correspondenceData.length > 0){ 
-            if($('#table-body').find('tr')){
-                document.getElementById('table-body').innerHTML='';
-            }
-			for (let i = loadedRows; i < Math.min(loadedRows + rowsToLoad, correspondenceData.length); i++) {
+   
+			for(let i=0;i<correspondenceData.length;i++){
                 const row = correspondenceData[i];
-                const tr = document.createElement('tr');
-                tr.classList.add('border-b','dark:border-gray-800','hover:shadow-lg','hover:bg-gray-100','hover:dark:bg-gray-700' , `corespondence_row${i}`);
+              
                 let url = "{{ route('projects.correspondence.view', [':id']) }}".replace(':id', row.id);
                 let url2 = "{{ route('projects.correspondence.edit', [':id']) }}".replace(':id', row.id);
 
-                tr.innerHTML = `
+                html+=`
                     <td class="px-6 py-3">${row.number}</td>
                     <td class="px-6 py-3"><a class="underline" href="${url}">${row.subject}</a></td>
                     <td class="px-6 py-3">${(row.last_upload_date != null) ? row.last_upload_date : ''}</td>
@@ -158,15 +167,9 @@
                     </td>
                 `;
 
-                fragment.appendChild(tr);
-                feather.replace();	
-                allDataLength = allDataLength - 1;
 			}
-		}else{
-            document.getElementById('table-body').innerHTML='';
-        }
-        tableBody.appendChild(fragment);
-        loadedRows += rowsToLoad;
+		}
+        $('#table-body-correspondence').html(html);
     }
 
     async function deleteCorrespondence(id , i){

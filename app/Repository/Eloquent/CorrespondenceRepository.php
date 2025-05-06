@@ -9,6 +9,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Repository\CorrespondenceRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class CorrespondenceRepository extends BaseRepository implements CorrespondenceRepositoryInterface
@@ -87,10 +88,10 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
     /**
     * @param int $project_id 
     * @param \Request $request
-    * @return Collection
+    * @return LengthAwarePaginator
     * 
     */
-    public function get_all_project_correspondence($project_id , $request): Collection{
+    public function get_all_project_correspondence($project_id , $request): LengthAwarePaginator{
         $sub = \DB::raw('(select  reply_correspondence_id as replyCorespondenceId  , MAX(created_date) as last_upload_date
          from correspondences where reply_correspondence_id is not null group by reply_correspondence_id)last_upload_table');
 
@@ -169,12 +170,12 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
 
 
 
-            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->get();
+            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->paginate(1);
 
             return $modal;           
 
         }else{
-            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->get();
+            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->paginate(1);
 
             return $modal;
         }

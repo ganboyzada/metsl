@@ -3,6 +3,7 @@ namespace App\Repository;
 
 use App\Model\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 interface CorrespondenceRepositoryInterface
@@ -26,10 +27,10 @@ interface CorrespondenceRepositoryInterface
             /**
     * @param int $project_id
     * @param \Request $request
-    * @return Collection
+    * @return LengthAwarePaginator
     * 
     */
-    public function get_all_project_correspondence($project_id , $request): Collection;  
+    public function get_all_project_correspondence($project_id , $request): LengthAwarePaginator;  
 
 
         /**
