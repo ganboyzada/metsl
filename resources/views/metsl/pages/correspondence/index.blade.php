@@ -70,8 +70,16 @@
 </div>
 
 <script>
-    
+    async function set_projectID(){
+        var projectId = $('#selected_project_id').val();
+        var projectName = $('#selected_project_name').val();
+        let url = `project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
+
+        let fetchRes = await fetch(url);
+    }
 	$(".projectButton").on('click',function(event) {
+        
+        set_projectID();
         
 		loadedRows = 0;
         //alert('ok');
