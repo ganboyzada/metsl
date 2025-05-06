@@ -18,7 +18,7 @@
                     @endphp
 
                     <input type="text" id="selected_project_id" value="{{ \Session::get('projectID') }}"/>
-                    <input type="text" id="selected_project_name" value="{{ \Session::get('projectName') }}"/>
+                    <input type="hidden" id="selected_project_name" value="{{ \Session::get('projectName') }}"/>
                     <!-- Dropdown Menu -->
                     <div  id="dropdown-toggle" class="dropdown absolute left-0 rounded-lg mt-2 min-w-full w-[130%] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg">
                         <ul class="py-2">
@@ -187,8 +187,7 @@
 
  
      function selectProject(projectName , projectId) {
-            $('#selected_project_id').val(projectId);
-            $('#selected_project_name').val(projectName);
+
             // let url = `/project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
 
             // let fetchRes = await fetch(url);
@@ -204,6 +203,8 @@
                     const dropdown = document.getElementById('dropdown-toggle');
                     dropdown.classList.toggle('active');
                     $('[name="project_id"]').val(projectId);
+                    $('#selected_project_id').val(projectId);
+                    $('#selected_project_name').val(projectName);
                     //location.reload();
 
                 }
