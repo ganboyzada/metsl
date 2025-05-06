@@ -183,11 +183,16 @@
         });
 
  
-        function selectProject(projectName , projectId) {
-            $.ajax({
-                url: "{{ route('projects.store_id_session') }}",
-                data: { projectID: projectId ,  projectName:projectName}
-            });
+        async function selectProject(projectName , projectId) {
+            let url = `project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
+
+            let fetchRes = await fetch(url);
+
+
+            // $.ajax({
+            //     url: "{{ route('projects.store_id_session') }}",
+            //     data: { projectID: projectId ,  projectName:projectName}
+            // });
             //alert('ok2');
             const selectedProjectElement = document.getElementById("project-variable");
             selectedProjectElement.textContent = projectName; // Update the displayed project name
