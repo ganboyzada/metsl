@@ -189,7 +189,7 @@
         async function selectProject(projectName , projectId) {
             $('#selected_project_id').val(projectId);
             $('#selected_project_name').val(projectName);
-            let url = `project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
+            let url = `/project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
 
             let fetchRes = await fetch(url);
 
