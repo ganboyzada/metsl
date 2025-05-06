@@ -240,6 +240,7 @@
         let url = `project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
 
         let fetchRes = await fetch(url);
+        location.reload();
         get_users();
     }
 
