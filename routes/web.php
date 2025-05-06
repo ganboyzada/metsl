@@ -162,3 +162,12 @@ Route::middleware([
     Route::get('/project/destroy-file/{id}',  [ProjectController::class, "destroyFile"])->name('projects.destroy-file');	
     Route::post('/project/update',action: [ProjectController::class, "update"] )->name('projects.update');
     Route::get('/project/destroy/{id}',  [ProjectController::class, "destroy"])->name('projects.destroy');	
+
+    Route::get('/clear-cache', function() {
+        Artisan::call('config:cache');
+        Artisan::call('cache:clear');
+        Artisan::call('config:clear');
+        Artisan::call('view:clear');
+        Artisan::call('route:clear');
+        return "Cache is cleared";
+    })->name('clear.cache');
