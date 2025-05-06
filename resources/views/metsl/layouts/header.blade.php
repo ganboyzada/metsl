@@ -212,7 +212,7 @@
                         $('[name="project_id"]').val(projectId);
                         $('#selected_project_id').val(projectId);
                         $('#selected_project_name').val(projectName);
-                       location.reload();
+                       //location.reload();
                     }
 
 
