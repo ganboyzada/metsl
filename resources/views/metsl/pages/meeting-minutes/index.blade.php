@@ -74,7 +74,7 @@
 
 </div>
 <script>
-    async function set_projectID(){
+    async function set_projectID_meeting_planing(){
         var projectId = $('#selected_project_id').val();
         var projectName = $('#selected_project_name').val();
         let url = `project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
@@ -86,7 +86,7 @@
 		
 		if(localStorage.getItem("project_tool") == 'meeting_planing'){
 
-			set_projectID();
+			set_projectID_meeting_planing();
 		}
 	});
 	$("#search , #start-date , #end-date").on('input',function(event) {

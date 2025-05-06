@@ -345,7 +345,7 @@
         
         });
         
-    async function set_projectID(){
+    async function set_projectID_participates(){
         var projectId = $('#selected_project_id').val();
         var projectName = $('#selected_project_name').val();
         let url = `project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
@@ -357,7 +357,7 @@
 	$(".projectButton").on('click',function(event) {
         location.reload();
 		if(localStorage.getItem("project_tool") == 'meeting_planing'){
-			set_projectID();
+			set_projectID_participates();
 		}
 		
 	});

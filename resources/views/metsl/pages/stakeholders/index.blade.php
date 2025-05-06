@@ -151,7 +151,7 @@
         }
 
 
-    async function set_projectID(){
+    async function set_projectID_stakeholders(){
         var projectId = $('#selected_project_id').val();
         var projectName = $('#selected_project_name').val();
         let url = `project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
@@ -165,7 +165,7 @@
 		
 		if(localStorage.getItem("project_tool") == 'stakeholders'){
 
-			set_projectID();
+			set_projectID_stakeholders();
 		}
 	});
 	$("#searchStakeholders").on('input',function(event) {

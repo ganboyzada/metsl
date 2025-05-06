@@ -112,7 +112,7 @@
 
 <script>
 	
-	async function set_projectID(){
+	async function set_projectID_docs(){
         var projectId = $('#selected_project_id').val();
         var projectName = $('#selected_project_name').val();
         let url = `project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
@@ -123,7 +123,7 @@
 
 	$(".projectButton").on('click',function(event) {
 		if(localStorage.getItem("project_tool") == 'documents'){			
-			set_projectID();
+			set_projectID_docs();
 		}
 	});
 	$("#order-by , #order-direction").on('change',function(event) {

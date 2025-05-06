@@ -234,7 +234,7 @@
     
       });
 	  
-    async function set_projectID(){
+    async function set_projectID_users(){
         var projectId = $('#selected_project_id').val();
         var projectName = $('#selected_project_name').val();
         let url = `project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
@@ -245,7 +245,7 @@
 
 	$(".projectButton").on('click',function(event) {
 
-		set_projectID();
+		set_projectID_users();
 		
 	});
 					

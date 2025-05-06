@@ -186,7 +186,7 @@
 		assignees_obj = populateChoices2('assignees', [], true);		
     }); 
 
-    async function set_projectID(){
+    async function set_projectID_tasks(){
         var projectId = $('#selected_project_id').val();
         var projectName = $('#selected_project_name').val();
         let url = `project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
@@ -201,7 +201,7 @@
 		
 		if(localStorage.getItem("project_tool") == 'task_planner'){
 
-			set_projectID();
+			set_projectID_tasks();
 		}
 	});
     $("#add-group-form").on("submit", function(event) {
