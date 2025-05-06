@@ -688,11 +688,18 @@ function searchDrawings(search){
         }
     
     });
-	  
+    async function set_projectID(){
+        var projectId = $('#selected_project_id').val();
+        var projectName = $('#selected_project_name').val();
+        let url = `project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
+
+        let fetchRes = await fetch(url);
+        get_participates();
+    }    	  
 
 	$(".projectButton").on('click',function(event) {
 		if(localStorage.getItem("project_tool") == 'punch_list'){
-			get_participates();
+			set_projectID();
 		}
 		
 	});

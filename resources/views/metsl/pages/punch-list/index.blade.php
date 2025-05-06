@@ -243,14 +243,21 @@
 		}	
 	
     }
-	
+    async function set_projectID(){
+        var projectId = $('#selected_project_id').val();
+        var projectName = $('#selected_project_name').val();
+        let url = `project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
+
+        let fetchRes = await fetch(url);
+        get_punch_list();		
+        getChangedParticipates();
+        getAllStatusPeriority();
+    } 	
 	$(".projectButton").on('click',function(event) {
 		
 		if(localStorage.getItem("project_tool") == 'punch_list'){
+            set_projectID();
 
-			get_punch_list();		
-			getChangedParticipates();
-            getAllStatusPeriority();
 		}
 	});
 

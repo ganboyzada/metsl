@@ -197,10 +197,18 @@
       });
 	  
 
-	
+    async function set_projectID(){
+        var projectId = $('#selected_project_id').val();
+        var projectName = $('#selected_project_name').val();
+        let url = `project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
+
+        let fetchRes = await fetch(url);
+        get_reviewers();
+    }
+
 	$(".projectButton").on('click',function(event) {
 		if(localStorage.getItem("project_tool") == 'documents'){
-			get_reviewers();
+			set_projectID();
 		}
 		
 	});

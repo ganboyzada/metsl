@@ -185,12 +185,23 @@
     document.addEventListener('DOMContentLoaded', () => {
 		assignees_obj = populateChoices2('assignees', [], true);		
     }); 
+
+    async function set_projectID(){
+        var projectId = $('#selected_project_id').val();
+        var projectName = $('#selected_project_name').val();
+        let url = `project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
+
+        let fetchRes = await fetch(url);
+        get_groups();
+            get_tasks();		
+
+    }
+
     $(".projectButton").on('click',function(event) {
 		
 		if(localStorage.getItem("project_tool") == 'task_planner'){
 
-			get_groups();
-            get_tasks();
+			set_projectID();
 		}
 	});
     $("#add-group-form").on("submit", function(event) {

@@ -151,11 +151,21 @@
         }
 
 
+    async function set_projectID(){
+        var projectId = $('#selected_project_id').val();
+        var projectName = $('#selected_project_name').val();
+        let url = `project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
+
+        let fetchRes = await fetch(url);
+        get_stakeholders();		
+
+    }
+
 	$(".projectButton").on('click',function(event) {
 		
 		if(localStorage.getItem("project_tool") == 'stakeholders'){
 
-			get_stakeholders();
+			set_projectID();
 		}
 	});
 	$("#searchStakeholders").on('input',function(event) {
