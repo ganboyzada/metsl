@@ -16,9 +16,6 @@
                     @php
                         $projects_ids = \App\Models\ProjectUser::where('user_id', auth()->user()->id)->pluck('project_id')->toArray();
                     @endphp
-
-                    <input type="hidden" id="selected_project_id" value="{{ \Session::get('projectID') }}"/>
-                    <input type="hidden" id="selected_project_name" value="{{ \Session::get('projectName') }}"/>
                     <!-- Dropdown Menu -->
                     <div  id="dropdown-toggle" class="dropdown absolute left-0 rounded-lg mt-2 min-w-full w-[130%] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg">
                         <ul class="py-2">
@@ -186,37 +183,17 @@
         });
 
  
-     function selectProject(projectName , projectId) {
-
-            // let url = `/project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
-
-            // let fetchRes = await fetch(url);
-
-
+        function selectProject(projectName , projectId) {
+            const selectedProjectElement = document.getElementById("project-variable");
+            selectedProjectElement.textContent = projectName; // Update the displayed project name
+            const dropdown = document.getElementById('dropdown-toggle');
+            dropdown.classList.toggle('active');
+			$('[name="project_id"]').val(projectId);
+            //alert(projectId);
             $.ajax({
                 url: "{{ route('projects.store_id_session') }}",
-                data: { projectID: projectId ,  projectName:projectName},
-                dataType: 'json',
-                success: function(data) {
-                    if(data.success){
-                        console.log(data);
-                        const selectedProjectElement = document.getElementById("project-variable");
-                        selectedProjectElement.textContent = projectName; // Update the displayed project name
-                        const dropdown = document.getElementById('dropdown-toggle');
-                        dropdown.classList.toggle('active');
-                        $('[name="project_id"]').val(projectId);
-                        $('#selected_project_id').val(projectId);
-                        $('#selected_project_name').val(projectName);
-                       // location.reload();
-                    }
-
-
-                }
-            });
-            //alert('ok2');
-
-            //alert(projectId);
- 
+                data: { projectID: projectId ,  projectName:projectName}
+            });  
             //toggleDropdown(); // Close the dropdown after selection
         }
 		
