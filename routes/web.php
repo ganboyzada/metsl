@@ -170,5 +170,6 @@ Route::middleware([
         // Artisan::call('route:clear'); // Avoid caching if using closures
         // Artisan::call('config:cache');
         // return "Cache is cleared";
+        Artisan::call('optimize');
         return request()->session()->all();
     })->name('clear.cache');
