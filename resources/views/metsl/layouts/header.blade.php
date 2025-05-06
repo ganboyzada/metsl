@@ -204,6 +204,7 @@
             const dropdown = document.getElementById('dropdown-toggle');
             dropdown.classList.toggle('active');
 			$('[name="project_id"]').val(projectId);
+            location.reload();
             //alert(projectId);
  
             //toggleDropdown(); // Close the dropdown after selection
