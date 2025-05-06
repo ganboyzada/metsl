@@ -82,11 +82,11 @@
         
         set_projectID();
         
-		loadedRows = 0;
-        //alert('ok');
-		if(localStorage.getItem("project_tool") == 'correspondence'){
-			get_correspondences();
-		}
+		// loadedRows = 0;
+       
+		// if(localStorage.getItem("project_tool") == 'correspondence'){
+		// 	get_correspondences();
+		// }
 	});
 
     let allDataLength = 0;
