@@ -149,7 +149,7 @@ class CorrespondenceController extends Controller
 
     public function ProjectCorrespondence(Request $request){
         $id = Session::get('projectID');
-       // dd(session('projectID'));
+        dd(session('projectID'));
         $correspondeces = $this->correspondenceService->getAllProjectCorrespondence($id , $request);
         $correspondeces->map(function($row){
             return $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];
