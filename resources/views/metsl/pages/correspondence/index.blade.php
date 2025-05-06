@@ -76,6 +76,7 @@
         let url = `project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
 
         let fetchRes = await fetch(url);
+        get_correspondences();
     }
 	$(".projectButton").on('click',function(event) {
         
