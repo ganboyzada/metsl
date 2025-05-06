@@ -72,7 +72,7 @@
 <script>
 	$(".projectButton").on('click',function(event) {
 		loadedRows = 0;
-        alert('ok');
+        //alert('ok');
 		if(localStorage.getItem("project_tool") == 'correspondence'){
 			get_correspondences();
 		}
