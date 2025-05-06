@@ -83,6 +83,26 @@ class CorrespondenceService
         return $correspondence;
     }
 
+
+    public function update_status(array $data)
+    {
+        
+        \DB::beginTransaction();
+        try {
+            $project_id = $data['project_id'];
+            $id = $data['id'];
+
+            $this->correspondenceRepository->update($data , $id);
+            $correspondence = $this->correspondenceRepository->find($data['id']);
+           
+            \DB::commit();
+        } catch (\Exception $e) {
+            \DB::rollback();
+            throw new \Exception($e->getMessage());
+        }
+        return $correspondence;
+    }
+
     public function delete($id)
     {
         try{
@@ -136,6 +156,10 @@ class CorrespondenceService
 
     }
 
+    public function getAllProjectCorrespondenceOpen($project_id , $request){
+        return $this->correspondenceRepository->get_all_project_correspondence_open($project_id , $request);
+
+    }
     public function getCorrespondenceParent($project_id , $correspondence_id){
         return $this->correspondenceRepository->get_correspondence_parent($project_id , $correspondence_id)->map(function($correspondence){
             $correspondence->assignees = implode(',',$correspondence->assignees->map(function($assignee){

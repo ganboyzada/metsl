@@ -2,6 +2,7 @@
 
 namespace App\Repository\Eloquent;
 
+use App\Enums\CorrespondenceStatusEnum;
 use App\Mail\StakholderEmail;
 use App\Models\Correspondence;
 use App\Models\Permission;
@@ -182,7 +183,64 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
         
 
     }
+    /**
+    * @param int $project_id 
+    * @param \Request $request
+    * @return LengthAwarePaginator
+    * 
+    */
+    public function get_all_project_correspondence_open($project_id , $request): LengthAwarePaginator{
+        $sub = \DB::raw('(select  reply_correspondence_id as replyCorespondenceId  , MAX(created_date) as last_upload_date
+         from correspondences where reply_correspondence_id is not null group by reply_correspondence_id)last_upload_table');
 
+        $modal =  $this->model->where('project_id',$project_id)->where('reply_correspondence_id',NULL)
+        ->leftjoin($sub,function($join){
+            $join->on('last_upload_table.replyCorespondenceId','=','id');       
+        })
+        ->where('status',CorrespondenceStatusEnum::OPEN->value);
+
+        if(!auth()->user()->is_admin){
+
+            $modal = $modal->where(function($q)use($project_id){
+                $q->whereHas('assignees', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                });
+
+                $q->orWhereHas('distributionMembers', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                });
+                
+                $q->orwhere('created_by', auth()->user()->id);
+
+
+                $enums_list = \App\Enums\CorrespondenceTypeEnum::cases();
+                foreach ($enums_list as $enum) {
+                    if(checkIfUserHasThisPermission($project_id , 'view_'.$enum->value)){
+                        $modal = $modal->orwhere('type' , $enum->value);
+    
+                    }
+                }
+
+
+
+
+            });
+            
+
+
+
+            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->paginate(10);
+
+            return $modal;           
+
+        }else{
+            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->paginate(10);
+
+            return $modal;
+        }
+        
+
+    }
     
     /**
     * @param int $project_id

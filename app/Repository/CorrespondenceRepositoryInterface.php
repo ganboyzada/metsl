@@ -32,7 +32,13 @@ interface CorrespondenceRepositoryInterface
     */
     public function get_all_project_correspondence($project_id , $request): LengthAwarePaginator;  
 
-
+/**
+    * @param int $project_id 
+    * @param \Request $request
+    * @return LengthAwarePaginator
+    * 
+    */
+    public function get_all_project_correspondence_open($project_id , $request): LengthAwarePaginator;
         /**
     * @param int $project_id
     * @param int $corespondence_id 

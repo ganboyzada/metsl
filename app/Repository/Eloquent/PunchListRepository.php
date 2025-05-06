@@ -2,6 +2,7 @@
 
 namespace App\Repository\Eloquent;
 
+use App\Enums\PunchListStatusEnum;
 use App\Mail\StakholderEmail;
 use App\Models\Permission;
 use App\Models\ProjectDocumentFiles;
@@ -243,7 +244,46 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
         
     }
 
-    
+  /**
+    * @param int $project_id 
+    * @param \Request $request
+    * @return LengthAwarePaginator
+    * 
+    */
+    public function get_all_project_Punch_list_open($project_id , $request): LengthAwarePaginator{
+        $data = $request->all();
+       // dd($data);
+        $punchLists =  $this->model->where('project_id',$project_id)
+        ->where('status','!=',PunchListStatusEnum::CLOSED->value);;
+        
+        if(checkIfUserHasThisPermission($project_id , 'view_all_punch_list')){
+
+            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->paginate(10);
+  
+            return $punchLists;
+        }        
+        else if(!auth()->user()->is_admin){
+
+            $punchLists = $punchLists->where(function($q){
+                $q->whereHas('users', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                });
+
+                $q->orwhere('responsible_id',auth()->user()->id);
+                $q->orwhere('created_by',auth()->user()->id);
+
+                
+            });
+
+            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->paginate(10);
+  
+            return $punchLists;
+              
+
+        }
+
+        
+    }    
     /**
     * @param int $project_id 
     * @return LengthAwarePaginator

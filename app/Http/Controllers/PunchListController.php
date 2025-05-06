@@ -372,7 +372,20 @@ class PunchListController extends Controller
      
         return response()->json($punchLists);
     }
+    public function PunchListOpen(Request $request){
+        $id = Session::get('projectID');
+        $punchLists = $this->punchListService->getAllProjectPunchListOpen($id , $request);
+        $punchLists->map(function($row){
 
+            $row->status_text = $row->status->text();
+            $row->status_color = $row->status->color();
+
+            $row->priority_text = $row->priority->color();
+            return $row;
+        });
+     
+        return response()->json($punchLists);
+    }
 
     public function drawings_search(Request $request){
         $id = Session::get('projectID');

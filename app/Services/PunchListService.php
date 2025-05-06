@@ -84,6 +84,10 @@ class PunchListService
         return $this->punchListRepository->get_all_project_Punch_list($project_id , $request);
 
     }
+    public function getAllProjectPunchListOpen($project_id , $request){
+        return $this->punchListRepository->get_all_project_Punch_list_open($project_id , $request);
+
+    }
     public function getAllProjectPunchListPaginate($project_id){
         return $this->punchListRepository->get_all_project_Punch_list_paginate($project_id);
 

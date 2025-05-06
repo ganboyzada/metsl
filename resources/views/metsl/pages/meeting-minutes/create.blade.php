@@ -309,7 +309,7 @@
                             $('#file-list').html('');
                             
                             setInterval(function() {
-                                location.reload();
+                                window.location.href="{{ route('home') }}";
                                 }, 3000);                        
 
                         }

@@ -77,6 +77,13 @@ class CorrespondenceController extends Controller
                 $all_data['created_date'] = date('Y-m-d');
 
                 $model = $this->correspondenceService->create($all_data);
+                if($all_data['reply_correspondence_id'] != NULL){
+                    $new_data['id'] = $all_data['reply_correspondence_id'];
+                    $new_data['status'] = $all_data['status'];
+                    $new_data['project_id'] = $all_data['project_id'];
+                    $this->correspondenceService->update_status($new_data);
+                }
+
             \DB::commit();
             // all good
             } catch (\Exception $e) {
@@ -144,6 +151,17 @@ class CorrespondenceController extends Controller
         $id = Session::get('projectID');
         //dd($id);
         $correspondeces = $this->correspondenceService->getAllProjectCorrespondence($id , $request);
+        $correspondeces->map(function($row){
+            return $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];
+        });
+     
+        return $correspondeces;
+    }
+
+    public function ProjectCorrespondenceOpen(Request $request){
+        $id = Session::get('projectID');
+        //dd($id);
+        $correspondeces = $this->correspondenceService->getAllProjectCorrespondenceOpen($id , $request);
         $correspondeces->map(function($row){
             return $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];
         });

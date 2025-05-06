@@ -60,6 +60,7 @@ Route::middleware([
     Route::get('/project/correspondence/create',  [CorrespondenceController::class, "create"])->name('projects.correspondence.create');
 	Route::post('/project/correspondence/store',  [CorrespondenceController::class, "store"])->name('projects.correspondence.store');
     Route::get('/project/correspondence/all',  [CorrespondenceController::class, "ProjectCorrespondence"])->name('projects.correspondence.all');
+    Route::get('/project/correspondence/all_open',  [CorrespondenceController::class, "ProjectCorrespondenceOpen"])->name('projects.correspondence.all.open');
 
 
     Route::get('/project/correspondence/users',  [CorrespondenceController::class, "getUsers"])->name('projects.correspondence.users');	
@@ -93,6 +94,8 @@ Route::middleware([
     // Route::post('/upload-image', [PunchListController::class, 'upload']);
 
 	Route::get('/project/punch-list/all',  [PunchListController::class, "PunchList"])->name('projects.punch-list.all');
+    Route::get('/project/punch-list/all_open',  [PunchListController::class, "PunchListOpen"])->name('projects.punch-list.all.open');
+
     Route::get('/project/punch-list/create', [PunchListController::class, "create"])->name('projects.punch-list.create');
     Route::get('/project/punch-list/drawings', [PunchListController::class, "drawings"])->name('projects.punch-list.drawings');
     Route::post('/project/punch-list/createDrawings', [PunchListController::class, "create_drawings"])->name('projects.punch-list.drawings.create');

@@ -33,6 +33,13 @@ interface PunchListRepositoryInterface
     */
     public function get_all_project_Punch_list($project_id , $request): LengthAwarePaginator; 
     
+    /**
+    * @param int $project_id 
+    * @param \Request $request
+    * @return LengthAwarePaginator
+    * 
+    */
+    public function get_all_project_Punch_list_open($project_id , $request): LengthAwarePaginator;
      /**
     * @param int $project_id 
     * @return LengthAwarePaginator
