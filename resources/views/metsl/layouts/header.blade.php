@@ -199,6 +199,7 @@
             });
             $.ajax({
                 url: "{{ route('projects.store_id_session') }}",
+                type: "POST",
                 data: { projectID: projectId ,  projectName:projectName},
                 dataType: 'json',
                 success: function(data) {
