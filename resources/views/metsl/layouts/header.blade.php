@@ -17,7 +17,7 @@
                         $projects_ids = \App\Models\ProjectUser::where('user_id', auth()->user()->id)->pluck('project_id')->toArray();
                     @endphp
 
-                    <input type="text" id="selected_project_id"/>
+                    <input type="text" id="selected_project_id" value="{{ \Session::get('projectID') }}"/>
                     <!-- Dropdown Menu -->
                     <div  id="dropdown-toggle" class="dropdown absolute left-0 rounded-lg mt-2 min-w-full w-[130%] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg">
                         <ul class="py-2">
