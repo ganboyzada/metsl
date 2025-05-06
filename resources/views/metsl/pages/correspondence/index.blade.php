@@ -155,7 +155,7 @@
                 let url = "{{ route('projects.correspondence.view', [':id']) }}".replace(':id', row.id);
                 let url2 = "{{ route('projects.correspondence.edit', [':id']) }}".replace(':id', row.id);
 
-                html+=`
+                html+=`<tr>
                     <td class="px-6 py-3">${row.number}</td>
                     <td class="px-6 py-3"><a class="underline" href="${url}">${row.subject}</a></td>
                     <td class="px-6 py-3">${(row.last_upload_date != null) ? row.last_upload_date : ''}</td>
@@ -164,7 +164,7 @@
                     <td class="px-6 py-3">${row.created_date}</td>
                     <td class="px-6 py-3">
                         <span class="px-3 py-1 rounded-full text-xs font-bold ${row.status_color[1]}">${row.status_color[0]}</span>
-                    </td>
+                    </td></tr>
                 `;
 
 			}
