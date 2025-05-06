@@ -200,7 +200,7 @@
             $.ajax({
                 url: "{{ route('projects.store_id_session') }}",
                 type: "POST",
-                data: { projectID: projectId ,  projectName:projectName},
+                data: { projectID: projectId ,  projectName:projectName,_token: '{{ csrf_token() }}'},
                 dataType: 'json',
                 success: function(data) {
                     if(data.success){
