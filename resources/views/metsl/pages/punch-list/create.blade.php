@@ -691,9 +691,9 @@ function searchDrawings(search){
     async function set_projectID_participates2(){
         var projectId = $('#selected_project_id').val();
         var projectName = $('#selected_project_name').val();
-        let url = `/project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
+        // let url = `/project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
 
-        let fetchRes = await fetch(url);
+        // let fetchRes = await fetch(url);
         get_participates();
     }    	  
 
