@@ -152,7 +152,7 @@ class CorrespondenceService
         
     }
     public function getAllProjectCorrespondence($project_id , $request){
-        dd($project_id.'/*/*');
+        //dd($project_id.'/*/*');
         return $this->correspondenceRepository->get_all_project_correspondence($project_id , $request);
 
     }
