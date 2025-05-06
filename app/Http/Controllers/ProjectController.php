@@ -62,7 +62,7 @@ class ProjectController extends Controller
          session(['projectID' => $request->projectID]);
          session(['projectName' => $request->projectName]);
 
-        return $request->session()->all();
+        return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$request->session()->all()]);
     }
 
     public function allProjects(){

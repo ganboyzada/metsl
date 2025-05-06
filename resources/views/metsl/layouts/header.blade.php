@@ -196,16 +196,20 @@
             $.ajax({
                 url: "{{ route('projects.store_id_session') }}",
                 data: { projectID: projectId ,  projectName:projectName},
+                dataType: 'json',
                 success: function(data) {
-                    console.log(data);
-                    const selectedProjectElement = document.getElementById("project-variable");
-                    selectedProjectElement.textContent = projectName; // Update the displayed project name
-                    const dropdown = document.getElementById('dropdown-toggle');
-                    dropdown.classList.toggle('active');
-                    $('[name="project_id"]').val(projectId);
-                    $('#selected_project_id').val(projectId);
-                    $('#selected_project_name').val(projectName);
-                    location.reload();
+                    if(data.success){
+                        console.log(data);
+                        const selectedProjectElement = document.getElementById("project-variable");
+                        selectedProjectElement.textContent = projectName; // Update the displayed project name
+                        const dropdown = document.getElementById('dropdown-toggle');
+                        dropdown.classList.toggle('active');
+                        $('[name="project_id"]').val(projectId);
+                        $('#selected_project_id').val(projectId);
+                        $('#selected_project_name').val(projectName);
+                        location.reload();
+                    }
+
 
                 }
             });
