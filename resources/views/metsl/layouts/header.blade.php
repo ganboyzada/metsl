@@ -192,7 +192,11 @@
 
             // let fetchRes = await fetch(url);
 
-
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
             $.ajax({
                 url: "{{ route('projects.store_id_session') }}",
                 data: { projectID: projectId ,  projectName:projectName},
@@ -218,7 +222,7 @@
             //alert(projectId);
  
             //toggleDropdown(); // Close the dropdown after selection
-        }
+    }
 		
  	
 		

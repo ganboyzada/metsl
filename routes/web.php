@@ -49,7 +49,7 @@ Route::middleware([
     Route::view('/roles/permissions', 'metsl.pages.permissions.index')->name('roles.permissions');
     Route::view('/roles/permissions/create', 'metsl.pages.permissions.create')->name('roles.permissions.create');
 
-    Route::get('/project/storeIdSession', [ProjectController::class, "storeIdSession"])->name('projects.store_id_session');
+    Route::post('/project/storeIdSession', [ProjectController::class, "storeIdSession"])->name('projects.store_id_session');
 
     Route::get('/project/{id}', function ($id) {
         return view('metsl.pages.projects.project'); // The view file for the company detail page
