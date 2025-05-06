@@ -79,7 +79,7 @@
 
     let allDataLength = 0;
 
-	async function search(e){
+	async function search(e, page = 1){
 		loadedRows = 0;
 		const search = $('[name="search"]').val();
 
