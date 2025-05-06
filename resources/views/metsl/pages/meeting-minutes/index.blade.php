@@ -82,13 +82,13 @@
         // let fetchRes = await fetch(url);
         get_meeting_planing();
     }    
-	$(".projectButton").on('click',function(event) {
+	// $(".projectButton").on('click',function(event) {
 		
-		if(localStorage.getItem("project_tool") == 'meeting_planing'){
+	// 	if(localStorage.getItem("project_tool") == 'meeting_planing'){
 
-			set_projectID_meeting_planing();
-		}
-	});
+	// 		set_projectID_meeting_planing();
+	// 	}
+	// });
 	$("#search , #start-date , #end-date").on('input',function(event) {
 		get_meeting_planing();
 	});

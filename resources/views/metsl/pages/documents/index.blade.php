@@ -121,11 +121,11 @@
         get_documents();
     }
 
-	$(".projectButton").on('click',function(event) {
-		if(localStorage.getItem("project_tool") == 'documents'){			
-			set_projectID_docs();
-		}
-	});
+	// $(".projectButton").on('click',function(event) {
+	// 	if(localStorage.getItem("project_tool") == 'documents'){			
+	// 		set_projectID_docs();
+	// 	}
+	// });
 	$("#order-by , #order-direction").on('change',function(event) {
 		loadedRows = 0;
 		if(localStorage.getItem("project_tool") == 'documents'){

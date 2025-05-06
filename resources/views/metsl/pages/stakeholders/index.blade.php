@@ -161,13 +161,13 @@
 
     }
 
-	$(".projectButton").on('click',function(event) {
+	// $(".projectButton").on('click',function(event) {
 		
-		if(localStorage.getItem("project_tool") == 'stakeholders'){
+	// 	if(localStorage.getItem("project_tool") == 'stakeholders'){
 
-			set_projectID_stakeholders();
-		}
-	});
+	// 		set_projectID_stakeholders();
+	// 	}
+	// });
 	$("#searchStakeholders").on('input',function(event) {
 		get_stakeholders();
 	});

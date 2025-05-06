@@ -697,12 +697,12 @@ function searchDrawings(search){
         get_participates();
     }    	  
 
-	$(".projectButton").on('click',function(event) {
-		if(localStorage.getItem("project_tool") == 'punch_list'){
-			set_projectID_participates2();
-		}
+	// $(".projectButton").on('click',function(event) {
+	// 	if(localStorage.getItem("project_tool") == 'punch_list'){
+	// 		set_projectID_participates2();
+	// 	}
 		
-	});
+	// });
 
 
 

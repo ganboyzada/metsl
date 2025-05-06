@@ -354,13 +354,13 @@
         get_participates();
     }
 
-	$(".projectButton").on('click',function(event) {
-        location.reload();
-		if(localStorage.getItem("project_tool") == 'meeting_planing'){
-			set_projectID_participates();
-		}
+	// $(".projectButton").on('click',function(event) {
+    //     location.reload();
+	// 	if(localStorage.getItem("project_tool") == 'meeting_planing'){
+	// 		set_projectID_participates();
+	// 	}
 		
-	});
+	// });
 		
 	// async  function get_participates2(){
 		// let fetchRes = await fetch(`{{url('project/meetings/participates')}}`);

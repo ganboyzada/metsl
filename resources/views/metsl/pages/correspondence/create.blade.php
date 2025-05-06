@@ -244,11 +244,11 @@
         get_users();
     }
 
-	$(".projectButton").on('click',function(event) {
+	// $(".projectButton").on('click',function(event) {
 
-		set_projectID_users();
+	// 	set_projectID_users();
 		
-	});
+	// });
 					
 
 	get_users();

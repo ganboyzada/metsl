@@ -206,12 +206,12 @@
         get_reviewers();
     }
 
-	$(".projectButton").on('click',function(event) {
-		if(localStorage.getItem("project_tool") == 'documents'){
-			set_projectID_reviewers();
-		}
+	// $(".projectButton").on('click',function(event) {
+	// 	if(localStorage.getItem("project_tool") == 'documents'){
+	// 		set_projectID_reviewers();
+	// 	}
 		
-	});
+	// });
 		
 	async  function get_reviewers(){
 		let fetchRes = await fetch(`{{url('project/documents/reviewers')}}`);

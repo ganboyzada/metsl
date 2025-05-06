@@ -197,13 +197,13 @@
 
     }
 
-    $(".projectButton").on('click',function(event) {
+    // $(".projectButton").on('click',function(event) {
 		
-		if(localStorage.getItem("project_tool") == 'task_planner'){
+	// 	if(localStorage.getItem("project_tool") == 'task_planner'){
 
-			set_projectID_tasks();
-		}
-	});
+	// 		set_projectID_tasks();
+	// 	}
+	// });
     $("#add-group-form").on("submit", function(event) {
         const form = document.getElementById("add-group-form");
         const formData = new FormData(form); 

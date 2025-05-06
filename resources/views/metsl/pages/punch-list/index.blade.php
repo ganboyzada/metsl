@@ -253,13 +253,13 @@
         getChangedParticipates();
         getAllStatusPeriority();
     } 	
-	$(".projectButton").on('click',function(event) {
+	// $(".projectButton").on('click',function(event) {
 		
-		if(localStorage.getItem("project_tool") == 'punch_list'){
-            set_projectID_punch_list();
+	// 	if(localStorage.getItem("project_tool") == 'punch_list'){
+    //         set_projectID_punch_list();
 
-		}
-	});
+	// 	}
+	// });
 
 	$("#search_punsh_list , .dates").on('input',function(event) {
         get_punch_list();
