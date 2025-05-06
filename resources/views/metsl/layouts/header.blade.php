@@ -186,25 +186,29 @@
         });
 
  
-        async function selectProject(projectName , projectId) {
+     function selectProject(projectName , projectId) {
             $('#selected_project_id').val(projectId);
             $('#selected_project_name').val(projectName);
-            let url = `/project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
+            // let url = `/project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
 
-            let fetchRes = await fetch(url);
+            // let fetchRes = await fetch(url);
 
 
-            // $.ajax({
-            //     url: "{{ route('projects.store_id_session') }}",
-            //     data: { projectID: projectId ,  projectName:projectName}
-            // });
+            $.ajax({
+                url: "{{ route('projects.store_id_session') }}",
+                data: { projectID: projectId ,  projectName:projectName},
+                success: function(data) {
+                    const selectedProjectElement = document.getElementById("project-variable");
+                    selectedProjectElement.textContent = projectName; // Update the displayed project name
+                    const dropdown = document.getElementById('dropdown-toggle');
+                    dropdown.classList.toggle('active');
+                    $('[name="project_id"]').val(projectId);
+                    location.reload();
+
+                }
+            });
             //alert('ok2');
-            const selectedProjectElement = document.getElementById("project-variable");
-            selectedProjectElement.textContent = projectName; // Update the displayed project name
-            const dropdown = document.getElementById('dropdown-toggle');
-            dropdown.classList.toggle('active');
-			$('[name="project_id"]').val(projectId);
-            location.reload();
+
             //alert(projectId);
  
             //toggleDropdown(); // Close the dropdown after selection
