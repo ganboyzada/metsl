@@ -33,8 +33,16 @@ class PunchListService
             $path = Storage::url('/project'.$data['project_id'].'/punch_list'.$modal->id);
             
             \File::makeDirectory($path, $mode = 0777, true, true);  
-           $users =  $this->punchListRepository->add_users_to_Punch_list($data,$modal );
-		   $this->punchListRepository->add_Linked_documents_to_punchlist($data,$modal);
+            if(isset($data['participates']) &&  count($data['participates']) > 0){
+                $users =  $this->punchListRepository->add_users_to_Punch_list($data,$modal );
+
+            }
+
+            if(isset($data['linked_documents']) &&  count($data['linked_documents']) > 0){
+                $this->punchListRepository->add_Linked_documents_to_punchlist($data,$modal);
+            }
+           
+		   
           // dd($users);
             if(isset($data['docs'])){
                 
