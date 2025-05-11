@@ -34,7 +34,7 @@ class punchListResource extends JsonResource
             "date_resolved_at" => $this->date_resolved_at,
             "due_date" => $this->due_date,
             "pin_x" => $this->pin_x,
-            "pin_y" => $this->pin_y - 9,
+            "pin_y" => $this->pin_y,
             "status"=> $this->status->text(),
             "priority"=> $this->priority->text(),
             "responsible"=>$this->responsible->name,
