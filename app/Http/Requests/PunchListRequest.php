@@ -52,8 +52,9 @@ class PunchListRequest extends FormRequest
                 "docs.*"  => ["nullable", "mimes:jpeg,bmp,png,gif,svg,pdf"],
                 'drawing_id'=> 'required',
                 'pin_x'=> 'required',
-                'pin_y'=> 'required'
-
+                'pin_y'=> 'required',
+                'width'=> 'required',
+                'height'=> 'required',
 
         
             ]; 

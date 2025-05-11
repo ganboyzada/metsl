@@ -133,7 +133,7 @@ class PunchListController extends Controller
         if($request->validated()){
             \DB::beginTransaction();
             try{
-                $all_data = request()->all();
+                $all_data = $request->all();
                // dd($all_data);
                 $all_data['created_by'] = \Auth::user()->id;
                 $all_data['closed_by'] = \Auth::user()->id;
