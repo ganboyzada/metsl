@@ -28,6 +28,8 @@ class DrawingResource extends JsonResource
             "project_id" => $this->project_id,
             "title" => $this->title,
             "description" => $this->description,
+            "width" => $this->width,
+            "height" => $this->height,
             "image" => $this->image,
             "url" => asset(Storage::url('project'.$this->project_id.'/drawings/'.$this->image))
             

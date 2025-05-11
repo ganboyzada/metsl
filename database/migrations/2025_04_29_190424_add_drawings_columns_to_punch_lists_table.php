@@ -19,8 +19,6 @@ return new class extends Migration
 
             $table->double('pin_x')->nullable();    
             $table->double('pin_y')->nullable();  
-            $table->double('width')->nullable();    
-            $table->double('height')->nullable();  
         });
     }
 

@@ -18,7 +18,7 @@ class PunchList extends Model
             'priority'=> PunchListPriorityEnum::class
         ];
     }
-    protected $fillable = ['number','title','location','cost_impact','priority','responsible_id','description','created_by','closed_by','project_id','status','date_notified_at','date_resolved_at','due_date','drawing_id','pin_x','pin_y','due_days','width','height'];
+    protected $fillable = ['number','title','location','cost_impact','priority','responsible_id','description','created_by','closed_by','project_id','status','date_notified_at','date_resolved_at','due_date','drawing_id','pin_x','pin_y','due_days'];
 
     public function users(): belongsToMany
     {

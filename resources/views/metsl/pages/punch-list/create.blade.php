@@ -85,9 +85,7 @@
 		<input type="hidden" name="project_id" value="{{ \Session::get('projectID') }}"/>
 
             <input type="hidden" name="pin_x"/>
-            <input type="hidden" name="pin_y"/>     
-            <input type="hidden" name="width"/>
-            <input type="hidden" name="height"/>    
+            <input type="hidden" name="pin_y"/>       
 
             <div class="w-full grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-4">
                 <!-- Title (Required) -->
@@ -542,8 +540,6 @@
                 currentPin = createDraggablePin(xPercent, yPercent , null , null);
                 $('[name="pin_x"]').val(xPercent);
                 $('[name="pin_y"]').val(yPercent);
-                $('[name="width"]').val(rect.width);
-                $('[name="height"]').val(rect.height);
                 //alert(xPercent.toFixed(2)+'//'+yPercent.toFixed(2));
                 // Save and show coordinates
                 // const coords = { x: xPercent.toFixed(2), y: yPercent.toFixed(2) };
@@ -609,7 +605,7 @@ function searchDrawings(search){
 
     $("#snag-item-form").on("submit", function(event) {
 
-        if($('[name="pin_x"]').val() == '' ||  $('[name="pin_y"]').val() == '' || $('[name="width"]').val() == '' ||  $('[name="height"]').val() == '' ){
+        if($('[name="pin_x"]').val() == '' ||  $('[name="pin_y"]').val() == '' ){
             $('.error').show();
             $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">Please Chose Drawing and set The coordinations</div>');
             event.preventDefault();

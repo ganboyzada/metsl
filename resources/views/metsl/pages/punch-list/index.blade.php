@@ -160,6 +160,7 @@
                 <th class="px-4 py-2 font-light">Date Resolved</th>
                 <th class="px-4 py-2 font-light">Due Date</th>
                 <th class="px-4 py-2 font-light">Created By</th>
+                <th class="px-4 py-2 font-light">Drawing Title</th>
                 <th class="px-4 py-2 font-light">Actions</th>
             </tr>
         </thead>
@@ -448,6 +449,7 @@ function renderPagination(data) {
                         <td class="px-4 py-2">${list[i].date_resolved_at ?? '-'}</td>
                         <td class="px-4 py-2">${list[i].due_date ?? '-'}</td>
                         <td class="px-4 py-2">${list[i].created_by_user.name ?? '-'}</td>
+                        <td class="px-4 py-2">${list[i].drawing.title ?? '-'}</td>
                         <td class="px-4 py-2">
                             <a target="_blank" href="${url}" class="text-gray-500 dark:text-gray-400 hover:text-gray-300">
                                 <i data-feather="eye" class="w-5 h-5"></i>

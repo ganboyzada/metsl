@@ -209,15 +209,29 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
                         'LIKE',
                         "%".$data['search']."%"
                     );
+
                 
             });
+
+            $q->orWhere(function($query) use($data){
+                    $query->WhereHas('drawing',function($q) use($data){
+                        $q->whereAny(
+                        [
+                            'title',
+                            'description'
+                        ],
+                        'LIKE',
+                        "%".$data['search']."%"
+                    );
+                    }); 
+                });
 
             });
         }
 
         if(checkIfUserHasThisPermission($project_id , 'view_all_punch_list')){
 
-            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->paginate(10);
+            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name' , 'drawing:id,title'])->paginate(10);
   
             return $punchLists;
         }        
@@ -234,7 +248,7 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
                 
             });
 
-            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->paginate(10);
+            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name' , 'drawing:id,title'])->paginate(10);
   
             return $punchLists;
               

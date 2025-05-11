@@ -21,10 +21,17 @@ class ProjectDrawingsService
         try {         
             $docs = array_map(function($file) use($project_id,$title,$description , $uploadeedfiles ){
                 $fileName = $file->getClientOriginalName();
+
+                // Get the path to the temporary uploaded file
+                $path = $file->getRealPath();
+
+                // Use getimagesize to get dimensions
+                [$width, $height] = getimagesize($path);
+
                 Storage::disk('public')->putFileAs('project'.$project_id.'/drawings', $file, $fileName);
 
 
-                return ['image'=>$fileName ,  'project_id'=>$project_id,  'title'=>$title,  'description'=>$description];
+                return ['image'=>$fileName ,  'project_id'=>$project_id,  'title'=>$title,  'description'=>$description,  'width'=>$width,  'height'=>$height];
 
             } , $uploadeedfiles);
 
