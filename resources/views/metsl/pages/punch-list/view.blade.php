@@ -554,35 +554,35 @@
 
 const pins = []; // Store pin coordinates
     let currentPin = null; // Holds the last placed pin
-    image.addEventListener('click', function (e) {
-        const rect = image.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
+    // image.addEventListener('click', function (e) {
+    //     const rect = image.getBoundingClientRect();
+    //     const x = e.clientX - rect.left;
+    //     const y = e.clientY - rect.top;
 
-        const xPercent = (x / rect.width) * 100;
-        const yPercent = (y / rect.height) * 100;
+    //     const xPercent = (x / rect.width) * 100;
+    //     const yPercent = (y / rect.height) * 100;
 
-        // 🔄 Remove previous pin if exists
-        if (currentPin) {
-            currentPin.remove();
+    //     // 🔄 Remove previous pin if exists
+    //     if (currentPin) {
+    //         currentPin.remove();
             
-        }
+    //     }
 
-        currentPin = createDraggablePin(xPercent, yPercent , null , null);
-        $('[name="pin_x"]').val(xPercent);
-        $('[name="pin_y"]').val(yPercent);
-        //alert(xPercent.toFixed(2)+'//'+yPercent.toFixed(2));
-        // Save and show coordinates
-        // const coords = { x: xPercent.toFixed(2), y: yPercent.toFixed(2) };
-        // pins.push(coords);
+    //     currentPin = createDraggablePin(xPercent, yPercent , null , null);
+    //     $('[name="pin_x"]').val(xPercent);
+    //     $('[name="pin_y"]').val(yPercent);
+    //     //alert(xPercent.toFixed(2)+'//'+yPercent.toFixed(2));
+    //     // Save and show coordinates
+    //     // const coords = { x: xPercent.toFixed(2), y: yPercent.toFixed(2) };
+    //     // pins.push(coords);
 
-        // const listItem = document.createElement('li');
-        // listItem.textContent = `Pin ${pins.length}: x = ${coords.x}%, y = ${coords.y}%`;
-        // logList.appendChild(listItem);
+    //     // const listItem = document.createElement('li');
+    //     // listItem.textContent = `Pin ${pins.length}: x = ${coords.x}%, y = ${coords.y}%`;
+    //     // logList.appendChild(listItem);
 
 
-    // console.log(x+'//'+y);
-    });
+    //     // console.log(x+'//'+y);
+    // });
 
 
 
