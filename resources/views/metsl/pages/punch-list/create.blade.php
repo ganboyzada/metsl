@@ -361,122 +361,126 @@
 
         let pin__x = null;
         let pin__y = null;
+        if(labelcontent == null){
 
-        pin.addEventListener('mousedown', (e) => {
-        isDragging = true;
-        wasDragged = false;
-        currentDraggedWrapper = wrapper;
-        e.preventDefault();
-        e.stopPropagation();
-        });
-
-        document.addEventListener('mousemove', (e) => {
-            if (!isDragging || !currentDraggedWrapper) return;
-
-            wasDragged = true; // Mark that the mouse moved
-
-            const rect = image.getBoundingClientRect();
-            const x = e.clientX - rect.left;
-            const y = e.clientY - rect.top;
-
-            const xPercent = (x / rect.width) * 100;
-            const yPercent = (y / rect.height) * 100;
-
-            pin__x = xPercent;
-            pin__y = yPercent;
-
-            currentDraggedWrapper.style.left = `${xPercent}%`;
-            currentDraggedWrapper.style.top = `${yPercent}%`;
-
-            if (labelcontent == null) {
-                $('[name="pin_x"]').val(xPercent);
-                $('[name="pin_y"]').val(yPercent);
-            }
-        });
-
-
-        document.addEventListener('mouseup', () => {
-    if (!wasDragged || !isDragging || !currentDraggedWrapper) {
-        isDragging = false;
-        currentDraggedWrapper = null;
-        return;
-    }
-
-    isDragging = false;
-    currentDraggedWrapper = null;
-
-    // if (labelcontent != null) {
-    //     $.ajaxSetup({
-    //         headers: {
-    //             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-    //         }
-    //     });
-    //     $.ajax({
-    //         url: "{{ route('projects.punch-list.update_pin') }}",
-    //         type: "POST",
-    //         data: {
-    //             id: labelcontent,
-    //             pin_x: pin__x,
-    //             pin_y: pin__y,
-    //             "_token": "{{ csrf_token() }}"
-    //         },
-    //         dataType: 'json',
-    //         success: function(data) {
-    //             if (data.success) {
-    //                 $('.success').show();
-    //                 $('.success').html('<div class="text-white-500 px-2 py-1 text-sm font-semibold">Pin coordination has been changed for punch number ' + number + '</div>');
-    //             } else if (data.error) {
-    //                 $('.error').show();
-    //                 $('.error').html('<div class="text-white-500 px-2 py-1 text-sm font-semibold">' + data.error + '</div>');
-    //             }
-    //         },
-    //         error: function(err) {
-    //             $.each(err.responseJSON.errors, function(key, value) {
-    //                 $('.error').show();
-    //                 $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+value[0]+'</div>');
-    //                 var el = $(document).find('[name="' + key + '"]');
-    //                 el.after($('<div class="err-msg text-red-500 px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
-    //             });
-    //         }
-    //     });
-    // }
-});
-
-    // Optional: remove on click
-    let user  = '{{ auth()->user()->is_admin }}';
-    if(user == 1){
-
-        pin.addEventListener('click', (e) => {
+            pin.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            wasDragged = false;
+            currentDraggedWrapper = wrapper;
+            e.preventDefault();
             e.stopPropagation();
-            if(labelcontent != null){
-               // wrapper.remove();
+            });
 
-                 //}else{
-                const confirmed = confirm('Are you sure you want to delete this punch?');
-                if (confirmed) {
-                    $('.error').hide(); 
-                    $('.success').hide();
+            document.addEventListener('mousemove', (e) => {
+                if (!isDragging || !currentDraggedWrapper) return;
 
-                    wrapper.remove();
+                wasDragged = true; // Mark that the mouse moved
 
+                const rect = image.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
 
-                    let url =`/project/punch-list/destroy/${labelcontent}`;		
-                    let fetchRes =  fetch(url);
-                    console.log(fetchRes);
-                        
-                        $('.success').show();
-                        $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
-                    
-                    
+                const xPercent = (x / rect.width) * 100;
+                const yPercent = (y / rect.height) * 100;
+
+                pin__x = xPercent;
+                pin__y = yPercent;
+
+                currentDraggedWrapper.style.left = `${xPercent}%`;
+                currentDraggedWrapper.style.top = `${yPercent}%`;
+
+                if (labelcontent == null) {
+                    $('[name="pin_x"]').val(xPercent);
+                    $('[name="pin_y"]').val(yPercent);
                 }
-            }
+            });
 
-        });
 
-        
-    }
+            document.addEventListener('mouseup', () => {
+                if (!wasDragged || !isDragging || !currentDraggedWrapper) {
+                    isDragging = false;
+                    currentDraggedWrapper = null;
+                    return;
+                }
 
-    return wrapper;
+                isDragging = false;
+                currentDraggedWrapper = null;
+
+                // if (labelcontent != null) {
+                //     $.ajaxSetup({
+                //         headers: {
+                //             'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                //         }
+                //     });
+                //     $.ajax({
+                //         url: "{{ route('projects.punch-list.update_pin') }}",
+                //         type: "POST",
+                //         data: {
+                //             id: labelcontent,
+                //             pin_x: pin__x,
+                //             pin_y: pin__y,
+                //             "_token": "{{ csrf_token() }}"
+                //         },
+                //         dataType: 'json',
+                //         success: function(data) {
+                //             if (data.success) {
+                //                 $('.success').show();
+                //                 $('.success').html('<div class="text-white-500 px-2 py-1 text-sm font-semibold">Pin coordination has been changed for punch number ' + number + '</div>');
+                //             } else if (data.error) {
+                //                 $('.error').show();
+                //                 $('.error').html('<div class="text-white-500 px-2 py-1 text-sm font-semibold">' + data.error + '</div>');
+                //             }
+                //         },
+                //         error: function(err) {
+                //             $.each(err.responseJSON.errors, function(key, value) {
+                //                 $('.error').show();
+                //                 $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+value[0]+'</div>');
+                //                 var el = $(document).find('[name="' + key + '"]');
+                //                 el.after($('<div class="err-msg text-red-500 px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
+                //             });
+                //         }
+                //     });
+                // }
+            });
+
+
+        }
+
+        // Optional: remove on click
+        let user  = '{{ auth()->user()->is_admin }}';
+        if(user == 1){
+
+            pin.addEventListener('click', (e) => {
+                e.stopPropagation();
+                if(labelcontent != null){
+                // wrapper.remove();
+
+                    //}else{
+                    const confirmed = confirm('Are you sure you want to delete this punch?');
+                    if (confirmed) {
+                        $('.error').hide(); 
+                        $('.success').hide();
+
+                        wrapper.remove();
+
+
+                        let url =`/project/punch-list/destroy/${labelcontent}`;		
+                        let fetchRes =  fetch(url);
+                        console.log(fetchRes);
+                            
+                            $('.success').show();
+                            $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
+                        
+                        
+                    }
+                }
+
+            });
+
+            
+        }
+
+        return wrapper;
 }
 
 
