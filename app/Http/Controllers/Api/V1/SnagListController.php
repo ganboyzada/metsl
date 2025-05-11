@@ -249,12 +249,14 @@ class SnagListController extends Controller
         if($request->validated()){
             \DB::beginTransaction();
             try{
-                $all_data = request()->all();
+                $all_data = $request->all();
                 $all_data['created_by'] = \Auth::user()->id;
                 $all_data['closed_by'] = \Auth::user()->id;
 
                 $all_data['status'] = 0;
                 $all_data['date_notified_at'] = date('Y-m-d');
+                $all_data['due_date'] = Carbon::now()->addDays((int)$all_data['due_days'])->toDateString();
+
                // dd($all_data);
                 $model = $this->punchListService->create($all_data);
             \DB::commit();
