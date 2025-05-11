@@ -352,7 +352,7 @@
         wrapper.style.position = 'absolute';
         wrapper.style.left = `${xPercent}%`;
         wrapper.style.top = `${yPercent}%`;
-        wrapper.style.transform = 'translate(-50%, -100%)';
+        //wrapper.style.transform = 'translate(-50%, -100%)';
 
 
 
