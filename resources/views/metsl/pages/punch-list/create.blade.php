@@ -448,10 +448,10 @@
 
         pin.addEventListener('click', (e) => {
             e.stopPropagation();
-            // if(labelcontent == null){
+            if(labelcontent != null){
                // wrapper.remove();
 
-            //}else{
+                 //}else{
                 const confirmed = confirm('Are you sure you want to delete this punch?');
                 if (confirmed) {
                     $('.error').hide(); 
@@ -469,7 +469,7 @@
                     
                     
                 }
-           // }
+            }
 
         });
 
