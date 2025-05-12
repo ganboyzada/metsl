@@ -8,12 +8,12 @@
     "src": "node_modules/@fontsource-variable/dm-sans/files/dm-sans-latin-wght-normal.woff2"
   },
   "resources/css/app.css": {
-    "file": "assets/app-DzGLBUB2.css",
+    "file": "assets/app-B9kWHfRF.css",
     "src": "resources/css/app.css",
     "isEntry": true
   },
   "resources/js/app.js": {
-    "file": "assets/app-eKjctNug.js",
+    "file": "assets/app-CX9yNmpv.js",
     "name": "app",
     "src": "resources/js/app.js",
     "isEntry": true,

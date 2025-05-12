@@ -179,7 +179,8 @@ function getLocalStorage(){
             $('.tab-content#punch-list').removeClass('hidden');
             $("[data-tab='punch-list']").addClass("active");
             try {
-                get_punch_list()
+                get_punch_list();
+                getAllStatusPeriority();
             } catch (error) {
                 console.log(error)
             }
