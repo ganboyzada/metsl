@@ -344,12 +344,12 @@
                             backgroundColor: '#ff5a5a', // Red
                         },
                         {
-                            label: 'Open',
+                            label: 'Next 7 Days',
                             data: next_7_days,
                             backgroundColor: '#3b82f6', // blue
                         },
                         {
-                            label: 'Closed',
+                            label: 'More than 7 days',
                             data: more_7_days,
                             backgroundColor: '#374151', // gray
                         },
