@@ -2,7 +2,7 @@
     <div class="flex justify-between items-start md:items-center">
         <div class="relative flex flex-col md:flex-row md:items-center gap-3">
             <a href="/" class="block relative md:mt-[-6px] w-24">
-                <img src="{{ asset('images/logo-dark.png') }}" class="dark:hidden" alt="">
+                <img src="{{ asset('images/logo.png') }}" class="dark:hidden" alt="">
                 <img src="{{ asset('images/logo-light.png') }}" class="hidden dark:block" alt="">
             </a>
 
