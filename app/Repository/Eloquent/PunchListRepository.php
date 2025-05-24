@@ -393,14 +393,7 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
             $q->where(function($query) use($search){
                     $query->whereAny(
                         [
-                            'number',
-                            'title',
-                            'date_notified_at',
-                            'location',
-                            'date_resolved_at',
-                            'description',
-                            'due_date',
-                            'status',
+                            'number'
                         ],
                         'LIKE',
                         "%".$search."%"
@@ -409,18 +402,18 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
                 
             });
 
-            $q->orWhere(function($query) use($search){
-                    $query->WhereHas('drawing',function($q) use($search){
-                        $q->whereAny(
-                        [
-                            'title',
-                            'description'
-                        ],
-                        'LIKE',
-                        "%".$search."%"
-                    );
-                    }); 
-                });
+            // $q->orWhere(function($query) use($search){
+            //         $query->WhereHas('drawing',function($q) use($search){
+            //             $q->whereAny(
+            //             [
+            //                 'title',
+            //                 'description'
+            //             ],
+            //             'LIKE',
+            //             "%".$search."%"
+            //         );
+            //         }); 
+            //     });
 
             });
         } 
