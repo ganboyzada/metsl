@@ -10,13 +10,13 @@
     </style>
 
 <style>
-/* .choices__list--dropdown {
-  z-index: 9999 !important;
-}*/
-/*.choices {
+.choices__list--dropdown {
+  z-index: 9999 !important; /* اجعلها قيمة كبيرة لتكون فوق المحرر */
+}
+.choices {
   position: relative;
   z-index: 9999 !important;
-} */
+}
 
     #image-container {
       position: relative;
@@ -77,10 +77,10 @@
 }
 
 
- .choices {
+/* .choices {
     z-index:0 !important;
 
-} 
+} */
 
   </style>
 
