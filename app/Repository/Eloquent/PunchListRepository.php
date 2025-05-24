@@ -374,6 +374,85 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
 
         
     }
+
+
+        /**
+    * @param int $project_id 
+    * @param int $id 
+    * @param \Request $request
+    * @return LengthAwarePaginator
+    * 
+    */
+    public function get_all_project_Punch_list_by_drawing_id($project_id ,$id , $request): LengthAwarePaginator{
+  
+        $punchLists =  $this->model->where('project_id',$project_id)->where('drawing_id',$id);
+
+        if(isset($request->search)){   
+            $search = $request->search;     
+            $punchLists=$punchLists->when($search , function($q) use($search){
+            $q->where(function($query) use($search){
+                    $query->whereAny(
+                        [
+                            'number',
+                            'title',
+                            'date_notified_at',
+                            'location',
+                            'date_resolved_at',
+                            'description',
+                            'due_date',
+                            'status',
+                        ],
+                        'LIKE',
+                        "%".$search."%"
+                    );
+
+                
+            });
+
+            $q->orWhere(function($query) use($search){
+                    $query->WhereHas('drawing',function($q) use($search){
+                        $q->whereAny(
+                        [
+                            'title',
+                            'description'
+                        ],
+                        'LIKE',
+                        "%".$search."%"
+                    );
+                    }); 
+                });
+
+            });
+        } 
+
+        if(checkIfUserHasThisPermission($project_id , 'view_all_punch_list')){
+
+            $punchLists=$punchLists->paginate(10);
+  
+            return $punchLists;
+        }        
+        else if(!auth()->user()->is_admin){
+
+            $punchLists = $punchLists->where(function($q){
+                $q->whereHas('users', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                });
+
+                $q->orwhere('responsible_id',auth()->user()->id);
+                $q->orwhere('created_by',auth()->user()->id);
+
+                
+            });
+
+            $punchLists=$punchLists->paginate(perPage: 10);
+  
+            return $punchLists;
+              
+
+        }
+
+        
+    }
     
      /**
     * @param int $project_id

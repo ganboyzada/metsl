@@ -304,7 +304,7 @@ class SnagListController extends Controller
 
 
     public function getSnagsDrawing(Request $request , $project_id, $id){
-        $punchLists = $this->punchListService->getAllProjectPunchListByDrawingId($project_id , $id);
+        $punchLists = $this->punchListService->getAllProjectPunchListByDrawingIdApi($project_id , $id , $request);
         $res = $this->getList($punchLists, $request, 'punchList');
         // $result['data'] = $res->items();
         // $result['pagination'] =  [

@@ -100,6 +100,13 @@ class PunchListService
         return $this->punchListRepository->get_all_project_Punch_list_paginate($project_id,$request);
 
     }
+
+ public function getAllProjectPunchListByDrawingIdApi($project_id,$id,$request){
+        return $this->punchListRepository->get_all_project_Punch_list_by_drawing_id($project_id,$id,$request);
+
+    }
+
+
     public function getAllProjectPunchListByDrawingId($project_id , $drawing_id , $current_punchlist_id){
         if($current_punchlist_id == NULL){
             return $this->punchListRepository->where(['project_id' => $project_id , 'drawing_id' => $drawing_id])->all();

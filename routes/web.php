@@ -101,7 +101,7 @@ Route::middleware([
     Route::post('/project/punch-list/createDrawings', [PunchListController::class, "create_drawings"])->name('projects.punch-list.drawings.create');
     Route::get('/project/punch-list/deleteDrawings/{id}', [PunchListController::class, "delete_drawings"])->name('projects.punch-list.drawings.delete');
     Route::get('/project/punch-list/searchDrawings', [PunchListController::class, "drawings_search"])->name('projects.punch-list.drawings.search');
-    Route::get('/project/punch-list/drawingImage/{id}/{current_punchlist_id?}',  [PunchListController::class, "getAllPunchListByDrawingId"])->name('projects.punch-list.all_punch_list_by_drawing_id');	
+    Route::get('/project/punch-list/drawingImage/{id}/{current_punchlist_id}',  [PunchListController::class, "getAllPunchListByDrawingId"])->name('projects.punch-list.all_punch_list_by_drawing_id');	
 
     Route::get('/project/punch-list/deleteAssignedDrawings/{punchlist_id}/{id}', [PunchListController::class, "delete_assigned_drawings"])->name('projects.punch-list.assigned_drawings.delete');
 

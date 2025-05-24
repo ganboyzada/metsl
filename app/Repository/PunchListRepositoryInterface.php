@@ -47,7 +47,16 @@ interface PunchListRepositoryInterface
     * 
     */
     public function get_all_project_Punch_list_paginate($project_id , $request): LengthAwarePaginator;
-    
+
+  /**
+    * @param int $project_id 
+    * @param int $id 
+    * @param \Request $request
+    * @return LengthAwarePaginator
+    * 
+    */
+    public function get_all_project_Punch_list_by_drawing_id($project_id ,$id , $request): LengthAwarePaginator ;   
+
     /**
     * @param int $projectID 
     * @return int
