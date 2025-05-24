@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api\V1;
 
+use App\Enums\PunchListStatusEnum;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProjectResource;
 use App\Http\Resources\UserProfileResource;
@@ -364,8 +365,8 @@ class ProjectController extends Controller
     }
 
     public function getStaticsesPuchList($projectId){
-        $punlist_count = PunchList::where('status','!=',2)->where('project_id',$projectId)
-        ->whereDate('due_date', '<', now()->toDateString());
+        $punlist_count = PunchList::where('project_id',$projectId)
+        ->where('status', PunchListStatusEnum::PENDING->value);
 
         if(checkIfUserHasThisPermission($projectId , 'view_all_punch_list')){
 
@@ -393,26 +394,17 @@ class ProjectController extends Controller
         }
 
         
-        $data['snag_list']['overdue'] = $punlist_count;
+        $data['snag_list']['pending'] = $punlist_count;
 
 
-        $punlist_count = PunchList::where('status','!=',2)->where('project_id',$projectId)
-        ->whereDate('due_date', '>', now()->toDateString());
+        $punlist_count = PunchList::where('project_id',$projectId)
+        ->where('status', PunchListStatusEnum::REVIEW->value);
 
 
         if(checkIfUserHasThisPermission($projectId , 'view_all_punch_list')){
 
 
-            $punlist_count =  $punlist_count->get()->filter(function ($value, $key) {
-                
-                $date2 = Carbon::parse($value->due_date);
-                $date1 = Carbon::parse(date('Y-m-d'));
-
-                $diffInDays = $date1->diffInDays($date2);
-
-                return $diffInDays < 7;
-
-            });
+            $punlist_count =  $punlist_count->get();
 
         }        
         else
@@ -428,37 +420,18 @@ class ProjectController extends Controller
 
                 
             });
-            $punlist_count =  $punlist_count->get()->filter(function ($value, $key) {
-                
-                $date2 = Carbon::parse($value->due_date);
-                $date1 = Carbon::parse(date('Y-m-d'));
-
-                $diffInDays = $date1->diffInDays($date2);
-            // dd($diffInDays);
-
-                return $diffInDays < 7;
-
-            });
+            $punlist_count =  $punlist_count->get();
         }
 
         $punlist_count =  $punlist_count->count();
-        $data['snag_list']['next_7_days'] = $punlist_count;
+        $data['snag_list']['review'] = $punlist_count;
 
-        $punlist_count = PunchList::where('status','!=',2)->where('project_id',$projectId)
-        ->whereDate('due_date', '>', now()->toDateString());
+        $punlist_count = PunchList::where('project_id',$projectId)
+        ->where('status', PunchListStatusEnum::CLOSED->value);
 
         if(checkIfUserHasThisPermission($projectId , 'view_all_punch_list')){
 
-            $punlist_count =  $punlist_count->get()->filter(function ($value, $key) {
-                
-                $date2 = Carbon::parse($value->due_date);
-                $date1 = Carbon::parse(date('Y-m-d'));
-
-                $diffInDays = $date1->diffInDays($date2);
-
-                return $diffInDays >= 7;
-
-            });
+            $punlist_count =  $punlist_count->get();
   
         }        
         else
@@ -475,36 +448,27 @@ class ProjectController extends Controller
                 
             });
 
-            $punlist_count =  $punlist_count->get()->filter(function ($value, $key) {
-                
-                $date2 = Carbon::parse($value->due_date);
-                $date1 = Carbon::parse(date('Y-m-d'));
-
-                $diffInDays = $date1->diffInDays($date2);
-
-                return $diffInDays >= 7;
-
-            }); 
+            $punlist_count =  $punlist_count->get(); 
               
 
         }
 
 
         $punlist_count =  $punlist_count->count();
-        $data['snag_list']['more_7_days'] = $punlist_count;
+        $data['snag_list']['closed'] = $punlist_count;
         return $data;
 
        
 
     }
     public function getStaticses($projectId){
-        $documents = $this->getStaticsesDocuments($projectId);
+        //$documents = $this->getStaticsesDocuments($projectId);
         $puchLists = $this->getStaticsesPuchList($projectId);
-        $correspondences = $this->getStaticsesCorrespondences($projectId);
-        $data = [...$documents , ...$puchLists , ...$correspondences];
+        //$correspondences = $this->getStaticsesCorrespondences($projectId);
+        //$data = [...$documents , ...$puchLists , ...$correspondences];
 
         return $this->sendResponse(
-            $data,
+            $puchLists,
             "Fetch All Statics."
         );
 

@@ -95,7 +95,7 @@ class SnagListController extends Controller
     }
 
     public function getSnagList(Request $request , $project_id){
-        $punchLists = $this->punchListService->getAllProjectPunchListPaginate($project_id);
+        $punchLists = $this->punchListService->getAllProjectPunchListPaginate($project_id,$request);
         $res = $this->getList($punchLists, $request, 'punchList');
         // $result['data'] = $res->items();
         // $result['pagination'] =  [

@@ -300,14 +300,51 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
     }    
     /**
     * @param int $project_id 
+    * @param \Request $request
     * @return LengthAwarePaginator
     * 
     */
-    public function get_all_project_Punch_list_paginate($project_id): LengthAwarePaginator{
+    public function get_all_project_Punch_list_paginate($project_id , $request): LengthAwarePaginator{
   
         $punchLists =  $this->model->where('project_id',$project_id);
 
-        
+        if(isset($request->search)){   
+            $search = $request->search;     
+            $punchLists=$punchLists->when($search , function($q) use($search){
+            $q->where(function($query) use($search){
+                    $query->whereAny(
+                        [
+                            'number',
+                            'title',
+                            'date_notified_at',
+                            'location',
+                            'date_resolved_at',
+                            'description',
+                            'due_date',
+                            'status',
+                        ],
+                        'LIKE',
+                        "%".$search."%"
+                    );
+
+                
+            });
+
+            $q->orWhere(function($query) use($search){
+                    $query->WhereHas('drawing',function($q) use($search){
+                        $q->whereAny(
+                        [
+                            'title',
+                            'description'
+                        ],
+                        'LIKE',
+                        "%".$search."%"
+                    );
+                    }); 
+                });
+
+            });
+        } 
 
         if(checkIfUserHasThisPermission($project_id , 'view_all_punch_list')){
 
