@@ -25,6 +25,7 @@
                     id="correspondence-number"
                     type="text"
 					name="number"
+                    readonly
                     placeholder="RFI-001"
                     class="w-full px-4 py-2 border  dark:bg-gray-800 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
                 />

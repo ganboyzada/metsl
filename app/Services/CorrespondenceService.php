@@ -19,11 +19,8 @@ class CorrespondenceService
     public function getNextNumber($type , $id){
        // dd($type);
         $count = $this->correspondenceRepository->get_next_number($type , $id);
-        if($count){
-            return $type.'-00'.$count+1;    
-        }else{
-            return $type.'-001';
-        }
+            return $type.'-'.$count;    
+        
     }
 
     public function create(array $data)

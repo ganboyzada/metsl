@@ -75,6 +75,13 @@ class CorrespondenceController extends Controller
                 $all_data['created_by'] = \Auth::user()->id;
 
                 $all_data['created_date'] = date('Y-m-d');
+                if($all_data['reply_correspondence_id'] == NULL){
+                    $all_data['number'] =  $this->correspondenceService->getNextNumber($all_data['type'] , Session::get('projectID'));
+
+                }else{
+                    $old = $this->correspondenceService->edit($all_data['reply_correspondence_id']);
+                    $all_data['number'] =  'Replying to '.$old->number??'';
+                }
 
                 $model = $this->correspondenceService->create($all_data);
                 if($all_data['reply_correspondence_id'] != NULL){

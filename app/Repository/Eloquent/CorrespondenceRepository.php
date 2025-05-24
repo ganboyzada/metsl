@@ -33,7 +33,16 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
     */
     public function get_next_number($type , $projectID): mixed
     {
-        return $this->model->where('type',$type)->where('project_id',$projectID)->count();
+        $model = $this->model->where('project_id',$projectID)->where('reply_correspondence_id',NULL)
+        ->orderby('id','desc')->first();
+        //dd($model);
+        if(isset($model->number)){
+            $number = explode('-', $model->number);
+            return (int)$number[1] + 1; 
+        }else{
+            return 1;
+        }
+        //return $this->model->where('type',$type)->where('project_id',$projectID)->count();
     } 
 
     /**
