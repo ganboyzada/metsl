@@ -25,7 +25,7 @@
     <!-- Stakeholder Section -->
     <h2 class="text-2xl font-semibold mb-6 flex items-center">
         <i data-feather="users" class="w-6 h-6 mr-2 text-green-500"></i>
-        Stakeholders
+        Project Team
     </h2>
     <div  id="Stakeholders" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6 mb-8">
         <!-- Stakeholder Card -->

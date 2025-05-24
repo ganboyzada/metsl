@@ -187,7 +187,7 @@ function getLocalStorage(){
 
             break;
         case 'stakeholders':
-            $('.current-selected').html('Stakeholders');
+            $('.current-selected').html('Project Team');
             $('.tab-content#stakeholders').removeClass('hidden');
             $("[data-tab='stakeholders']").addClass("active");
             try {

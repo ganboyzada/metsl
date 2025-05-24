@@ -24,7 +24,7 @@
             <div id="progress-step-1" class="progress-step active h-2 rounded-full mt-2"></div>
         </div>
         <div class="text-center">
-            <div class="text-sm font-semibold">2. Stakeholder Selection</div>
+            <div class="text-sm font-semibold">2. Project Team Selection</div>
             <div id="progress-step-2" class="progress-step h-2 rounded-full mt-2"></div>
         </div>
         <div class="text-center">
@@ -270,7 +270,7 @@
         <!-- Step 3: Role Assignment -->
         <div id="step3" class="wizard-step hidden">
             <h2 class="text-2xl font-semibold mb-4">Role Assignment</h2>
-            <p class="mb-2 text-gray-700 dark:text-gray-200">Assign specific roles to the stakeholders selected in the previous step.</p>
+            <p class="mb-2 text-gray-700 dark:text-gray-200">Assign specific roles to the Project Team selected in the previous step.</p>
 
             <!-- Stakeholder Grid -->
             <div id="stakeholderGrid" class="stakeholder-grid grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
@@ -368,7 +368,7 @@
             <!-- Role Assignment Modal -->
             <div id="roleAssignmentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
                 <div class="bg-white dark:bg-gray-800 p-6 w-full max-w-lg max-h-[90vh] overflow-y-scroll">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200" id="modalStakeholderName">Assign Role to Stakeholder</h3>
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200" id="modalStakeholderName">Assign Role to Project Team</h3>
     
                     <!-- Role Assignment Form -->
                     <form id="roleAssignmentForm" onsubmit="saveRoleAssignment(event)">

@@ -22,7 +22,7 @@
                 <i data-feather="calendar" class="mr-2"></i> Meeting Minutes
             </button>
             <button data-tab="stakeholders" class="py-3 px-4" onclick="set_in_local_storage('stakeholders');">
-                <i data-feather="users" class="mr-2"></i> Stakeholders
+                <i data-feather="users" class="mr-2"></i> Project Team
             </button>
             <button data-tab="punch-list" class="py-3 px-4"   onclick="set_in_local_storage('punch_list');">
                 <i data-feather="list" class="mr-2"></i> Punch List

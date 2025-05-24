@@ -192,6 +192,10 @@
 						<div>
                             <a onclick="openCreateUserModal('${i}')" href="#"><h3 class="text-lg font-semibold">${all_stakeholders[i].userable.first_name} ${all_stakeholders[i].userable.last_name}</h3></a>
                             <p class="text-sm text-gray-600 dark:text-gray-300">${all_stakeholders[i].email}</p>
+                             <p class="text-sm text-gray-600 dark:text-gray-300">${all_stakeholders[i].company != null ? all_stakeholders[i].company.name : '' }</p>
+                              <p class="text-sm text-gray-600 dark:text-gray-300">${all_stakeholders[i].all_roles[0].pivot.job_title}</p>
+                               <p class="text-sm text-gray-600 dark:text-gray-300">${all_stakeholders[i].userable.mobile_phone}</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-300">${all_stakeholders[i].userable.office_phone}</p>
                         
                             <div class="mt-4 flex items-center gap-2">
                                 <a onclick="openCreateUserModal('${i}')" href="#" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">

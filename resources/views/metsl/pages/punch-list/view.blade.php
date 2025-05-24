@@ -529,7 +529,7 @@
     async function get_image(id){
 
         let savedPins = [];
-        let fetchRes = await fetch(`{{url('project/punch-list/drawingImage/${id}')}}`);
+        let fetchRes = await fetch(`{{url('project/punch-list/drawingImage/${id}/${current_punchlist_id}')}}`);
         const all = await fetchRes.json();
 
         savedPins = all;

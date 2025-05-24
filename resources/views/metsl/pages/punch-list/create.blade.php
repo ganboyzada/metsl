@@ -10,6 +10,14 @@
     </style>
 
 <style>
+.choices__list--dropdown {
+  z-index: 9999 !important; /* اجعلها قيمة كبيرة لتكون فوق المحرر */
+}
+.choices {
+  position: relative;
+  z-index: 9999 !important;
+}
+
     #image-container {
       position: relative;
       display: inline-block;
@@ -69,10 +77,10 @@
 }
 
 
-.choices {
+/* .choices {
     z-index:0 !important;
 
-}
+} */
 
   </style>
 
@@ -718,14 +726,25 @@ function searchDrawings(search){
 		$('[name="number"]').val(all.next_number);
 
 		let reviewers = all.distribution_members.map(function(item) {
-		  return {'value' : item.id , 'label' : item.name};
+            if(item.company_id != null){
+                var label =  item.name+' - '+ item.company.name;
+            }else{
+                var label =  item.name;
+            }
+		  return {'value' : item.id , 'label' : label};
 		});
 			distribution_obj.clearStore();
 			distribution_obj.setChoices(reviewers);	
 
 
 			reviewers = all.responsible.map(function(item) {
-			  return {'value' : item.id , 'label' : item.name , 'selected' : true};
+                if(item.company_id != null){
+                    var label =  item.name+' - '+ item.company.name;
+                }else{
+                    var label =  item.name;
+                }
+                
+			  return {'value' : item.id , 'label' : label , 'selected' : true};
 			});	
 			reviewers_obj.clearStore();
 			reviewers_obj.setChoices(reviewers);

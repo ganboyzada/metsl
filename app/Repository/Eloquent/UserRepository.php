@@ -88,8 +88,8 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                     $query->wherePivot('project_id',$project_id);
 
                 }])
-
-                ->get(['id', 'name']);
+                ->with(['company:id,name'])
+                ->select(['id', 'name','company_id' ])->get();
         }else{
             return $this->model->whereHas('projects', function ($query) use ($project_id) {
                 $query->where(function ($q) use ($project_id) {
@@ -138,7 +138,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
        })
        
        //->whereRelation('projects', 'projects.id', '=', $project_id)
-        ->with('userable')
+        ->with('userable' , 'company')
+        ->with(['allRoles'=>function($query)use($project_id){
+                    $query->wherePivot('project_id',$project_id);
+
+                }])
         ->when($request->search , function($query) use($request){
             $query->where(function($q) use($request){
                 $q->where('name', 'LIKE', "%".$request->search."%");

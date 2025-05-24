@@ -186,9 +186,9 @@ class PunchListController extends Controller
         }
     }
 
-    public function getAllPunchListByDrawingId(Request $request , $drawing_id){
+    public function getAllPunchListByDrawingId(Request $request , $drawing_id , $current_punchlist_id = null){
         $project_id = Session::get('projectID');
-        $punchLists = $this->punchListService->getAllProjectPunchListByDrawingId($project_id , $drawing_id);
+        $punchLists = $this->punchListService->getAllProjectPunchListByDrawingId($project_id , $drawing_id , $current_punchlist_id);
         $punchLists->map(function($row){
 
             $row->x = $row->pin_x;
@@ -238,7 +238,8 @@ class PunchListController extends Controller
 			
             $distribution_members = $distribution_members['users'];
             $responsible = $responsible['users'];
-
+           // dd($distribution_members);
+           // return $distribution_members[0]->company;
             return ['distribution_members'=>$distribution_members, 'responsible'=>$responsible  , 'next_number'=>$next_number];
         }
 

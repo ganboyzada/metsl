@@ -100,8 +100,14 @@ class PunchListService
         return $this->punchListRepository->get_all_project_Punch_list_paginate($project_id,$request);
 
     }
-    public function getAllProjectPunchListByDrawingId($project_id , $drawing_id){
-        return $this->punchListRepository->where(['project_id' => $project_id , 'drawing_id' => $drawing_id])->all();
+    public function getAllProjectPunchListByDrawingId($project_id , $drawing_id , $current_punchlist_id){
+        if($current_punchlist_id == NULL){
+            return $this->punchListRepository->where(['project_id' => $project_id , 'drawing_id' => $drawing_id])->all();
+
+        }else{
+            return $this->punchListRepository->where(['project_id' => $project_id , 'drawing_id' => $drawing_id , 'id' => $current_punchlist_id])->all();
+
+        }
 
     }
     public function getStatusPieChart($project_id){
