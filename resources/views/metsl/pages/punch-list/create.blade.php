@@ -15,7 +15,10 @@
 }
 .choices {
   position: relative;
-  z-index: 9999 !important;
+ z-index: 9999 !important; 
+}
+#roleAssignmentModal{
+ z-index: 10000 !important;
 }
 
     #image-container {
