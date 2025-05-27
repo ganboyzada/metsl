@@ -9,7 +9,7 @@
                     <th class="px-4 py-2 font-light">Number</th>
                     <th class="px-4 py-2 font-light">Created Date</th>
                     <th class="px-4 py-2 font-light">revision Count</th>
-                    <th class="px-4 py-2 font-light">status</th>
+                    <th class="px-4 py-2 font-light">Pending Revision Count</th>
                 </tr>
             </thead>
             <tbody id="widget-docs-table">
@@ -30,13 +30,13 @@ function loadWidgetDocs() {
         if(DocsData.length > 0){
             for(let i=0;i<DocsData.length;i++){
                 if(DocsData[i].has_pending_revision > 0){
-                    var status = `<span class=" flex items-center text-xs font-semibold bg-yellow-900 text-white rounded-full px-2 py-1">
-                        ${DocsData[i].has_pending_revision} Pending
+                    var status = `<span class=" flex items-center text-xs font-semibold bg-red-500 text-white rounded-full px-2 py-1">
+                        ${DocsData[i].has_pending_revision} 
                             </span>
                         `;
                 }else{
-                    var status = `<span class=" flex items-center text-xs font-semibold bg-green-900 text-white rounded-full px-2 py-1">
-                        ${DocsData[i].has_pending_revision} Pending
+                    var status = `<span class=" flex items-center text-xs font-semibold bg-green-500 text-white rounded-full px-2 py-1">
+                        ${DocsData[i].has_pending_revision} 
                             </span>
                         `;
                 }
