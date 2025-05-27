@@ -30,12 +30,12 @@ function loadWidgetDocs() {
         if(DocsData.length > 0){
             for(let i=0;i<DocsData.length;i++){
                 if(DocsData[i].has_pending_revision > 0){
-                    var status = `<span class=" flex items-center text-xs font-semibold bg-red-500 text-white rounded-full px-2 py-1">
+                    var status = `<span class="  text-xs font-semibold bg-red-500 text-white rounded-full px-2 py-1">
                         ${DocsData[i].has_pending_revision} 
                             </span>
                         `;
                 }else{
-                    var status = `<span class=" flex items-center text-xs font-semibold bg-green-500 text-white rounded-full px-2 py-1">
+                    var status = `<span class="  text-xs font-semibold bg-green-500 text-white rounded-full px-2 py-1">
                         ${DocsData[i].has_pending_revision} 
                             </span>
                         `;
