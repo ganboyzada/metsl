@@ -21,7 +21,19 @@ class CheckProjectSession
             return $next($request);
         }else{ 
             
-            $project = Project::latest()->first();
+           // $project = Project::latest()->first();
+
+              if(checkIfUserHasThisPermission(Session::get('projectID') ,'view_all_projects')){
+                $project = \App\Models\Project::latest()->first();
+            }else{
+                $project =\App\Models\Project::whereHas('stakholders', function ($query) {
+                $query->where(function ($q) {
+                    $q->where('user_id', auth()->user()->id);
+                });
+                })->latest()->first();
+            }
+
+
             if($project){
                 session(['projectID' => $project->id]);
                 session(['projectName' => $project->name]);

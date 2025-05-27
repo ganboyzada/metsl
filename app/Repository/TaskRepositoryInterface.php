@@ -4,6 +4,7 @@ namespace App\Repository;
 use App\Model\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 interface TaskRepositoryInterface
 {
@@ -13,7 +14,11 @@ interface TaskRepositoryInterface
     */
 
     public function all_tasks($project_id): Collection;
-
+  /**
+    * @param integer $id
+    * @return LengthAwarePaginator
+    */
+    public function all_tasks_assigned($project_id) :LengthAwarePaginator;
 
     /**
     * @param array $data 

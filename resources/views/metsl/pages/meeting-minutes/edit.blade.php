@@ -14,7 +14,7 @@
     @endif  
     <div class="meeting-view grid grid-cols-1 lg:grid-cols-4 gap-6">
         <!-- Meeting Planner Form -->
-        <div class="lg:col-span-2 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"  method="POST" enctype="multipart/form-data">
+        <div class="lg:col-span-4 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"  method="POST" enctype="multipart/form-data">
             @csrf
             <input type="hidden" id="project_id" name="project_id" value="{{ \Session::get('projectID') }}"/>
             <input type="hidden" name="id" value="{{ $meeting_id }}"/> 
@@ -42,7 +42,7 @@
 
             <div class="col-span-1">
                 <label for="endDate" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200">Status</label>
-                <span class="px-3 py-1 font-bold rounded-full text-xs {{ $meeting->status->color() }} text-white">{{ strtoupper($meeting->status->text()) }}</span>
+                <span class="px-3 py-1 font-bold rounded-full text-xs {{ $meeting->status->color() }} text-white">{{ ($meeting->status->name == 'PUBLISHED'  && $meeting->old_status->value == \App\Enums\MeetingPlanStatusEnum::PLANNED->value) ? 'Ready To '.strtoupper($meeting->status->text()) : strtoupper($meeting->status->text()) }}</span>
             </div>
 
             <!-- Meeting Location -->
@@ -96,7 +96,7 @@
 
         </div>
 
-        <div class="lg:col-span-2 rounded-xl bg-gray-100 dark:bg-gray-800 py-5">
+        <div class="lg:col-span-4 rounded-xl bg-gray-100 dark:bg-gray-800 py-5">
             <h3 class="text-xl mb-4 px-5">Meeting Notes</h3>
             <form id="meeting-planner-form" method="POST" >
                 @csrf
@@ -189,12 +189,36 @@
                     </table>
                 </div>
                 <div class="px-5">
+                    @if ($meeting->old_status->value != \App\Enums\MeetingPlanStatusEnum::PUBLISHED->value)
                     <button type="button" onclick="addNote()" class="mt-4 w-full py-2 px-4 bg-gray-200 dark:bg-gray-700 rounded-full hover:bg-blue-500/50 flex gap-4 justify-center"><i data-feather="plus-circle"></i>Add Note</button>
-                    @php
-                        //dd($meeting);
+                    @endif
+                   @php
+                        $planned_date = $meeting->planned_date;
+                        $start_time = $meeting->start_time;
+                        $duration_minutes = (int)$meeting->duration; // Duration as an integer
+                        $meeting_start = \Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $planned_date.' '.$start_time);
+                        $meeting_end = $meeting_start->copy()->addMinutes($duration_minutes);
+                        
+                        
                     @endphp
+                    <input type="hidden" name="status" value="{{ ($now->greaterThan($meeting_end) || $now->between($meeting_start, $meeting_end))? \App\Enums\MeetingPlanStatusEnum::PUBLISHED->value : -1 }}"/>
                     @if($meeting->created_by == auth()->user()->id || auth()->user()->is_admin)
-                    <button type="submit" class="submit_planing_meeting_form mt-6 py-3 px-4 bg-gray-200 dark:bg-gray-700 rounded-xl hover:bg-blue-500 flex gap-4 justify-center"><i data-feather="save"></i>Save Changes</button>
+                    @if ($meeting->old_status->value != \App\Enums\MeetingPlanStatusEnum::PUBLISHED->value)
+                          <button type="submit" class="submit_planing_meeting_form mt-6 py-3 px-4 bg-gray-200 dark:bg-gray-700 rounded-xl hover:bg-blue-500 flex gap-4 justify-center"><i data-feather="save"></i>
+                            @php
+                                
+                                $now = \Carbon\Carbon::now();
+                                if ($now->greaterThan($meeting_end) || $now->between($meeting_start, $meeting_end)){
+                                    echo 'Publish';
+                                }else{
+                                    echo 'Save';
+                                }
+                            @endphp     
+                            
+                        
+                        </button>                      
+                    @endif
+
                     @endif
                 </div>
             </form>
@@ -260,9 +284,9 @@
                         
                         $('#file-list').html('');
                         
-                        setInterval(function() {
-                            location.reload();
-                            }, 3000);                        
+                       setInterval(function() {
+                                window.location.href="{{ route('home') }}";
+                                }, 3000);                        
 
                     }
                     else if(data.error){

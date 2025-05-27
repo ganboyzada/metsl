@@ -22,9 +22,20 @@
                     <!-- Dropdown Menu -->
                     <div  id="dropdown-toggle" class="dropdown absolute left-0 rounded-lg mt-2 min-w-full w-[130%] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg">
                         <ul class="py-2">
+                            @php
+                                if(checkIfUserHasThisPermission(Session::get('projectID') ,'view_all_projects')){
+                                    $all_projects = \App\Models\Project::all();
+                                }else{
+                                    $all_projects =\App\Models\Project::whereHas('stakholders', function ($query) {
+                                    $query->where(function ($q) {
+                                        $q->where('user_id', auth()->user()->id);
+                                    });
+                                    })->get();
+                                }
+                            @endphp
                             <!-- List of Projects (Replace these with dynamic content) -->
-                            @if($projects->count() > 0) 
-                                @foreach($projects as $project)
+                            @if($all_projects->count() > 0) 
+                                @foreach($all_projects as $project)
                                     @if (in_array($project->id, $projects_ids) || auth()->user()->is_admin)
                                     <li>
                                         <button onclick="selectProject('{{ $project->name }}' , '{{ $project->id }}')" class="block text-xs w-full text-left px-4 py-2 hover:bg-black/10 projectButton">{{ $project->name }}</button>
@@ -204,7 +215,7 @@
                 dataType: 'json',
                 success: function(data) {
                     if(data.success){
-                        console.log(data);
+                        //console.log(data);
                         const selectedProjectElement = document.getElementById("project-variable");
                         selectedProjectElement.textContent = projectName; // Update the displayed project name
                         const dropdown = document.getElementById('dropdown-toggle');

@@ -135,7 +135,7 @@
 
         function openCreateUserModal(i) {
             let currentStakeholder = allStakeholder[i];
-            console.log(currentStakeholder);
+            //console.log(currentStakeholder);
             $('#user_type').val(currentStakeholder.userable_type);
             $('[name="company_id"]').val(currentStakeholder.company_id);
             $('[name="first_name"]').val(currentStakeholder.userable.first_name);

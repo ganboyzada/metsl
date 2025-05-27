@@ -2,6 +2,7 @@
 
 namespace App\Repository\Eloquent;
 
+use App\Enums\MeetingPlanStatusEnum;
 use App\Mail\StakholderEmail;
 use App\Models\MeetingPlan;
 use App\Models\Permission;
@@ -55,6 +56,36 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
         return $this->model->where('project_id',$projectID)->count();
     } 
 
+    /**
+    * @param int $project_id 
+    * @param \Request $request
+    * @return LengthAwarePaginator
+    * 
+    */
+    public function get_all_project_meeting_planing_has_action_to_user($project_id , $request): LengthAwarePaginator{
+        $meetingPlanings =  $this->model->join('meeting_plan_notes','meeting_plan_notes.meeting_id','=','meeting_plans.id')
+        ->where('project_id',$project_id)->where('meeting_plan_notes.type','action')
+        ->where('status',MeetingPlanStatusEnum::PUBLISHED->value)->select('meeting_plans.*');
+
+          if(auth()->user()->is_admin){
+            $meetingPlanings = $meetingPlanings->with(['users:id,name'])->groupBy('meeting_plans.id')->paginate(5);
+
+            return $meetingPlanings;
+        }
+        else if(!auth()->user()->is_admin){
+
+            $meetingPlanings = $meetingPlanings->where('assign_user_id',auth()->user()->id);
+            
+
+            
+            
+            $meetingPlanings = $meetingPlanings->with(['users:id,name'])->groupBy('meeting_plans.id')->paginate(5);
+
+            return $meetingPlanings;  
+            
+
+        }
+    }
 
     /**
     * @param int $project_id 

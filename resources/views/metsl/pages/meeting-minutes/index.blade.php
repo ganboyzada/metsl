@@ -93,50 +93,69 @@
 		get_meeting_planing();
 	});
 	async function get_meeting_planing(page = 1){
-        if(localStorage.getItem("project_tool") == 'meeting_planing'){
-		const search = $('#search').val();
-		const startDate = $('#start-date').val();
-		const endDate = $('#end-date').val();
-		
-		let url =`project/meetings/all?page=${page}&search=${search}&start_date=${startDate}&end_date=${endDate}`;
+       // alert(localStorage.getItem("project_tool"));
+        if(localStorage.getItem("project_tool") == 'meeting_planing'  || localStorage.getItem("project_tool") == 'activities'){
+
+            if(localStorage.getItem("project_tool") == 'meeting_planing'){
+                const search = $('#search').val();
+                const startDate = $('#start-date').val();
+                const endDate = $('#end-date').val();
+                
+                let url =`project/meetings/all?page=${page}&search=${search}&start_date=${startDate}&end_date=${endDate}`;
 
 
-        let fetchRes = await fetch(url);
-        const response = await fetchRes.json(); // full paginated response
-        const all_meetings = response.data;
-        renderPaginationMeeting(response); // handle pagination UI
+                let fetchRes = await fetch(url);
+                const response = await fetchRes.json(); // full paginated response
+                const all_meetings = response.data;
+                renderPaginationMeeting(response); // handle pagination UI
 
 
-		 correspondenceData = all_meetings.map(function(item) {
-			let namesString = item.users.map((user) => `${user.name}`).join(", ");
-			item.users = namesString;
-			  return item;
-			});
-			let html =``;
-			if(all_meetings.length > 0){
-				for(let i=0;i<all_meetings.length;i++){
-                    console.log(all_meetings[i].users);
-					let url = "{{ route('projects.meetings.edit', [':id']) }}".replace(':id', all_meetings[i].id);
-					html+=`<tr class="border-b dark:border-gray-800">
-							<td class="px-4 py-2"><a target="_blank" href="${url}">${all_meetings[i].name}</a></td>
-							<td class="px-4 py-2">${all_meetings[i].planned_date}</td>
-							<td class="px-4 py-2">
-								<span class="px-3 py-1 rounded-full text-xs ${all_meetings[i].color} text-white">${all_meetings[i].status_text}</span>
-							</td>
-							<td class="px-4 py-2">${all_meetings[i].start_time}</td>
-							<td class="px-4 py-2">${all_meetings[i].users}</td>
-                            <td class="px-4 py-2 flex items-center gap-3">
-								<a target="_blank" href="${url}" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
-									<i data-feather="eye" class="w-5 h-5"></i>
-								</a>
-							</td>
-					
-							</tr>`;
-				}
-				
-			}
-			$('#meetings-table').html(html);
-            feather.replace();	
+                correspondenceData = all_meetings.map(function(item) {
+                let namesString = item.users.map((user) => `${user.name}`).join(", ");
+                item.users = namesString;
+                return item;
+                });
+                let html =``;
+                if(all_meetings.length > 0){
+                    for(let i=0;i<all_meetings.length;i++){
+                        //console.log(all_meetings[i].users);
+                        let url = "{{ route('projects.meetings.edit', [':id']) }}".replace(':id', all_meetings[i].id);
+                        html+=`<tr class="border-b dark:border-gray-800">
+                                <td class="px-4 py-2"><a target="_blank" href="${url}">${all_meetings[i].name}</a></td>
+                                <td class="px-4 py-2">${all_meetings[i].planned_date}</td>
+                                <td class="px-4 py-2">
+                                    <span class="px-3 py-1 rounded-full text-xs ${all_meetings[i].color} text-white">${all_meetings[i].status_text}</span>
+                                </td>
+                                <td class="px-4 py-2">${all_meetings[i].start_time}</td>
+                                <td class="px-4 py-2">${all_meetings[i].users}</td>
+                                <td class="px-4 py-2 flex items-center gap-3">
+                                    <a target="_blank" href="${url}" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
+                                        <i data-feather="eye" class="w-5 h-5"></i>
+                                    </a>
+                                </td>
+                        
+                                </tr>`;
+                    }
+                    
+                }
+                $('#meetings-table').html(html);
+                feather.replace();	
+            }else{
+                let url = `project/meetings/all_actions?page=${page}`;
+
+                let fetchRes = await fetch(url);
+                const response = await fetchRes.json(); // full paginated response
+                const all_meetings = response.data;
+
+                mettingsData = all_meetings.map(function(item) {
+                let namesString = item.users.map((user) => `${user.name}`).join(", ");
+                item.users = namesString;
+                return item;
+                });
+                await loadWidgetMeetings();
+                renderPaginationMeetingsWidget(response);
+            }
+
 			
         }
 	}

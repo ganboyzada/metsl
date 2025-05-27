@@ -23,7 +23,7 @@ Route::middleware([
 ])->group(function () {
 
 
-    Route::get('/', action: [ProjectController::class, "detail"])->name(name: 'home');
+    Route::get('/',  [ProjectController::class, "detail"])->name(name: 'home');
 
 
 
@@ -75,6 +75,7 @@ Route::middleware([
 	Route::post('/project/documents/store',  [DocumentController::class, "store"])->name('projects.documents.store');
     Route::get('/project/documents/all',  [DocumentController::class, "ProjectDocuments"])->name('projects.documents.all');
     Route::post('/project/documents/package/store',  [DocumentController::class, "store_package"])->name('projects.documents.package.store');
+    Route::get('/project/documents/all_assigned',  [DocumentController::class, "ProjectDocumentsAssigned"])->name('projects.documents.all_assigned');
 
 
 
@@ -121,6 +122,7 @@ Route::middleware([
 
 
 	Route::get('/project/meetings/all',  [MeetingPlaningController::class, "ProjectMeeetings"])->name('projects.meetings.all');
+    Route::get('/project/meetings/all_actions',  [MeetingPlaningController::class, "ProjectMeeetingsHasActions"])->name('projects.meetings.all_actions');
 	Route::get('/project/meetings/create',  [MeetingPlaningController::class, "create"])->name(name: 'projects.meetings.create');	
     Route::get('/project/meetings/participates',  [MeetingPlaningController::class, "getParticipates"])->name('projects.meetings.participates');	
 	Route::post('/project/meetings/store',  [MeetingPlaningController::class, "store"])->name(name: 'projects.meetings.store');	
@@ -137,7 +139,7 @@ Route::middleware([
     Route::get('/project/stakeholders/all',  [StakeholderController::class, "stakeholders"])->name('projects.stakeholders.all');
     Route::get('/project/stakeholders/edit/{id}',  [StakeholderController::class, "edit"])->name('projects.stakeholders.edit');
 	Route::get('/project/stakeholders/destroy/{id}',  [StakeholderController::class, "destroy"])->name(name: 'projects.stakeholders.destroy');	
-    Route::post('/project/stakeholders/update', action: [StakeholderController::class, "update"])->name('projects.stakeholders.update');
+    Route::post('/project/stakeholders/update',  [StakeholderController::class, "update"])->name('projects.stakeholders.update');
 
     Route::get('/project/groups/all',  [GroupController::class, "all"])->name(name: 'projects.groups.all');	
 	Route::post('/project/groups/store',  [GroupController::class, "store"])->name(name: 'projects.groups.store');	
@@ -146,21 +148,23 @@ Route::middleware([
     
 
     Route::get('/project/tasks/all',  [TaskController::class, "all"])->name(name: 'projects.tasks.all');	
+    Route::get('/project/tasks/all_assigned',  [TaskController::class, "all_assigned"])->name(name: 'projects.tasks.all_assigned');	
+
 	Route::post('/project/tasks/store',  [TaskController::class, "store"])->name(name: 'projects.tasks.store');	
 	Route::post('/project/tasks/update',  [TaskController::class, "update"])->name(name: 'projects.tasks.update');	
 	Route::get('/project/tasks/destroy/{id}',  [TaskController::class, "destroy"])->name(name: 'projects.tasks.destroy');	
 	Route::get('/project/tasks/change-status/{id}/{st}',  [TaskController::class, "change_status"])->name(name: 'projects.tasks.change-status');	
 
 
-    Route::post('/project/store', action: [ProjectController::class, "store"])->name('projects.store');
+    Route::post('/project/store',  [ProjectController::class, "store"])->name('projects.store');
 
 
-    Route::get('/projects',action: [ProjectController::class, "allProjects"] )->name('projects');
-    Route::get('/create-project',action: [ProjectController::class, "create"] )->name('projects.create');
-    Route::post('/project/users/store', action: [ProjectController::class, "store_user"])->name('projects.users.store');});
-    Route::get('/project/edit/{id}',action: [ProjectController::class, "edit"] )->name('projects.edit');
+    Route::get('/projects', [ProjectController::class, "allProjects"] )->name('projects');
+    Route::get('/create-project', [ProjectController::class, "create"] )->name('projects.create');
+    Route::post('/project/users/store',  [ProjectController::class, "store_user"])->name('projects.users.store');});
+    Route::get('/project/edit/{id}', [ProjectController::class, "edit"] )->name('projects.edit');
     Route::get('/project/destroy-file/{id}',  [ProjectController::class, "destroyFile"])->name('projects.destroy-file');	
-    Route::post('/project/update',action: [ProjectController::class, "update"] )->name('projects.update');
+    Route::post('/project/update', [ProjectController::class, "update"] )->name('projects.update');
     Route::get('/project/destroy/{id}',  [ProjectController::class, "destroy"])->name('projects.destroy');	
 
     Route::get('/clear-cache', function() {

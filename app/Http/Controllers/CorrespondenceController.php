@@ -173,7 +173,9 @@ class CorrespondenceController extends Controller
             return $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];
         });
      
-        return $correspondeces;
+        //return $correspondeces;
+        return response()->json($correspondeces);
+        
     }
 
     public function find($id){

@@ -10,6 +10,8 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 
 class TaskRepository extends BaseRepository implements TaskRepositoryInterface
 {
@@ -24,7 +26,32 @@ class TaskRepository extends BaseRepository implements TaskRepositoryInterface
        parent::__construct($model);
    }
 
+  /**
+    * @param integer $id
+    * @return LengthAwarePaginator
+    */
+    public function all_tasks_assigned($project_id) :LengthAwarePaginator
+    {
+        $tasks =  $this->model->where('project_id',$project_id)->where('done',0)->with('assignees:id,name');
+        if(auth()->user()->is_admin){
+            $tasks = $tasks->paginate(5);
+             return $tasks;
+        }else{
+             $tasks = $tasks->where(function($q){
+                $q->whereHas('assignees', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                });
 
+
+                
+            });
+
+            $tasks=$tasks->paginate(5);
+  
+            return $tasks;
+
+        }
+    }
 
    /**
     * @param integer $id

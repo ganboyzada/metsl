@@ -156,7 +156,7 @@
         let url = 	`{{url('project/documents/revisions/comments/${revision_id}')}}`	;
         let fetchRes = await fetch(url);
         let comments = await fetchRes.json();
-        console.log(comments);
+        //console.log(comments);
             let html = ``;
             if(comments.comments.length > 0){
                 for(let i=0; i<comments.comments.length; i++){
@@ -183,8 +183,8 @@
         document.getElementById('comment-box').classList.toggle('hidden');
         
     }
-    const commentButtons = document.querySelectorAll('.comment-button');
-    const commentBoxes = document.getElementsByClassName('.comment-box');
+    var commentButtons = document.querySelectorAll('.comment-button');
+    var  commentBoxes = document.getElementsByClassName('.comment-box');
 
     // Handle comment button click
     commentButtons.forEach((button, index) => {

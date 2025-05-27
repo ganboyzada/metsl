@@ -149,6 +149,13 @@ class DocumentService
 
     }
 
+
+    public function getAllProjectDocumentsAssigned($project_id , $request){
+        return $this->documentRepository->get_all_project_documents_assigned($project_id , $request);
+
+    }
+
+
     public function getDetailOfDocument($document_id){
 
        return $this->documentRepository->with(['files','reviewers','user'])->find($document_id);

@@ -219,16 +219,16 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
                     $query->where('user_id', auth()->user()->id);
                 });
                 
-                $q->orwhere('created_by', auth()->user()->id);
+               // $q->orwhere('created_by', auth()->user()->id);
 
 
-                $enums_list = \App\Enums\CorrespondenceTypeEnum::cases();
-                foreach ($enums_list as $enum) {
-                    if(checkIfUserHasThisPermission($project_id , 'view_'.$enum->value)){
-                        $modal = $modal->orwhere('type' , $enum->value);
+                // $enums_list = \App\Enums\CorrespondenceTypeEnum::cases();
+                // foreach ($enums_list as $enum) {
+                //     if(checkIfUserHasThisPermission($project_id , 'view_'.$enum->value)){
+                //         $modal = $modal->orwhere('type' , $enum->value);
     
-                    }
-                }
+                //     }
+                // }
 
 
 
@@ -238,12 +238,12 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
 
 
 
-            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->paginate(10);
+            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->paginate(5);
 
             return $modal;           
 
         }else{
-            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->paginate(10);
+            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->paginate(5);
 
             return $modal;
         }

@@ -23,7 +23,7 @@
 
 <script>
     function loadPunchListWidget(list){
-        console.log(list);
+        //console.log(list);
         let html =``;
         if(list.length > 0){
             for(let i=0;i<list.length;i++){

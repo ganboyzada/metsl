@@ -216,6 +216,8 @@ function getLocalStorage(){
             try {
                 get_correspondences()
                 get_punch_list()
+                get_meeting_planing()
+				get_documents()
             } catch (error) {
                 console.log(error)
             }

@@ -105,7 +105,7 @@
             $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
 
         }else{
-            console.log(fetchRes);
+            //console.log(fetchRes);
             $('.success').show();
             $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
             $('#draw'+id).remove();

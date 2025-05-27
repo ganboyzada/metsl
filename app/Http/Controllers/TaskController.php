@@ -64,6 +64,28 @@ class TaskController extends Controller
         return $tasks;
     }
 
+
+        public function all_assigned(Request $request){
+        $id = Session::get('projectID');
+        $tasks = $this->taskService->allTasksAssigned($id);
+
+        $tasks->setCollection(
+        $tasks->getCollection()->map(function ($task) {
+            $end = Carbon::parse($task->end_date);
+            $start = Carbon::parse($task->start_date);
+            $diff = $start->diffInDays($end);
+                $task->file_url = $task->file != NULL ? Storage::url('/project'.$task->project_id.'/tasks/'.$task->file) : NULL;
+                $task->file_name = $task->file ?? NULL;
+                $task->duration=$diff;
+                return $task;
+
+        })
+    );
+   
+     
+        return response()->json($tasks);
+    }
+
     public function update(TaskRequest  $request)
     {
 

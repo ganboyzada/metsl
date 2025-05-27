@@ -4,6 +4,8 @@ namespace App\Repository;
 use App\Model\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 
 interface DocumentRepositoryInterface
 {
@@ -15,6 +17,14 @@ interface DocumentRepositoryInterface
     * 
     */
     public function add_users_to_document($data , $document);  
+
+    /**
+    * @param int $project_id 
+    * @param \Request $request
+    * @return LengthAwarePaginator
+    * 
+    */
+    public function get_all_project_documents_assigned($project_id , $request): LengthAwarePaginator;
 
             /**
     * @param int $project_id

@@ -325,13 +325,13 @@
                     backgroundColor: '#374151', // gray
                 },
             ];
-            console.log(data_set);
+            //console.log(data_set);
             par_chart.data.labels = assigness;
             par_chart.data.datasets = data_set;
             par_chart.update();
         }else{
             // Bar Chart
-            console.log(assigness);
+            //console.log(assigness);
             const barCtx = document.getElementById('assignee-bar-chart').getContext('2d');
             par_chart = new Chart(barCtx, {
                 type: 'bar',
@@ -471,7 +471,7 @@ function renderPagination(data) {
             $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
 
         }else{
-            console.log(fetchRes);
+            //console.log(fetchRes);
             get_punch_list();
             $('.success').show();
             $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');

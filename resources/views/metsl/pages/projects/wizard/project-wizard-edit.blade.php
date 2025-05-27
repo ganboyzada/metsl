@@ -618,9 +618,9 @@
     let client_stakeholders =  {!! json_encode($project->clients_permissions) !!};
     let  contractor_stakeholders = {!! json_encode($project->contractors_permissions) !!};
     
-    console.log(contractor_stakeholders);
-    console.log(designTeam_stakeholders);
-    console.log(projectManager_stakeholders);
+    //console.log(contractor_stakeholders);
+    //console.log(designTeam_stakeholders);
+    //console.log(projectManager_stakeholders);
 
 function map_user_type(type){
 		
@@ -991,7 +991,7 @@ function saveRoleAssignment(event) {
         currentStakeholder.permissions = permissions;
         currentStakeholder.job_title = job_title;
     }
-    console.log(contractor_stakeholders);
+    //console.log(contractor_stakeholders);
     closeRoleAssignmentModal();
     renderStakeholderGrid(); // Update the grid display
 }

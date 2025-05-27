@@ -381,7 +381,7 @@
         renderDays();
         renderTimeline();
        
-        console.log(all_groups);
+        //console.log(all_groups);
     }
 
     async function get_tasks() { 
@@ -399,7 +399,7 @@
         renderDays();
         renderTimeline();
        
-        console.log(tasks);
+        //console.log(tasks);
     }
 /*
     const tasks = [
@@ -460,7 +460,7 @@
                 $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
 
             }else{
-                console.log(fetchRes);
+                //console.log(fetchRes);
                 groups = groups.filter((group) => group.id != id);
                 tasks = tasks.filter((task) => task.groupId != id);
                 renderGroups();
@@ -525,7 +525,7 @@
             $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
 
         }else{
-            console.log(fetchRes);
+            //console.log(fetchRes);
             $("#task-modal").addClass("hidden");
             tasks = tasks.filter((task) => task.id != id);
             renderGroups();
@@ -617,7 +617,7 @@
             $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
 
         }else{
-            console.log(fetchRes);
+            //console.log(fetchRes);
            // $("#task-modal").addClass("hidden");
             tasks = tasks.map(function(item) {
                 if(item.id == id){

@@ -11,6 +11,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Repository\DocumentRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
 class DocumentRepository extends BaseRepository implements DocumentRepositoryInterface
@@ -42,6 +43,43 @@ class DocumentRepository extends BaseRepository implements DocumentRepositoryInt
         }catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }    
+    }
+
+    /**
+    * @param int $project_id 
+    * @param \Request $request
+    * @return LengthAwarePaginator
+    * 
+    */
+    public function get_all_project_documents_assigned($project_id , $request): LengthAwarePaginator{
+        $query =  $this->model->where('project_id',$project_id)
+        ->withCount(['revisions as has_pending_revision' => function ($query) {
+        $query->where('status', 0);
+        }])
+        ->withCount('revisions');
+
+
+        if(auth()->user()->is_admin){
+            return $query->paginate(5);
+        }else if(!auth()->user()->is_admin){
+            //dd(auth()->user()->packages()->pluck('packages.id')->toArray());
+            $query = $query->where(function($q){
+                $q->whereHas('reviewers', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                });
+
+                $q->orWhere(function($q){
+                        $q->whereIn('package_id', auth()->user()->packages()->pluck('packages.id')->toArray());
+                });
+
+                
+            });
+
+            
+            return $query->paginate(5);
+
+        }
+
     }
 
 

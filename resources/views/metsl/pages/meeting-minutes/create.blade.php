@@ -130,9 +130,9 @@
                 <option value="GMT+12">GMT+12</option>
             </select>
         </div>
-		<div class="col-span-1">
+		<div class="col-span-1 hidden">
 			<label for="endDate" class="block font-medium text-gray-700 dark:text-gray-200">Status</label>
-				<select name="status" id="status"class="mt-1 block w-full   shadow-sm dark:bg-gray-800 dark:text-gray-200">
+				<select   name="status" id="status"class="mt-1 block w-full   shadow-sm dark:bg-gray-800 dark:text-gray-200">
 					@php
 					$status_list = \App\Enums\MeetingPlanStatusEnum::cases();
 					@endphp
@@ -142,7 +142,7 @@
 				</select>
         </div>
         <!-- Participants -->
-        <div>
+        <div class="col-span-2">
             <label for="participants" class="block text-sm mb-2 font-medium dark:text-gray-200">Participants</label>
             <select id="participants"  name="participates[]" multiple class="participates choices w-full border dark:bg-gray-800 dark:text-gray-200">
             </select>
@@ -388,7 +388,7 @@
 			const reviewers = all.users.map(function(item) {
 			  return {'value' : item.id , 'label' : item.name};
 			});
-			console.log(reviewers);
+			//console.log(reviewers);
 			reviewers_obj.clearStore();
 			reviewers_obj.setChoices(reviewers);
 				

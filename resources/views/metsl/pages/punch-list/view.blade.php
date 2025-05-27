@@ -491,7 +491,7 @@
 
                     let url =`/project/punch-list/destroy/${labelcontent}`;		
                     let fetchRes =  fetch(url);
-                    console.log(fetchRes);
+                    //console.log(fetchRes);
                         if(labelcontent == current_punchlist_id){
                             $('.success').show();
                             $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
@@ -534,7 +534,7 @@
 
         savedPins = all;
 
-        console.log(savedPins);
+        //console.log(savedPins);
 
 
 
@@ -606,7 +606,7 @@ async function deleteDrawing(punchlist_id , id){
             $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
 
         }else{
-            console.log(fetchRes);
+            //console.log(fetchRes);
             $('.success').show();
             $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
             $('#draw'+id).remove();

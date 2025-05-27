@@ -58,7 +58,7 @@
 		@endif
 	</div>
     
-	<input type="hidden" id="comments_permission" value="{{ checkIfUserHasThisPermission(Session::get('projectID') , 'add_revision_comment') }}"/>
+	<input type="hidden" id="comments_permission" value="{{ checkIfUserHasThisPermission(Session::get('projectID') , 'review_documents') }}"/>
 
 	<input type="hidden" id="accept_reject_document" value="{{ checkIfUserHasThisPermission(Session::get('projectID') , 'accept_reject_document') }}"/>
 	
@@ -166,7 +166,7 @@
 			item.selected = reviewers_selected.includes(item.value) ? true : false
 			return item;
 		});
-		console.log(doc_reviewers);
+		//console.log(doc_reviewers);
 		reviewers_obj.clearStore();
 		reviewers_obj.setChoices(all_reviewers_with_selected);	
 		var html = ``;
@@ -357,53 +357,72 @@
 		$('#current-doc-package').text(text);
 	}
 
-	async function get_documents(){
-		if(localStorage.getItem("project_tool") == 'documents'){
-		$('#revisions-list').html('');
-		const orderBy = $('#order-by').val();
-		const orderDirection = $('#order-direction').val();
-		const DocNo = $('#searchDocuments').val();
+	async function get_documents(page = 1){
+		if(localStorage.getItem("project_tool") == 'documents'  || localStorage.getItem("project_tool") == 'activities'){
+			if(localStorage.getItem("project_tool") == 'meeting_planing'){
+				$('#revisions-list').html('');
+				const orderBy = $('#order-by').val();
+				const orderDirection = $('#order-direction').val();
+				const DocNo = $('#searchDocuments').val();
 
-		let url = 	`/project/documents/all?package_id=${package_id}&DocNO=${DocNo}&orderBy=${orderBy}&orderDirection=${orderDirection}`;
+				let url = 	`/project/documents/all?package_id=${package_id}&DocNO=${DocNo}&orderBy=${orderBy}&orderDirection=${orderDirection}`;
 
-		
-		let newurl = url.replace('amp;','');
-		let fetchRes = await fetch(newurl);
-		all_documents = await fetchRes.json();
-		let html = ``;
-		if(all_documents.length > 0){
-			for(let i=0; i<all_documents.length; i++){
-				html+=`<div id="doc${i}" class="relative h-36 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md group transition transform hover:scale-105">
-					<h3 class="text-sm font-medium dark:text-gray-400 mb-2 truncate">${all_documents[i].title == null ? all_documents[i].number : all_documents[i].title}</h3>
-
-					<span class="flex absolute bottom-10 right-4 text-xs font-semibold text-blue-500 dark:text-blue-300">
-						${all_documents[i].created_date}
-						{{--
-						<a onclick="delete_doc(${i} , ${all_documents[i].id})" href="#" class="text-red-500 dark:text-red-400 hover:text-red-300">
-							<i data-feather="trash" class="ms-2 w-5 h-5"></i>
-						</a>
-						--}}
-					</span>
-					
-						<i data-feather="file-text" class="w-12 h-12 text-gray-400 dark:text-gray-500"></i>
-					
-					
 				
-					<span class="absolute bottom-2 right-2 flex items-center text-xs font-semibold bg-blue-900 text-white rounded-full px-2 py-1">
-						<i data-feather="refresh-cw" class="w-4 h-4 mr-1"></i>${all_documents[i].revisions_count}
-					</span>
-					<button onclick="get_revisions(${all_documents[i].id} , '${all_documents[i].number}')" data-modal="revisions-modal"
-						class="absolute modal-toggler rounded-full bottom-2 left-2 bg-blue-500 text-white px-3 py-1 text-xs  block lg:hidden group-hover:block transition duration-200"
-						aria-label="View Revisions"
-					>
-						 Revisions
-					</button>
-				</div>`;
+				let newurl = url.replace('amp;','');
+				let fetchRes = await fetch(newurl);
+				all_documents = await fetchRes.json();
+				let html = ``;
+				if(all_documents.length > 0){
+					for(let i=0; i<all_documents.length; i++){
+						html+=`<div id="doc${i}" class="relative h-36 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md group transition transform hover:scale-105">
+							<h3 class="text-sm font-medium dark:text-gray-400 mb-2 truncate">${all_documents[i].title == null ? all_documents[i].number : all_documents[i].title}</h3>
+
+							<span class="flex absolute bottom-10 right-4 text-xs font-semibold text-blue-500 dark:text-blue-300">
+								${all_documents[i].created_date}
+								{{--
+								<a onclick="delete_doc(${i} , ${all_documents[i].id})" href="#" class="text-red-500 dark:text-red-400 hover:text-red-300">
+									<i data-feather="trash" class="ms-2 w-5 h-5"></i>
+								</a>
+								--}}
+							</span>
+							
+								<i data-feather="file-text" class="w-12 h-12 text-gray-400 dark:text-gray-500"></i>
+							
+							
+						
+							<span class="absolute bottom-2 right-2 flex items-center text-xs font-semibold bg-blue-900 text-white rounded-full px-2 py-1">
+								<i data-feather="refresh-cw" class="w-4 h-4 mr-1"></i>${all_documents[i].revisions_count}
+							</span>
+							<button onclick="get_revisions(${all_documents[i].id} , '${all_documents[i].number}')" data-modal="revisions-modal"
+								class="absolute modal-toggler rounded-full bottom-2 left-2 bg-blue-500 text-white px-3 py-1 text-xs  block lg:hidden group-hover:block transition duration-200"
+								aria-label="View Revisions"
+							>
+								Revisions
+							</button>
+						</div>`;
+					}
+				}
+				$('#documents_list').html(html);
+				feather.replace({ 'stroke-width': 1 });
+			}else{
+				let url = `project/documents/all_assigned?page=${page}`;
+
+                let fetchRes = await fetch(url);
+                const response = await fetchRes.json(); // full paginated response
+                const all_docs_assigned= response.data;
+
+				DocsData = all_docs_assigned.map(function(item) {
+              
+                return item;
+                });
+
+                await loadWidgetDocs();
+                renderPaginationDocsWidget(response);
+
 			}
+
 		}
-		$('#documents_list').html(html);
-		feather.replace({ 'stroke-width': 1 });
-		}
+
 	}
 	
 </script>

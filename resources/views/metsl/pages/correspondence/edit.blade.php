@@ -261,7 +261,7 @@
             return {'value' : item.id , 'label' : item.name ,  'selected': selected_assignees.includes(item.id) ? true : false};
         });
 
-        console.log(assignees);
+        //console.log(assignees);
         // assignees_obj = populateChoices2('assignees', assignees, true);
 		assignees_obj.clearStore();
 		assignees_obj.setChoices(assignees);		

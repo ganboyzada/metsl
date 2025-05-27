@@ -17,6 +17,13 @@ interface MeetingPlaningRepositoryInterface
     */
     public function add_users_to_meeting_planing($data , $meetingPlaning);  
 
+     /**
+    * @param int $project_id 
+    * @param \Request $request
+    * @return LengthAwarePaginator
+    * 
+    */
+    public function get_all_project_meeting_planing_has_action_to_user($project_id , $request): LengthAwarePaginator;
             /**
     * @param int $project_id
     * @param \Request $request

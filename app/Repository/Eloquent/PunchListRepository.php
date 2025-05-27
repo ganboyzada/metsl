@@ -268,11 +268,11 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
         $data = $request->all();
        // dd($data);
         $punchLists =  $this->model->where('project_id',$project_id)
-        ->where('status','!=',PunchListStatusEnum::CLOSED->value);;
+        ->where('status','!=',PunchListStatusEnum::CLOSED->value);
         
-        if(checkIfUserHasThisPermission($project_id , 'view_all_punch_list')){
+        if(auth()->user()->is_admin){
 
-            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->paginate(10);
+            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->paginate(5);
   
             return $punchLists;
         }        
@@ -284,12 +284,12 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
                 });
 
                 $q->orwhere('responsible_id',auth()->user()->id);
-                $q->orwhere('created_by',auth()->user()->id);
+               // $q->orwhere('created_by',auth()->user()->id);
 
                 
             });
 
-            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->paginate(10);
+            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->paginate(5);
   
             return $punchLists;
               

@@ -88,6 +88,12 @@ class MeetingPlaningService
 
     }
 
+
+    public function getAllProjectMeetingActions($project_id , $request){
+        return $this->meetingPlaningRepository->get_all_project_meeting_planing_has_action_to_user($project_id , $request);
+
+    }
+
     public function find($meeting_planing_id){
         $punch_list =  $this->meetingPlaningRepository->with([ 'users:name' , 'files','notes'])->find($meeting_planing_id);
         return $punch_list;

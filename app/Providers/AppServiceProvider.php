@@ -45,11 +45,15 @@ class AppServiceProvider extends ServiceProvider
         //         ]
         //     );
         // });
-        $all_projects = \App\Models\Project::get(['id' , 'name']);
-        if(isset($all_projects[($all_projects->count() - 1)]->id)){
-            $id= $all_projects[($all_projects->count() - 1)]->id;
 
-        }
+
+
+
+        //$all_projects = \App\Models\Project::get(['id' , 'name']);
+        // if(isset($all_projects[($all_projects->count() - 1)]->id)){
+        //     $id= $all_projects[($all_projects->count() - 1)]->id;
+
+        // }
 
    
         Blade::directive('permitted', function ($expression) {
@@ -75,7 +79,7 @@ class AppServiceProvider extends ServiceProvider
             return "<?php endif; ?>";
         });
         
-        \View::share('projects', $all_projects);
+       // \View::share('projects', $all_projects);
        // Model::preventLazyLoading();
 
         //

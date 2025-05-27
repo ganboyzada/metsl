@@ -75,7 +75,10 @@ class TaskService
 
         return $model;
     }
+    public function allTasksAssigned($project_id){
+        return $this->taskRepository->all_tasks_assigned($project_id);
 
+    }
     public function allTasks($project_id)
     {
         return $this->taskRepository->all_tasks($project_id);

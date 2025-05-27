@@ -78,7 +78,7 @@
     document.getElementById('searchBar').addEventListener('input', function () {
         const searchQuery = this.value.toLowerCase();
         const rows = document.querySelectorAll('.roles_tr');
-        console.log(rows);
+        //console.log(rows);
         
         rows.forEach(card => {
             const name = card.querySelector('td:first-child').textContent.toLowerCase();

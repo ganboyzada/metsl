@@ -219,7 +219,7 @@
 		const reviewers = all_users.users.map(function(item) {
 		  return {'value' : item.id , 'label' : item.name};
 		});
-			console.log(reviewers);
+			//console.log(reviewers);
 			doc_reviewers = reviewers;
 			reviewers_obj.clearStore();
 			reviewers_obj.setChoices(reviewers);

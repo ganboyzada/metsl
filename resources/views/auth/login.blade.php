@@ -44,5 +44,9 @@
                 </x-button>
             </div>
         </form>
+
+        <script>
+            localStorage.setItem("project_tool", 'activities');
+            </script>
     </x-authentication-card>
 </x-guest-layout>

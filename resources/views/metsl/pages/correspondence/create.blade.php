@@ -269,7 +269,7 @@
 		const assignees = all_users.assigned_users.map(function(item) {
 			  return {'value' : item.id , 'label' : item.name};
 			});
-			console.log(assignees);
+			//console.log(assignees);
 			assignees_obj.clearStore();
 			assignees_obj.setChoices(assignees);
 			//populateChoices3('assignees',assignees);

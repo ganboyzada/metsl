@@ -102,6 +102,22 @@ class DocumentController extends Controller
         return $documents;
     }
 
+    public function ProjectDocumentsAssigned(Request $request){
+        $id = Session::get('projectID');
+        $documents = $this->documentService->getAllProjectDocumentsAssigned($id , $request); 
+		$documents->map(function($row){
+			$startDate = Carbon::parse($row->created_date);
+
+			$endDate = Carbon::parse(date('Y-m-d'));
+			if($startDate->diffInDays($endDate) > 0){
+				return $row->created_date = $startDate->diffInDays($endDate).' days ago';
+			}
+			
+		});	
+			
+        return response()->json($documents);
+    }
+
     public function edit($document_id){
         $detail =  $this->documentService->getDetailOfDocument($document_id);
  
