@@ -31,11 +31,14 @@ function loadWidgetDocs() {
             for(let i=0;i<DocsData.length;i++){
                 if(DocsData[i].has_pending_revision > 0){
                     var status = `<span class=" flex items-center text-xs font-semibold bg-yellow-900 text-white rounded-full px-2 py-1">
-                        revision Pending
+                        ${DocsData[i].has_pending_revision} Pending
                             </span>
                         `;
                 }else{
-                    var status = ``;
+                    var status = `<span class=" flex items-center text-xs font-semibold bg-green-900 text-white rounded-full px-2 py-1">
+                        ${DocsData[i].has_pending_revision} Pending
+                            </span>
+                        `;
                 }
                 html+=`<tr class="border-b dark:border-gray-800">
                         <td class="px-4 py-2">${DocsData[i].title == null ? DocsData[i].number : DocsData[i].title}</td>
