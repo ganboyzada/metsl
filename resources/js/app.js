@@ -125,10 +125,10 @@ dropZone.addEventListener('click', () => {
 function handleFiles(files) {
     fileList.innerHTML = ''; // Clear file list
     Array.from(files).forEach((file) => {
-        if (file.size > 5 * 1024 * 1024) { // Validate file size (5MB)
-            alert(`File ${file.name} exceeds the maximum size of 5MB.`);
-            return;
-        }
+        // if (file.size > 5 * 1024 * 1024) { // Validate file size (5MB)
+        //     alert(`File ${file.name} exceeds the maximum size of 5MB.`);
+        //     return;
+        // }
         const li = document.createElement('li');
         li.textContent = `${file.name} (${(file.size / 1024).toFixed(2)} KB)`;
         fileList.appendChild(li);
