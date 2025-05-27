@@ -9,7 +9,6 @@
     @include('metsl.pages.widgets.tasks')
 
     @include('metsl.pages.widgets.punchlist')
-    @include('metsl.pages.documents.revisions')
     @include('metsl.pages.documents.comments')
 
 

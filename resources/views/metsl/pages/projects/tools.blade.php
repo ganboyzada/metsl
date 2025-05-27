@@ -33,6 +33,11 @@
         </div>
     </div>
 </div>
+
+@include('metsl.pages.documents.revisions')
+@include('metsl.pages.documents.comments')
+
+
 <script>
 //localStorage.setItem("project_tool", 'meeting_planing');
 //alert(localStorage.getItem("project_tool"));

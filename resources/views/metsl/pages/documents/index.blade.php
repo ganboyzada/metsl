@@ -106,9 +106,7 @@
 
 </div>
 @include('metsl.pages.documents.create_package')
-@include('metsl.pages.documents.revisions')
 @include('metsl.pages.documents.uploader')
-@include('metsl.pages.documents.comments')
 
 <script>
 	
