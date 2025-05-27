@@ -359,7 +359,7 @@
 
 	async function get_documents(page = 1){
 		if(localStorage.getItem("project_tool") == 'documents'  || localStorage.getItem("project_tool") == 'activities'){
-			if(localStorage.getItem("project_tool") == 'meeting_planing'){
+			if(localStorage.getItem("project_tool") == 'documents'){
 				$('#revisions-list').html('');
 				const orderBy = $('#order-by').val();
 				const orderDirection = $('#order-direction').val();
