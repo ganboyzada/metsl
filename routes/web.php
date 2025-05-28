@@ -9,6 +9,7 @@ use App\Http\Controllers\ProjectController;
 use App\Http\Controllers\PunchListController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\WorkPackagesController;
 use App\Http\Controllers\StakeholderController;
 use App\Http\Controllers\TaskController;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,19 @@ Route::middleware([
     Route::get('/companies/edit/{id}',  [CompanyController::class, "edit"])->name('companies.edit');
     Route::delete('/companies/destroy/{id}',  [CompanyController::class, "destroy"])->name('companies.destroy');
     Route::put('/companies/update/{id}',  [CompanyController::class, "update"])->name('companies.update');
+	
+	
+    Route::get('/work_packages',  [WorkPackagesController::class, "index"])->name('work_packages');
+    Route::get('/work_packages/create',  [WorkPackagesController::class, "create"])->name('work_packages.create');
+    Route::post('/work_packages/store',  [WorkPackagesController::class, "store"])->name('work_packages.store');
+    Route::get('/work_packages/edit/{id}',  [WorkPackagesController::class, "edit"])->name('work_packages.edit');
+    Route::delete('/work_packages/destroy/{id}',  [WorkPackagesController::class, "destroy"])->name('work_packages.destroy');
+    Route::put('/work_packages/update/{id}',  [WorkPackagesController::class, "update"])->name('work_packages.update');	
+	
+	
+	
+	
+	
 
     Route::view('/roles/permissions', 'metsl.pages.permissions.index')->name('roles.permissions');
     Route::view('/roles/permissions/create', 'metsl.pages.permissions.create')->name('roles.permissions.create');
@@ -128,6 +142,9 @@ Route::middleware([
 	Route::post('/project/meetings/store',  [MeetingPlaningController::class, "store"])->name(name: 'projects.meetings.store');	
     Route::view('/project/meetings/view/{id}', 'metsl.pages.meeting-minutes.meeting_minutes')->name('projects.meetings.view');
     Route::get('/project/meetings/edit/{id}', [MeetingPlaningController::class, "edit"])->name('projects.meetings.edit');
+    Route::get('/project/meetings/download/{id}', [MeetingPlaningController::class, "downloadPdf"])->name('projects.meetings.downloadPdf');
+
+
 
 	Route::post('/project/meetings/update',  [MeetingPlaningController::class, "update"])->name(name: 'projects.meetings.update');	
 	Route::get('/project/meetings/destroy/{id}',  [MeetingPlaningController::class, "destroy"])->name(name: 'projects.meetings.destroy');	
@@ -175,5 +192,6 @@ Route::middleware([
         // Artisan::call('config:cache');
         // 
         Artisan::call('optimize');
+        phpinfo();
         return "Cache is cleared";
     })->name('clear.cache');
