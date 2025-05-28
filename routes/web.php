@@ -192,6 +192,14 @@ Route::middleware([
         // Artisan::call('config:cache');
         // 
         Artisan::call('optimize');
-        phpinfo();
-        return "Cache is cleared";
+            $inputPath = storage_path("metslTaskTrack.docx");
+            $outputPath = storage_path('/');
+       // phpinfo();
+        $command = "libreoffice --headless --convert-to pdf --outdir $outputPath $inputPath";
+    exec($command);
+
+    $pdfFile = pathinfo('metslTaskTrack', PATHINFO_FILENAME) . '.pdf';
+
+    return response()->download("$outputPath/$pdfFile");
+       // return "Cache is cleared";
     })->name('clear.cache');
