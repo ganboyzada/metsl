@@ -192,5 +192,6 @@ Route::middleware([
         // Artisan::call('config:cache');
         // 
         Artisan::call('optimize');
+        phpinfo();
         return "Cache is cleared";
     })->name('clear.cache');
