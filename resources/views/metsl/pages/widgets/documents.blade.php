@@ -89,9 +89,12 @@ async function get_revisions2(id , number){
 			html+=``;
 			for(var i=0;i<detail.files.length;i++){
 				var file_url = 	`{{asset('storage/project${detail.project_id}/documents${detail.id}/${detail.files[i].file}')}}`;	
+				var preview_image = 	`{{asset('storage/project${detail.project_id}/documents${detail.id}/${detail.files[i].preview_image}')}}`;	
 			
 				html+=`<tr class="group hover:bg-gray-100 dark:hover:bg-gray-700" ${i==0 ? 'style="background-color: #ffd70026;"' : ''}>
                     <td class="py-2 px-4">${i + 1}</td>
+					<td class="py-2 px-4"><a href="${preview_image}" target="_blank"><img src="${preview_image}" style="width:30%;"/></a></td>
+
                     <td class="py-2 px-4">${ detail.title == null ? '-' : detail.title}</td>
                     <td class="py-2 px-4">${ detail.user.name}</td>
                     <td class="py-2 px-4">${ detail.created_date}</td>
@@ -148,6 +151,8 @@ async function get_revisions2(id , number){
 				html+=`<tr class="group hover:bg-gray-100 dark:hover:bg-gray-700">
 
                     <td class="py-2 px-4">${z++}</td>
+					<td class="py-2 px-4"><a href="${revisions[i].preview_image }" target="_blank"><img src="${revisions[i].preview_image }" style="width:30%;"/></a></td>
+
                     <td class="py-2 px-4">${ revisions[i].title}</td>
                     <td class="py-2 px-4">${ revisions[i].user.name}</td>
                     <td class="py-2 px-4">${ revisions[i].upload_date}</td>

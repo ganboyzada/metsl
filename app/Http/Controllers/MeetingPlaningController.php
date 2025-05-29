@@ -26,6 +26,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use View;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class MeetingPlaningController extends Controller
@@ -40,6 +41,48 @@ class MeetingPlaningController extends Controller
     {
     }
 
+
+    public function downloadPdf($id){
+
+        $meeting_id = $id;
+        $meeting = $this->meetingPlaningService->find($meeting_id);
+       // return $meeting;
+
+        $planned_date = $meeting->planned_date;
+        $start_time = $meeting->start_time;
+        $duration_minutes = (int)$meeting->duration; // Duration as an integer
+
+        $meeting_start = Carbon::createFromFormat('Y-m-d H:i:s', $planned_date.' '.$start_time);
+        $meeting_end = $meeting_start->copy()->addMinutes($duration_minutes);
+        $now = Carbon::now();
+
+        //dd($meeting_start.'-'.$meeting_end.'-'.$now);
+        // Determine meeting status dynamically
+        $meeting->old_status = $meeting->status ;
+        $meeting_status = null;
+        //dd($meeting->status);
+        //dd($now->between($meeting_start, $meeting_end));
+        if ($now->lessThan($meeting_start) && $meeting->status->value == MeetingPlanStatusEnum::PLANNED->value) {
+            $meeting_status = MeetingPlanStatusEnum::PLANNED;
+        } elseif ($now->between($meeting_start, $meeting_end) && $meeting->status->value == MeetingPlanStatusEnum::PLANNED->value) {
+            $meeting_status = MeetingPlanStatusEnum::ONGOING;
+        } elseif ($now->greaterThan($meeting_end) ||  $meeting->status->value == MeetingPlanStatusEnum::PUBLISHED->value) {
+            $meeting_status = MeetingPlanStatusEnum::PUBLISHED;
+        }
+
+
+
+        //dd($meeting_status);
+        $meeting->status = $meeting_status ;
+
+
+        //return $meeting;
+        $reviewers = $this->userService->getUsersOfProjectID($meeting->project_id , 'participate_in_meetings');
+
+
+    $pdf = Pdf::loadView('metsl.pages.meeting-minutes.pdf', compact('meeting','reviewers'));
+    return $pdf->download('meeting_'.$id.'.pdf');
+}
     public function create(){
         return view('metsl.pages.meeting-minutes.create');
     }

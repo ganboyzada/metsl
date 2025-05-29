@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Relations\Pivot;
 class ProjectDocumentRevisions extends Pivot
 {
 	protected $table = 'project_document_revisions';
-    protected $fillable = ['title','upload_date','file','status', 'user_id','project_document_id','project_document_file_id'];
+    protected $fillable = ['title','upload_date','file','status', 'user_id','project_document_id','project_document_file_id','preview_image'];
 
     protected function casts(): array
     {

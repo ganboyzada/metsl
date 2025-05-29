@@ -19,6 +19,7 @@
             <thead>
                 <tr class="bg-gray-200 dark:bg-gray-800 dark:border-gray-700 font-light">
                     <th class="py-2 px-4">#</th>
+                    <th class="py-2 px-4">Preview Image</th>
                     <th class="py-2 px-4">Title</th>
                     <th class="py-2 px-4">Uploaded By</th>
                     <th class="py-2 px-4">Upload Date</th>

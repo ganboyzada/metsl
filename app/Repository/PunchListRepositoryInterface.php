@@ -16,7 +16,12 @@ interface PunchListRepositoryInterface
     * 
     */
     public function add_users_to_Punch_list($data , $punshList);  
-
+   /**
+    * @param array $data 
+    * @param Model $punshList 
+    * @param array $assignees_has_permission
+    */
+    public function add_assignees_to_Punch_list($data , $punshList , $assignees_has_permission);
 
      /**
     * @param array $data 

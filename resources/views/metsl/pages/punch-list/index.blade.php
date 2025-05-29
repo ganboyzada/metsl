@@ -442,7 +442,7 @@ function renderPagination(data) {
                         <td class="px-4 py-2">${list[i].number}</td>
                         <td class="px-4 py-2">${list[i].title}</td>
                         <td class="px-4 py-2">${list[i].status_text}</td>
-                        <td class="px-4 py-2">${list[i].responsible.name}</td>
+                        <td class="px-4 py-2">${(list[i].package != null)?list[i].package.name:''}</td>
                     
                         <td class="px-4 py-2">${list[i].priority_text}</td>
                         <td class="px-4 py-2">${list[i].date_notified_at ?? '-'}</td>

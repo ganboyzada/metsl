@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App;
 use App\Repository\CompanyRepositoryInterface;
 use Illuminate\Support\Facades\Storage;
 
@@ -69,5 +70,10 @@ class CompanyService
     public function find($id)
     {
         return $this->CompanyRepository->find($id);
+    }
+
+    public function get_work_packages(){
+        $packages = App\Models\WorkPackages::all();
+        return $packages;
     }
 }

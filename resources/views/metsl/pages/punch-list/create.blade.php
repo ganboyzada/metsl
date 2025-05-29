@@ -125,7 +125,7 @@
 
                 <!-- Responsible Member (Single Selector) (Required) -->
                 <div class="md:col-span-1">
-                    <label for="responsible-member" class="block text-sm mb-2 font-medium dark:text-gray-200">Responsible Member <span class="text-red-500">*</span></label>
+                    <label for="responsible-member" class="block text-sm mb-2 font-medium dark:text-gray-200">Work Package Responsible <span class="text-red-500">*</span></label>
                     <select id="responsible-member" name="responsible_id" class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200" required>
                 
                     </select>
@@ -729,28 +729,33 @@ function searchDrawings(search){
 		$('[name="number"]').val(all.next_number);
 
 		let reviewers = all.distribution_members.map(function(item) {
-            if(item.company_id != null){
-                var label =  item.name+' - '+ item.company.name;
-            }else{
+            // if(item.company_id != null){
+            //     var label =  item.name+' - '+ item.company.name;
+            // }else{
                 var label =  item.name;
-            }
+            //
 		  return {'value' : item.id , 'label' : label};
 		});
 			distribution_obj.clearStore();
 			distribution_obj.setChoices(reviewers);	
 
 
-			reviewers = all.responsible.map(function(item) {
-                if(item.company_id != null){
-                    var label =  item.name+' - '+ item.company.name;
-                }else{
-                    var label =  item.name;
-                }
-                
-			  return {'value' : item.id , 'label' : label , 'selected' : true};
+            let packages =  {!! json_encode($packages) !!};
+            const allpackages = packages.map(function(item) {
+			  return {'value' : item.id  , 'label' : item.name};
 			});	
+
+			// reviewers = all.responsible.map(function(item) {
+            //     if(item.company_id != null){
+            //         var label =  item.name+' - '+ item.company.name;
+            //     }else{
+            //         var label =  item.name;
+            //     }
+                
+			//   return {'value' : item.id , 'label' : label , 'selected' : true};
+			// });	
 			reviewers_obj.clearStore();
-			reviewers_obj.setChoices(reviewers);
+			reviewers_obj.setChoices(allpackages);
 
 
             let files =  {!! json_encode($files) !!};

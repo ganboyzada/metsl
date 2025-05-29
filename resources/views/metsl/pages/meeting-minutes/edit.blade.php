@@ -4,7 +4,14 @@
 
 @section('content')
 <div>
+    <div class="flex justify-between items-center mb-6">
+        <div class="flex gap-4 items-center">
     <h1 class="text-2xl font-semibold mb-6 dark:text-gray-200">Meeting: {{ $meeting->name }}</h1>
+     </div>
+     <a href="{{ route('projects.meetings.downloadPdf', $meeting->id)  }}" 
+        class="inline-flex px-4 py-2 bg-blue-500 text-white hover:bg-blue-600"><i data-feather="file" class="mr-2"></i>Download PDF</a>
+       
+    </div>          
 	<div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
 	<div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
     @if(session()->has('success'))
@@ -202,6 +209,7 @@
                         
                     @endphp
                     <input type="hidden" name="status" value="{{ ($now->greaterThan($meeting_end) || $now->between($meeting_start, $meeting_end))? \App\Enums\MeetingPlanStatusEnum::PUBLISHED->value : -1 }}"/>
+                   
                     @if($meeting->created_by == auth()->user()->id || auth()->user()->is_admin)
                     @if ($meeting->old_status->value != \App\Enums\MeetingPlanStatusEnum::PUBLISHED->value)
                           <button type="submit" class="submit_planing_meeting_form mt-6 py-3 px-4 bg-gray-200 dark:bg-gray-700 rounded-xl hover:bg-blue-500 flex gap-4 justify-center"><i data-feather="save"></i>
@@ -220,6 +228,9 @@
                     @endif
 
                     @endif
+                          
+                   
+                    
                 </div>
             </form>
         </div>

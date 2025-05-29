@@ -83,7 +83,12 @@ class RepositoryServiceProvider extends ServiceProvider
                 $app->make(ProjectFileService::class)
             );
         }); 
-        
+ 
+        $this->app->bind(CompanyRepositoryInterface::class, CompanyRepository::class);
+        $this->app->bind(CompanyService::class, function ($app) {
+            return new CompanyService($app->make(CompanyRepositoryInterface::class));
+        }); 
+
         $this->app->bind(ClientRepositoryInterface::class, ClientRepository::class);
         $this->app->bind(ClientService::class, function ($app) {
             return new ClientService($app->make(ClientRepositoryInterface::class));

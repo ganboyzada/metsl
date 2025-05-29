@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ProjectDocumentFiles extends Model
 {
     protected $table= 'project_document_files';
-    protected $fillable = ['file', 'project_document_id ','type','size','status'];  
+    protected $fillable = ['file', 'project_document_id ','type','size','status','preview_image'];  
 	
     public function ProjectDocument(): BelongsTo
     {

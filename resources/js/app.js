@@ -271,6 +271,7 @@ const populateChoices = (selector, options, multiple=false, placeholder=null) =>
 
 let assignees_obj = {};
 let distribution_obj = {};
+let work_pckgs = {};
 let received_obj = {};
 let reviewers_obj = {};
 
@@ -281,7 +282,7 @@ const populateChoices2 = (selector, options, multiple=false, placeholder=null) =
         //choices:options,
         itemSelectText: '',
         removeItemButton: multiple, // Allow multiple for Assignees & Distribution, single for Received From
-        placeholderValue: placeholder ? placeholder : `Select ${selector.replace('-', ' ')}`,
+        placeholderValue: placeholder ? placeholder : `Select Option`,
     });	
   
         received_obj = obj;

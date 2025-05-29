@@ -23,7 +23,7 @@ class PunchListService
          $count = $this->punchListRepository->get_next_number($id);
          return $count;
      }
-    public function create(array $data)
+    public function create(array $data , $assignees_has_permission = [])
     {
         \DB::beginTransaction();
         try {
@@ -33,6 +33,11 @@ class PunchListService
             $path = Storage::url('/project'.$data['project_id'].'/punch_list'.$modal->id);
             
             \File::makeDirectory($path, $mode = 0777, true, true);  
+
+			if($modal->work_package_id != NULL && count($assignees_has_permission) > 0){
+                $assignees =  $this->punchListRepository->add_assignees_to_Punch_list($data,$modal, $assignees_has_permission);
+            }
+
             if(isset($data['participates']) &&  count($data['participates']) > 0){
                 $users =  $this->punchListRepository->add_users_to_Punch_list($data,$modal );
 
@@ -143,7 +148,8 @@ class PunchListService
     }
 
     public function find($punch_list_id){
-        $punch_list =  $this->punchListRepository->with([ 'users.userable' , 'files' , 'responsible.userable' ,'replies.user','documentFiles','drawing'])->find($punch_list_id);
+        $punch_list =  $this->punchListRepository->with([ 'users.userable' , 'files'  ,'replies.user','documentFiles','drawing',
+        'assignees.userable','package.companies', 'responsible.userable'])->find($punch_list_id);
         $punch_list->priority_val = $punch_list->priority->value;
         $punch_list->status_val = $punch_list->status->value;
         return $punch_list;

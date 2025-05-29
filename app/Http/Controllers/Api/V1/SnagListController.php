@@ -113,6 +113,7 @@ class SnagListController extends Controller
 
     public function getSnagListDetail(Request $request , $punch_list_id){
         $punch_list = $this->punchListService->find($punch_list_id);
+      //  return $punch_list;
         return $this->sendResponse(new punchListResource($punch_list), "Punch List retrieved successfully.");        
     }
 
@@ -231,11 +232,11 @@ class SnagListController extends Controller
             $next_number =  $this->punchListService->getNextNumber($project_id);
 
             $distribution_members = $this->userService->getUsersOfProjectID($project_id , 'distribution_members_punch_list');
-            $responsible = $this->userService->getUsersOfProjectID($project_id , 'responsible_punch_list');
+            //$responsible = $this->userService->getUsersOfProjectID($project_id , 'responsible_punch_list');
 			
             $distribution_members = $distribution_members['users'];
-            $responsible = $responsible['users'];
-
+           // $responsible = $responsible['users'];
+            $responsible =  \App\Models\WorkPackages::get(['id','name']);
             $res =  ['distribution_members'=>$distribution_members, 'responsible'=>$responsible  , 'next_number'=>$next_number];
             return $this->sendResponse($res, "Data retrieved successfully."); 
         
@@ -252,13 +253,16 @@ class SnagListController extends Controller
                 $all_data = $request->all();
                 $all_data['created_by'] = \Auth::user()->id;
                 $all_data['closed_by'] = \Auth::user()->id;
-
+                $all_data['work_package_id'] =  $all_data['responsible_id'];
+                $all_data['responsible_id'] = NULL;
                 $all_data['status'] = 0;
                 $all_data['date_notified_at'] = date('Y-m-d');
                 $all_data['due_date'] = Carbon::now()->addDays((int)$all_data['due_days'])->toDateString();
 
                // dd($all_data);
-                $model = $this->punchListService->create($all_data);
+                $assignees_has_permission = collect($this->userService->getUsersOfProjectID($all_data['project_id'] , 'responsible_punch_list')['users'])->pluck('id')->toArray();
+
+                $model = $this->punchListService->create($all_data , $assignees_has_permission);
             \DB::commit();
             // all good
             } catch (\Exception $e) {

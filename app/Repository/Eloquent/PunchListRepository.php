@@ -8,7 +8,7 @@ use App\Models\Permission;
 use App\Models\ProjectDocumentFiles;
 use App\Models\ProjectDocumentRevisions;
 use App\Models\PunchList;
-use App\Models\Role;
+use App\Models\WorkPackages;
 use App\Models\User;
 use App\Repository\PunchListRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
@@ -20,14 +20,43 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
 
    /**
     * UserRepository constructor.
-    *
     * @param PunchList $model
+    * @param WorkPackages $modelWorkPackages
     */
-   public function __construct(PunchList $model)
+   public function __construct(PunchList $model , WorkPackages $modelWorkPackages)
    {
-       parent::__construct($model);
+       parent::__construct($model , $modelWorkPackages);
    }
 
+    /**
+    * @param array $data 
+    * @param Model $punshList 
+    * @param array $assignees_has_permission
+    */
+    public function add_assignees_to_Punch_list($data , $punshList , $assignees_has_permission)
+    {
+        try{
+            if(!$punshList){
+                throw new \Exception('Record not find'); 
+            }
+
+            //$user_of_workpackage = $punshList->package()->companies()->users()->pluck('id')->toArray();
+            $users_of_work_packages = $this->model2->join('company_work_packages', 'company_work_packages.work_package_id', '=', 'work_packages.id')
+            ->join('users', 'users.company_id', '=', 'company_work_packages.company_id')
+            
+            ->join('companies', 'companies.id', '=', 'users.company_id')
+            ->where('companies.active', 1)
+            ->whereIN('users.id', $assignees_has_permission)->where('work_packages.id', $punshList->work_package_id)
+            ->select('users.id')->pluck('users.id')->toArray();
+
+
+   
+            $d = $punshList->assignees()->sync($users_of_work_packages);
+           
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }    
+    }
 
     /**
     * @param array $data 
@@ -41,6 +70,7 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
                 throw new \Exception('Record not find'); 
             }
             $d = $punshList->users()->sync($data['participates']);
+        
         }catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }    
@@ -108,7 +138,9 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
         if(isset($data['assignee'])){
             $punchLists=$punchLists->when($data['assignee'] , function($q) use($data){
                 $q->where(function($query) use($data){
-                    $query->whereIn('responsible_id',$data['assignee']);
+                    $query->WhereHas('assignees',function($q) use($data){
+                        $q->whereIn('users.id',$data['assignee']);
+                    }); 
                     $query->orWhereHas('users',function($q) use($data){
                         $q->whereIn('users.id',$data['assignee']);
                     }); 
@@ -231,7 +263,7 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
 
         if(checkIfUserHasThisPermission($project_id , 'view_all_punch_list')){
 
-            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name' , 'drawing:id,title'])->paginate(10);
+            $punchLists=$punchLists->with(['package:id,name', 'createdByUser:id,name' , 'drawing:id,title'])->paginate(10);
   
             return $punchLists;
         }        
@@ -242,13 +274,15 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
                     $query->where('user_id', auth()->user()->id);
                 });
 
-                $q->orwhere('responsible_id',auth()->user()->id);
+                $q->orWhereHas('assignees',function($query){
+                     $query->where('user_id', auth()->user()->id);
+                    }); ;
                 $q->orwhere('created_by',auth()->user()->id);
 
                 
             });
 
-            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name' , 'drawing:id,title'])->paginate(10);
+            $punchLists=$punchLists->with(['package:id,name', 'createdByUser:id,name' , 'drawing:id,title'])->paginate(10);
   
             return $punchLists;
               
@@ -272,7 +306,7 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
         
         if(auth()->user()->is_admin){
 
-            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->paginate(5);
+            $punchLists=$punchLists->with(['package:id,name', 'createdByUser:id,name'])->paginate(5);
   
             return $punchLists;
         }        
@@ -283,13 +317,15 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
                     $query->where('user_id', auth()->user()->id);
                 });
 
-                $q->orwhere('responsible_id',auth()->user()->id);
+                $q->orwhereHas('assignees', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                });
                // $q->orwhere('created_by',auth()->user()->id);
 
                 
             });
 
-            $punchLists=$punchLists->with(['responsible:id,name', 'createdByUser:id,name'])->paginate(5);
+            $punchLists=$punchLists->with(['package:id,name', 'createdByUser:id,name'])->paginate(5);
   
             return $punchLists;
               
@@ -359,7 +395,9 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
                     $query->where('user_id', auth()->user()->id);
                 });
 
-                $q->orwhere('responsible_id',auth()->user()->id);
+                $q->orwhereHas('assignees', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                });
                 $q->orwhere('created_by',auth()->user()->id);
 
                 
@@ -431,7 +469,9 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
                     $query->where('user_id', auth()->user()->id);
                 });
 
-                $q->orwhere('responsible_id',auth()->user()->id);
+                $q->orwhereHas('assignees', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                });
                 $q->orwhere('created_by',auth()->user()->id);
 
                 

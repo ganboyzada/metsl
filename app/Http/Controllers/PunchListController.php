@@ -10,6 +10,7 @@ use App\Http\Requests\MeetingPlaningRequest;
 use App\Http\Requests\PunchListRequest;
 use App\Models\PunchList;
 use App\Services\ClientService;
+use App\Services\CompanyService;
 use App\Services\ContractorService;
 use App\Services\DesignTeamService;
 use App\Services\DocumentService;
@@ -41,37 +42,11 @@ class PunchListController extends Controller
         protected ProjectDocumentFilesService $projectDocumentFilesService,
         protected ProjectDrawingsService $projectDrawingsService,
         protected ProjectService $projectService , 
-   
+         protected CompanyService $companyService , 
+  
 
         )
     {
-    }
-
-    public function imageUI(){
-        return view('metsl.pages.punch-list.image_ui',get_defined_vars());
-    }
-
-        public function upload(Request $request)
-    {
-        $data = $request->input('image');
-        $imageName = $request->input('name');
-
-        $project_id = $request->input('project_id');
-        $punch_list_id = $request->input('punch_list_id');
-
-        if (preg_match('/^data:image\/(\w+);base64,/', $data, $type)) {
-            $data = substr($data, strpos($data, ',') + 1);
-            $type = strtolower($type[1]); // jpg, png, gif
-
-            $imageName = pathinfo($imageName, PATHINFO_FILENAME) . '.' . $type;
-            $data = base64_decode($data);
-
-            Storage::disk('public')->put("project$project_id/punch_list$punch_list_id/$imageName", $data);
-
-            return response()->json(['success' => true, 'filename' => $imageName]);
-        }
-
-        return response()->json(['error' => 'Invalid image data'], 400);
     }
 
     public function create(){
@@ -81,6 +56,7 @@ class PunchListController extends Controller
          
           //  $next_number =  $this->correspondenceService->getNextNumber($type , $id);
           $files = $this->projectDocumentFilesService->getNewestFilesByProjectId( $id);
+          $packages = $this->companyService->get_work_packages();
 
         }
         return view('metsl.pages.punch-list.create',get_defined_vars());
@@ -102,6 +78,17 @@ class PunchListController extends Controller
     public function edit($id){
         $punch_list_id = $id;
         $punch_list = $this->punchListService->find($punch_list_id);
+    // $assignees_has_permission = collect($this->userService->getUsersOfProjectID(3 , 'responsible_punch_list')['users'])
+    //     ->pluck('id')->toArray();
+    //     return (\App\Models\WorkPackages::join('company_work_packages', 'company_work_packages.work_package_id', '=', 'work_packages.id')
+    //         ->join('users', 'users.company_id', '=', 'company_work_packages.company_id')
+            
+    //         ->join('companies', 'companies.id', '=', 'users.company_id')
+    //         ->where('companies.active', 1)
+    //         ->whereIN('users.id', $assignees_has_permission)
+    //         ->select('users.id')->pluck('users.id')->toArray()
+    //         );
+
       //  return $punch_list;
 
         /*$distribution_members = $this->userService->getUsersOfProjectID(Session::get('projectID') , '');
@@ -139,14 +126,19 @@ class PunchListController extends Controller
                 $all_data['closed_by'] = \Auth::user()->id;
 
                 $all_data['project_id'] = Session::get('projectID');
-                $all_data['status'] = 0;
+                $all_data['status'] = 0;               
+                $all_data['work_package_id'] =  $all_data['responsible_id'];
+                $all_data['responsible_id'] = NULL;
                 $all_data['due_date'] = Carbon::now()->addDays((int)$all_data['due_days'])->toDateString();
                 $all_data['date_notified_at'] = date('Y-m-d');
                 //dd($all_data);
                 $id = Session::get('projectID');     
                 $next_number =  $this->punchListService->getNextNumber($id);
                 $all_data['number'] = $next_number;
-                $model = $this->punchListService->create($all_data);
+
+                $assignees_has_permission = collect($this->userService->getUsersOfProjectID($all_data['project_id'] , 'responsible_punch_list')['users'])->pluck('id')->toArray();
+
+                $model = $this->punchListService->create($all_data , $assignees_has_permission);
             \DB::commit();
             // all good
             } catch (\Exception $e) {
@@ -234,13 +226,13 @@ class PunchListController extends Controller
             $next_number =  $this->punchListService->getNextNumber($id);
 
             $distribution_members = $this->userService->getUsersOfProjectID($id , 'distribution_members_punch_list');
-            $responsible = $this->userService->getUsersOfProjectID($id , 'responsible_punch_list');
+           // $responsible = $this->userService->getUsersOfProjectID($id , 'responsible_punch_list');
 			
             $distribution_members = $distribution_members['users'];
-            $responsible = $responsible['users'];
+           // $responsible = $responsible['users'];
            // dd($distribution_members);
            // return $distribution_members[0]->company;
-            return ['distribution_members'=>$distribution_members, 'responsible'=>$responsible  , 'next_number'=>$next_number];
+            return ['distribution_members'=>$distribution_members , 'next_number'=>$next_number];
         }
 
     }
@@ -486,5 +478,35 @@ class PunchListController extends Controller
         }
         return response()->json(['success' => 'Form changed successfully.' ]);
     }
+
+
+    
+    public function imageUI(){
+        return view('metsl.pages.punch-list.image_ui',get_defined_vars());
+    }
+
+    public function upload(Request $request)
+    {
+        $data = $request->input('image');
+        $imageName = $request->input('name');
+
+        $project_id = $request->input('project_id');
+        $punch_list_id = $request->input('punch_list_id');
+
+        if (preg_match('/^data:image\/(\w+);base64,/', $data, $type)) {
+            $data = substr($data, strpos($data, ',') + 1);
+            $type = strtolower($type[1]); // jpg, png, gif
+
+            $imageName = pathinfo($imageName, PATHINFO_FILENAME) . '.' . $type;
+            $data = base64_decode($data);
+
+            Storage::disk('public')->put("project$project_id/punch_list$punch_list_id/$imageName", $data);
+
+            return response()->json(['success' => true, 'filename' => $imageName]);
+        }
+
+        return response()->json(['error' => 'Invalid image data'], 400);
+    }
+
 
 }

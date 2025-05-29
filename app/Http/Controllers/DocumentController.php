@@ -159,6 +159,7 @@ class DocumentController extends Controller
            // dd($row->ProjectDocument->project);
            if($row->file != NULL){
             $row->file = Storage::url('project'.$row->project->id.'/documents'.$row->project_document_id.'/revisions/'.$row->file);
+            $row->preview_image = Storage::url('project'.$row->project->id.'/documents'.$row->project_document_id.'/revisions/'.$row->preview_image);
 
            }
             return $row;

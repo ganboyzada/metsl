@@ -120,6 +120,7 @@
                     for(let i=0;i<all_meetings.length;i++){
                         //console.log(all_meetings[i].users);
                         let url = "{{ route('projects.meetings.edit', [':id']) }}".replace(':id', all_meetings[i].id);
+                        let url2 = "{{ route('projects.meetings.downloadPdf', [':id']) }}".replace(':id', all_meetings[i].id);
                         html+=`<tr class="border-b dark:border-gray-800">
                                 <td class="px-4 py-2"><a target="_blank" href="${url}">${all_meetings[i].name}</a></td>
                                 <td class="px-4 py-2">${all_meetings[i].planned_date}</td>
@@ -131,6 +132,10 @@
                                 <td class="px-4 py-2 flex items-center gap-3">
                                     <a target="_blank" href="${url}" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
                                         <i data-feather="eye" class="w-5 h-5"></i>
+                                    </a>
+
+                                     <a  href="${url2}" class="text-blue-500 dark:text-blue-400 hover:text-blue-300">
+                                        <i data-feather="download" class="w-5 h-5"></i>
                                     </a>
                                 </td>
                         

@@ -13,17 +13,19 @@ class BaseRepository implements EloquentRepositoryInterface
      * @var Model      
      */     
      protected $model;
+     protected $model2;
      protected $with = [];       
      protected $where = [];  
 
     /**      
      * BaseRepository constructor.      
-     *      
-     * @param Model $model      
+     * @param Model $model        
+     * @param Model $model2      
      */     
-    public function __construct(Model $model)     
+    public function __construct(Model $model , Model $model2 = null)     
     {         
         $this->model = $model;
+        $this->model2 = $model2;
     }
    /**
     *

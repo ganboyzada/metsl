@@ -177,10 +177,16 @@
 			
             <div class="flex flex-wrap gap-4">
 			
-                <div class="flex items-center">
-                    <img src="{{$punch_list->responsible->userable->image}}" alt="Profile" class="w-10 h-10 rounded-full mr-4">
-                    <p class="  dark:text-gray-200">{{$punch_list->responsible->userable->first_name}} {{$punch_list->responsible->userable->last_name}}</p>
-                </div>		
+            @if($punch_list->assignees->count() > 0)
+				@foreach($punch_list->assignees as $user)
+					<div class="flex items-center">
+						<img src="{{$user->userable->image}}" alt="Profile" class="w-10 h-10 rounded-full mr-4">
+                        <p class="  dark:text-gray-200">{{$user->userable->first_name}} {{$user->userable->last_name}}</p>
+					</div>
+					
+				@endforeach
+				
+			@endif			
 			
             </div>
         </div>
@@ -199,6 +205,20 @@
 				@endforeach
 				
 			@endif	
+            </div>
+        </div>
+
+        <div class="mb-6">
+            <h3 class="text-sm font-medium dark:text-gray-400 mb-2">Companies</h3>
+            
+			<h4>{{ $punch_list->package?->name??'' }}	</h4>
+            <div class="flex flex-wrap gap-4">
+            @if (isset($punch_list->package) && $punch_list->package->companies->count() > 0)
+            @foreach ($punch_list->package->companies as $comapny)
+                <span class="px-3 py-1 rounded-full text-xs bg-green-500 text-white">{{ $comapny->name }}</span>
+            @endforeach
+                
+            @endif
             </div>
         </div>
 

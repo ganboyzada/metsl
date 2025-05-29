@@ -37,16 +37,16 @@ class punchListResource extends JsonResource
             "pin_y" => $this->pin_y,
             "status"=> $this->status->text(),
             "priority"=> $this->priority->text(),
-            "responsible"=>$this->responsible->name,
+            "responsible"=>$this->package?->name??'',
             "responsible_user" =>$this->when(
-                ($this->relationLoaded('responsible') && $this->responsible->relationLoaded('userable')),
+                $this->relationLoaded('responsible') ,
                 function () {
                     return new UserProfileResource($this->responsible);
                 }
             ),
 
-            "distrbution_members" =>$this->when(
-                ($this->relationLoaded('users') && $this->responsible->relationLoaded('userable')),
+            "distrbution_members" => $this->when(
+                $this->relationLoaded('users') ,
                 function () {
                     return new UserProfileCollection($this->users);
                 }

@@ -123,7 +123,11 @@
                     </a>
 					@endif
 					@if(checkIfUserHasThisPermission(Session::get('projectID') ,'modify_companies'))
-
+                    <a href="{{ route('work_packages') }}" class="flex items-center px-4 py-2 hover:bg-gray-200/25">
+                        <i data-feather="list" class="mr-3"></i>
+                        Work Packages
+                        <i data-feather="lock" class="ml-auto w-4 h-4 text-blue-400"></i>
+                    </a>
                     <a href="{{ route('companies') }}" class="flex items-center px-4 py-2 hover:bg-gray-200/25">
                         <i data-feather="list" class="mr-3"></i>
                         Companies

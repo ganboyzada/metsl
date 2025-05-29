@@ -44,6 +44,7 @@ class ProjectController extends Controller
     }
 
     public function detail(Request $request){
+       // phpinfo();
         // $project = $this->projectService->find($request->id);
         if (Session::has('projectID') && Session::has('projectName')){
             $id = Session::get('projectID');
@@ -55,8 +56,33 @@ class ProjectController extends Controller
         // $pass = '12345678';
         // $m = \Mail::to('marina3mad100@gmail.com')->send(new StakholderEmail($project_name , $job_title , $email ,$pass ));
        // return $request->session()->all();
-            
-        return view('metsl.pages.projects.project', get_defined_vars());
+//  $pdfFullPath = storage_path('app/public/HAL-OV-FF-1002.pdf');
+
+//     if (!file_exists($pdfFullPath)) {
+//         return response()->json([
+//             'error' => 'PDF file not found at path: ' . $pdfFullPath
+//         ], 404);
+//     }
+
+//     try {
+//         $pdf = new \Spatie\PdfToImage\Pdf($pdfFullPath);
+
+//         // Save first page as image
+//         $imageName = 'HAL-OV-FF-1002.jpg';
+//         $imagePath = storage_path('app/public/' . $imageName);
+
+//         $pdf->setPage(1)->saveImage($imagePath);
+
+//         return response()->json([
+//             'message' => 'PDF uploaded and first page converted to image.',
+//             'image' => asset('storage/' . $imageName),
+//         ]);
+//     } catch (\Exception $e) {
+//         return response()->json([
+//             'error' => 'Conversion failed: ' . $e->getMessage()
+//         ], 500);
+//     }       
+       return view('metsl.pages.projects.project', get_defined_vars());
     }
     
     public function storeIdSession(Request $request){

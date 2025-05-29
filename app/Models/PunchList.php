@@ -18,11 +18,17 @@ class PunchList extends Model
             'priority'=> PunchListPriorityEnum::class
         ];
     }
-    protected $fillable = ['number','title','location','cost_impact','priority','responsible_id','description','created_by','closed_by','project_id','status','date_notified_at','date_resolved_at','due_date','drawing_id','pin_x','pin_y','due_days'];
+    protected $fillable = ['number','title','location','cost_impact','priority','responsible_id','work_package_id','description','created_by','closed_by','project_id','status','date_notified_at','date_resolved_at','due_date','drawing_id','pin_x','pin_y','due_days'];
 
     public function users(): belongsToMany
     {
         return $this->belongsToMany(User::class, 'punch_list_participants', 'punch_list_id', 'user_id');
+    }
+
+
+    public function assignees(): belongsToMany
+    {
+        return $this->belongsToMany(User::class, 'punch_list_assignees', 'punch_list_id', 'user_id');
     }
 
     public function files(): hasMany
@@ -33,6 +39,10 @@ class PunchList extends Model
     public function project(): belongsTo
     {
         return $this->belongsTo(Project::class);
+    }
+	public function package(): belongsTo
+    {
+        return $this->belongsTo(WorkPackages::class , 'work_package_id');
     }
 	public function responsible(): belongsTo
     {

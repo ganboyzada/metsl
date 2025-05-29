@@ -30,15 +30,35 @@ class ProjectDocumentRevisionsService
             }
 
 
-            $modal =  $this->projectDocumentRevisionsRepository->create($data);
-            $path = Storage::disk('public')->path('/project'.$data['project_id'].'/documents'.$project_document_id.'/revisions'.$modal->id);            
+            
+            $path = Storage::disk('public')->path('/project'.$data['project_id'].'/documents'.$project_document_id.'/revisions');            
             \File::makeDirectory($path, $mode = 0777, true, true);  
-
+            $preview_image = NULL;
             if(isset($data['file']) && $data['file'] != NULL){
                 Storage::disk('public')->putFileAs('project'.$data['project_id'].'/documents'.$project_document_id.'/revisions/', $file, $fileName);
+                
+                
+                $extension = $file->getClientOriginalExtension();
+                $mimeType = $file->getMimeType();
+                if ($extension === 'pdf' && $mimeType === 'application/pdf') {
+                        $pdfFullPath = storage_path('app/public/project'.$project_id.'/documents'.$project_document_id.'/revisions/'.$fileName);
+                        $pdf = new \Spatie\PdfToImage\Pdf($pdfFullPath);
+
+                        // Save first page as image
+                        $imageName = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME)  . '.jpg';
+                        $imagePath = storage_path('app/public/project'.$project_id.'/documents'.$project_document_id.'/revisions/'.$imageName);
+
+                        $pdf->setPage(1)->saveImage($imagePath);
+                        $preview_image = $imageName;
+                }elseif (in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp']) && str_starts_with($mimeType, 'image/')) {
+                    $preview_image = $fileName;
+
+                }             
 
 
-            }           
+            }   
+            $data['preview_image'] = $preview_image;
+            $modal =  $this->projectDocumentRevisionsRepository->create($data);
             \DB::commit();
         } catch (\Exception $e) {
             \DB::rollback();
