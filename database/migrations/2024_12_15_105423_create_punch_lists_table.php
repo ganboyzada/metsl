@@ -25,7 +25,7 @@ return new class extends Migration
             $table->date('date_resolved_at')->nullable();
             $table->date('due_date')->nullable();
 
-            $table->unsignedBiginteger('responsible_id')->unsigned();
+            $table->unsignedBiginteger('responsible_id')->unsigned()->nullable();
             $table->foreign('responsible_id')->references('id')
                 ->on('users')->onDelete('cascade');	
 				
