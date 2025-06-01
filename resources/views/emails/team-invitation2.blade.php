@@ -21,8 +21,8 @@
     <p> Greetings from Metsl TaskTrack
         @if ($pass != '')
         <p>You have just been added to the project “({{ $name }})” as ({{ $job_title }}). A user account is created to fit your customized workflow. You can kindly retrieve the login email and the secure password from below:</p>
-        <p>Login email: ({{ $email }})</p>
-        <p>Password: ({{ $pass }})</p>  
+        <p>Login email: {{ $email }}</p>
+        <p>Password: {{ $pass }}</p>  
         <p>** Please do not share this password to eliminate confidential issues</p>     
         @else
         <p>You have just been added to the project “({{ $name }})” as ({{ $job_title }}). A user account is created to fit your customized workflow.</p>
