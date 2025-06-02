@@ -56,8 +56,8 @@ class CorrespondenceRequest extends FormRequest
                     Rule::unique('correspondences' , 'number')->where(fn ($query) => $query->where('project_id', request()->project_id))
                 ],
                 'subject' => [
-                    'required',
-                    Rule::unique('correspondences' , 'subject')->where(fn ($query) => $query->where('project_id', request()->project_id))
+                    'required'
+                   // Rule::unique('correspondences' , 'subject')->where(fn ($query) => $query->where('project_id', request()->project_id))
                 ],
 
                 'description' => 'nullable',
