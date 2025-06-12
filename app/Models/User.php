@@ -17,6 +17,8 @@ use App\Models\Permission;
 use App\Models\Role;
 use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
 use App\Models\Company;
+use Illuminate\Support\Facades\Storage;
+
 
 class User extends Authenticatable
 {
@@ -37,7 +39,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'company_id'
+        'profile_photo_path',
+        'mobile_phone'
     ];
 
     protected $guard_name = 'sanctum';
@@ -76,6 +79,17 @@ class User extends Authenticatable
         ];
     }
 
+
+       protected function getprofilePhotoPathAttribute(): string
+    {
+        if($this->attributes['profile_photo_path'] != NULL){
+            return Storage::url('users/'.$this->attributes['profile_photo_path']);
+        }else{
+            return asset('images/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.webp');
+        }
+        
+    }
+
     /**
      *
      * @return collection
@@ -87,7 +101,9 @@ class User extends Authenticatable
 
     public function projects(): BelongsToMany
     {
-         return $this->belongsToMany(Project::class, 'projects_users', 'user_id', 'project_id');
+         //return $this->belongsToMany(Project::class, 'projects_users', 'user_id', 'project_id');
+         return $this->belongsToMany(Project::class, 'projects_users', 'user_id', 'project_id')
+        ->withPivot(['company_id','type','specialty','office_phone']);
     } 
 
     public function packages(): BelongsToMany

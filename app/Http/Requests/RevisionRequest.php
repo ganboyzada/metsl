@@ -24,7 +24,9 @@ class RevisionRequest extends FormRequest
     {
         return [
 
-            'revision_id' => ['required', 'integer'],         
+            'revision_id' => 'required_without:file_id|nullable|integer',
+            'file_id' => 'required_without:revision_id|nullable|integer',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             'comment' => 'required'   
         ]; 
     }

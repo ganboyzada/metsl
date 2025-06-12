@@ -44,6 +44,17 @@ class ProjectController extends Controller
     }
 
     public function detail(Request $request){
+    //    dd(checkIfUserHasThisPermission(3 , 'view_RFC'));
+    //      $enums_list = \App\Enums\CorrespondenceTypeEnum::cases();
+    //             foreach ($enums_list as $enum) {
+    //                 //if(checkIfUserHasThisPermission(3 , 'view_'.$enum->value)){
+    //                     print('view_'.$enum->value);
+    
+    //                // }
+    //             }
+
+    //       return;      
+
        // phpinfo();
         // $project = $this->projectService->find($request->id);
         if (Session::has('projectID') && Session::has('projectName')){
@@ -125,12 +136,14 @@ class ProjectController extends Controller
 		
 		//$proj = Project::with('contractors')->where('id',6)->first();
 		//return $proj;
+        
         if(checkIfUserHasThisPermission(Session::get('projectID') ,'create_projects')){
-            $clients = $this->clientService->all();
-            $contractors = $this->contractorService->all();
-            //dd($contractors[0]->user->id);
-            $design_teams = $this->designTeamService->all();
-            $project_managers = $this->projectmanagerService->all();
+            // $clients = $this->clientService->all();
+            // $contractors = $this->contractorService->all();
+            // $design_teams = $this->designTeamService->all();
+            // $project_managers = $this->projectmanagerService->all();
+
+            $users =  $this->userService->all();
             $companies = Company::where('active', true)->get()->keyBy('id');
             $roles = Role::with('permissions')->get();
             $role_permission_arr = [];
@@ -153,26 +166,33 @@ class ProjectController extends Controller
         if($request->validated()){
             try{         
                 $data = $request->validated();
-                //dd($data['user_type']);
-                $data['user_name']=$data['first_name'].' '.$data['last_name'];
-                if($data['user_type'] == 'client'){
-                    $model = $this->clientService->create($data);
+                if(isset($data['user_id']) && $data['user_id'] != NULL){
+                    $user = $this->userService->update($data);
+                    $user = $this->userService->find($data['user_id']);
+                }else{
+                  //  dd('ok');
                     $user = $this->userService->create($data);
-                    $model->user()->save($user);                
-                }else if($data['user_type'] == 'contractor'){
-                    $model = $this->contractorService->create($data);
-                    $user = $this->userService->create($data);
-                    $model->user()->save($user);
-                }else if($data['user_type'] == 'designTeam'){
-                    $model = $this->designTeamService->create($data);
-                    $user = $this->userService->create($data);
-                    $model->user()->save($user);                
-                }else if($data['user_type'] == 'projectManager'){
-                // dd('ok');
-                    $model = $this->projectmanagerService->create($data);
-                    $user = $this->userService->create($data);
-                    $model->user()->save($user);                
                 }
+                
+                //dd($data['user_type']);
+                // $data['user_name']=$data['first_name'].' '.$data['last_name'];
+                // if($data['user_type'] == 'client'){
+                //     $model = $this->clientService->create($data);
+                //     $user = $this->userService->create($data);
+                //     $model->user()->save($user);                
+                // }else if($data['user_type'] == 'contractor'){
+                //     $model = $this->contractorService->create($data);
+                //     $user = $this->userService->create($data);
+                //     $model->user()->save($user);
+                // }else if($data['user_type'] == 'designTeam'){
+                //     $model = $this->designTeamService->create($data);
+                //     $user = $this->userService->create($data);
+                //     $model->user()->save($user);                
+                // }else if($data['user_type'] == 'projectManager'){
+                //     $model = $this->projectmanagerService->create($data);
+                //     $user = $this->userService->create($data);
+                //     $model->user()->save($user);                
+                // }
                 
                 \DB::commit();
                 // all good
@@ -180,14 +200,21 @@ class ProjectController extends Controller
                 \DB::rollback();
                 return response()->json(['error' => $e->getMessage()]);
             }              
-             return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$model , 'user'=>$user, 'company'=>$user->company]);
+             return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$user , 'user'=>$user]);
 
         }
 
     }
 
+    public function search(Request $request){
+        $users = $this->userService->search($request);
+        return response()->json($users);
+
+    }
+
     public function store(ProjectRequest  $request)
     {
+        
         if($request->validated()){
             \DB::beginTransaction();
             try{
@@ -210,11 +237,12 @@ class ProjectController extends Controller
 
     public function edit(Request $request , $id){
         $project = $this->projectService->find($id);
-       // return $project;
-        $clients = $this->clientService->all();
-        $contractors = $this->contractorService->all();
-        $design_teams = $this->designTeamService->all();
-        $project_managers = $this->projectmanagerService->all();
+        //return $project;
+        // $clients = $this->clientService->all();
+        // $contractors = $this->contractorService->all();
+        // $design_teams = $this->designTeamService->all();
+        // $project_managers = $this->projectmanagerService->all();
+        $users =  $this->userService->all();
         $companies = Company::where('active', true)->get()->keyBy('id');
         $roles = Role::with('permissions')->get();
         $role_permission_arr = [];
@@ -232,6 +260,7 @@ class ProjectController extends Controller
 
     public function update(ProjectRequest  $request)
     {
+        
         if($request->validated()){
             \DB::beginTransaction();
             try{
@@ -252,7 +281,7 @@ class ProjectController extends Controller
 
     public function destroy($id){
         $this->projectService->delete($id);
-        return redirect()->back()->with('success' , 'Item deleted successfully');
+        //return redirect()->back()->with('success' , 'Item deleted successfully');
 
         
     }

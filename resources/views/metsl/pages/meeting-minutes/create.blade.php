@@ -377,10 +377,11 @@
 	// }
 			
 
-	get_participates();
+	
 
 	async  function get_participates(){
-		if(localStorage.getItem("project_tool") == 'meeting_planing'){
+        //alert('ok');
+		//if(localStorage.getItem("project_tool") == 'meeting_planing'){
 
 			let fetchRes = await fetch(`{{url('project/meetings/participates')}}`);
 			const all = await fetchRes.json();
@@ -392,7 +393,7 @@
 			reviewers_obj.clearStore();
 			reviewers_obj.setChoices(reviewers);
 				
-		}	
+		//}	
     }
 	
     // let participants = [
@@ -406,6 +407,7 @@
     document.addEventListener('DOMContentLoaded', () => {
        // populateChoices('participants', participants, true); 
 		reviewers_obj = populateChoices2('participants', [], true);		
+        get_participates();
     }); 
 </script>
 @endpush

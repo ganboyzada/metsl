@@ -9,6 +9,7 @@ use App\Http\Requests\CorrespondenceRequest;
 use App\Http\Requests\DocumentRequest;
 use App\Http\Requests\MeetingPlaningRequest;
 use App\Http\Requests\TypeRequest;
+use App\Mail\MeetingEmail;
 use App\Services\ClientService;
 use App\Services\ContractorService;
 use App\Services\DesignTeamService;
@@ -19,6 +20,7 @@ use App\Services\ProjectDocumentRevisionsService;
 use App\Services\ProjectManagerService;
 use App\Services\ProjectService;
 use App\Services\UserService;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
@@ -26,7 +28,6 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Storage;
 use View;
-use Barryvdh\DomPDF\Facade\Pdf;
 
 
 class MeetingPlaningController extends Controller
@@ -59,14 +60,17 @@ class MeetingPlaningController extends Controller
         //dd($meeting_start.'-'.$meeting_end.'-'.$now);
         // Determine meeting status dynamically
         $meeting->old_status = $meeting->status ;
-        $meeting_status = null;
+        $meeting_status = NULL;
         //dd($meeting->status);
         //dd($now->between($meeting_start, $meeting_end));
         if ($now->lessThan($meeting_start) && $meeting->status->value == MeetingPlanStatusEnum::PLANNED->value) {
             $meeting_status = MeetingPlanStatusEnum::PLANNED;
         } elseif ($now->between($meeting_start, $meeting_end) && $meeting->status->value == MeetingPlanStatusEnum::PLANNED->value) {
             $meeting_status = MeetingPlanStatusEnum::ONGOING;
-        } elseif ($now->greaterThan($meeting_end) ||  $meeting->status->value == MeetingPlanStatusEnum::PUBLISHED->value) {
+        } 
+        //elseif ($now->greaterThan($meeting_end) ||  $meeting->status->value == MeetingPlanStatusEnum::PUBLISHED->value) {
+        elseif ($meeting->status->value == MeetingPlanStatusEnum::PUBLISHED->value) {
+   
             $meeting_status = MeetingPlanStatusEnum::PUBLISHED;
         }
 
@@ -77,11 +81,11 @@ class MeetingPlaningController extends Controller
 
 
         //return $meeting;
-        $reviewers = $this->userService->getUsersOfProjectID($meeting->project_id , 'participate_in_meetings');
+       // $reviewers = $this->userService->getUsersOfProjectID($meeting->project_id , 'participate_in_meetings');
+        //return view('metsl.pages.meeting-minutes.pdf', compact('meeting','reviewers'));
 
-
-    $pdf = Pdf::loadView('metsl.pages.meeting-minutes.pdf', compact('meeting','reviewers'));
-    return $pdf->download('meeting_'.$id.'.pdf');
+    $pdf = Pdf::loadView('metsl.pages.meeting-minutes.pdf', compact('meeting'));
+    return $pdf->download($meeting->name.'-'.$meeting->planned_date.'.pdf');
 }
     public function create(){
         return view('metsl.pages.meeting-minutes.create');
@@ -127,14 +131,14 @@ class MeetingPlaningController extends Controller
         //dd($meeting_start.'-'.$meeting_end.'-'.$now);
         // Determine meeting status dynamically
         $meeting->old_status = $meeting->status ;
-        $meeting_status = null;
-        //dd($meeting->status);
+        $meeting_status = NULL;
+       // dd($now);
         //dd($now->between($meeting_start, $meeting_end));
         if ($now->lessThan($meeting_start) && $meeting->status->value == MeetingPlanStatusEnum::PLANNED->value) {
             $meeting_status = MeetingPlanStatusEnum::PLANNED;
         } elseif ($now->between($meeting_start, $meeting_end) && $meeting->status->value == MeetingPlanStatusEnum::PLANNED->value) {
             $meeting_status = MeetingPlanStatusEnum::ONGOING;
-        } elseif ($now->greaterThan($meeting_end) ||  $meeting->status->value == MeetingPlanStatusEnum::PUBLISHED->value) {
+        } elseif ($meeting->status->value == MeetingPlanStatusEnum::PUBLISHED->value) {
             $meeting_status = MeetingPlanStatusEnum::PUBLISHED;
         }
 
@@ -213,18 +217,20 @@ class MeetingPlaningController extends Controller
     
             //dd($meeting_start.'-'.$meeting_end.'-'.$now);
             // Determine meeting status dynamically
-            $meeting_status = null;
+            $meeting_status = NULL;
 
     
             if ($now->lessThan($meeting_start) && $row->status->value == MeetingPlanStatusEnum::PLANNED->value) {
                 $meeting_status = MeetingPlanStatusEnum::PLANNED;
             } elseif ($now->between($meeting_start, $meeting_end) && $row->status->value == MeetingPlanStatusEnum::PLANNED->value) {
                 $meeting_status = MeetingPlanStatusEnum::ONGOING;
-            } elseif ($now->greaterThan($meeting_end) ||  $row->status->value == MeetingPlanStatusEnum::PUBLISHED->value) {
+            } elseif ($row->status->value == MeetingPlanStatusEnum::PUBLISHED->value) {
                 $meeting_status = MeetingPlanStatusEnum::PUBLISHED;
             }  
-            $row->status_text = ($meeting_status->name == 'PUBLISHED' && $row->status->value == MeetingPlanStatusEnum::PLANNED->value )? ' Ready To '.$meeting_status->text() : $meeting_status->text();
-            $row->color = $meeting_status->color();
+            //$row->status_text = ($meeting_status->name == 'PUBLISHED' && $row->status->value == MeetingPlanStatusEnum::PLANNED->value )? ' Ready To '.$meeting_status->text() : $meeting_status->text();
+            $row->status_text = ($meeting_status == NULL )? ' Ready To '.MeetingPlanStatusEnum::PUBLISHED->text() : $meeting_status->text();
+
+            $row->color = ($meeting_status != NULL)? $meeting_status->color() : 'bg-red-500';
 
             $row->status = $meeting_status ;
             return $row;
@@ -250,18 +256,18 @@ class MeetingPlaningController extends Controller
     
             //dd($meeting_start.'-'.$meeting_end.'-'.$now);
             // Determine meeting status dynamically
-            $meeting_status = null;
+            $meeting_status = NULL;
 
     
             if ($now->lessThan($meeting_start) && $row->status->value == MeetingPlanStatusEnum::PLANNED->value) {
                 $meeting_status = MeetingPlanStatusEnum::PLANNED;
             } elseif ($now->between($meeting_start, $meeting_end) && $row->status->value == MeetingPlanStatusEnum::PLANNED->value) {
                 $meeting_status = MeetingPlanStatusEnum::ONGOING;
-            } elseif ($now->greaterThan($meeting_end) ||  $row->status->value == MeetingPlanStatusEnum::PUBLISHED->value) {
+            } elseif ($row->status->value == MeetingPlanStatusEnum::PUBLISHED->value) {
                 $meeting_status = MeetingPlanStatusEnum::PUBLISHED;
             }  
-            $row->status_text = ($meeting_status->name == 'PUBLISHED' && $row->status->value == MeetingPlanStatusEnum::PLANNED->value )? ' Ready To '.$meeting_status->text() : $meeting_status->text();
-            $row->color = $meeting_status->color();
+            $row->status_text = ($meeting_status == NULL )? ' Ready To '.MeetingPlanStatusEnum::PUBLISHED->text() : $meeting_status->text();
+            $row->color = ($meeting_status != NULL)? $meeting_status->color() : 'bg-red-500';
 
             $row->status = $meeting_status ;
             return $row;
@@ -302,14 +308,16 @@ class MeetingPlaningController extends Controller
     public function store_notes(){
 
         $data = request()->all();
-
         $all_data = [];
+            //dd($data);
+
         $meeting = \App\Models\MeetingPlan::find($data['meeting_id']);
-        $meeting->notes()->delete();
         
-        if(count($data['note']) > 0){
+        $meeting->notes()->delete();
+        //dd($meeting->notes()->get());
+        if(count($data['notes']) > 0){
            
-            foreach($data['note'] as $index=>$note){
+            foreach($data['notes'] as $index=>$note){
                 $insert_arr = [];
                 $insert_arr['note'] = $note; 
                 $insert_arr['type'] = isset($data['type'][$index]) ? 'action' : 'note';
@@ -323,11 +331,29 @@ class MeetingPlaningController extends Controller
         }
 
         \App\Models\MeetingPlanNotes::insert($all_data);
-        if(count($data['note']) > 0 && $data['status']== MeetingPlanStatusEnum::PUBLISHED->value){
-           // dd(MeetingPlanStatusEnum::PUBLISHED->value);
+        //if(count($data['note']) > 0){
             $meeting->status = MeetingPlanStatusEnum::PUBLISHED->value;
             $meeting->save();
-        }
+        //}
+
+            $emails = [];
+            $meeting = $this->meetingPlaningService->find($data['meeting_id']);
+           // dd($meeting->notes);
+            if($meeting->notes->count() > 0){
+                foreach($meeting->notes as $note){
+                    if($note->type == 'action' && $note->assignee != NULL
+                     && !in_array($note->assignee->email , $emails)){
+                        $emails[] = $note->assignee->email;
+                    }
+
+                }
+            }
+            //dd($emails);
+            if(count($emails) > 0){
+                foreach($emails as $email){
+                    $m = \Mail::to($email)->send(new MeetingEmail($meeting )); 
+                }
+            }
         return response()->json(['success' => 'Form submitted successfully.']);
     }
 

@@ -28,7 +28,7 @@ class Correspondence extends Model
         ];
     }
 
-    protected $fillable = ['reply_correspondence_id','created_date','created_by','project_id','number', 'subject','type','status' ,'program_impact','cost_impact','description'];
+    protected $fillable = ['reply_correspondence_id','reply_child_correspondence_id','due_days','due_date','changed_by','created_date','created_by','project_id','number', 'subject','type','status' ,'program_impact','cost_impact','description'];
 
     public function files(): HasMany
     {
@@ -56,7 +56,10 @@ class Correspondence extends Model
     {
         return $this->belongsTo(User::class, 'created_by', 'id');
     }
-
+    public function ChangedBy(): belongsTo
+    {
+        return $this->belongsTo(User::class, 'changed_by', 'id');
+    }
 
     public function documentFiles(): belongsToMany
     {
@@ -72,6 +75,14 @@ class Correspondence extends Model
         'correspondence_id', 'revision_id')
         ->using(CorrespondenceLinkedDocuments::class);
     } 
+
+    public  function relatedCorrespondences(): BelongsToMany{
+        return $this->belongsToMany(Correspondence::class, 'correspondence_related_correspondences', 'correspondence_id', 'related_id');
+    }
+	
+	public  function forwards(): BelongsToMany{
+        return $this->belongsToMany(User::class, 'correspondence_forwards', 'correspondence_id', 'user_id');
+    }
 
 
 }

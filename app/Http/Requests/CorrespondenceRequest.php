@@ -53,7 +53,7 @@ class CorrespondenceRequest extends FormRequest
                 'type' => ['required'],
                 'number' => [
                     'required',
-                    Rule::unique('correspondences' , 'number')->where(fn ($query) => $query->where('project_id', request()->project_id))
+                    Rule::unique('correspondences' , 'number')->where(fn ($query) => $query->where('project_id', request()->project_id)->where('reply_correspondence_id', NULL))
                 ],
                 'subject' => [
                     'required'
@@ -62,10 +62,12 @@ class CorrespondenceRequest extends FormRequest
 
                 'description' => 'nullable',
                 'status' => 'required',
+                'due_days'=>['required_if:reply_correspondence_id,!=,null', 'integer'],
                 'program_impact' => 'required',
                 'cost_impact' => 'required',
-                "assignees"    => ['required','array'],
-                "distribution"    => ['required','array'],
+                "assignees"    => ['required_if:reply_correspondence_id,!=,null','array'],
+                "distribution"    => ['nullable','array'],
+                "related_correspondences"    => ['nullable','array'],
                 'docs' => 'nullable',
                 'linked_documents' => 'nullable',
         

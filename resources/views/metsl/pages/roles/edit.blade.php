@@ -38,16 +38,48 @@
                     Save Role
                 </button>
             </div>
+            <div class="mb-4 space-x-4">
+            <label class="leading-snug">
+                <input type="radio" name="checkControl" id="checkAll" style="border:1px solid;" />
+                Check All
+            </label>
 
+            <label class="leading-snug">
+                <input type="radio" name="checkControl" id="uncheckAll" style="border:1px solid;" />
+                Uncheck All
+            </label>
+            </div>
             <div>
                 <h3 class="block text-sm mb-5 font-medium dark:text-gray-200">Assign Permissions</h3>
                 <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6 checkbox-style-1">
                 
                     @foreach($permissions as $permission)
+                    @if ($permission->name != 'view_all_projects' && $permission->name != 'modify_presets' && $permission->name != 'modify_companies'
+                     && $permission->name != 'modify_package' && $permission->name != 'create_projects')
+                          
                     <div class="checkbox-wrapper-47">
-                        <input type="checkbox" name="permissions[]"  value="{{ $permission->id }}" id="p-{{ $permission->id }}" {{ $role->permissions->contains($permission->id) ? 'checked' : '' }}/>
+                        <input type="checkbox" name="permissions[]"  class="perm-checkbox"   value="{{ $permission->id }}" id="p-{{ $permission->id }}" {{ $role->permissions->contains($permission->id) ? 'checked' : '' }}/>
                         <label for="p-{{ $permission->id }}" class="leading-snug">{{ ucwords(str_replace("_"," ",$permission->name))   }}</label>
                     </div>
+                    @endif
+                    @endforeach
+                    
+                </div>
+
+                            </br>
+
+                <h3 class="block text-lg mb-5 font-large dark:text-gray-200"><u>Admin Permissions</u></h3>
+                <div class="grid grid-cols-1 md:grid-cols-3 xl:grid-cols-4 gap-6 checkbox-style-1">
+                
+                    @foreach($permissions as $permission)
+                    @if ($permission->name == 'view_all_projects' || $permission->name == 'modify_presets' || $permission->name == 'modify_companies'
+                     || $permission->name == 'modify_package' || $permission->name == 'create_projects')
+                          <div class="checkbox-wrapper-47">
+                            <input type="checkbox" name="permissions[]" class="perm-checkbox"  value="{{ $permission->id }}" id="p-{{ $permission->id }}"  {{ $role->permissions->contains($permission->id) ? 'checked' : '' }}/>
+                            <label for="p-{{ $permission->id }}" class="leading-snug">{{ ucwords(str_replace("_"," ",$permission->name))   }}</label>
+                        </div>                      
+                    @endif
+
                     @endforeach
                     
                 </div>
@@ -58,4 +90,17 @@
         <button type="submit" class="mt-5 px-4 py-2 bg-blue-500 text-white hover:bg-blue-600">Update Role</button>
     </form>
 </div>
+    <script>
+  document.getElementById('checkAll').addEventListener('change', function () {
+    if (this.checked) {
+      document.querySelectorAll('.perm-checkbox').forEach(cb => cb.checked = true);
+    }
+  });
+
+  document.getElementById('uncheckAll').addEventListener('change', function () {
+    if (this.checked) {
+      document.querySelectorAll('.perm-checkbox').forEach(cb => cb.checked = false);
+    }
+  });
+</script>
 @endsection

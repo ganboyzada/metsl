@@ -16,6 +16,9 @@ return new class extends Migration
             $table->unsignedBiginteger('project_id')->unsigned();
             $table->unsignedBiginteger('user_id')->unsigned();
 
+
+
+
             $table->foreign('project_id')->references('id')
                  ->on('projects')->onDelete('cascade');
             $table->foreign('user_id')->references('id')

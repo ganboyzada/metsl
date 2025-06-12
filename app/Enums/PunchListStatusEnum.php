@@ -32,8 +32,8 @@ enum  PunchListStatusEnum: int
         return match($this) 
         {
             self::PENDING => '#374151',
-            self::CLOSED => '#ff5a5a',
-            self::REVIEW => '#4ab342'
+            self::CLOSED => '#4ab342',
+            self::REVIEW => '#ff5a5a'
         };
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\ProjectRequest;
+use App\Http\Requests\UserProjectRequest;
 use App\Http\Requests\UserRequest;
 use App\Models\Contractor;
 use App\Models\Permission;
@@ -48,27 +48,14 @@ class StakeholderController extends Controller
     }
 
 
-    public function update(UserRequest $request){
+    public function update(UserProjectRequest $request){
         \DB::beginTransaction();
         if($request->validated()){
             try{         
                 $data = $request->validated();
-                //dd($data['user_type']);
-                $data['user_name']=$data['first_name'].' '.$data['last_name'];
-                if($data['user_type'] == 'App\Models\Client'){
-                    $model = $this->clientService->update($data);
-                    $user = $this->userService->update($data);
-                }else if($data['user_type'] == 'App\Models\Contractor'){
-                    $model = $this->contractorService->update($data);
-                    $user = $this->userService->update($data);
-                }else if($data['user_type'] == 'App\Models\DesignTeam'){
-                    $model = $this->designTeamService->update($data);
-                    $user = $this->userService->update($data);
-                }else if($data['user_type'] == 'App\Models\ProjectManager'){
-                // dd('ok');
-                    $model = $this->projectmanagerService->update($data);
-                    $user = $this->userService->update($data);
-                }
+                //dd($data);
+                $user = $this->userService->update($data);
+                $user = $this->userService->find($data['user_id']);
                 
                 \DB::commit();
                 // all good
@@ -86,9 +73,9 @@ class StakeholderController extends Controller
         $project_id = Session::get('projectID');
         $project = $this->projectService->find($project_id);
         $project->stakholders()->detach($id);
-        $user = $this->userService->find($id);
-        $user->userable()->delete();
-        $this->userService->delete($id);
+        //$user = $this->userService->find($id);
+        //$user->userable()->delete();
+      //  $this->userService->delete($id);
 
         
 

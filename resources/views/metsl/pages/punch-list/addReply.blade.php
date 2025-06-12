@@ -73,7 +73,7 @@
        
                     <div>
                         <label for="title" class="block text-sm font-medium dark:text-gray-200 mb-1">Title *</label>
-                        <input required
+                        <input required value="{{ $punch_list->title }}"
                             type="text"
                             id="title"
                             name="title"

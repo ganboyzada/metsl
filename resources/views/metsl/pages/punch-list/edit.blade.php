@@ -262,7 +262,7 @@
 	}
 	*/
 
-	get_participates();
+	
 	async  function get_participates(){
 		if(localStorage.getItem("project_tool") == 'punch_list'){
 
@@ -296,7 +296,8 @@
     document.addEventListener('DOMContentLoaded', () => {
 		
 		distribution_obj = populateChoices2('distribution-members', [], true);		
-		reviewers_obj = populateChoices2('responsible-member', [] , false);	
+		reviewers_obj = populateChoices2('responsible-member', [] , false);
+        get_participates();
 		
     }); 
 

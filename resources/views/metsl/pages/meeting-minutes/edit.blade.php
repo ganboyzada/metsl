@@ -49,7 +49,7 @@
 
             <div class="col-span-1">
                 <label for="endDate" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200">Status</label>
-                <span class="px-3 py-1 font-bold rounded-full text-xs {{ $meeting->status->color() }} text-white">{{ ($meeting->status->name == 'PUBLISHED'  && $meeting->old_status->value == \App\Enums\MeetingPlanStatusEnum::PLANNED->value) ? 'Ready To '.strtoupper($meeting->status->text()) : strtoupper($meeting->status->text()) }}</span>
+                <span class="px-3 py-1 font-bold rounded-full text-xs {{ ($meeting->status == NULL) ? "bg-red-500": $meeting->status->color() }} text-white">{{ ($meeting->status == NULL  && $meeting->old_status->value == \App\Enums\MeetingPlanStatusEnum::PLANNED->value) ? 'Ready To '.strtoupper(\App\Enums\MeetingPlanStatusEnum::PUBLISHED->text()) : strtoupper($meeting->status->text()) }}</span>
             </div>
 
             <!-- Meeting Location -->
@@ -135,9 +135,9 @@
                                 <tr class="meeting-note ">
                                     <td class="px-2 py-2">{{ $index + 1 }}</td>
                                     <td class="px-2 py-2">
-                                        <input required value="{{ $note->note }}" type="text" 
+                                        <textarea  rows="3" column="5"  type="text"  id="textarea{{ $index+1 }}"
                                             placeholder="Your note ..." name="note[]"
-                                            class="text-sm rounded-full ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white"/>
+                                            class="exclude_this text-sm  ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white">{{ $note->note }}</textarea>
                                     </td>
                                     <td class="px-2 py-2">
                                         <div class="checkbox-wrapper-34">
@@ -165,8 +165,8 @@
                             <tr class="meeting-note">
                                 <td class="px-2 py-2">1</td>
                                 <td class="px-2 py-2">
-                                    <input required type="text" placeholder="your note ..." name="note[]" 
-                                        class="text-sm rounded-full ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white"/>
+                                    <textarea rows="3" column="5"  type="text" placeholder="your note ..." name="note[]" id="textarea1"
+                                        class="exclude_this text-sm  ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white"></textarea>
                                 </td>
                                 <td class="px-2 py-2">
                                     <div class="checkbox-wrapper-34">
@@ -209,18 +209,19 @@
                         
                     @endphp
                     <input type="hidden" name="status" value="{{ ($now->greaterThan($meeting_end) || $now->between($meeting_start, $meeting_end))? \App\Enums\MeetingPlanStatusEnum::PUBLISHED->value : -1 }}"/>
-                   
+                                                  
                     @if($meeting->created_by == auth()->user()->id || auth()->user()->is_admin)
                     @if ($meeting->old_status->value != \App\Enums\MeetingPlanStatusEnum::PUBLISHED->value)
                           <button type="submit" class="submit_planing_meeting_form mt-6 py-3 px-4 bg-gray-200 dark:bg-gray-700 rounded-xl hover:bg-blue-500 flex gap-4 justify-center"><i data-feather="save"></i>
+                            Publish
                             @php
                                 
-                                $now = \Carbon\Carbon::now();
-                                if ($now->greaterThan($meeting_end) || $now->between($meeting_start, $meeting_end)){
-                                    echo 'Publish';
-                                }else{
-                                    echo 'Save';
-                                }
+                                // $now = \Carbon\Carbon::now();
+                                // if ($now->greaterThan($meeting_end) || $now->between($meeting_start, $meeting_end)){
+                                //     echo 'Publish';
+                                // }else{
+                                //     echo 'Save';
+                                // }
                             @endphp     
                             
                         
@@ -255,9 +256,35 @@
     }
 
     $("#meeting-planner-form").on("submit", function(event) {
+        event.preventDefault();
+
+
+
         //alert('ok');
         const form = document.getElementById("meeting-planner-form");
         const formData = new FormData(form); 
+
+        const elements = document.getElementsByClassName('exclude_this');
+
+        Array.from(elements).forEach(el => {
+            formData.append('notes[]',tinyMCE.get(el.id).getContent());
+        });
+
+
+//         tinyMCE.get().forEach(editor => {
+//             if(editor.getContent() != ''){
+//                 formData.append('note[]', editor.getContent());
+//             }
+            
+// });
+
+
+
+                //const editors = tinyMCE.editors.filter(editor => editor.targetElm.name === 'note[]');
+//         editors.forEach(editor => {
+//     formData.append('note[]', editor.getContent());
+// });
+        console.log(tinyMCE.get());
     
             $('.error').hide();
             $('.success').hide();
@@ -327,20 +354,22 @@
     
     });
     
-let noteCount = parseInt({{ $meeting->notes->count() }});
 
 function addNote(){
+    let noteCount = document.getElementsByClassName('meeting-note').length;
+
     noteCount++;
     let users = {!! json_encode($users) !!}
     let html = `
         <tr class="meeting-note">
             <td class="px-2 py-2">${noteCount}</td>
             <td class="px-2 py-2">
-                <input required type="text" placeholder="your note ..." name="note[]" id="note" class="text-sm rounded-full ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white"/>
+                <textarea rows="3" column="5"  type="text" placeholder="your note ..." name="note[]" id="textarea${noteCount}"
+                                        class="exclude_this text-sm  ps-3 pe-8 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white"></textarea>
             </td>
             <td class="px-2 py-2">
                 <div class="checkbox-wrapper-34">
-                    <input name="type[${noteCount}]" onchange="changeNoteType(event)" class='tgl tgl-ios' id='toggle-n${noteCount}' type='checkbox'>
+                    <input name="type[${noteCount - 1}]" onchange="changeNoteType(event)" class='tgl tgl-ios' id='toggle-n${noteCount}' type='checkbox'>
                     <label class='tgl-btn' for='toggle-n${noteCount}'></label>
                 </div>
             </td>
@@ -362,6 +391,14 @@ function addNote(){
         </tr>
     `;
     $('#meeting-notes tbody').append(html);
+
+
+  tinymce.init({
+    selector: `#textarea${noteCount}`,
+    menubar: false,
+    height: 300
+  });
+
 }
 </script>
 @endpush

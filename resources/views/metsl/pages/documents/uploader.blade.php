@@ -62,18 +62,40 @@
             <!-- Title -->
             <div class="mb-4">
                 <div class="flex gap-2">  
-                    <div class="w-1/3">
+                 <div class="w-1/3">
                         <label for="package" class="block text-sm font-medium dark:text-gray-200 mb-1">Package</label>
-                        <select name="package_id" id="package_id" class="w-full px-3 py-2 dark:bg-gray-800 dark:text-gray-200">
-
+                        <select name="package_id" id="package_id" onchange="getSubfolders(this.value)" class="w-full px-3 py-2 dark:bg-gray-800 dark:text-gray-200">
+                            <option value="">select Package</option>
                             @if ($packages2->count() > 0)
-                                @foreach ($packages2 as $package)
-                                    <option value="{{$package->id}}">{{$package->name}}</option>    
+                                @foreach ($packages2 as $row)
+                                    <option value="{{$row->id}}" 
+                                        {{ (isset($package_detail->id) && $package_detail->id == $row->id) || (isset($package_subfolder->id) && $package_subfolder->id == $row->id) ? 'selected' : '' }}
+                                        >{{$row->name}}
+                                    
+                                    </option>    
                                 @endforeach            
                             @endif
                         </select>
                     </div>
                     <div class="w-2/3">
+                        <label for="subfolder_id" class="block text-sm font-medium dark:text-gray-200 mb-1">subfolder</label>
+                        <select name="subfolder_id" id="subfolder_id" class="w-full px-3 py-2 dark:bg-gray-800 dark:text-gray-200">
+                                <option value="">select Subfolder</option>
+                            @if (isset($package_detail->subFolders) && $package_detail->subFolders->count() > 0)
+                                @foreach ($package_detail->subFolders as $sub)
+                                    <option value="{{$sub->id}}" 
+                                        {{ (isset($package_subfolder->subFolders) && $package_subfolder->subFolders->contains('id', $sub->id))?'selected':'' }}
+                                        >{{$sub->name}}</option>    
+                                @endforeach            
+                            @endif
+                        </select>
+                    </div>
+
+
+                
+                </div>
+
+                     <div class="mb-6">
                         <label for="title" class="block text-sm font-medium dark:text-gray-200 mb-1">Title</label>
                         <input
                             type="text"
@@ -83,7 +105,6 @@
                             placeholder="Enter title"
                         />
                     </div>
-                </div>
                 
             </div>
 
@@ -122,7 +143,16 @@
 
 
     }
+ let isSubmitting = false;
+   
  $("#upload-form").on("submit", function(event) {
+    event.preventDefault(); // أول شي عشان نوقف الإرسال التقليدي
+    if (isSubmitting) {
+        return; // إذا كان الطلب شغال، ارفض الطلب الجديد
+    }
+    isSubmitting = true;
+    $("#submit_upload_form").prop('disabled', true);
+        //alert('ok');
         const form = document.getElementById("upload-form");
         const formData = new FormData(form); 
 		const document_id = $('#document_id').val();
@@ -150,6 +180,7 @@
                 },
                 success: function(data) {
                     if (data.success) {
+                        sSubmitting = false;
                          
                         $("#submit_upload_form").prop('disabled', false);
                         
@@ -163,11 +194,16 @@
 						
                         $('#file-list').html('');
 						
-						get_documents();
+						//get_documents();
+
+                        setInterval(function() {
+                            location.reload();
+                        }, 3000);	
 
 
                     }
                     else if(data.error){
+                        sSubmitting = false;
                         $("#submit_upload_form").prop('disabled', false);
 
                         $('.error').show();
@@ -175,6 +211,7 @@
                     }
                 },
                 error: function (err) {
+                    sSubmitting = false;
                     $.each(err.responseJSON.errors, function(key, value) {
                         $('.error').show();
                         $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+value[0]+'</div>');
@@ -219,6 +256,8 @@
 		const reviewers = all_users.users.map(function(item) {
 		  return {'value' : item.id , 'label' : item.name};
 		});
+        reviewers.unshift({ value: -1, label: 'All' });
+
 			//console.log(reviewers);
 			doc_reviewers = reviewers;
 			reviewers_obj.clearStore();
@@ -234,12 +273,15 @@
    
 	}
 			
-    get_reviewers();
+    
 	let doc_reviewers = [];
 
 	document.addEventListener('DOMContentLoaded', () => {
+        if(localStorage.getItem("project_tool") == 'documents'){
 		reviewers_obj = populateChoices2('reviewers', [], true);
         accessibles_obj = populateChoices2('accessibles', [], true);
+        get_reviewers();
+        }
 
        // assignees_obj = populateChoices2('assignees', [], true);
 

@@ -22,7 +22,23 @@ class UserService
         \DB::beginTransaction();
         try {
             
+            if(isset($data['image']) && $data['image'] != NULL){
+                $file = $data['image'];
+                $fileName = md5(time()).'.'.$file->extension();            
+                $data['profile_photo_path'] = $fileName;
+
+            }else{
+                    $data['profile_photo_path'] = NULL;
+            }   
             
+            
+            $path = Storage::disk('public')->path('users');
+
+            \File::makeDirectory($path, $mode = 0777, true, true);
+
+            if(isset($data['image']) && $data['image'] != NULL){
+                Storage::disk('public')->putFileAs('users', $file, $fileName);
+            }
             $data['name'] = $data['first_name'].'_'.$data['last_name'];
             $data['password'] = Hash::make('password');
             $model =  $this->userRepository->create($data);
@@ -45,52 +61,109 @@ class UserService
     {
         \DB::beginTransaction();
         try {
+            if(isset($data['image']) && $data['image'] != NULL){
+                $file = $data['image'];
+                $fileName = md5(time()).'.'.$file->extension();            
+                $data['profile_photo_path'] = $fileName;
+
+            }       
             
+            $path = Storage::disk('public')->path('users');
+
+            \File::makeDirectory($path, $mode = 0777, true, true);
+
+            if(isset($data['image']) && $data['image'] != NULL){
+                Storage::disk('public')->putFileAs('users', $file, $fileName);
+            }
+
+
             $data['name'] = $data['first_name'].'_'.$data['last_name'];
-            $data['password'] = Hash::make('password');
+            if(isset($data['password']) && $data['password'] != NULL){
+                //($data['password']);
+                $data['password'] = Hash::make($data['password']);
+            }else{
+                unset($data['password']);
+            }
             $id = $data['user_id'];
             $user = $this->userRepository->find($data['user_id']);
+            //dd($data);
 
             $model =  $this->userRepository->update($data , $id);
-          // dd($user);
-            if($user->company_id != NULL && $user->company_id != $data['company_id']){
-             //  dd($user);
-                $company = \App\Models\Company::with('packages')->find($user->company_id);
-                if($company->packages->count() > 0){
-                    foreach($company->packages as $package){
 
-                        // dd(\DB::table('punch_list_assignees')
-                        // ->join('punch_lists', 'punch_lists.id', '=', 'punch_list_assignees.punch_list_id')
-                        // ->where('punch_lists.work_package_id',$package->id)
-                        // ->where('punch_lists.project_id',Session::get('projectID'))
-						// ->where('user_id',$data['user_id'])->get());
-                        \DB::table('punch_list_assignees')
-                        ->join('punch_lists', 'punch_lists.id', '=', 'punch_list_assignees.punch_list_id')
-                        ->where('punch_lists.work_package_id',$package->id)
-                        ->where('punch_lists.project_id',Session::get('projectID'))
-						->where('user_id',$data['user_id'])->delete();
-                    }
-                }
-            }
+            if(isset($data['project_user_id']) && $data['project_user_id'] != NULL){
 
-            if($data['company_id'] != NULL){
-                $company = \App\Models\Company::with('packages')->find($data['company_id']);
-                $snags = \App\Models\PunchList::where('project_id',Session::get('projectID'))
-                ->whereIn('work_package_id', $company->packages->pluck('id')->toArray())->get();
-				$assignees_has_permission = collect($this->getUsersOfProjectID(Session::get('projectID') , 'responsible_punch_list')['users'])->pluck('id')->toArray();
+                $project_user = \App\Models\ProjectUser::find($data['project_user_id']);
+                $project_user->update(['company_id' => $data['company_id'] , 'office_phone'=> $data['office_phone'] , 'specialty' => $data['specialty']]);
+            
 
-                if($snags->count() > 0 && in_array($data['user_id'],$assignees_has_permission) ){
-                    foreach($snags as $snag){
-                        $chk = \DB::table('punch_list_assignees')->where(['punch_list_id'=>$snag->id , 'user_id'=>$data['user_id']])->first();
-                        if(!isset($chk->id)){
-                            \DB::table('punch_list_assignees')->insert(['punch_list_id'=>$snag->id , 'user_id'=>$data['user_id']]);
+                if($user->company_id != NULL && $user->company_id != $data['company_id']){
+                    $company = \App\Models\Company::with('packages')->find($user->company_id);
+                    if($company->packages->count() > 0){
+                        foreach($company->packages as $package){
 
+                            \DB::table('punch_list_assignees')
+                            ->join('punch_lists', 'punch_lists.id', '=', 'punch_list_assignees.punch_list_id')
+                            ->where('punch_lists.work_package_id',$package->id)
+                            ->where('punch_lists.project_id',Session::get('projectID'))
+                            ->where('user_id',$data['user_id'])->delete();
                         }
-                        
-                       // $snag->assignees()->sync($data['user_id']);
+                    }
+
+                }
+
+
+                if($data['company_id'] != NULL){
+                    $company = \App\Models\Company::with('packages')->find($data['company_id']);
+                    $snags = \App\Models\PunchList::where('project_id',Session::get('projectID'))
+                    ->whereIn('work_package_id', $company->packages->pluck('id')->toArray())->get();
+                    $assignees_has_permission = collect($this->getUsersOfProjectID(Session::get('projectID') , 'responsible_punch_list')['users'])->pluck('id')->toArray();
+
+                    if($snags->count() > 0 && in_array($data['user_id'],$assignees_has_permission) ){
+                        foreach($snags as $snag){
+                            $chk = \DB::table('punch_list_assignees')->where(['punch_list_id'=>$snag->id , 'user_id'=>$data['user_id']])->first();
+                            if(!isset($chk->id)){
+                                \DB::table('punch_list_assignees')->insert(['punch_list_id'=>$snag->id , 'user_id'=>$data['user_id']]);
+
+                            }
+                            
+                        }
                     }
                 }
+
+
             }
+          // dd($user);
+            // if($user->company_id != NULL && $user->company_id != $data['company_id']){
+            //     $company = \App\Models\Company::with('packages')->find($user->company_id);
+            //     if($company->packages->count() > 0){
+            //         foreach($company->packages as $package){
+
+            //             \DB::table('punch_list_assignees')
+            //             ->join('punch_lists', 'punch_lists.id', '=', 'punch_list_assignees.punch_list_id')
+            //             ->where('punch_lists.work_package_id',$package->id)
+            //             ->where('punch_lists.project_id',Session::get('projectID'))
+			// 			->where('user_id',$data['user_id'])->delete();
+            //         }
+            //     }
+            // }
+
+            // if($data['company_id'] != NULL){
+            //     $company = \App\Models\Company::with('packages')->find($data['company_id']);
+            //     $snags = \App\Models\PunchList::where('project_id',Session::get('projectID'))
+            //     ->whereIn('work_package_id', $company->packages->pluck('id')->toArray())->get();
+			// 	$assignees_has_permission = collect($this->getUsersOfProjectID(Session::get('projectID') , 'responsible_punch_list')['users'])->pluck('id')->toArray();
+
+            //     if($snags->count() > 0 && in_array($data['user_id'],$assignees_has_permission) ){
+            //         foreach($snags as $snag){
+            //             $chk = \DB::table('punch_list_assignees')->where(['punch_list_id'=>$snag->id , 'user_id'=>$data['user_id']])->first();
+            //             if(!isset($chk->id)){
+            //                 \DB::table('punch_list_assignees')->insert(['punch_list_id'=>$snag->id , 'user_id'=>$data['user_id']]);
+
+            //             }
+                        
+            //         }
+            //     }
+            // }
 
             //$this->userRepository->create_role_permisions_of_user($model->id , $data);
            
@@ -115,7 +188,9 @@ class UserService
     {
         return $this->userRepository->find($id);
     }
-
+    public function search($request){
+        return $this->userRepository->search($request);
+    }
     public function createRolePermissionsOfUser($project_id , $all_stakholders){
         return $this->userRepository->create_role_permisions_set_of_user($project_id , $all_stakholders);
     }

@@ -72,6 +72,7 @@
 <div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
 <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
 <div class="flex items-end mb-3">
+  
     <h1 class="text-lg dark:text-gray-200">{{  $punch_list->title }} / <b>{{$punch_list->number}}</b></h1>
     @if ($punch_list->status_val != 2)
     @if ((auth()->user()->is_admin || $punch_list->created_by == auth()->user()->id))
@@ -94,8 +95,8 @@
 
             </div>
         </div>
-    @elseif((checkIfUserHasThisPermission(Session::get('projectID') ,'responsible_punch_list') ||
-    checkIfUserHasThisPermission(Session::get('projectID') ,'distribution_members_punch_list')
+    @elseif((checkIfUserHasThisPermission(Session::get('projectID') ,'responsible_punch_list')  &&
+    $punch_list->assignees()->pluck('user_id')->contains(auth()->user()->id)
     ) && $punch_list->status_val  == 0)
             <div class="ml-auto relative has-dropdown">
                 <button type="button"
@@ -180,8 +181,8 @@
             @if($punch_list->assignees->count() > 0)
 				@foreach($punch_list->assignees as $user)
 					<div class="flex items-center">
-						<img src="{{$user->userable->image}}" alt="Profile" class="w-10 h-10 rounded-full mr-4">
-                        <p class="  dark:text-gray-200">{{$user->userable->first_name}} {{$user->userable->last_name}}</p>
+						<img src="{{$user->profile_photo_path}}" alt="Profile" class="w-10 h-10 rounded-full mr-4">
+                        <p class="  dark:text-gray-200">{{$user->name}}</p>
 					</div>
 					
 				@endforeach
@@ -198,8 +199,8 @@
 			@if($punch_list->users->count() > 0)
 				@foreach($punch_list->users as $user)
 					<div class="flex items-center">
-						<img src="{{$user->userable->image}}" alt="Profile" class="w-10 h-10 rounded-full mr-4">
-                        <p class="  dark:text-gray-200">{{$user->userable->first_name}} {{$user->userable->last_name}}</p>
+						<img src="{{$user->profile_photo_path}}" alt="Profile" class="w-10 h-10 rounded-full mr-4">
+                        <p class="  dark:text-gray-200">{{$user->name}} </p>
 					</div>
 					
 				@endforeach

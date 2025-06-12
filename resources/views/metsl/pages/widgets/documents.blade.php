@@ -23,20 +23,24 @@
 <script>
 
 function loadWidgetDocs() {
-				console.log(DocsData);
 
         
         let html =``;
         if(DocsData.length > 0){
             for(let i=0;i<DocsData.length;i++){
-                if(DocsData[i].has_pending_revision > 0){
+				if(DocsData[i].status == 0){
+					var status_count = 1;
+				}else{
+					var status_count = 0;
+				}
+                if(DocsData[i].has_pending_revision > 0 || DocsData[i].status == 0  ){
                     var status = `<span class="  text-xs font-semibold bg-red-500 text-white rounded-full px-2 py-1">
-                        ${DocsData[i].has_pending_revision} 
+                        ${DocsData[i].has_pending_revision + status_count} 
                             </span>
                         `;
                 }else{
                     var status = `<span class="  text-xs font-semibold bg-green-500 text-white rounded-full px-2 py-1">
-                        ${DocsData[i].has_pending_revision} 
+                        0 
                             </span>
                         `;
                 }

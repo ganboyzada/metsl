@@ -12,6 +12,8 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\WorkPackagesController;
 use App\Http\Controllers\StakeholderController;
 use App\Http\Controllers\TaskController;
+use App\Http\Controllers\UserController;
+
 use Illuminate\Support\Facades\Route;
 
 
@@ -29,7 +31,7 @@ Route::middleware([
 
 
     Route::get('/dashboard', function () {
-        return view('dashboard');
+        return redirect()->route('home');
     })->name('dashboard');
 
 
@@ -83,20 +85,33 @@ Route::middleware([
 	Route::post('/project/correspondence/update',  [CorrespondenceController::class, "update"])->name(name: 'projects.correspondence.update');	
 	Route::get('/project/correspondence/destroy/{id}',  [CorrespondenceController::class, "destroy"])->name(name: 'projects.correspondence.destroy');	
     Route::get('/project/correspondence/destroy-file/{id}',  [CorrespondenceController::class, "destroyFile"])->name(name: 'projects.correspondence.destroy-file');	
+    Route::get('/project/correspondence/close/{id}',  [CorrespondenceController::class, "close"])->name(name: 'projects.correspondence.close');	
+    Route::get('/project/correspondence/accept/{id}',  [CorrespondenceController::class, "accept"])->name(name: 'projects.correspondence.accept');	
+    Route::get('/project/correspondence/reject/{id}',  [CorrespondenceController::class, "reject"])->name(name: 'projects.correspondence.reject');	
+    Route::post('/project/correspondence/delay',  [CorrespondenceController::class, "delay"])->name(name: 'projects.correspondence.delay');	
     
     Route::view('/project/documents', 'metsl.pages.documents.index')->name('projects.documents');
 	Route::get('/project/documents/reviewers',  [DocumentController::class, "getreviewers"])->name('projects.documents.reviewers');	
 	Route::post('/project/documents/store',  [DocumentController::class, "store"])->name('projects.documents.store');
+    Route::get('/project/documents/packages/all',  [DocumentController::class, "ProjectDocumentsPackages"])->name('projects.documents.packages.all');
+    Route::get('/project/documents/package/{id}',  [DocumentController::class, "ProjectDocumentsPackage"])->name('projects.documents.package');
+    Route::get('/project/documents/package/subfolders/{package_id}',  [DocumentController::class, "ProjectDocumentsPackageSubfolders"])->name('projects.documents.package.subfolders');
+    Route::get('/project/documents/package/subfolder/{subfolder_id}',  [DocumentController::class, "ProjectDocumentsPackageSubfolder"])->name('projects.documents.package.subfolder');
+
+
     Route::get('/project/documents/all',  [DocumentController::class, "ProjectDocuments"])->name('projects.documents.all');
     Route::post('/project/documents/package/store',  [DocumentController::class, "store_package"])->name('projects.documents.package.store');
     Route::get('/project/documents/all_assigned',  [DocumentController::class, "ProjectDocumentsAssigned"])->name('projects.documents.all_assigned');
+    Route::post('/project/documents/subfolder/store',  [DocumentController::class, "store_subfolder"])->name('projects.documents.subfolder.store');
 
 
 
     Route::get('/project/documents/revisions/update_status',  [DocumentRevisionController::class, "update_status"])->name('projects.documents.revision.update_status');
 	Route::post('/projects/documents/revision/comments/store',  [DocumentRevisionController::class, "store_comment"])->name('projects.documents.revision.comments.store');
-	Route::post('/projects/documents/revision/store',  [DocumentRevisionController::class, "store"])->name('projects.documents.revision.store');
-	Route::get('/project/documents/revisions/comments/{id}',  [DocumentRevisionController::class, "revisionComments"])->name('projects.documents.revisions.comments');
+	Route::post('/projects/documents/revision/reject_with_comments/store',  [DocumentRevisionController::class, "reject_with_comments"])->name('projects.documents.revision.reject_with_comments.store');
+
+    Route::post('/projects/documents/revision/store',  [DocumentRevisionController::class, "store"])->name('projects.documents.revision.store');
+	Route::get('/project/documents/revisions/comments/{id}/{type}',  [DocumentRevisionController::class, "revisionComments"])->name('projects.documents.revisions.comments');
 	Route::get('/project/documents/edit/{id}',  [DocumentController::class, "edit"])->name('projects.documents.edit');
 	Route::post('/project/documents/update',  [DocumentController::class, "update"])->name('projects.documents.update');
 	Route::get('/project/documents/revisions/{id}',  [DocumentController::class, "ProjectDocumentsRevisions"])->name('projects.documents.revisions');
@@ -180,9 +195,16 @@ Route::middleware([
     Route::get('/create-project', [ProjectController::class, "create"] )->name('projects.create');
     Route::post('/project/users/store',  [ProjectController::class, "store_user"])->name('projects.users.store');});
     Route::get('/project/edit/{id}', [ProjectController::class, "edit"] )->name('projects.edit');
+    Route::get('/project/users/search-users', [ProjectController::class, "search"] )->name('projects.users.search');
+
+
     Route::get('/project/destroy-file/{id}',  [ProjectController::class, "destroyFile"])->name('projects.destroy-file');	
     Route::post('/project/update', [ProjectController::class, "update"] )->name('projects.update');
     Route::get('/project/destroy/{id}',  [ProjectController::class, "destroy"])->name('projects.destroy');	
+
+    Route::get('/profile',  [UserController::class, "profile"])->name('profile');	
+    Route::post('/profile/update',  [UserController::class, "update"])->name('profile.update');	
+
 
     Route::get('/clear-cache', function() {
         // Artisan::call('cache:clear');

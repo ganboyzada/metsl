@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\CorrespondenceTypeEnum;
 use App\Repository\CorrespondenceRepositoryInterface;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Storage;
@@ -29,6 +30,9 @@ class CorrespondenceService
         try {
 
             $correspondence =  $this->correspondenceRepository->create($data);
+            if(isset($data['related_correspondences']) && count($data['related_correspondences']) > 0){
+                $correspondence->relatedCorrespondences()->sync($data['related_correspondences']);
+            }
             $this->correspondenceRepository->add_users_to_correspondence($data,$correspondence );
             $this->correspondenceRepository->add_Linked_documents_to_correspondence($data,$correspondence );
 
@@ -109,6 +113,33 @@ class CorrespondenceService
         }
     }
 
+    public function close($id)
+    {
+        try{
+            return $this->correspondenceRepository->close($id);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function accept($id)
+    {
+        try{
+            return $this->correspondenceRepository->accept($id);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
+    public function reject($id)
+    {
+        try{
+            return $this->correspondenceRepository->reject($id);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+    }
+
     public function all()
     {
         return $this->correspondenceRepository->all();
@@ -120,6 +151,10 @@ class CorrespondenceService
         return $this->correspondenceRepository->change_status($id , $status);
         
     }
+    
+    public function allCorrespondenceExceptNCR($project_id ,$reply_correspondence_id){
+        return $this->correspondenceRepository->get_correspondence_except_NCR($project_id , $reply_correspondence_id);
+    }
 
     public function edit($id)
     {
@@ -129,7 +164,8 @@ class CorrespondenceService
          'ReceivedFrom', 
          
          'files:id,correspondence_id,file,size',
-         'documentFiles'
+         'documentFiles',
+         'relatedCorrespondences'
          
          ])->find($id);
         
@@ -138,9 +174,9 @@ class CorrespondenceService
     public function find($id)
     {
         return $this->correspondenceRepository->with([
-            'assignees.userable' , 
-        'distributionMembers.userable',
-         'ReceivedFrom.userable', 
+            'assignees' , 
+        'distributionMembers',
+         'ReceivedFrom', 
          
          'files:id,correspondence_id,file,size',
          'documentFiles'
@@ -179,6 +215,14 @@ class CorrespondenceService
 
         });
 
+    }
+
+    public function updateDueDays($request){
+        return $this->correspondenceRepository->update_due_days($request);
+    }  
+    
+    public function getLastReplyCorrespondence($project_id , $correspondence_id){
+        return $this->correspondenceRepository->get_last_reply_correspondence($project_id , $correspondence_id);
     }
 
 }

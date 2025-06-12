@@ -132,7 +132,7 @@ class ProjectService
         'stakholders.allPermissions'=>function($query)use($id){
             $query->wherePivot('project_id',$id);
         },
-        'stakholders.company',
+       // 'stakholders.company',
         'files'
 
          
@@ -140,14 +140,14 @@ class ProjectService
 
 
         $clients = $project->stakholders->filter(function($user){
-            if($user->userable_type == Client::class){
+            if($user->pivot->type == 'client'){
                 return $user;
             }
         });
         $project->clients = $clients;
 
         $contractors = $project->stakholders->filter(function($user){
-            if($user->userable_type == Contractor::class){
+            if($user->pivot->type == 'contractor'){
                 return $user;
             }
         });
@@ -155,14 +155,14 @@ class ProjectService
 
 
         $projectMangers = $project->stakholders->filter(function($user){
-            if($user->userable_type == ProjectManager::class){
+            if($user->pivot->type == 'projectManager'){
                 return $user;
             }
         });
         $project->projectMangers = $projectMangers;
 
         $designTeams = $project->stakholders->filter(function($user){
-            if($user->userable_type == DesignTeam::class){
+            if($user->pivot->type == 'designTeam'){
                 return $user;
             }
         });
@@ -178,18 +178,24 @@ class ProjectService
                 return [
                     'id'=> $client->id,
                     'name' => $client->name,
-                    'company'=> $client->company ? $client->company->name : '',
+                    'company'=> $client->pivot->company_id,
+                    'specialty'=> $client->pivot->specialty,
+                    'office_phone'=> $client->pivot->office_phone,
                     'role'=>$client->allRoles[0]?->name??null,
                     'job_title'=>$client->allRoles[0]?->pivot->job_title?? null,
+                    'type'=>'client',
                     'permissions' => $permissions
                 ];
             }else{
                 return [
                     'id'=> $client->id,
                     'name' => $client->name,
-                    'company'=> $client->company ? $client->company->name : '',
+                    'company'=> $client->pivot->company_id,
+                    'specialty'=> $client->pivot->specialty,
+                    'office_phone'=> $client->pivot->office_phone,
                     'job_title'=> '',
                     'role'=>'',
+                    'type'=>'client',
                     'permissions' => []
                 ];
             }
@@ -206,18 +212,25 @@ class ProjectService
                 return [
                     'id'=> $contractor->id,
                     'name' => $contractor->name,
-                    'company'=> $contractor->company ? $contractor->company->name : '',
+                    'company'=> $contractor->pivot->company_id,
+                    'specialty'=> $contractor->pivot->specialty,
+                    'office_phone'=> $contractor->pivot->office_phone,
+
                     'role'=>$contractor->allRoles[0]->name,
                     'job_title'=>$contractor->allRoles[0]->pivot->job_title,
+                    'type'=>'contractor',
                     'permissions' => $permissions
                 ];
             }else{
                 return [
                     'id'=> $contractor->id,
                     'name' => $contractor->name,
-                    'company'=> $contractor->company ? $contractor->company->name : '',
-                    'role'=>'',
+                    'company'=> $contractor->pivot->company_id,
+                    'specialty'=> $contractor->pivot->specialty,
+                    'office_phone'=> $contractor->pivot->office_phone,
+                      'role'=>'',
                     'job_title'=> '',
+                    'type'=>'contractor',
                     'permissions' => []
                 ];
             }
@@ -236,18 +249,24 @@ class ProjectService
                 return [
                     'id'=> $design_team->id,
                     'name' => $design_team->name,
-                    'company'=> $design_team->company ? $design_team->company->name : '',
+                    'company'=> $design_team->pivot->company_id,
+                    'specialty'=> $design_team->pivot->specialty,
+                    'office_phone'=> $design_team->pivot->office_phone,
                     'role'=>$design_team->allRoles[0]->name,
                     'job_title'=>$design_team->allRoles[0]->pivot->job_title,
+                    'type'=>'designTeam',
                     'permissions' => $permissions
                 ];
             }else{
                 return [
                     'id'=> $design_team->id,
                     'name' => $design_team->name,
+                    'company'=> $design_team->pivot->company_id,
+                    'specialty'=> $design_team->pivot->specialty,
+                    'office_phone'=> $design_team->pivot->office_phone,
                     'job_title'=>'',
                     'role'=>'',
-                    'job_title'=> '',
+                    'type'=>'designTeam',
                     'permissions' => []
                 ];
             }
@@ -264,18 +283,24 @@ class ProjectService
                 return [
                     'id'=> $project_manager->id,
                     'name' => $project_manager->name,
-                    'company'=> $project_manager->company ? $project_manager->company->name : '',
+                                        'company'=> $project_manager->pivot->company_id,
+                    'specialty'=> $project_manager->pivot->specialty,
+                    'office_phone'=> $project_manager->pivot->office_phone,
                     'role'=>$project_manager->allRoles[0]->name,
                     'job_title'=>$project_manager->allRoles[0]->pivot->job_title,
+                    'type'=>'projectManager',
                     'permissions' => $permissions
                 ];
             }else{
                 return [
                     'id'=> $project_manager->id,
                     'name' => $project_manager->name,
-                    'company'=> $project_manager->company ? $project_manager->company->name : '',
+                                        'company'=> $project_manager->pivot->company_id,
+                    'specialty'=> $project_manager->pivot->specialty,
+                    'office_phone'=> $project_manager->pivot->office_phone,
                     'role'=>'',
                     'job_title'=> '',
+                    'type'=>'projectManager',
                     'permissions' => []
                 ];
             }

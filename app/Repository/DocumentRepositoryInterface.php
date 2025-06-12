@@ -25,13 +25,36 @@ interface DocumentRepositoryInterface
     * 
     */
     public function get_all_project_documents_assigned($project_id , $request): LengthAwarePaginator;
+/**
+    * @param int $project_id
+    * @param \Request $request
+    * @return Collection
+    * 
+    */
+    public function get_all_project_documents_packages($project_id , $request): Collection; 
 
+    /**
+    * @param int $id
+    * @param \Request $request
+    * @return Model
+    * 
+    */
+    public function get_package($id, $request) :Model;
+
+      /**
+    * @param int $id
+    * @param \Request $request
+    * @return Model
+    * 
+    */
+    public function get_sub_folder($id , $request): Model;
             /**
     * @param int $project_id
     * @param \Request $request
     * @return Collection
     * 
     */
+    
     public function get_all_project_documents($project_id , $request): Collection;  
 
         /**

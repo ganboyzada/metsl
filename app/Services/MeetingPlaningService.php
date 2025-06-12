@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Mail\MeetingEmail;
 use App\Repository\DocumentRepositoryInterface;
 use App\Repository\MeetingPlaningFilesRepositoryInterface;
 use App\Repository\MeetingPlaningRepositoryInterface;
@@ -42,7 +43,17 @@ class MeetingPlaningService
             if(isset($data['docs'])){
                 
                 $this->meetingPlaningFilesService->createBulkFiles($data['project_id'] , $modal->id ,$data['docs']);
-            }           
+            }      
+            $meeting = $this->find($modal->id);
+            $emails = $meeting->users()->pluck('email')->toArray();
+            //dd($emails);
+            if(count($emails) > 0){
+                foreach($emails as $email){
+                    $m = \Mail::to($email)->send(new MeetingEmail($meeting )); 
+
+
+                }
+            }
             \DB::commit();
         } catch (\Exception $e) {
             \DB::rollback();
@@ -95,7 +106,7 @@ class MeetingPlaningService
     }
 
     public function find($meeting_planing_id){
-        $punch_list =  $this->meetingPlaningRepository->with([ 'users:name' , 'files','notes.assignee'])->find($meeting_planing_id);
+        $punch_list =  $this->meetingPlaningRepository->with([ 'users:id,name,email' , 'files','notes.assignee'])->find($meeting_planing_id);
         return $punch_list;
     }
 

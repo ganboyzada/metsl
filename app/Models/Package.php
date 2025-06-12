@@ -3,7 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\belongsTo;
+use Illuminate\Database\Eloquent\Relations\hasMany;
 use Illuminate\Database\Eloquent\Relations\belongsToMany;
 
 class Package extends Model
@@ -19,4 +19,14 @@ class Package extends Model
         ->using(PackageAssignees::class);
 
     } 
+
+    public function subFolders(): hasMany
+    {
+        return $this->hasMany(PackageSubFolders::class);
+    }
+
+    public function documents(): hasMany
+    {
+        return $this->hasMany(ProjectDocument::class);
+    }
 }

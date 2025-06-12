@@ -7,7 +7,14 @@
 <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
 
 <div class="dark:text-gray-200">
-    <h2 class="text-2xl font-semibold mb-6">Create Correspondence</h2>
+    <h2 class="text-2xl font-semibold mb-6">
+           @if (isset($reply_correspondence->id) && $reply_correspondence_id != NULL)
+                    Reply
+                @else
+                    Create Correspondence
+                @endif
+
+    </h2>
 
     <!-- Form -->
     <form id="correspondence-form" class="space-y-6"  method="POST" enctype="multipart/form-data">
@@ -15,6 +22,7 @@
 		<input type="hidden" name="project_id" value="{{ \Session::get('projectID') }}"/>
 		<input type="hidden" value="{{$type ?? ''}}" name="type"/>
 		<input type="hidden" value="{{$reply_correspondence_id ?? ''}}" name="reply_correspondence_id"/>
+		<input type="hidden" value="{{$reply_child_correspondence_id ?? ''}}" name="reply_child_correspondence_id"/>
 		
         <!-- Grid Layout for Fields -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -25,7 +33,7 @@
                     id="correspondence-number"
                     type="text"
 					name="number"
-                    readonly
+                    readonly required
                     placeholder="RFI-001"
                     class="w-full px-4 py-2 border  dark:bg-gray-800 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
                 />
@@ -34,11 +42,12 @@
             <!-- Subject -->
             <div>
                 <label for="subject" class="block text-sm font-medium mb-1">Subject</label>
-                <input
+                <input required
                     id="subject"
 					name="subject"
                     type="text"
                     placeholder="Enter subject"
+                    value="{{ $reply_correspondence->subject??'' }}"
                     class="w-full px-4 py-2 border  dark:bg-gray-800 dark:border-gray-700 focus:border-blue-500 focus:outline-none"
                 />
             </div>
@@ -56,15 +65,7 @@
 					@endphp
 
 					@foreach ($status_list as $status)
-                        @if ($reply_correspondence_id == NULL && $i == 0)
-
                         <option value="{{$status->value}}">{{$status->name}}</option>
-
-                        @elseif($reply_correspondence_id != NULL && $i == 1)
-
-                        <option value="{{$status->value}}">{{$status->name}}</option>
-                            
-                        @endif
                         @php
                             $i++;
                         @endphp
@@ -108,16 +109,44 @@
                 </select>
             </div>
 
+              <div class="md:col-span-1" style="display:{{ isset($reply_correspondence->id)?'none':'' }};">
+                    <label for="due_days" class="block text-sm mb-2 font-medium dark:text-gray-200">Due Days</label>
+                    <select id="due_days" required name="due_days" class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200">
+ 
+                        <option value="5">5 day</option>
+                        <option value="7">7 day</option>
+                        <option value="10">10 day</option>
+                        <option value="14">14 day</option>
+                        <option value="17">17 day</option>
+                        <option value="21">21 day</option>
+                        <option value="24">24 day</option>
+                        <option value="27">27 day</option>
+                        <option value="30">30 day</option>
+
+                    </select>
+            
+                </div>	
+
             <!-- Assignees -->
             <div class="relative">
                 <label for="assignees" class="block text-sm font-medium mb-1">Assignees</label>
-                <select id="assignees" name="assignees[]" multiple class="w-full"></select>
+                <select  {{ isset($reply_correspondence->id)?'disabled':'' }} id="assignees" name="assignees[]" multiple class="w-full"></select>
             </div>
 
             <!-- Distribution Members -->
             <div class="relative">
                 <label for="distribution" class="block text-sm font-medium mb-1">Distribution Members</label>
-                <select id="distribution" name="distribution[]" multiple class="w-full"></select>
+                <select  {{ isset($reply_correspondence->id)?'disabled':'' }}  id="distribution" name="distribution[]" multiple class="w-full"></select>
+            </div>
+
+
+            <div class="relative">
+                <label for="related_correspondences" class="block text-sm font-medium mb-1">Related Correspondence</label>
+                <select id="related_correspondences" multiple name="related_correspondences[]" class="w-full">
+                    <option value="">select related correspondence<option>
+                
+
+                </select>
             </div>
 		
         </div>
@@ -157,7 +186,13 @@
 
         <!-- Submit Button -->
         <div class="flex justify-end">
-            <button type="submit"  id="submit_correspondence_form" class="px-6 py-2 bg-blue-500 text-white  hover:bg-blue-600">Create Correspondence</button>
+            <button type="submit"  id="submit_correspondence_form" class="px-6 py-2 bg-blue-500 text-white  hover:bg-blue-600">
+                @if (isset($reply_correspondence->id) && $reply_correspondence_id != NULL)
+                    Reply
+                @else
+                    Create    
+                @endif
+                </button>
         </div>
     </form>
 </div>
@@ -252,7 +287,7 @@
 	// });
 					
 
-	get_users();
+	
         // Populate Assignees, Distribution Members, and Received From
 	async  function get_users(){
 		const type = $('[name="type"]').val();
@@ -266,20 +301,41 @@
             $('[name="number"]').val(all_users.next_number);
           
         }
-		const assignees = all_users.assigned_users.map(function(item) {
-			  return {'value' : item.id , 'label' : item.name};
-			});
-			//console.log(assignees);
+
+        let assigned_users_reply =  {!! json_encode($reply_correspondence->assignees??[]) !!};
+    
+                const assignees = all_users.assigned_users.map(function(item) {
+                    return {'value' : item.id , 'label' : item.name, 
+                    'selected': assigned_users_reply.some(user => user.id === item.id)};
+
+                
+                
+                });
+
+        
+
+
 			assignees_obj.clearStore();
 			assignees_obj.setChoices(assignees);
 			//populateChoices3('assignees',assignees);
+
+            let distributions_users_reply =  {!! json_encode($reply_correspondence->distributionMembers??[]) !!};
 			
 			const distribution = all_users.destrbution_users.map(function(item) {
-			  return {'value' : item.id , 'label' : item.name};
+			  return {'value' : item.id , 'label' : item.name,
+                'selected': distributions_users_reply.some(user => user.id === item.id)
+              };
 			});	
 			//populateChoices3('distribution', distribution);
 			distribution_obj.clearStore();
-			distribution_obj.setChoices(distribution);			
+			distribution_obj.setChoices(distribution);	
+            
+            let correspondences = {!! json_encode($related_correpondences) !!};
+            const allcorrespondences = correspondences.map(function(item) {
+			  return {'value' : item.id  , 'label' : item.number+' - '+item.subject};
+			});	
+			correspondence_obj.clearStore();
+			correspondence_obj.setChoices(allcorrespondences);	
 			
 			// const allusers = all_users.users.map(function(item) {
 			  // return {'value' : item.id , 'label' : item.name};
@@ -302,7 +358,9 @@
     document.addEventListener('DOMContentLoaded', () => {
 		assignees_obj = populateChoices2('assignees', [], true);		
 		distribution_obj = populateChoices2('distribution', [], true);	
+        correspondence_obj = populateChoices2('related_correspondences', [], true);	
 		linked_documents = populateChoices2('linked_documents', [], false);		
+        get_users();
 		
     }); 
 

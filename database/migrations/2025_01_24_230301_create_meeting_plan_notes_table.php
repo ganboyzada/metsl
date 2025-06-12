@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
 
 
-            $table->string('note')->nullable();
+            $table->text('note')->nullable();
             $table->string('type')->nullable();
             $table->unsignedBiginteger('assign_user_id')->nullable()->unsigned();
             $table->foreign('assign_user_id')->references('id')

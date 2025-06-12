@@ -310,7 +310,8 @@
         document.addEventListener('DOMContentLoaded', () => {
 		distribution_obj = populateChoices2('distribution-members', [], true);	
 		reviewers_obj = populateChoices2('responsible-member', []);		
-        linked_documents = populateChoices2('linked_documents', [], false);		
+        linked_documents = populateChoices2('linked_documents', [], false);	
+        get_participates();	
 
 		
     }); 
@@ -768,7 +769,7 @@ function searchDrawings(search){
 	}
 			
 
-	get_participates();
+	
 
 	
 

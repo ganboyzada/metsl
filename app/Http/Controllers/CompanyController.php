@@ -91,14 +91,17 @@ class CompanyController extends Controller
 				if($snags->count() > 0){
 					foreach($snags as $snag){
 						$users_of_work_packages = WorkPackages::join('company_work_packages', 'company_work_packages.work_package_id', '=', 'work_packages.id')
-						->join('users', 'users.company_id', '=', 'company_work_packages.company_id')
+						->join('projects_users', 'projects_users.company_id', '=', 'company_work_packages.company_id')
 						
-						->where('work_packages.id', $old)->where('users.company_id',$id)
-						->select('users.id')->pluck('users.id')->toArray();
+						->where('work_packages.id', $old)->where('projects_users.company_id',$id)
+						->select('projects_users.user_id')->pluck('projects_users.user_id')->toArray();
 						
 						//dd($users_of_work_packages);
-						\DB::table('punch_list_assignees')->where('punch_list_id',$snag->id)
+                        if(count($users_of_work_packages) > 0){
+                            \DB::table('punch_list_assignees')->where('punch_list_id',$snag->id)
 						->whereIn('user_id',$users_of_work_packages)->delete();
+                        }
+						
 					}
 				}
 						
@@ -119,9 +122,9 @@ class CompanyController extends Controller
 						foreach($snags as $snag){
 							$assignees_has_permission = collect($this->userService->getUsersOfProjectID($snag->project_id , 'responsible_punch_list')['users'])->pluck('id')->toArray();
 
-							$users_of_work_packages = \DB::table('users')->join('companies','companies.id','=','users.company_id')
-							->where('users.company_id',$id)->whereIn('users.id',$assignees_has_permission)
-							->select('users.id')->pluck('users.id')->toArray();
+							$users_of_work_packages = \DB::table('projects_users')->join('companies','companies.id','=','projects_users.company_id')
+							->where('projects_users.company_id',$id)->whereIn('projects_users.user_id',$assignees_has_permission)
+							->select('projects_users.user_id')->pluck('projects_users.user_id')->toArray();
 							
 
 							 

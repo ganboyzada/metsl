@@ -39,17 +39,18 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
             if(!$punshList){
                 throw new \Exception('Record not find'); 
             }
-
+           // dd($assignees_has_permission);
             //$user_of_workpackage = $punshList->package()->companies()->users()->pluck('id')->toArray();
             $users_of_work_packages = $this->model2->join('company_work_packages', 'company_work_packages.work_package_id', '=', 'work_packages.id')
-            ->join('users', 'users.company_id', '=', 'company_work_packages.company_id')
+            ->join('projects_users', 'projects_users.company_id', '=', 'company_work_packages.company_id')
             
-            ->join('companies', 'companies.id', '=', 'users.company_id')
-            ->where('companies.active', 1)
-            ->whereIN('users.id', $assignees_has_permission)->where('work_packages.id', $punshList->work_package_id)
-            ->select('users.id')->pluck('users.id')->toArray();
+            ->join('companies', 'companies.id', '=', 'projects_users.company_id')
+            //->where('companies.active', 1)
+            ->whereIN('projects_users.user_id', $assignees_has_permission)
+            ->where('work_packages.id', $punshList->work_package_id)
+            ->select('projects_users.user_id')->pluck('projects_users.user_id')->toArray();
 
-
+            //dd($users_of_work_packages);
    
             $d = $punshList->assignees()->sync($users_of_work_packages);
            
@@ -224,6 +225,16 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
                         
             }) ; 
         }    
+
+        if(isset($data['work-package'])){    
+            $punchLists=$punchLists->when($data['work-package'] , function($q) use($data){
+                $q->where(function($query) use($data){
+                $query->where('work_package_id',$data['work-package']);
+                });
+                        
+            }) ; 
+        }  
+
         if(isset($data['search'])){        
             $punchLists=$punchLists->when($data['search'] , function($q) use($data){
             $q->where(function($query) use($data){
@@ -306,26 +317,36 @@ class PunchListRepository extends BaseRepository implements PunchListRepositoryI
         
         if(auth()->user()->is_admin){
 
-            $punchLists=$punchLists->with(['package:id,name', 'createdByUser:id,name'])->paginate(5);
+            $punchLists=$punchLists->with(['package:id,name', 'createdByUser:id,name'])->paginate(10);
   
             return $punchLists;
         }        
         else if(!auth()->user()->is_admin){
 
             $punchLists = $punchLists->where(function($q){
-                $q->whereHas('users', function ($query) {
-                    $query->where('user_id', auth()->user()->id);
+                // $q->whereHas('users', function ($query) {
+                //     $query->where('user_id', auth()->user()->id);
+                // });
+
+                $q->Where( function ($query) {
+                    $query->where('status',PunchListStatusEnum::PENDING->value);
+                    $query->whereHas('assignees', function ($query) {
+                         $query->where('user_id', auth()->user()->id);
+                    });
                 });
 
-                $q->orwhereHas('assignees', function ($query) {
-                    $query->where('user_id', auth()->user()->id);
+                $q->orWhere( function ($query) {
+                    $query->where('status','!=',PunchListStatusEnum::CLOSED->value);
+                    $query->where('created_by',auth()->user()->id);
                 });
+
+                
                // $q->orwhere('created_by',auth()->user()->id);
 
                 
             });
 
-            $punchLists=$punchLists->with(['package:id,name', 'createdByUser:id,name'])->paginate(5);
+            $punchLists=$punchLists->with(['package:id,name', 'createdByUser:id,name'])->paginate(10);
   
             return $punchLists;
               

@@ -32,9 +32,10 @@ interface ProjectDocumentRevisionsRepositoryInterface
 
        /**
     * @param int $id
+    * @param string $type
     * @return Model
     */
-    public function get_revision_comments($id) :Model;
+    public function get_revision_comments($id,$type) :Model;
 
    
 }

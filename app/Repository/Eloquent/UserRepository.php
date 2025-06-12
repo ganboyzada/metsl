@@ -31,6 +31,11 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     */
     public function create_role_permisions_set_of_user($project_id , $all_stakholders) :void
     {
+        
+        $project =  Project::find($project_id);
+        $users_ids = $project->stakholders()->pluck('users.id')->toArray();
+        //$project->stakholders()->detach();
+       // dd($all_stakholders);
         $users = [];
         if(count($all_stakholders) > 0){
             foreach($all_stakholders as $row){
@@ -49,6 +54,14 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                     $user->permissions()->wherePivot('project_id',$project_id)->detach();
                     //dd($role->permissions);
                     $user->permissions()->attach($role->permissions, ['project_id'=>$project_id]);
+                    if(count($users_ids) > 0){
+                        if(!in_array($row->id , $users_ids)){
+                            $project->stakholders()->attach($row->id, ['company_id'=>($row->company != '' ? $row->company : NULL) , 'office_phone'=>$row->office_phone ?? NULL , 
+                            'specialty'=>$row->specialty ?? NULL , 'type'=>$row->type ?? NULL  ]);
+
+                        }
+                    }
+                            
                     
                 }
                 
@@ -58,8 +71,10 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             
             //$project_name = 'asd2';
             //$m = \Mail::to('marina3mad100@gmail.com')->send(new StakholderEmail($project_name));               
-            $project =  Project::find($project_id);
-            $project->stakholders()->sync($users);
+
+            
+
+            //$project->stakholders()->sync($users);
 
            // dd('ok');
         }
@@ -132,13 +147,21 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
     public function get_stakeholders_of_project($project_id , $request):Collection    
     {   
         $data = $request->all();
-       return $this->model->whereHas('projects', function ($query) use ($project_id) {
-            $query->where('projects.id',$project_id);
+       return $this->model->join('projects_users', 'users.id', '=', 'projects_users.user_id')
+       ->leftjoin('companies', 'companies.id', '=', 'projects_users.company_id')
+       ->where('projects_users.project_id', $project_id)
+       ->select('users.*', 'companies.name as company_name','projects_users.id as project_user_id')
+       
+    //    ->whereHas('projects', function ($query) use ($project_id) {
+    //         $query->where('projects.id',$project_id);
             
-       })
+    //    })
+       ->with(['projects'=>function($query)use($project_id){
+        $query->wherePivot('project_id',$project_id);
+        }])
        
        //->whereRelation('projects', 'projects.id', '=', $project_id)
-        ->with('userable' , 'company')
+       // ->with('userable' , 'company')
         ->with(['allRoles'=>function($query)use($project_id){
                     $query->wherePivot('project_id',$project_id);
 
@@ -147,20 +170,31 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
             $query->where(function($q) use($request){
                 $q->where('name', 'LIKE', "%".$request->search."%");
                 $q->orwhere('email', 'LIKE', "%".$request->search."%");
-                $q->orWhereHas('userable',function($q)use($request){
-                    $q->where('first_name', 'LIKE', "%".$request->search."%");
-                    $q->orwhere('last_name', 'LIKE', "%".$request->search."%");
-                    $q->orwhere('mobile_phone', 'LIKE', "%".$request->search."%");
-                    $q->orwhere('office_phone', 'LIKE', "%".$request->search."%");
-                    $q->orwhere('specialty', 'LIKE', "%".$request->search."%");
+                // $q->orWhereHas('userable',function($q)use($request){
+                //     $q->where('first_name', 'LIKE', "%".$request->search."%");
+                //     $q->orwhere('last_name', 'LIKE', "%".$request->search."%");
+                //     $q->orwhere('mobile_phone', 'LIKE', "%".$request->search."%");
+                //     $q->orwhere('office_phone', 'LIKE', "%".$request->search."%");
+                //     $q->orwhere('specialty', 'LIKE', "%".$request->search."%");
     
-                });
+                // });
             });
 
     
         })
         ->get();
         
+    }
+
+/**
+    * @param \Request $request
+    * @return Collection
+    */ 
+    public function search($request): Collection{
+        return $this->model->where(function($q) use($request){
+            $q->where('name', 'LIKE', "%".$request->search."%");
+            $q->orwhere('email', 'LIKE', "%".$request->search."%"); 
+        })->get(['id', 'name', 'mobile_phone','email','profile_photo_path']);
     }
   
 }

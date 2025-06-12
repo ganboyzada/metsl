@@ -3,6 +3,7 @@
 namespace App\Repository\Eloquent;
 
 use App\Mail\StakholderEmail;
+use App\Models\Package;
 use App\Models\Permission;
 use App\Models\ProjectDocument;
 use App\Models\ProjectDocumentFiles;
@@ -21,10 +22,11 @@ class DocumentRepository extends BaseRepository implements DocumentRepositoryInt
     * UserRepository constructor.
     *
     * @param ProjectDocument $model
+    * @param Package $model2
     */
-   public function __construct(ProjectDocument $model)
+   public function __construct(ProjectDocument $model , Package $model2)
    {
-       parent::__construct($model);
+       parent::__construct($model , $model2);
    }
 
 
@@ -53,14 +55,24 @@ class DocumentRepository extends BaseRepository implements DocumentRepositoryInt
     */
     public function get_all_project_documents_assigned($project_id , $request): LengthAwarePaginator{
         $query =  $this->model->where('project_id',$project_id)
+        ->where(function($q){
+            $q->whereHas('revisions', function ($query) {
+                $query->where('status', 0);
+            });
+
+            $q->orwhere('project_documents.status', 0);
+        
+        })
+
         ->withCount(['revisions as has_pending_revision' => function ($query) {
         $query->where('status', 0);
         }])
+        
         ->withCount('revisions');
 
 
         if(auth()->user()->is_admin){
-            return $query->paginate(5);
+            return $query->paginate(10);
         }else if(!auth()->user()->is_admin){
             //dd(auth()->user()->packages()->pluck('packages.id')->toArray());
             $query = $query->where(function($q){
@@ -76,12 +88,67 @@ class DocumentRepository extends BaseRepository implements DocumentRepositoryInt
             });
 
             
-            return $query->paginate(5);
+            return $query->paginate(10);
 
         }
 
     }
 
+    /**
+    * @param int $id
+    * @param \Request $request
+    * @return Model
+    * 
+    */
+    public function get_package($id, $request) :Model{
+        return $this->model2->
+        with(['subFolders' => function ($query) {
+        $query->withCount('documents');
+    }])->find($id);
+    }
+
+    /**
+    * @param int $project_id
+    * @param \Request $request
+    * @return Collection
+    * 
+    */
+    public function get_all_project_documents_packages($project_id , $request): Collection{
+        $query =  $this->model2->where('project_id',$project_id)->withCount('documents');
+
+        if(checkIfUserHasThisPermission($project_id , 'modify_package')){
+            return $query->get();
+        }else if(!auth()->user()->is_admin){
+            //dd(auth()->user()->packages()->pluck('packages.id')->toArray());
+            $query = $query->where(function($q){
+                $q->whereHas('assignees', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                });
+
+
+                
+            });
+
+            
+            return $query->get();
+        }
+    }
+
+    /**
+    * @param int $id
+    * @param \Request $request
+    * @return Model
+    * 
+    */
+    public function get_sub_folder($id , $request): Model{
+        return $this->model2->whereHas('subFolders', function ($query)use($id) {
+            $query->where('id', $id);
+        })
+        
+        ->with(['subFolders' => function ($query)use($id) {
+            $query->where('id', $id)->withCount('documents');
+        }])->first();
+    }
 
     /**
     * @param int $project_id 
@@ -110,6 +177,15 @@ class DocumentRepository extends BaseRepository implements DocumentRepositoryInt
 
         if(isset($request->package_id) && $request->package_id != 0){
             $query->where('package_id' , $request->package_id);
+            if(!isset($request->subfolder_id)){
+                $query->where('subfolder_id' , NULL);
+
+            }
+        }
+
+        if(isset($request->subfolder_id) && $request->subfolder_id != 0){
+            $query->where('subfolder_id' , $request->subfolder_id);
+          
         }
 
        if(isset($request->orderBy) && ($request->orderBy == 'number' || $request->orderBy == 'created_date')){

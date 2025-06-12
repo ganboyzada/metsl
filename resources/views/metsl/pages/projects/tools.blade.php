@@ -1,13 +1,13 @@
 
 <div class="has-dropdown w-1/2 sm:w-auto relative inline-block text-left z-50">
     <!-- Dropdown Toggle Button -->
-    <button class="dropdown-toggle w-full flex items-center px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-800">
+    <button onclick="toggleToolsDropdown()" class="dropdown-toggle w-full flex items-center px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-800">
         <span class="flex flex-col items-start text-xs mr-2 font-medium me-auto">Tools <b class="current-selected">Meeting Minutes</b></span>
         <i class="ms-auto" data-feather="chevron-down"></i>
     </button>
 
     <!-- Dropdown Menu -->
-    <div class="dropdown absolute left-0 mt-2 w-max bg-gray-800 rounded-lg overflow-hidden text-gray-200 shadow-lg">
+    <div  id="toolsDropdown" class="hidden absolute  left-0 mt-2 w-max bg-gray-800 rounded-lg  text-gray-200 shadow-lg">
         <div data-tabs="project-tools" class="grid grid-cols-1 tab-links bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg text-left">
             <button data-tab="activities" class="py-3 px-4" onclick="set_in_local_storage('activities'); ">
                 <i data-feather="activity" class="mr-2"></i> Activities
@@ -36,6 +36,7 @@
 
 @include('metsl.pages.documents.revisions')
 @include('metsl.pages.documents.comments')
+@include('metsl.pages.documents.reject')
 
 
 <script>

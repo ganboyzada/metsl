@@ -37,4 +37,9 @@ interface UserRepositoryInterface
     * @return Collection
     */ 
     public function get_stakeholders_of_project($project_id , $request): Collection;
+    /**
+    * @param \Request $request
+    * @return Collection
+    */ 
+    public function search($request): Collection;
 }

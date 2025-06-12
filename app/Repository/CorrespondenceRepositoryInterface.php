@@ -14,8 +14,32 @@ interface CorrespondenceRepositoryInterface
     * @param int $projectID 
     * @return mixed
     */
-    public function get_next_number($type , $projectID): mixed;  
+    public function get_next_number($type , $projectID): mixed; 
     
+    /**
+    * @param int $id 
+    * @return bool
+    */
+    public function close($id): bool;
+
+        /**
+    * @param int $id 
+    * @return bool
+    */
+    public function accept($id): bool;
+
+        /**
+    * @param int $id 
+    * @return bool
+    */
+    public function reject($id): bool;
+    /**
+    * @param int $project_id
+    * @param int $reply_correspondence_id
+    * @return Collection
+    * 
+    */
+    public function get_correspondence_except_NCR($project_id , $reply_correspondence_id): Collection;    
     
         /**
     * @param array $data 
@@ -56,10 +80,25 @@ interface CorrespondenceRepositoryInterface
     */
     public function get_correspondence_parent($project_id , $corespondence_id): Collection;
 
+       /**
+    * @param int $project_id
+    * @param int $corespondence_id 
+    * @return mixed
+    * 
+    */
+    public function get_last_reply_correspondence($project_id , $corespondence_id): mixed;
+
      /**
     * @param array $data 
     * @param Model $correspondence 
     * 
     */
     public function add_Linked_documents_to_correspondence($data , $correspondence): void;
+    /**
+    * @param Request $request 
+    * @return bool
+    * 
+    */
+
+    public function update_due_days($request):bool;
 }

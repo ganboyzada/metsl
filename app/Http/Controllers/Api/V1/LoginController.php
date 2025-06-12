@@ -21,25 +21,12 @@ class LoginController extends Controller
     {
         if($request->validated()){
             $input = $request->all();
-            $user = User::where(['email' => $input['email']])->where('is_admin', '!=', 1)->with('userable')->first();
+            $user = User::where(['email' => $input['email']])->where('is_admin', '!=', 1)->first();
 
-            if (isset($user) && $user->userable->status == 1) {
+            if (isset($user)) {
                 if (Hash::check($input['password'], $user->password)) {
-                    if($user->userable_type == DesignTeam::class){
-                        $user->user_type = 'Design Team';
-                    }
-        
-                    else if($user->userable_type == Contractor::class){
-                        $user->user_type = 'Contractor';
-                    }
-        
-                    else if($user->userable_type == Client::class){
-                        $user->user_type = 'Client';
-                    }
-
-                    else if($user->userable_type == ProjectManager::class){
-                        $user->user_type = 'Project Manager';
-                    }
+                    $user->user_type = '';
+         
                     $user->access_token =  $user->createToken('metsl')->plainTextToken;
                     return $this->sendResponse([new UserProfileResource($user)], "You are successfully logged in");
                 } else {
@@ -57,7 +44,7 @@ class LoginController extends Controller
 
     public function profile(){
         //dd(auth()->user()->is_admin);
-        $user = User::where(['id' => auth()->user()->id])->with('userable')->first();
+        $user = User::where(['id' => auth()->user()->id])->first();
         return $this->sendResponse([new UserProfileResource($user)], "You are successfully logged in");
     }
 

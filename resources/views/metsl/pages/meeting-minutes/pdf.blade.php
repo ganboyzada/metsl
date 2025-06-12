@@ -3,12 +3,30 @@
 <head>
     <title>Meeting Summary</title>
     <style>
-        body { font-family: sans-serif;}
-        table, th, td {
+        body { font-family: sans-serif; border: 1px solid black;margin:10px;padding:10px;}
+        table #meeting-notes, #meeting-notes th, #meeting-notestd {
         border: 1px solid black;
         border-collapse: collapse;
         text-align: center; 
         }
+        #meeting-notes {
+  border-collapse: collapse;
+  width: 100%;
+}
+
+#meeting-notes th, #meeting-notes td {
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #D6EEEE;
+}
+
+.d-flex{
+    display:flex;
+    justify-content: space-between
+}
     </style>
 </head>
 <body>
@@ -28,11 +46,11 @@
 
             </br>
 
-            <div class="col-span-1">
+            {{-- <div class="col-span-1">
                 <label for="endDate" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200" style="color:red;">Status</label>
                 <span class="px-3 py-1 font-bold rounded-full text-xs {{ $meeting->status->color() }} text-white">{{ ($meeting->status->name == 'PUBLISHED'  && $meeting->old_status->value == \App\Enums\MeetingPlanStatusEnum::PLANNED->value) ? 'Ready To '.strtoupper($meeting->status->text()) : strtoupper($meeting->status->text()) }}</span>
             </div>
-            </br>
+            </br> --}}
 
             <!-- Meeting Location -->
             <div class="col-span-1">
@@ -40,32 +58,39 @@
                 <span class="px-3 py-1 font-bold rounded-full text-xs">{{ $meeting->location }}</span>
             </div>
             </br>
+            <table>
+                <tr>
+                    <!-- Planned Date -->
+                    <td class="col-span-1" style="width:400px">
+                        <label for="planned-date" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200" style="color:red;">Planned Date:</label>
+                        <span class="px-3 py-1 font-bold rounded-full text-xs">{{ $meeting->planned_date }}</span>
+                    </td>
+                
 
-            <!-- Planned Date -->
-            <div class="col-span-1">
-                <label for="planned-date" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200" style="color:red;">Planned Date:</label>
-                <span class="px-3 py-1 font-bold rounded-full text-xs">{{ $meeting->planned_date }}</span>
-            </div>
-            </br>
-
-            <!-- Start Time -->
-            <div class="col-span-1">
-                <label for="start-time" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200" style="color:red;">Start Time:</label>
-                <span class="px-3 py-1 font-bold rounded-full text-xs">{{ $meeting->start_time }}</span>
-            </div>
-            </br>
-            <!-- Duration -->
-            <div class="col-span-1">
-                <label for="duration" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200" style="color:red;">Duration:</label>
-                <span class="px-3 py-1 font-bold rounded-full text-xs">{{$meeting->duration }} minutes</span>
-            </div>
-            </br>
-
+                    <!-- Start Time -->
+                    <td class="col-span-1" >
+                        <label for="start-time" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200" style="color:red;">Start Time:</label>
+                        <span class="px-3 py-1 font-bold rounded-full text-xs">{{ $meeting->start_time }}</span>
+                    </td>
+                </tr>
+            
+            </table>
+        </br>
+            <table>
+                <tr>
+                    <!-- Planned Date -->
+                    <td class="col-span-1" style="width:400px">
+                        <label for="duration" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200" style="color:red;">Duration:</label>
+                        <span class="px-3 py-1 font-bold rounded-full text-xs">{{$meeting->duration }} minutes</span>
+                    </td>
+  
             <!-- Time Zone -->
-            <div class="col-span-1">
-                <label for="time-zone" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200" style="color:red;">Time Zone:</label>
-                <span class="px-3 py-1 font-bold rounded-full text-xs">{{$meeting->timezone }}</span>
-            </div>
+                <td class="col-span-1">
+                    <label for="time-zone" class="block text-sm mb-2 font-light opacity-75 dark:text-gray-200" style="color:red;">Time Zone:</label>
+                    <span class="px-3 py-1 font-bold rounded-full text-xs">{{$meeting->timezone }}</span>
+                </td>
+            </tr>
+        </table>
             </br>
 
             <!-- Meeting Purpose -->
@@ -81,9 +106,9 @@
 
                 <div class="flex flex-wrap gap-3">
                 @foreach($meeting->users as $user)
-                <span class="text-xs px-2 py-1 inline-flex items-center gap-1 rounded-full bg-gray-200 dark:bg-gray-800">
-                    <i data-feather="user" class="min-w-5 h-5 w-5"></i>
-                    {{ $user->name }}</span>
+                <p class="text-xs px-2 py-1 inline-flex items-center gap-1 rounded-full bg-gray-200 dark:bg-gray-800">
+                    
+                    {{ $user->name }}</p>
                 @endforeach
                 </div>
             </div>
@@ -94,7 +119,7 @@
             <h3 class="text-xl mb-4 px-5">Meeting Notes</h3>
    
                 <div class="overflow-x-auto">
-                    <table class="w-full" id="meeting-notes"  style="width:100%;border-collapse:separate">
+                    <table class="w-full" id="meeting-notes"  style="width:100%;border:1px solid black">
                         <thead class="bg-gray-200 dark:bg-gray-900/50 text-sm text-left">
                             <tr>
                                 <th class="px-2 py-1 font-light">ID</th>
@@ -119,7 +144,7 @@
                                 <tr class="meeting-note ">
                                     <td class="px-2 py-2">{{ $index + 1 }}</td>
                                     <td class="px-2 py-2">
-                                        {{ $note->note }}
+                                        {{ strip_tags($note->note) }}
                                     </td>
                                     <td class="px-2 py-2">
                                         {{ $note->type == 'action' ? 'Action' : 'Note' }}

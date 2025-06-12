@@ -1,6 +1,6 @@
 <!-- Revisions Modal -->
-<div id="revisions-modal" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center hidden z-50">
-    <div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg max-w-3xl w-full p-6">
+<div id="revisions-modal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+    <div class="bg-white dark:bg-gray-800 max-h-[90vh] overflow-y-scroll  p-6 max-w-7xl">
         <!-- Modal Header -->
         <div class="flex justify-between items-center mb-4">
             <h2 id="revisions-title" class="text-xl font-semibold dark:text-gray-200">
@@ -33,146 +33,150 @@
                 <!-- Comment Box -->
 
             </tbody>
-			<thead>
-	                <tr id="comment-box" class="comment-box hidden">
-				    <form id="commentWizard" method="POST" enctype="multipart/form-data">
-					@csrf
-                    <td colspan="6" class="py-2 px-4 bg-gray-50 dark:bg-gray-700">
-					<input type="hidden" name="revision_id" id="revision_id"/>
-                        <textarea name="comment" id="comment" class="comment w-full border  p-2 dark:bg-gray-800 dark:text-gray-200" placeholder="Write your comment..."></textarea>
-                        <button type="submit"  class="submit_revision_form bg-blue-500 text-white px-4 py-2 mt-2  hover:bg-blue-600">
-                            Send
-                        </button>
-                        <button type="button" onclick="get_comments()"  data-modal="comments-modal" class="modal-toggler bg-blue-500 text-white px-4 py-2  hover:bg-blue-600 transition duration-200">
-                            View Comments
-                        </button>					
-					</form>	
-                    </td>
-                </tr>		
-			</thead>
+
         </table>
     </div>
 </div>
 
 <!-- Trigger Script -->
 <script>
-	async function update_status(id , status){
-		let url = 	`{{url('project/documents/revisions/update_status?id=${id}&status=${status}')}}`	;
-		let newurl = url.replace('amp;','');
-		let fetchRes = await fetch(newurl);
-		if(fetchRes.status != 200){
-			$('#error_div').show();
-			//$('#error_div').css('display','block !important');
-                   
-			
-		}
-		get_revisions(current_document_id);
+	async function update_status(id , status , number , project_doc_id){
+        if(status == 2){
+            $('.revision_id').val(id);
+            $('.file_id').val(null);
+            $('.file_type').val('revision');
+            $('.project_document_id').val(project_doc_id);
+            $('.number').val(number);
+            document.getElementById("reject-modal").classList.remove("hidden");
+        }else{
+            let url = 	`{{url('project/documents/revisions/update_status?id=${id}&status=${status}')}}`	;
+            let newurl = url.replace('amp;','');
+            let fetchRes = await fetch(newurl);
+            if(fetchRes.status != 200){
+                $('#error_div').show();
+                //$('#error_div').css('display','block !important');
+                    
+                
+            }
+            if (localStorage.getItem("project_tool") == 'activities') {
+                get_documents();
+            }
+            get_revisions(current_document_id , number);
+        }
+
 	}
-    async function update_doc_status(id , status){
-		let url = 	`{{url('project/documents/files/update_status?id=${id}&status=${status}')}}`	;
-		let newurl = url.replace('amp;','');
-		let fetchRes = await fetch(newurl);
-		if(fetchRes.status != 200){
-			$('#error_div').show();
-			//$('#error_div').css('display','block !important');
-                   
-			
-		}
-		get_revisions(current_document_id);
+    async function update_doc_status(project_doc_id , status , number , file_id){
+        if(status == 2){
+            $('.revision_id').val(null);
+            $('.file_id').val(file_id);
+            $('.file_type').val('file');
+            $('.project_document_id').val(project_doc_id);
+            $('.number').val(number);
+            document.getElementById("reject-modal").classList.remove("hidden");
+        }else{
+            let url = 	`{{url('project/documents/files/update_status?id=${id}&status=${status}')}}`	;
+            let newurl = url.replace('amp;','');
+            let fetchRes = await fetch(newurl);
+            if(fetchRes.status != 200){
+                $('#error_div').show();
+                //$('#error_div').css('display','block !important');
+                    
+                
+            }
+            if (localStorage.getItem("project_tool") == 'activities') {
+                get_documents();
+            }
+            get_revisions(current_document_id , number);
+        }
 	}
 
-    $("#commentWizard").on("submit", function(event) {
-            const form = document.getElementById("commentWizard");
-            const formData = new FormData(form); 
-            formData.append('comment',tinyMCE.get('comment').getContent());
-
-                $('#error_div').hide();
-                $('#success_div').hide();
-                $('.err-msg').hide();
-                //$("#error_div").html("");
-                $("#success_div").html("");
-                event.preventDefault();  
-                $.ajaxSetup({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
-                    }
-                });
-                $.ajax({
-                    url: "{{ route('projects.documents.revision.comments.store') }}",
-                    type: "POST",
-                    data: formData,
-                    dataType: 'json',
-                    contentType: false,
-                    processData: false,
-                    cache: false,
-                    beforeSend: function() {
-                        $(".submit_revision_form").prop('disabled', true);
-                    },
-                    success: function(data) {
-                        if (data.success) {
-                            
-                            $(".submit_revision_form").prop('disabled', false);
-                            
-                            $("#commentWizard")[0].reset();
-                            document.getElementById('comment-box').classList.toggle('hidden');
-                            
-                            window.scrollTo(0,0);
-                            $('#success_div').show();
-                            $('#success_div').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.success+'</div>');
-                        }
-                        else if(data.error){
-                            $(".submit_revision_form").prop('disabled', false);
-
-                            $('#error_div').show();
-                            $('#error_div').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.error+'</div>');
-                        }
-                    },
-                    error: function (err) {
-                        $.each(err.responseJSON.errors, function(key, value) {
-                            $('.error').show();
-                            $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+value[0]+'</div>');
-                                var el = $(document).find('[name="'+key + '"]');
-                                if(el.length == 0){
-                                    el = $(document).find('[id="'+key + '"]');
-                                }
-                                el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
-                                
-                            });
-
-                            $(".submit_revision_form").prop('disabled', false);
-
-
-                    }
-                });
-        
-        });
-        
-    async function get_comments(){
+ async function get_comments(){
         let revision_id = $('#revision_id').val();
+        let file_id = $('#file_id').val();
+        let file_type = $('#file_type').val();
         $('#comments-list').html('');
 		$('.error').hide();
 		$('.success').hide();
 		$(".error").html("");
 		$(".success").html("");
-        let url = 	`{{url('project/documents/revisions/comments/${revision_id}')}}`	;
-        let fetchRes = await fetch(url);
-        let comments = await fetchRes.json();
-        //console.log(comments);
-            let html = ``;
-            if(comments.comments.length > 0){
-                for(let i=0; i<comments.comments.length; i++){
-                    html+=`<tr class="group hover:bg-gray-100 dark:hover:bg-gray-700">
-                        <td class="py-2 px-4">${i + 1}</td>
-                        <td class="py-2 px-4">${ comments.comments[i].comment}</td>
-                        <td class="py-2 px-4">${ comments.comments[i].user.name}</td>
-                    
-                    </tr>`;
+        if(file_type == 'revision'){
+            let url=`{{url('project/documents/revisions/comments/${revision_id}/revision')}}`	;
+            let fetchRes = await fetch(url);
+            let comments = await fetchRes.json();
+                            let html = ``;
+                if(comments.comments.length > 0){
+                    for(let i=0; i<comments.comments.length; i++){
+                        html+=`<tr class="group hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <td class="py-2 px-4">${i + 1}`;
+                                if(comments.comments[i].type == 'reject'){
+                                     html+=`<span class=" mx-2 text-xs font-semibold bg-red-500 text-white rounded-full px-2 py-1">
+                                        reject Comment
+                                        </span>`;
+
+                                }
+                                html+=`</td>
+                            <td class="py-2 px-4">${ comments.comments[i].comment}</td>
+                            <td class="py-2 px-4">`;
+
+                            if(comments.comments[i].image != null){
+							   html+=`<a target="_blank" href="${ comments.comments[i].image }" class="text-blue-500 hover:text-blue-700">
+								<i data-feather="download" stroke-width="2" class="w-5 h-5"></i>
+							</a>`;
+					   
+						}
+                                
+                                
+                            html+=`</td>
+                            <td class="py-2 px-4">${ comments.comments[i].user.name}</td>
+                        
+                        </tr>`;
+                    }
                 }
-            }
-            $('#comments-list').html(html);
+                $('#comments-list').html(html);
+                feather.replace();	
+        }else{
+            let url=`{{url('project/documents/revisions/comments/${file_id}/file')}}`	;
+            let fetchRes = await fetch(url);
+            let comments = await fetchRes.json();
+                            let html = ``;
+                if(comments.comments.length > 0){
+                    for(let i=0; i<comments.comments.length; i++){
+                        html+=`<tr class="group hover:bg-gray-100 dark:hover:bg-gray-700">
+                            <td class="py-2 px-4">${i + 1}`;
+                                if(comments.comments[i].type == 'reject'){
+                                     html+=`<span class=" mx-2 text-xs font-semibold bg-red-500 text-white rounded-full px-2 py-1">
+                                        reject Comment
+                                        </span>`;
+
+                                }
+                                html+=`</td>
+                            <td class="py-2 px-4">${ comments.comments[i].comment}</td>
+                              <td class="py-2 px-4">`;
+
+                            if(comments.comments[i].image != null){
+							   html+=`<a target="_blank" href="${ comments.comments[i].image }" class="text-blue-500 hover:text-blue-700">
+								<i data-feather="download" stroke-width="2" class="w-5 h-5"></i>
+							</a>`;
+					   
+						}
+                                
+                                
+                            html+=`</td>
+                            <td class="py-2 px-4">${ comments.comments[i].user.name}</td>
+                        
+                        </tr>`;
+                    }
+                }
+                $('#comments-list').html(html);
+                feather.replace();	
+        }
+        
+
+        //console.log(comments);
+
         }
 
-    function show_comment(id){
+    function show_comment(id , type="revision" , project_doc_id){
         // if($('#revision_id').val() == id && !document.getElementById('comment-box').classList.contains('hidden')){
 
             // document.getElementById('comment-box').classList.add('hidden');
@@ -180,8 +184,22 @@
             // $('#revision_id').val(id);
             // document.getElementById('comment-box').classList.remove('hidden');
         // }
-        $('#revision_id').val(id);
-        document.getElementById('comment-box').classList.toggle('hidden');
+        if(type =="revision"){
+            $('#revision_id').val(id);
+            $('#file_id').val(null);
+            $('#file_type').val(type);
+            $('#project_document_id').val(project_doc_id);
+        }else{
+            $('#revision_id').val(null);
+            $('#file_id').val(id);
+            $('#file_type').val(type);
+             $('#project_document_id').val(project_doc_id);
+        }
+        
+        get_comments();
+        // $('#comments-modal').modal('show');
+         document.getElementById("comments-modal").classList.remove("hidden");
+        //document.getElementById('comment-box').classList.toggle('hidden');
         
     }
     var commentButtons = document.querySelectorAll('.comment-button');

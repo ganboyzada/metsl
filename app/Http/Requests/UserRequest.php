@@ -21,18 +21,19 @@ class UserRequest extends FormRequest
      */
     public function rules(): array
     {
-        if(isset(request()->userable_id)){
+        if(isset(request()->user_id)){
             $id = request()->user_id;
             return [
                 'first_name' => 'required',
                 'company_id' => 'nullable',
                 'last_name' => 'required',
                 'mobile_phone' => 'required',
-                'office_phone' => 'required',
+                'office_phone' => 'nullable',
                 'email'=>'required|email|unique:users,email,'.$id,
-                'specialty' => 'required',
-                "user_type"    => "required",
-                "userable_id"    => "required",
+                'specialty' => 'nullable',
+                'password'=>'nullable|string|min:8',
+                //"user_type"    => "required",
+               // "userable_id"    => "required",
                 "user_id"    => "required",
                 'image' => 'nullable|image|mimes:jpeg,png,jpg,gif',
             ]; 

@@ -27,7 +27,8 @@ class DocumentRequest extends FormRequest
 
                 'project_id' => ['required', 'integer'],
                 'package_id' => ['required', 'integer'],
-            
+                 'subfolder_id' => ['nullable', 'integer'],
+           
                 'title' => 'nullable',
                 'number' => 'required',
                 "reviewers"    => ['required','array'],
@@ -41,7 +42,8 @@ class DocumentRequest extends FormRequest
 
                 'project_id' => ['required', 'integer'],
                 'package_id' => ['required', 'integer'],
-            
+                  'subfolder_id' => ['nullable', 'integer'],
+           
                 'title' => 'nullable',
                 'number' => 'required',
                 "reviewers"    => ['required','array'],

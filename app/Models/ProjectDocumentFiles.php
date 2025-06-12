@@ -26,4 +26,9 @@ class ProjectDocumentFiles extends Model
             'project_id' // refers to customer_id column on invoices table
         );
     }
+
+    public function comments()
+    {
+        return $this->hasMany(ProjectDocumentRevisionComments::class , 'file_id');
+    }
 }

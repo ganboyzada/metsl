@@ -72,6 +72,12 @@ class DocumentService
                     $path = Storage::url('/project'.$data['project_id'].'/documents'.$document->id);
                     
                     \File::makeDirectory($path, $mode = 0777, true, true);  
+                    if(in_array(-1 , $data['reviewers'])){
+                        $reviewers = collect($this->userService->getUsersOfProjectID($project_id , 'review_documents')['users'])->pluck('id')->toArray();
+                        $data['reviewers'] = $reviewers;
+                       // dd($data['reviewers']);
+
+                    }
 
                     $users =  $this->documentRepository->add_users_to_document($data,$document );
         
@@ -149,7 +155,17 @@ class DocumentService
 
     }
 
+    public function getAllProjectDocumentsPackages($project_id , $request){
+        return $this->documentRepository->get_all_project_documents_packages($project_id , $request);
 
+    }
+    public function getPackage($project_id , $id){
+        return $this->documentRepository->get_package($project_id , $id);
+    }
+
+    public function getSubFolder($id , $request){
+        return $this->documentRepository->get_sub_folder($id , $request);
+    }
     public function getAllProjectDocumentsAssigned($project_id , $request){
         return $this->documentRepository->get_all_project_documents_assigned($project_id , $request);
 

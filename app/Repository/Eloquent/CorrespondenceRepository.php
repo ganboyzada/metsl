@@ -3,6 +3,7 @@
 namespace App\Repository\Eloquent;
 
 use App\Enums\CorrespondenceStatusEnum;
+use App\Enums\CorrespondenceTypeEnum;
 use App\Mail\StakholderEmail;
 use App\Models\Correspondence;
 use App\Models\Permission;
@@ -10,6 +11,7 @@ use App\Models\Role;
 use App\Models\User;
 use App\Repository\CorrespondenceRepositoryInterface;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\Request;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Collection;
 
@@ -45,9 +47,79 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
         //return $this->model->where('type',$type)->where('project_id',$projectID)->count();
     } 
 
+
+      /**
+    * @param int $id 
+    * @return bool
+    */
+    public function close($id): bool
+    {
+        try{
+            return $this->model->where(function($q)use($id){
+                $q->where('id',$id);
+                $q->orWhere('reply_correspondence_id',$id);
+            })
+            
+            ->update(['status'=>CorrespondenceStatusEnum::CLOSED->value , 'changed_by'=>auth()->user()->id]);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+        //return $this->model->where('type',$type)->where('project_id',$projectID)->count();
+    } 
+
+          /**
+    * @param int $id 
+    * @return bool
+    */
+    public function accept($id): bool
+    {
+        try{
+            return $this->model->where(function($q)use($id){
+                $q->where('id',$id);
+                //$q->orWhere('reply_correspondence_id',$id);
+            })
+            
+            ->update(['status'=>CorrespondenceStatusEnum::ACCEPTED->value , 'changed_by'=>auth()->user()->id]);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+        //return $this->model->where('type',$type)->where('project_id',$projectID)->count();
+    } 
+             /**
+    * @param int $id 
+    * @return bool
+    */
+    public function reject($id): bool
+    {
+        try{
+            return $this->model->where(function($q)use($id){
+                $q->where('id',$id);
+                //$q->orWhere('reply_correspondence_id',$id);
+            })
+            
+            ->update(['status'=>CorrespondenceStatusEnum::REJECTED->value , 'changed_by'=>auth()->user()->id]);
+        }catch (\Exception $e) {
+            throw new \Exception($e->getMessage());
+        }
+        //return $this->model->where('type',$type)->where('project_id',$projectID)->count();
+    }
+    /**
+    * @param int $project_id
+    * @param int $reply_correspondence_id
+    * @return Collection
+    * 
+    */
+    public function get_correspondence_except_NCR($project_id , $reply_correspondence_id): Collection{
+        return $this->model->where('project_id',$project_id)->where('id','!=',$reply_correspondence_id)
+        ->where('type', '!=', CorrespondenceTypeEnum::NCR->value)
+            ->where('project_id', $project_id)
+            ->whereNull('reply_correspondence_id')
+            ->get();
+    }
+
     /**
     * @param array $data 
-    * @param Model $correspondence 
+    * @param Model $correspo$this->model->where('project_id',$project_id)->ndence 
     * 
     */
     public function add_users_to_correspondence($data , $correspondence): void
@@ -57,7 +129,22 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
                 throw new \Exception('Record not find'); 
             }
             $correspondence->assignees()->sync($data['assignees']);
-            $correspondence->DistributionMembers()->sync($data['distribution']);
+            if(isset($data['distribution']) && count($data['distribution']) > 0){
+                $correspondence->DistributionMembers()->sync($data['distribution']);
+            }
+            
+            if($correspondence->reply_correspondence_id == NULL){
+                $correspondence->forwards()->sync($data['assignees']);
+            }else{
+
+                $parent = $this->model->find($correspondence->reply_correspondence_id);
+                if($parent->created_by == auth()->user()->id){
+                    $correspondence->forwards()->sync($data['assignees']);
+                }else{
+                    $correspondence->forwards()->sync([$parent->created_by]);
+                }
+                
+            }
         }catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }    
@@ -167,7 +254,7 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
                 $enums_list = \App\Enums\CorrespondenceTypeEnum::cases();
                 foreach ($enums_list as $enum) {
                     if(checkIfUserHasThisPermission($project_id , 'view_'.$enum->value)){
-                        $modal = $modal->orwhere('type' , $enum->value);
+                        $q = $q->orwhere('type' , $enum->value);
     
                     }
                 }
@@ -180,12 +267,12 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
 
 
 
-            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->paginate(10);
+            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name'])->paginate(10);
 
             return $modal;           
 
         }else{
-            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->paginate(10);
+            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name'])->paginate(10);
 
             return $modal;
         }
@@ -199,14 +286,56 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
     * 
     */
     public function get_all_project_correspondence_open($project_id , $request): LengthAwarePaginator{
-        $sub = \DB::raw('(select  reply_correspondence_id as replyCorespondenceId  , MAX(created_date) as last_upload_date
-         from correspondences where reply_correspondence_id is not null group by reply_correspondence_id)last_upload_table');
+        // $sub = \DB::raw('(select  reply_correspondence_id as replyCorespondenceId  , MAX(created_date) as last_upload_date
+        //  from correspondences where reply_correspondence_id is not null group by reply_correspondence_id)last_upload_table');
 
-        $modal =  $this->model->where('project_id',$project_id)->where('reply_correspondence_id',NULL)
-        ->leftjoin($sub,function($join){
-            $join->on('last_upload_table.replyCorespondenceId','=','id');       
-        })
-        ->where('status',CorrespondenceStatusEnum::OPEN->value);
+        $modal =  $this->model->where('project_id',$project_id)
+        //->where('reply_correspondence_id',NULL)
+        // ->leftjoin($sub,function($join){
+        //     $join->on('last_upload_table.replyCorespondenceId','=','id');       
+        // })
+        ->where('status','!=',CorrespondenceStatusEnum::CLOSED->value)
+        ->where(function($q)use ($project_id){
+            if(!auth()->user()->is_admin){
+                $q->where(function($query)use ($project_id){
+                    $query->where('changed_by', '!=',NULL);
+                    $query->where('created_by', auth()->user()->id);
+                });
+
+                $q->orwhere(function($query)use ($project_id){
+                    $query->whereNotIn('id', function($query) use ($project_id) {
+                    $query->select('reply_child_correspondence_id')
+                    ->from('correspondences')
+                    ->whereNotNull('reply_child_correspondence_id')
+                    ->where('project_id', $project_id);
+                    })->where('created_by','!=', auth()->user()->id);
+                });
+
+            }else{
+                $q->where(function($query)use ($project_id){
+                    $query->where('changed_by', '!=',NULL);
+                });
+
+                $q->orwhere(function($query)use ($project_id){
+                    $query->whereNotIn('id', function($query) use ($project_id) {
+                    $query->select('reply_child_correspondence_id')
+                    ->from('correspondences')
+                    ->whereNotNull('reply_child_correspondence_id')
+                    ->where('project_id', $project_id);
+                    });
+                });
+
+            }
+
+
+            
+
+            // $q->orWhereHas('distributionMembers', function ($query) {
+            //         $query->where('user_id', auth()->user()->id);
+            //     });
+        });
+        
+         
 
         if(!auth()->user()->is_admin){
 
@@ -219,13 +348,22 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
                     $query->where('user_id', auth()->user()->id);
                 });
                 
-               // $q->orwhere('created_by', auth()->user()->id);
+                $q->orWhereHas('forwards', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
+                    
+                });
+
+
+                  $q->orwhere(function($query)use($project_id){
+                      $query->where('changed_by', '!=',NULL);
+                    $query->where('created_by', auth()->user()->id);
+                  });
 
 
                 // $enums_list = \App\Enums\CorrespondenceTypeEnum::cases();
                 // foreach ($enums_list as $enum) {
                 //     if(checkIfUserHasThisPermission($project_id , 'view_'.$enum->value)){
-                //         $modal = $modal->orwhere('type' , $enum->value);
+                //         $q = $q->orwhere('type' , $enum->value);
     
                 //     }
                 // }
@@ -238,12 +376,12 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
 
 
 
-            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->paginate(5);
+            $modal = $modal->orderBy('id', 'desc')->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name'])->paginate(10);
 
             return $modal;           
 
         }else{
-            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name'])->paginate(5);
+            $modal = $modal->orderBy('id', 'desc')->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name'])->paginate(10);
 
             return $modal;
         }
@@ -260,10 +398,21 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
     public function get_correspondence_replies($project_id , $corespondence_id): Collection{
         return $this->model->where('project_id',$project_id)->where('reply_correspondence_id',$corespondence_id)
         
-        ->with(['assignees:id,name' , 'CreatedBy:id,name'])->get();
+        ->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name'])->get();
     }  
 
-
+  
+    /**
+    * @param int $project_id
+    * @param int $corespondence_id 
+    * @return mixed
+    * 
+    */
+    public function get_last_reply_correspondence($project_id , $corespondence_id): mixed{
+        return $this->model->where('project_id',$project_id)->where('reply_correspondence_id',$corespondence_id)
+        
+        ->where('reply_correspondence_id','!=',NULL)->where('reply_child_correspondence_id','!=',NULL)->orderBy('id', 'desc')->first();
+    }  
 
         /**
     * @param int $project_id
@@ -274,7 +423,19 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
     public function get_correspondence_parent($project_id , $corespondence_id): Collection{
         return $this->model->where('project_id',$project_id)->where('id',$corespondence_id)
         
-        ->with(['assignees:id,name' , 'CreatedBy:id,name'])->get();
+        ->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name'])->get();
     }  
+        /**
+    * @param Request $request 
+    * @return bool
+    * 
+    */
+
+    public function update_due_days($request):bool{
+        $parent = $this->model->find($request->id);
+        $due_date = date('Y-m-d', strtotime($parent->due_date. ' + '.(int)$request->due_days.' days'));
+        $due_days = $parent->due_days + (int)$request->due_days;
+        return $this->model->where('reply_correspondence_id' , $request->id)->update(['due_days' => $due_days , 'due_date' => $due_date]);
+    }
  
 }

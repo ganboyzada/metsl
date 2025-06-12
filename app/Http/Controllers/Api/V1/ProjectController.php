@@ -247,7 +247,7 @@ class ProjectController extends Controller
                 $enums_list = \App\Enums\CorrespondenceTypeEnum::cases();
                 foreach ($enums_list as $enum) {
                     if(checkIfUserHasThisPermission($projectId , 'view_'.$enum->value)){
-                        $correspondence_count = $correspondence_count->orwhere('type' , $enum->value);
+                        $q = $q->orwhere('type' , $enum->value);
     
                     }
                 }
@@ -291,7 +291,7 @@ class ProjectController extends Controller
                 $enums_list = \App\Enums\CorrespondenceTypeEnum::cases();
                 foreach ($enums_list as $enum) {
                     if(checkIfUserHasThisPermission($projectId , 'view_'.$enum->value)){
-                        $correspondence_count = $correspondence_count->orwhere('type' , $enum->value);
+                        $q = $q->orwhere('type' , $enum->value);
     
                     }
                 }
@@ -335,7 +335,7 @@ class ProjectController extends Controller
                 $enums_list = \App\Enums\CorrespondenceTypeEnum::cases();
                 foreach ($enums_list as $enum) {
                     if(checkIfUserHasThisPermission($projectId , 'view_'.$enum->value)){
-                        $correspondence_count = $correspondence_count->orwhere('type' , $enum->value);
+                        $q = $q->orwhere('type' , $enum->value);
     
                     }
                 }

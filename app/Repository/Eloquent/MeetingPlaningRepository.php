@@ -65,10 +65,12 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
     public function get_all_project_meeting_planing_has_action_to_user($project_id , $request): LengthAwarePaginator{
         $meetingPlanings =  $this->model->join('meeting_plan_notes','meeting_plan_notes.meeting_id','=','meeting_plans.id')
         ->where('project_id',$project_id)->where('meeting_plan_notes.type','action')
-        ->where('status',MeetingPlanStatusEnum::PUBLISHED->value)->select('meeting_plans.*');
+        //->where('status',MeetingPlanStatusEnum::PLANNED->value)
+        
+        ->select('meeting_plans.*','meeting_plan_notes.note', 'meeting_plan_notes.deadline');
 
           if(auth()->user()->is_admin){
-            $meetingPlanings = $meetingPlanings->with(['users:id,name'])->groupBy('meeting_plans.id')->paginate(5);
+            $meetingPlanings = $meetingPlanings->with(['users:id,name'])->paginate(10);
 
             return $meetingPlanings;
         }
@@ -79,7 +81,7 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
 
             
             
-            $meetingPlanings = $meetingPlanings->with(['users:id,name'])->groupBy('meeting_plans.id')->paginate(5);
+            $meetingPlanings = $meetingPlanings->with(['users:id,name'])->paginate(10);
 
             return $meetingPlanings;  
             

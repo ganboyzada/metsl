@@ -34,7 +34,9 @@ function loadWidgetCorrespondence() {
                 let url2 = "{{ route('projects.correspondence.edit', [':id']) }}".replace(':id', row.id);
 
                 html+=`<tr>
-                    <td class="px-6 py-3">${row.number}</td>
+                    <td class="px-6 py-3">${row.number}
+					<span class="px-3 py-1 rounded-full text-xs font-bold bg-orange-500 text-white">${row.label}</span>
+					</td>
                     <td class="px-6 py-3"><a class="underline" href="${url}">${row.subject}</a></td>
 
                     <td class="px-6 py-3">${(row.created_by != null) ? row.created_by.name : ''}</td>

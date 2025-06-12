@@ -9,7 +9,7 @@
             <div class="toolbox flex flex-nowrap items-center gap-2 absolute md:static left-0 top-[140%] w-[90vw] md:w-auto">
                 <div class="w-1/2 sm:w-auto has-dropdown relative inline-block text-left z-2">
                     <!-- Dropdown Toggle Button -->
-                    <button class="dropdown-toggle w-full flex items-center px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-800">
+                    <button  onclick="toggleProjectsDropdown()" class="dropdown-toggle w-full flex items-center px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-800">
                         <span id="selected-project" class="flex flex-col items-start text-xs mr-2 font-medium me-auto">Project<b id="project-variable">{{  session('projectName')  }}</b></span>
                         <i class="ms-auto" data-feather="chevron-down"></i>
                     </button>
@@ -20,7 +20,7 @@
                     <input type="hidden" id="selected_project_id" value="{{ session('projectID') }}"/>
                     <input type="hidden" id="selected_project_name" value="{{ session('projectName') }}"/>
                     <!-- Dropdown Menu -->
-                    <div  id="dropdown-toggle" class="dropdown absolute left-0 rounded-lg mt-2 min-w-full w-[130%] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg">
+                    <div  id="projects-dropdown-toggle" class="hidden absolute  left-0 rounded-lg mt-2 min-w-full w-[130%] bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-200 shadow-lg">
                         <ul class="py-2">
                             @php
                                 if(checkIfUserHasThisPermission(Session::get('projectID') ,'view_all_projects')){
@@ -84,7 +84,7 @@
             
 
             <!-- Notifications with Badge -->
-            <div class="relative">
+            <div class="relative hidden">
                 <button onclick="toggleNotifications()">
                     <i data-feather="bell"></i>
                     <!-- Notification count badge -->
@@ -102,10 +102,10 @@
             </div>
 
             <!-- User Profile and Dropdown -->
-            <div class="relative">
-                <button onclick="toggleUserDropdown()" class="rounded-full flex items-center pl-1 py-1 pr-1 md:pr-2 lg:pr-4 bg-gray-100 dark:bg-gray-800">
+            <div class="has-dropdown w-1/2 sm:w-auto relative inline-block text-left z-50">
+                <button onclick="toggleUserDropdown()"  class="dropdown-toggle w-full flex items-center px-2 py-1 rounded-lg bg-gray-200 dark:bg-gray-800">
                     <!-- User Image -->
-                    <img src="https://placehold.co/32" alt="User" class="min-w-7 md:min-w-9 w-7 md:w-9 h-7 md:h-9 md:mr-2 rounded-full">
+                    <img src="{{ auth()->user()->profile_photo_path }}" alt="User" class="min-w-7 md:min-w-9 w-7 md:w-9 h-7 md:h-9 md:mr-2 rounded-full">
                     <!-- User Name -->
                     <div class="text-xs flex-col items-start hidden md:flex">
                         <span>Welcome,</span>
@@ -113,16 +113,19 @@
                     </div>   
                 </button>
                 <!-- User Dropdown Menu -->
-                <div id="userDropdown" class="hidden absolute right-0 mt-2 w-52 bg-gray-100 rounded-lg dark:bg-gray-800 shadow-lg  py-2 z-[60]">
-                    <a href="#" class="flex items-center px-4 py-2 hover:bg-gray-100/25"><i data-feather="user" class="mr-3"></i>Profile</a>
-                    @if(checkIfUserHasThisPermission(Session::get('projectID') ,'modify_presets'))
+                <div id="userDropdown" class="hidden absolute  left-0 mt-2 w-max bg-gray-800 rounded-lg  text-gray-200 shadow-lg">
+                    <a href="{{ route('profile') }}" class="flex items-center px-4 py-2 hover:bg-gray-100/25"><i data-feather="user" class="mr-3"></i>Profile</a>
+                    @if(checkIfUserHasThisPermission(Session::get('projectID') ,'modify_presets') || 
+                    checkIfUserHasThisPermission(Session::get('projectID') ,'create_projects')
+                    )
                     <a href="{{ route('roles') }}" class="flex items-center px-4 py-2 hover:bg-gray-200/25">
                         <i data-feather="git-pull-request" class="mr-3"></i>
                         Manage Roles
                         <i data-feather="lock" class="ml-auto w-4 h-4 text-blue-400"></i>
                     </a>
 					@endif
-					@if(checkIfUserHasThisPermission(Session::get('projectID') ,'modify_companies'))
+					@if(checkIfUserHasThisPermission(Session::get('projectID') ,'modify_companies') || 
+                    checkIfUserHasThisPermission(Session::get('projectID') ,'create_projects'))
                     <a href="{{ route('work_packages') }}" class="flex items-center px-4 py-2 hover:bg-gray-200/25">
                         <i data-feather="list" class="mr-3"></i>
                         Work Packages
@@ -143,7 +146,7 @@
                     --}}
                     <form method="POST" action="{{ route('logout') }}" class="block">
                         @csrf
-                        <button type="submit" class="text-left text-gray-700 dark:text-gray-300 hover:bg-red-900/25 hover:text-red-400 px-4 py-2 w-full">
+                        <button type="submit" class="flex w-full items-center px-4 py-2 hover:bg-gray-100/25">
                             <i data-feather="log-out" class="mr-3"></i> Sign Out
                         </button>
                     </form>
@@ -180,12 +183,33 @@
 
         // User Dropdown Toggle Function
         function toggleUserDropdown() {
+           
             const dropdown = document.getElementById('userDropdown');
             dropdown.classList.toggle('hidden');
         }
 
+        function toggleToolsDropdown() {
+          //  alert('hi');
+            const dropdown = document.getElementById('toolsDropdown');
+            dropdown.classList.toggle('hidden');
+        }
+
+        function toggleProjectsDropdown(){
+            // alert('ok');
+            const dropdown = document.getElementById('projects-dropdown-toggle');
+            dropdown.classList.toggle('hidden');            
+        }
+
         // Close notifications popup when clicking outside
         document.addEventListener('click', function(event) {
+            //alert('ok');
+            //document.getElementById('toolsDropdown').classList.toggle('hidden');
+            const toolPopup = document.getElementById('toolsDropdown');
+            const toolButton = event.target.closest('button[onclick="toggleToolsDropdown()"]');
+
+            const projectPopup = document.getElementById('projects-dropdown-toggle');
+            const projectButton = event.target.closest('button[onclick="toggleProjectsDropdown()"]');
+
             const notificationPopup = document.getElementById('notificationPopup');
             const notificationButton = event.target.closest('button[onclick="toggleNotifications()"]');
             const userDropdown = document.getElementById('userDropdown');
@@ -195,6 +219,16 @@
                 notificationPopup.classList.add('hidden');
             }
             
+  
+
+            if (!toolButton && !toolPopup.contains(event.target)) {
+                toolPopup.classList.add('hidden');
+            }
+
+            if (!projectButton && !projectPopup.contains(event.target)) {
+                projectPopup.classList.add('hidden');
+            }
+
             if (!userButton && !userDropdown.contains(event.target)) {
                 userDropdown.classList.add('hidden');
             }
@@ -222,7 +256,7 @@
                         //console.log(data);
                         const selectedProjectElement = document.getElementById("project-variable");
                         selectedProjectElement.textContent = projectName; // Update the displayed project name
-                        const dropdown = document.getElementById('dropdown-toggle');
+                        const dropdown = document.getElementById('projects-dropdown-toggle');
                         dropdown.classList.toggle('active');
                         $('[name="project_id"]').val(projectId);
                         $('#selected_project_id').val(projectId);

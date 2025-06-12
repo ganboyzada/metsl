@@ -22,38 +22,23 @@ class UserProfileResource extends JsonResource
      */
     public function toArray($request): array
     {
+        $name = explode('_', $this->name);
+        $first_name = $name[0];
+        $last_name = $name[1];
         $resource = [
             "id" => $this->id,
-            "first_name" => $this->userable->first_name,
-            "last_name" => $this->userable->last_name,
-            "user_name" => $this->userable->user_name,
-            "image" => $this->userable->image,
-            "email" => $this->userable->email,
-            "address" => $this->userable->address,
-            "mobile_phone" => $this->userable->mobile_phone,
-            "office_phone" => $this->userable->office_phone,
-            "status" => $this->userable->status
+            "first_name" => $first_name,
+            "last_name" => $last_name,
+            "user_name" => $this->name,
+            "image" => $this->profile_photo_path,
+            "email" => $this->email,
+            "address" => '',
+            "mobile_phone" => $this->mobile_phone,
+            "office_phone" => '',
+            "status" => 1
         ];
       
-        if(isset($this->user_type)){
-            $resource['user_type'] = $this->user_type;
-        } else{
-            if($this->userable_type == DesignTeam::class){
-                $resource['user_type'] = 'Design Team';
-            }
-
-            else if($this->userable_type == Contractor::class){
-                $resource['user_type'] = 'Contractor';
-            }
-
-            else if($this->userable_type == Client::class){
-                $resource['user_type'] = 'Client';
-            }
-
-            else if($this->userable_type == ProjectManager::class){
-                $resource['user_type'] = 'Project Manager';
-            }
-        }       
+        $resource['user_type'] = 'user';      
         if(isset($this->access_token)){
             $resource['access_token'] = $this->access_token;
         }

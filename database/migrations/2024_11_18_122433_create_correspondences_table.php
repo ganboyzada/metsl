@@ -20,6 +20,8 @@ return new class extends Migration
 			$table->char('program_impact')->nullable();
 			$table->char('cost_impact')->nullable();
 			$table->longText('description')->nullable();
+            $table->integer('due_days')->default(5)->nullable();
+            $table->date('due_date')->nullable();
 
             $table->unsignedBiginteger('recieved_from')->unsigned();
             $table->foreign('recieved_from')->references('id')
@@ -33,14 +35,16 @@ return new class extends Migration
                  ->on('projects')->onDelete('cascade');
 
             $table->unsignedBiginteger('created_by')->unsigned();
+            $table->integer('changed_by')->nullable();
             $table->foreign('created_by')->references('id')
                 ->on('users')->onDelete('cascade');
 
             $table->integer('reply_correspondence_id')->nullable();    
+            $table->integer('reply_child_correspondence_id')->nullable();    
 
 
 
-            $table->unique(['number' , 'subject']);     
+            $table->unique(['number']);     
 			
             $table->timestamps();
         });

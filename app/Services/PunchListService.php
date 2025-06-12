@@ -148,8 +148,8 @@ class PunchListService
     }
 
     public function find($punch_list_id){
-        $punch_list =  $this->punchListRepository->with([ 'users.userable' , 'files'  ,'replies.user','documentFiles','drawing',
-        'assignees.userable','package.companies', 'responsible.userable'])->find($punch_list_id);
+        $punch_list =  $this->punchListRepository->with([ 'users' , 'files'  ,'replies.user','documentFiles','drawing',
+        'assignees','package.companies', 'responsible'])->find($punch_list_id);
         $punch_list->priority_val = $punch_list->priority->value;
         $punch_list->status_val = $punch_list->status->value;
         return $punch_list;

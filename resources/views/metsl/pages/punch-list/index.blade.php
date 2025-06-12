@@ -24,6 +24,8 @@
             <!-- Dropdown -->
             <div id="filter-dropdown" class="dropdown absolute mt-2 z-10 bg-white dark:bg-gray-800 shadow-lg w-52">
                 <ul class="divide-y divide-gray-200 dark:divide-gray-700">
+                  
+                    
                     <li>
                         <button  type="button"
                             class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -82,6 +84,15 @@
                             Due Date
                         </button>
                     </li>
+                    <li>
+                        <button  type="button"
+                            class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
+                            data-filter="work-package" data-filter-type="select"
+                        >
+                            Work Package
+                        </button>
+                    </li> 
+
                     <li>
                         <button  type="button"
                             class="w-full text-left px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700"
@@ -154,7 +165,7 @@
                 <th class="px-4 py-2 font-light">#</th>
                 <th class="px-4 py-2 font-light">Title</th>
                 <th class="px-4 py-2 font-light">Status</th>
-                <th class="px-4 py-2 font-light">Assignee Company</th>
+                <th class="px-4 py-2 font-light">Work Package</th>
                 <th class="px-4 py-2 font-light">Priority</th>
                 <th class="px-4 py-2 font-light">Date Notified</th>
                 <th class="px-4 py-2 font-light">Date Resolved</th>
@@ -194,6 +205,7 @@
     getAllStatusPeriority();
     let reviewers = {};
 	let priority = {};
+    let packages = {};
 	let status = {};
 	let status_list_labels = {};
 	let status_list_colors = {};
@@ -225,6 +237,7 @@
 			let fetchRes = await fetch(`{{url('project/punch-list/allStatusPeriorityOption')}}`);
 			const all = await fetchRes.json();
 			priority = all.priority;
+            packages = all.packages;
 			status = all.status;
 			status_list_labels = all.status_list_labels;
 			status_list_colors = all.status_list_colors;
@@ -464,7 +477,7 @@ function renderPagination(data) {
     async function deletePunchList(id){
         $('.error').hide(); 
         $('.success').hide();
-		let url =`project/punch-list/destroy/${id}`;		
+		let url =`/project/punch-list/destroy/${id}`;		
 		let fetchRes = await fetch(url);
         if(fetchRes.status != 200){
             $('.error').show();
@@ -534,7 +547,9 @@ function renderPagination(data) {
 							options = priority;
 						}else if(filterName == 'status'){
 							options = status;	
-						}
+                        }else if(filterName == 'work-package'){
+                            options = packages;
+                        }
 						input.onchange = function(e) {get_punch_list(e);}; 
               
 

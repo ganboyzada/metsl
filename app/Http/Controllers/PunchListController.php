@@ -250,7 +250,17 @@ class PunchListController extends Controller
 
     public function getStatusPeriorityOption(Request $request){
         if (Session::has('projectID') && Session::has('projectName')){
-            $projectId = Session::get('projectID');     
+            $projectId = Session::get('projectID'); 
+            $packages_list = [];
+            $packages = $this->companyService->get_work_packages();
+            if($packages->count() > 0){
+                foreach ($packages as $package){
+                    $packages_list[] = ['label'=>$package->name , 'value'=>$package->id];
+                }
+
+            }
+            
+            
             $priority_list = [];           
             $statusPieChart = $this->punchListService->getStatusPieChart($projectId);
             $enums_list = \App\Enums\PunchListPriorityEnum::cases();
@@ -270,17 +280,20 @@ class PunchListController extends Controller
 
             }       
             $punlists_overdue_count= PunchList::where('status','!=',2)->where('project_id',$projectId)
-            ->whereDate('due_date', '<', now()->toDateString())->count();           
+            ->whereDate('due_date', '<', now()->toDateString())->count();  
+            
             
             $overdue = [];
             $assignees = [];
             $next_7_days = [];
             $more_7_days = [];          
-            $punlists = PunchList::join('users','users.id','=','punch_lists.responsible_id')
+            $punlists = PunchList::join('punch_list_assignees','punch_list_assignees.punch_list_id','=','punch_lists.id')
+            ->join('users','users.id','=','punch_list_assignees.user_id')
             ->where('status','!=',2)->where('project_id',$projectId)
-            ->whereDate('due_date', '<', now()->toDateString())->groupBy('users.id')
+            ->whereDate('due_date', '<', now()->toDateString())
+            ->groupBy('users.id')
             ->select(\DB::raw('count(*) as total , users.*'))->get();
-            
+           // dd($punlists); 
             if($punlists->count() > 0){
                 foreach ($punlists as $punlist){
                     $assignees[] = $punlist->name;
@@ -290,10 +303,11 @@ class PunchListController extends Controller
                 }
 
             }
-    
+           // dd($overdue);
             $sevenDaysLater = Carbon::now()->addDays(7)->toDateString();
             
-            $punlists = PunchList::join('users', 'users.id', '=', 'punch_lists.responsible_id')
+            $punlists = PunchList::join('punch_list_assignees','punch_list_assignees.punch_list_id','=','punch_lists.id')
+            ->join('users','users.id','=','punch_list_assignees.user_id')
                 ->select(\DB::raw('count(*) as total , users.*'))
                 ->where('status', '!=', 2)
                 ->where('project_id', $projectId)
@@ -318,7 +332,8 @@ class PunchListController extends Controller
 
                 $sevenDaysLater = Carbon::now()->addDays(7)->toDateString();
             
-                $punlists = PunchList::join('users', 'users.id', '=', 'punch_lists.responsible_id')
+                $punlists = PunchList::join('punch_list_assignees','punch_list_assignees.punch_list_id','=','punch_lists.id')
+                    ->join('users','users.id','=','punch_list_assignees.user_id')
                     ->select(\DB::raw('count(*) as total , users.*'))
                     ->where('status', '!=', 2)
                     ->where('project_id', $projectId)
@@ -340,8 +355,9 @@ class PunchListController extends Controller
                         }
         
                     }
+                  
 
-            return ['priority'=> $priority_list, 
+            return ['priority'=> $priority_list, 'packages'=>$packages_list,
             'status'=> $status_list , 'status_list_labels'=>$status_list_labels , 
             'status_list_colors'=>$status_list_colors , 'statusPieChart'=>$status_list_values,
         

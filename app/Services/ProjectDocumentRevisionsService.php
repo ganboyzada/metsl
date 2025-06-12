@@ -77,12 +77,28 @@ class ProjectDocumentRevisionsService
     }
 
     public function createComment($data){
+            if(isset($data['image']) && $data['image'] != NULL){
+                $file = $data['image'];
+                $fileName = time().'_'.$file->getClientOriginalName();            
+                $data['image'] = $fileName;
+
+            }else{
+                $data['image'] = NULL;
+            }
+
+            $path = Storage::disk('public')->path('/project'.$data['project_id'].'/documents'.$data['project_document_id'].'/comments');            
+            \File::makeDirectory($path, $mode = 0777, true, true);  
+            if(isset($data['image']) && $data['image'] != NULL){
+                Storage::disk('public')->putFileAs('project'.$data['project_id'].'/documents'.$data['project_document_id'].'/comments/', $file, $fileName);
+                
+            }
+        //dd($data);
         return $this->projectDocumentRevisionsRepository->create_comment($data);
 
     }
 
-    public function getRevisionComments($id){
-        return $this->projectDocumentRevisionsRepository->get_revision_comments($id);
+    public function getRevisionComments($id,$type){
+        return $this->projectDocumentRevisionsRepository->get_revision_comments($id,$type);
 
     }
 

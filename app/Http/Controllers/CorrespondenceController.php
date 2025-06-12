@@ -21,6 +21,7 @@ use App\Services\ProjectDocumentFilesService;
 use App\Services\ProjectManagerService;
 use App\Services\ProjectService;
 use App\Services\UserService;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
@@ -53,11 +54,34 @@ class CorrespondenceController extends Controller
         if (Session::has('projectID') && Session::has('projectName')){
             $id = Session::get('projectID');
             $type = $request->type;
+            
+            
+           // return $related_correpondence;
+            $reply_child_correspondence_id = NULL;
+
+
+
             $reply_correspondence_id = $request->correspondece ?? NULL;
             if($reply_correspondence_id != NULL){
+                $this_correpondence = $this->correspondenceService->edit($request->correspondece);
+                if(isset($this_correpondence->id) && $this_correpondence->reply_correspondence_id != NULL){
+                    $reply_correspondence_id = $this_correpondence->reply_correspondence_id;
+                    $reply_child_correspondence_id = $this_correpondence->id;                    
+                }
                 $reply_correspondence = $this->correspondenceService->edit($reply_correspondence_id);
+                //dd($reply_correspondence->assignees()->pluck('users.id')->toArray());
+                //return $reply_correspondence;
 
             }
+            if($reply_child_correspondence_id == NULL){
+                $last_reply_correspondence = $this->correspondenceService->getLastReplyCorrespondence($id , $reply_correspondence_id);
+                if(isset($last_reply_correspondence->id)){
+                    $reply_child_correspondence_id = $last_reply_correspondence->id;
+                }
+            }
+
+
+            $related_correpondences = $this->correspondenceService->allCorrespondenceExceptNCR($id , $reply_correspondence_id);
           //  $next_number =  $this->correspondenceService->getNextNumber($type , $id);
           $files = $this->projectDocumentFilesService->getNewestFilesByProjectId( $id);
 
@@ -73,6 +97,7 @@ class CorrespondenceController extends Controller
             try{
                 $all_data = request()->all();
                 $all_data['created_by'] = \Auth::user()->id;
+                $all_data['due_date'] = Carbon::now()->addDays((int)$all_data['due_days'])->toDateString();
 
                 $all_data['created_date'] = date('Y-m-d');
                 if($all_data['reply_correspondence_id'] == NULL){
@@ -81,15 +106,23 @@ class CorrespondenceController extends Controller
                 }else{
                     $old = $this->correspondenceService->edit($all_data['reply_correspondence_id']);
                     $all_data['number'] =  'Replying to '.$old->number??'';
+                    $all_data['due_days'] =  $old->due_days??5;
+                    $all_data['due_date'] =  $old->due_date??NULL;
+                    $all_data['assignees'] = $old->assignees()->pluck('users.id')->toArray();
+                    $all_data['distribution'] = $old->distributionMembers()->pluck('users.id')->toArray();
+                    if($all_data['reply_child_correspondence_id']   == NULL){
+                        $all_data['reply_child_correspondence_id'] = $all_data['reply_correspondence_id'];
+                    }
+                    
                 }
-
+               // dd($all_data);
                 $model = $this->correspondenceService->create($all_data);
-                if($all_data['reply_correspondence_id'] != NULL){
-                    $new_data['id'] = $all_data['reply_correspondence_id'];
-                    $new_data['status'] = $all_data['status'];
-                    $new_data['project_id'] = $all_data['project_id'];
-                    $this->correspondenceService->update_status($new_data);
-                }
+                // if($all_data['reply_correspondence_id'] != NULL){
+                //     $new_data['id'] = $all_data['reply_correspondence_id'];
+                //     $new_data['status'] = $all_data['status'];
+                //     $new_data['project_id'] = $all_data['project_id'];
+                //     $this->correspondenceService->update_status($new_data);
+                // }
 
             \DB::commit();
             // all good
@@ -104,6 +137,28 @@ class CorrespondenceController extends Controller
         }
     }
 
+    public function close($id){
+        $correspondece = $this->correspondenceService->close($id);
+    }
+
+    public function accept($id){
+        $correspondece = $this->correspondenceService->accept($id);
+    }
+    public function reject($id){
+        $correspondece = $this->correspondenceService->reject($id);
+    }
+
+    public function delay(Request $request){
+        $correspondece = $this->correspondenceService->edit($request->id);
+        $correspondece->due_date = date('Y-m-d', strtotime($correspondece->due_date. ' + '.(int)$request->due_days.' days'));
+        $correspondece->due_days = $correspondece->due_days + (int)$request->due_days;
+        $correspondece->save();
+       // dd($this->correspondenceService->edit($request->id));
+        $correspondece = $this->correspondenceService->updateDueDays($request);
+
+        return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$correspondece]);
+
+    }
     public function edit($id){
         $correspondece = $this->correspondenceService->edit($id);
           $files = $this->projectDocumentFilesService->getNewestFilesByProjectId( Session::get('projectID'));
@@ -170,9 +225,24 @@ class CorrespondenceController extends Controller
         //dd($id);
         $correspondeces = $this->correspondenceService->getAllProjectCorrespondenceOpen($id , $request);
         $correspondeces->map(function($row){
-            return $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];
+            $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];
+        
+               $dueDate = Carbon::parse($row->due_date); // example due date
+            $today = Carbon::today();
+
+            // Compare dates
+            if ($today->greaterThan($dueDate)) {
+                $diff = $today->diffInDays($dueDate);
+                $row->label = "Overdue by $diff days";
+            } else {
+                $diff = $today->diffInDays($dueDate);
+                 $row->label = "Remain $diff days";
+            }
+            return $row;
         });
      
+  
+
         //return $correspondeces;
         return response()->json($correspondeces);
         
@@ -180,19 +250,29 @@ class CorrespondenceController extends Controller
 
     public function find($id){
         $correspondece = $this->correspondenceService->find($id);
-        
+        //dd($correspondece->reply_child_correspondence_id );
         if($correspondece->reply_correspondence_id == NULL){
             $others_correspondeces_realated = $this->correspondenceService->getCorrespondenceReplies($correspondece->project_id , $correspondece->id)->map(function($row){
                 $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];
                 return $row;
             });
         }else{
-            $others_correspondeces_realated = $this->correspondenceService->getCorrespondenceParent($correspondece->project_id , $correspondece->reply_correspondence_id)->map(function($row){
-                $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];
-                return $row;
-            });
+            if($correspondece->reply_child_correspondence_id == $correspondece->reply_correspondence_id){
+                $others_correspondeces_realated = $this->correspondenceService->getCorrespondenceParent($correspondece->project_id , $correspondece->reply_correspondence_id)->map(function($row){
+                    $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];
+                    return $row;
+                });
+
+            }else{
+                $others_correspondeces_realated = $this->correspondenceService->getCorrespondenceParent($correspondece->project_id , $correspondece->reply_child_correspondence_id)->map(function($row){
+                    $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];
+                    return $row;
+                });
+            }
+
 
         }
+        //dd($correspondece);
         return view('metsl.pages.correspondence.view', get_defined_vars());
 
     }

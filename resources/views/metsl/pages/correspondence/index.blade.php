@@ -190,8 +190,11 @@
                     <td class="px-6 py-3">${(row.created_by != null) ? row.created_by.name : ''}</td>
                     <td class="px-6 py-3">${row.created_date}</td>
                     <td class="px-6 py-3">
-                        <span class="px-3 py-1 rounded-full text-xs font-bold ${row.status_color[1]}">${row.status_color[0]}</span>
-                    </td></tr>
+                        <span class="px-3 py-1 rounded-full text-xs font-bold ${row.status_color[1]}">${row.status_color[0]}</span>`;
+                        if(row.changed_by != null){
+                             html+=`</br><small class="text-xs font-semibold">by ${row.changed_by.name}</small>`;
+                        }
+                     html+=`</td></tr>
                 `;
 
 			}
@@ -202,7 +205,7 @@
     async function deleteCorrespondence(id , i){
         $('.error').hide(); 
         $('.success').hide();
-		let url =`project/correspondence/destroy/${id}`;		
+		let url =`/project/correspondence/destroy/${id}`;		
 		let fetchRes = await fetch(url);
         if(fetchRes.status != 200){
             $('.error').show();

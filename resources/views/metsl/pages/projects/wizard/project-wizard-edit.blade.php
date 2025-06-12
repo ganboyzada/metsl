@@ -9,6 +9,42 @@
 @endsection
 
 @section('content')
+<style>
+        .search-container {
+      position: relative;
+      width: 300px;
+    }
+
+    #email {
+      width: 100%;
+      padding: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+    }
+
+    .search-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      border: 1px solid #ccc;
+      border-top: none;
+      background: white;
+      z-index: 1000;
+      max-height: 200px;
+      overflow-y: auto;
+      display: none;
+    }
+
+    .search-results div {
+      padding: 8px;
+      cursor: pointer;
+    }
+
+    .search-results div:hover {
+      background-color: #f0f0f0;
+    }
+</style>
 <div class="bg-green-500 text-white px-2 py-1 text-sm font-semibold hidden success"></div>
 <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
 @if(session()->has('success'))
@@ -42,8 +78,11 @@
     </div>
 
     <!-- Step 1: Project Basics -->
+	@if(checkIfUserHasThisPermission(Session::get('projectID') ,'create_projects') || auth()->user()->id == $project->created_by)
+
     <form id="projectWizard" method="POST" enctype="multipart/form-data">
         @csrf
+	@endif	
         <input type="hidden" name="id" value="{{ $project->id }}"/>
 
         <div id="step1" class="wizard-step">
@@ -132,7 +171,7 @@
 
         <!-- Step 2: Stakeholder Selection -->
         <div id="step2" class="wizard-step hidden">
-            <h2 class="text-2xl font-semibold mb-4">Stakeholder Selection</h2>
+            <h2 class="text-2xl font-semibold mb-4">Project Team Selection</h2>
             
             <div class="grid grid-cols-2 gap-6">
                 <!-- Clients Section -->
@@ -142,10 +181,25 @@
                         @if ($project->clients->count() > 0)
                             @php $i = 0; @endphp
                             @foreach ($project->clients as $selected_user)
-                            <div class="flex items-center mb-2">
-                            <select onchange="map_user_type('client')" name="client[]" id="client{{ $i }}" index="{{ $i }}" class="block w-96 px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200 mr-2">
-                                @foreach ($clients as $user)
-                                <option value="{{ $user->id }}" uuid="{{ $user->user->id }}" {{ $selected_user->id == $user->user->id ? 'selected' : '' }}   >{{ $user->user_name }}</option>`;
+                            <div class="flex items-center mb-2 client{{$i}}">
+                            <select onchange="add_others_data_to_selected_user(this ,'client',{{ $i }})" name="client[]" id="client.{{ $i }}" index="{{ $i }}" class="block w-96 px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200 mr-2">
+                               <option value="" disabled>select client</option>
+                                @foreach ($users as $user)
+                                @if ($selected_user->id == $user->id)
+                                    <option value="{{ $user->id }}" uuid="{{ $user->id }}" image="{{ $user->profile_photo_path }}"
+                                     company="{{ $selected_user->pivot->company_id }}" specialty="{{ $selected_user->pivot->specialty }}"
+                                      office_phone="{{ $selected_user->pivot->office_phone }}"
+                                     
+                                     name="{{ $user->name }}" email="{{ $user->email }}" phone="{{ $user->mobile_phone }}"
+                                     {{ $selected_user->id == $user->id ? 'selected' : '' }}   >{{ $user->name }}</option>
+                                @else
+                                <option value="{{ $user->id }}" uuid="{{ $user->id }}" image="{{ $user->profile_photo_path }}"
+                                     
+                                     name="{{ $user->name }}" email="{{ $user->email }}" phone="{{ $user->mobile_phone }}"
+                                     {{ $selected_user->id == $user->id ? 'selected' : '' }}   >{{ $user->name }}</option>     
+                                    
+                                @endif
+                                
                                 @endforeach
                                
                             </select>
@@ -173,11 +227,26 @@
                         @if ($project->projectMangers->count() > 0)
                             @php $i = 0; @endphp
                             @foreach ($project->projectMangers as $selected_user)
-                                <div class="flex items-center mb-2">
-                                <select onchange="map_user_type('projectManager')" name="projectManager[]" id="projectManager{{ $i }}" index="{{ $i }}" class="block w-96 px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200 mr-2">
-                                    @foreach ($project_managers as $user)
-                                    <option value="{{ $user->id }}" uuid="{{ $user->user->id }}" {{ $selected_user->id == $user->user->id ? 'selected' : '' }}   >{{ $user->user_name }}</option>`;
-                                    @endforeach
+                                <div class="flex items-center mb-2 projectManager{{$i}}">
+                                <select onchange="add_others_data_to_selected_user(this ,'projectManager',{{ $i }})" name="projectManager[]" id="projectManager.{{ $i }}" index="{{ $i }}" class="block w-96 px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200 mr-2">
+                                <option value="" disabled>select projectManager</option>
+                                    @foreach ($users as $user)
+                                @if ($selected_user->id == $user->id)
+                                    <option value="{{ $user->id }}" uuid="{{ $user->id }}" image="{{ $user->profile_photo_path }}"
+                                     company="{{ $selected_user->pivot->company_id }}" specialty="{{ $selected_user->pivot->specialty }}"
+                                      office_phone="{{ $selected_user->pivot->office_phone }}"
+                                     
+                                     name="{{ $user->name }}" email="{{ $user->email }}" phone="{{ $user->mobile_phone }}"
+                                     {{ $selected_user->id == $user->id ? 'selected' : '' }}   >{{ $user->name }}</option>
+                                @else
+                                <option value="{{ $user->id }}" uuid="{{ $user->id }}" image="{{ $user->profile_photo_path }}"
+                                     
+                                     name="{{ $user->name }}" email="{{ $user->email }}" phone="{{ $user->mobile_phone }}"
+                                     {{ $selected_user->id == $user->id ? 'selected' : '' }}   >{{ $user->name }}</option>     
+                                    
+                                @endif
+                                
+                                @endforeach
                                 
                                 </select>
                                 <button type="button" onclick="openCreateUserModal('projectManager' , '{{ $i }}')" class="p-2 rounded-md bg-orange-600 inline-flex text-white">
@@ -205,10 +274,25 @@
                         @if ($project->designTeams->count() > 0)
                             @php $i = 0; @endphp
                             @foreach ($project->designTeams as $selected_user)
-                            <div class="flex items-center mb-2">
-                                <select onchange="map_user_type('designTeam')" name="designTeam[]" id="designTeam{{ $i }}" index="{{ $i }}" class="block w-96 px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200 mr-2">
-                                    @foreach ($design_teams as $user)
-                                        <option value="{{ $user->id }}" uuid="{{ $user->user->id }}" {{ $selected_user->id == $user->user->id ? 'selected' : '' }}   >{{ $user->user_name }}</option>`;
+                            <div class="flex items-center mb-2 designTeam{{$i}}">
+                                <select onchange="add_others_data_to_selected_user(this ,'designTeam',{{ $i  }})" name="designTeam[]" id="designTeam.{{ $i }}" index="{{ $i }}" class="block w-96 px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200 mr-2">
+                                    <option value="" disabled>select designTeam</option>
+                                    @foreach ($users as $user)
+                                    @if ($selected_user->id == $user->id)
+                                        <option value="{{ $user->id }}" uuid="{{ $user->id }}" image="{{ $user->profile_photo_path }}"
+                                        company="{{ $selected_user->pivot->company_id }}" specialty="{{ $selected_user->pivot->specialty }}"
+                                        office_phone="{{ $selected_user->pivot->office_phone }}"
+                                        
+                                        name="{{ $user->name }}" email="{{ $user->email }}" phone="{{ $user->mobile_phone }}"
+                                        {{ $selected_user->id == $user->id ? 'selected' : '' }}   >{{ $user->name }}</option>
+                                    @else
+                                    <option value="{{ $user->id }}" uuid="{{ $user->id }}" image="{{ $user->profile_photo_path }}"
+                                        
+                                        name="{{ $user->name }}" email="{{ $user->email }}" phone="{{ $user->mobile_phone }}"
+                                        {{ $selected_user->id == $user->id ? 'selected' : '' }}   >{{ $user->name }}</option>     
+                                        
+                                    @endif
+                                    
                                     @endforeach
                                 
                                 </select>
@@ -237,10 +321,25 @@
                         @php $i = 0; @endphp
                         
                         @foreach ($project->contractors as $selected_user)
-                        <div class="flex items-center mb-2">
-                            <select onchange="map_user_type('contractor')" name="contractor[]" id="contractor{{ $i }}" index="{{ $i }}" class="block w-96 px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200 mr-2">
-                                @foreach ($contractors as $user)
-                                    <option value="{{ $user->id }}" uuid="{{ $user->user->id }}" {{ $selected_user->id == $user->user->id ? 'selected' : '' }}   >{{ $user->user_name }}</option>`;
+                        <div class="flex items-center mb-2 contractor{{$i}}">
+                            <select onchange="add_others_data_to_selected_user(this ,'contractor',{{ $i }})" name="contractor[]" id="contractor.{{ $i }}" index="{{ $i }}" class="block w-96 px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200 mr-2">
+                                <option value="" disabled>select contractor</option>
+                                @foreach ($users as $user)
+                                @if ($selected_user->id == $user->id)
+                                    <option value="{{ $user->id }}" uuid="{{ $user->id }}"  image="{{ $user->profile_photo_path }}"
+                                     company="{{ $selected_user->pivot->company_id }}" specialty="{{ $selected_user->pivot->specialty }}"
+                                      office_phone="{{ $selected_user->pivot->office_phone }}"
+                                     
+                                     name="{{ $user->name }}" email="{{ $user->email }}" phone="{{ $user->mobile_phone }}"
+                                     {{ $selected_user->id == $user->id ? 'selected' : '' }}   >{{ $user->name }}</option>
+                                @else
+                                <option value="{{ $user->id }}" uuid="{{ $user->id }}"  image="{{ $user->profile_photo_path }}"
+                                     
+                                     name="{{ $user->name }}" email="{{ $user->email }}" phone="{{ $user->mobile_phone }}"
+                                     {{ $selected_user->id == $user->id ? 'selected' : '' }}   >{{ $user->name }}</option>     
+                                    
+                                @endif
+                                
                                 @endforeach
                             
                             </select>
@@ -301,23 +400,29 @@
 
             <!-- Display summary of project details -->
             <button type="button" onclick="showStep(3)" class="bg-gray-500 text-white px-4 py-2 rounded mt-4 mr-2">Back</button>
-            <button type="submit"id="submit_project_form" class="bg-green-500 text-white px-4 py-2 rounded mt-4">Submit Project</button>
-        </div>
+            @if(checkIfUserHasThisPermission(Session::get('projectID') ,'create_projects') || auth()->user()->id == $project->created_by)
+
+			<button type="submit"id="submit_project_form" class="bg-green-500 text-white px-4 py-2 rounded mt-4">Submit Project</button>
+			@endif
+		</div>
+	@if(checkIfUserHasThisPermission(Session::get('projectID') ,'create_projects') || auth()->user()->id == $project->created_by)
+
     </form>
-            <!-- Overlay Modal for Creating New User -->
-            <div id="createUserModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-                <div class="bg-white dark:bg-gray-800  p-6 w-full max-w-md">
-                    <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200">Create New User</h3>
+	@endif
+       <div id="createUserModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+                <div class="bg-white dark:bg-gray-800 p-6 w-full max-w-md">
+                    <h3 class="text-xl font-semibold mb-4 text-gray-700 dark:text-gray-200" id="model_user_title">Create New User</h3>
                     <div class="bg-red-500 text-white px-2 py-1 text-sm font-semibold hidden error"></div>
     
     
                     <form id="createUserForm"   enctype="multipart/form-data">
                         @csrf
                         <input type="hidden" id="user_type" name="user_type">
+                        <input type="hidden" id="user_id" name="user_id">
                         <input type="hidden" id="user_index" name="user_index">
                         <div class="mb-4">
                             <label class="block text-gray-700 dark:text-gray-200 mb-1">image</label>
-                            <input   accept="image/*" type="file" name="image" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" >
+                            <input   accept="image/*" id="profile_image" type="file" name="image" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" >
                         </div>                    
                         
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -330,34 +435,40 @@
                                 @endforeach
                                 </select>
                             </div>
+
+
+                            <div class="search-container md:col-span-2">
+                                <label class="block text-gray-700 dark:text-gray-200 mb-1">Email (Login Credential)</label>
+                                <input type="email" id="email" name="email" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                                <div id="results" class="search-results"></div>
+                            </div>
+
+
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-200 mb-1">Name</label>
-                                <input type="text" name="first_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                                <input type="text" id="first_name" name="first_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-200 mb-1">Surname</label>
-                                <input type="text" name="last_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                                <input type="text" id="last_name" name="last_name" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-200 mb-1">Mobile Phone</label>
-                                <input type="text" name="mobile_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                                <input type="text" id="phone" name="mobile_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
                             </div>
                             <div>
                                 <label class="block text-gray-700 dark:text-gray-200 mb-1">Office Phone</label>
-                                <input type="text" name="office_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                                <input type="text" name="office_phone" id="office_phone" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
                             </div>
-                            <div class="md:col-span-2">
-                                <label class="block text-gray-700 dark:text-gray-200 mb-1">Email (Login Credential)</label>
-                                <input type="email" name="email" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
-                            </div>
+
                             <div class="md:col-span-2">
                                 <label class="block text-gray-700 dark:text-gray-200 mb-1">Specialty</label>
-                                <input type="text" name="specialty" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
+                                <input type="text" name="specialty" id="specialty" class="w-full px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200" required>
                             </div>
                         </div>
                         <div class="flex justify-end mt-6">
                             <button type="button" onclick="closeCreateUserModal()" class="text-gray-600 dark:text-gray-300 mr-3">Cancel</button>
-                            <button type="submit" id="submitBtn" class="bg-blue-500 text-white px-4 py-2 rounded">Create User</button>
+                            <button type="submit" id="submitBtn" class="bg-blue-500 text-white px-4 py-2">Please Confirm</button>
                         </div>
                     </form>
                 </div>
@@ -415,7 +526,9 @@
     
                         <div class="flex justify-end mt-6">
                             <button type="button" onclick="closeRoleAssignmentModal()" class="text-gray-600 dark:text-gray-300 mr-3">Cancel</button>
-                            <button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+                             @if(checkIfUserHasThisPermission(Session::get('projectID') ,'create_projects') || auth()->user()->id == $project->created_by)
+							<button type="submit" class="bg-blue-500 text-white px-4 py-2 rounded">Save</button>
+							@endif
                         </div>
                     </form>
                 </div>
@@ -429,6 +542,105 @@
 
 <!-- JavaScript for Wizard Step Navigation -->
 <script>
+        const searchInput  = document.getElementById("email");
+    const resultsDiv = document.getElementById("results");
+    const firstNameInput = document.getElementById("first_name");
+    const lastNameInput = document.getElementById("last_name");
+    const phoneInput = document.getElementById("phone");
+    const user_id = document.getElementById("user_id");
+
+ let debounceTimer;
+
+    searchInput.addEventListener("input", function () {
+      const query = this.value.trim();
+      clearTimeout(debounceTimer);
+
+      if (!query) {
+        resultsDiv.style.display = "none";
+        return;
+      }
+
+      debounceTimer = setTimeout(() => {
+        fetch(`/project/users/search-users?search=${encodeURIComponent(query)}`)
+          .then(res => res.json())
+          .then(data => {
+            resultsDiv.innerHTML = "";
+            if (!data.length) {
+              resultsDiv.style.display = "none";
+              return;
+            }
+
+            data.forEach(user => {
+              const div = document.createElement("div");
+              div.textContent = `${user.email} (${user.name})`;
+
+              div.addEventListener("click", () => {
+
+                  let filtered_contractor_stakeholders = contractor_stakeholders.filter(function (ele) {
+                        return ele.id == user.id;
+                    });
+                    let filtered_designTeam_stakeholders = designTeam_stakeholders.filter(function (ele) {
+                        return ele.id == user.id;
+                    });
+                    let filtered_projectManager_stakeholders = projectManager_stakeholders.filter(function (ele) {
+                        return ele.id == user.id;
+                    });
+                    let filtered_client_stakeholders = client_stakeholders.filter(function (ele) {
+                        return ele.id == user.id;
+                    });
+
+                if(filtered_contractor_stakeholders.length > 0 || filtered_designTeam_stakeholders.length > 0 || filtered_projectManager_stakeholders.length > 0 || filtered_client_stakeholders.length > 0){
+                    alert('this user has already been added');
+                    firstNameInput.value = '';
+                    lastNameInput.value = '';
+                    phoneInput.value = '';
+                    searchInput.value = '';
+                    user_id.value = '';
+                    resultsDiv.style.display = "none";
+                  //  document.getElementById("profile_image").src = "{{ asset('images/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.webp') }}";
+                    return false;
+                }else{
+                    const nameParts = user.name.trim().split("_");
+                    const firstName = nameParts[0];
+                    const lastName = nameParts.slice(1).join(" "); // Join rest as last name
+
+                    // Fill fields
+                    firstNameInput.value = firstName;
+                    lastNameInput.value = lastName;
+                    phoneInput.value = user.mobile_phone;
+                    searchInput.value = user.email;
+                    user_id.value = user.id;
+                  //  document.getElementById("profile_image").src = user.profile_photo_path;
+
+                    resultsDiv.style.display = "none";
+                }
+
+                // Split full name
+
+              });
+
+              resultsDiv.appendChild(div);
+            });
+
+            resultsDiv.style.display = "block";
+          })
+          .catch(err => {
+            console.error("Search error:", err);
+            resultsDiv.innerHTML = "<div>Error loading results</div>";
+            resultsDiv.style.display = "block";
+          });
+      }, 300); // debounce
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!document.querySelector(".search-container").contains(e.target)) {
+        resultsDiv.style.display = "none";
+      }
+    });
+
+
+
+
     function loadFiles(event) {
 	    var html = '';
 	    if(event.target.files.length > 0){
@@ -548,10 +760,10 @@
     
         
     $("#createUserForm").on("submit", function(event) {
+        event.preventDefault();
         $('.err-msg').hide();
         $(".error").html("");
         $(".error").hide();
-        event.preventDefault();  
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
@@ -575,20 +787,75 @@
                     $("#submitBtn").prop('disabled', false); 
                     const type = $('#user_type').val();
                     const index = $('#user_index').val();
+                    const company = $('#user_company').val();
+               //#ccc     alert(data.data.id);
+                    if(document.getElementById('user_id').value == '' || document.getElementById('user_id').value == null ){
+                       // alert(data.data.id+'**************');
+                        //alert(`${type}.${index}`);
+                      
+                        const select = document.getElementById(`${type}.${index}`);
+                        const opt = document.createElement('option');
+                        opt.value = data.data.id;
+                        opt.uuid = data.data.id;
+                        opt.name = document.getElementById('first_name').value+'_'+document.getElementById('last_name').value;
+                        opt.email = document.getElementById('email').value;
+                        opt.phone = document.getElementById('phone').value;
+                        opt.specialty = document.getElementById('specialty').value;
+                        opt.company = document.getElementById('user_company').value;
+                        opt.office_phone = document.getElementById('office_phone').value;
+                        opt.image = data.data.profile_photo_path;
 
-                    const select = document.getElementById(`${type}.${index}`);
-                    const opt = document.createElement('option');
-                    opt.value = data.data.id;
-                    opt.uuid = data.user.id;
-                    opt.company = (data.company != null)?data.company.name : '';
-                    opt.setAttribute("uuid",data.user.id);
-                    opt.innerHTML = data.data.user_name;
-                    select.appendChild(opt);
-                    document.getElementById(`${type}.${index}`).value = data.data.id;
-                    
+                        opt.setAttribute("image",data.data.profile_photo_path);
+
+                        opt.setAttribute("uuid",data.data.id);
+                        opt.setAttribute("name",document.getElementById('first_name').value+'_'+document.getElementById('last_name').value);
+                        opt.setAttribute("email",document.getElementById('email').value);
+                        opt.setAttribute("phone",document.getElementById('phone').value);
+
+                        opt.setAttribute("specialty",document.getElementById('specialty').value);
+                        opt.setAttribute("company",document.getElementById('user_company').value);
+                        opt.setAttribute("office_phone",document.getElementById('office_phone').value);
+
+                        opt.innerHTML = data.data.name;
+
+                        
+                        select.appendChild(opt);
+
+                          document.getElementById(`${type}.${index}`).value = data.data.id;
+                       // $(`#${type}.${index}`).val(data.data.id);
+                        
+                    }else{
+                      //  alert(index);
+                        document.getElementById(`${type}.${index}`).value = data.data.id;
+                       // alert(document.getElementById(`${type}.${index}`).selectedIndex);
+                        const select = document.getElementById(`${type}.${index}`).options[document.getElementById(`${type}.${index}`).selectedIndex];
+                        console.log(select);
+                        
+                        select.name = document.getElementById('first_name').value+'_'+document.getElementById('last_name').value;
+                        select.email = document.getElementById('email').value;
+                        select.phone = document.getElementById('phone').value;
+                        select.specialty = document.getElementById('specialty').value;
+                        select.company = document.getElementById('user_company').value;
+                        select.office_phone = document.getElementById('office_phone').value;
+                        select.image = data.data.profile_photo_path;
+
+                        select.setAttribute("image",data.data.profile_photo_path);
+
+                        select.setAttribute("uuid",data.data.id);
+                        select.setAttribute("name",document.getElementById('first_name').value+'_'+document.getElementById('last_name').value);
+                        select.setAttribute("email",document.getElementById('email').value);
+                        select.setAttribute("phone",document.getElementById('phone').value);
+
+                        select.setAttribute("specialty",document.getElementById('specialty').value);
+                        select.setAttribute("company",document.getElementById('user_company').value);
+                        select.setAttribute("office_phone",document.getElementById('office_phone').value);
+
+
+                        console.log(select);
+                    }
 
                     map_user_type(type);
-                    $("#createUserForm")[0].reset(); 
+                   // $("#createUserForm")[0].reset(); 
                     document.getElementById("createUserModal").classList.add("hidden");
 
                 
@@ -617,6 +884,53 @@
     let projectManager_stakeholders =  {!! json_encode($project->project_managers_permissions) !!};
     let client_stakeholders =  {!! json_encode($project->clients_permissions) !!};
     let  contractor_stakeholders = {!! json_encode($project->contractors_permissions) !!};
+
+
+
+
+    	
+    function add_others_data_to_selected_user(select , type , length){
+
+
+        
+        const selectedOption = select.options[select.selectedIndex];
+
+        let filtered_contractor_stakeholders = contractor_stakeholders.filter(function (ele) {
+            return ele.id == selectedOption.getAttribute('uuid');
+        });
+        let filtered_designTeam_stakeholders = designTeam_stakeholders.filter(function (ele) {
+            return ele.id == selectedOption.getAttribute('uuid');
+        });
+        let filtered_projectManager_stakeholders = projectManager_stakeholders.filter(function (ele) {
+            return ele.id == selectedOption.getAttribute('uuid');
+        });
+        let filtered_client_stakeholders = client_stakeholders.filter(function (ele) {
+            return ele.id == selectedOption.getAttribute('uuid');
+        });
+
+        console.log(contractor_stakeholders);
+
+        if(filtered_contractor_stakeholders.length > 0 || filtered_designTeam_stakeholders.length > 0 || filtered_projectManager_stakeholders.length > 0 || filtered_client_stakeholders.length > 0){
+            select.value = '';
+            alert('this user has already been added');
+            return false;
+        }else{
+            openCreateUserModal(type , length);
+            const nameParts = selectedOption.getAttribute('name').trim().split("_");
+            const firstName = nameParts[0];
+            const lastName = nameParts.slice(1).join(" "); // Join rest as last name
+            $('#model_user_title').html('User '+selectedOption.getAttribute('name'));
+            document.getElementById("email").value = selectedOption.getAttribute('email');
+            document.getElementById("user_id").value = selectedOption.getAttribute('uuid');
+            document.getElementById("first_name").value = firstName;
+            document.getElementById("last_name").value = lastName;
+            document.getElementById("phone").value = (selectedOption.getAttribute('phone') == 'null')?'':selectedOption.getAttribute('phone');
+            //document.getElementById("profile_image").src = selectedOption.getAttribute('image');
+        }
+
+
+
+    }
     
     //console.log(contractor_stakeholders);
     //console.log(designTeam_stakeholders);
@@ -638,10 +952,14 @@ function map_user_type(type){
 						client_stakeholders[idx].id = parseInt($(ele).find(":selected").attr('uuid'));
 						client_stakeholders[idx].name = $(ele).find(":selected").text();
                         client_stakeholders[idx].company = $(ele).find(":selected").attr('company');
+                         client_stakeholders[idx].specialty = $(ele).find(":selected").attr('specialty');
+                         client_stakeholders[idx].office_phone = $(ele).find(":selected").attr('office_phone');
 						
 					}else{
 						
-						client_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(), 'company':$(ele).find(":selected").attr('company'),  'role': "" , 'job_title': "", 'permissions': [] , 'type':type});
+						client_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(),
+                        'specialty':$(ele).find(":selected").attr('specialty'),'office_phone':$(ele).find(":selected").attr('office_phone'),
+                         'company':$(ele).find(":selected").attr('company'),  'role': "" , 'job_title': "", 'permissions': [] , 'type':type});
 					}                   
 
                 }
@@ -649,15 +967,21 @@ function map_user_type(type){
             }).get();           
         }else if(type == 'contractor'){
             $("select[name='"+type+"[]']").map(function (idx, ele) {
+                               // alert($(ele).find(":selected").attr('specialty'));
+
                 if($(ele).val() != '' && $.isNumeric($(ele).val())){
 					if (typeof contractor_stakeholders[idx] !== 'undefined') {
 						contractor_stakeholders[idx].id = parseInt($(ele).find(":selected").attr('uuid'));
 						contractor_stakeholders[idx].name = $(ele).find(":selected").text();
                         contractor_stakeholders[idx].company = $(ele).find(":selected").attr('company');
+                        contractor_stakeholders[idx].specialty = $(ele).find(":selected").attr('specialty');
+                        contractor_stakeholders[idx].office_phone = $(ele).find(":selected").attr('office_phone');
 						
 					}else{
 						
-						contractor_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(), 'company':$(ele).find(":selected").attr('company'), 'role': "", 'job_title': "",'permissions': [] , 'type':type});
+						contractor_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(), 
+                        'specialty':$(ele).find(":selected").attr('specialty'),'office_phone':$(ele).find(":selected").attr('office_phone'),
+                        'company':$(ele).find(":selected").attr('company'), 'role': "", 'job_title': "",'permissions': [] , 'type':type});
 					}
                 }
             
@@ -671,9 +995,13 @@ function map_user_type(type){
 						designTeam_stakeholders[idx].id = parseInt($(ele).find(":selected").attr('uuid'));
 						designTeam_stakeholders[idx].name = $(ele).find(":selected").text();
 						designTeam_stakeholders[idx].company = $(ele).find(":selected").attr('company');
+                        designTeam_stakeholders[idx].specialty = $(ele).find(":selected").attr('specialty');
+                         designTeam_stakeholders[idx].office_phone = $(ele).find(":selected").attr('office_phone');
 					}else{
 						
-						designTeam_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(), 'company':$(ele).find(":selected").attr('company'), 'role': "", 'job_title': "",'permissions': [] , 'type':type});
+						designTeam_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(), 
+                        'specialty':$(ele).find(":selected").attr('specialty'),'office_phone':$(ele).find(":selected").attr('office_phone'),
+                        'company':$(ele).find(":selected").attr('company'), 'role': "", 'job_title': "",'permissions': [] , 'type':type});
 					}
 
                 }
@@ -687,16 +1015,23 @@ function map_user_type(type){
 						projectManager_stakeholders[idx].id = parseInt($(ele).find(":selected").attr('uuid'));
 						projectManager_stakeholders[idx].name = $(ele).find(":selected").text();
 						projectManager_stakeholders[idx].company = $(ele).find(":selected").attr('company');
+                        projectManager_stakeholders[idx].specialty = $(ele).find(":selected").attr('specialty');
+                         projectManager_stakeholders[idx].office_phone = $(ele).find(":selected").attr('office_phone');
 					}else{
 						
-						projectManager_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(), 'company':$(ele).find(":selected").attr('company'), 'role': "", 'job_title': "", 'permissions': [] , 'type':type});
+						projectManager_stakeholders.push({'id':parseInt($(ele).find(":selected").attr('uuid')) , 'name':$(ele).find(":selected").text(), 
+                        'specialty':$(ele).find(":selected").attr('specialty'),'office_phone':$(ele).find(":selected").attr('office_phone'),
+                        'company':$(ele).find(":selected").attr('company'), 'role': "", 'job_title': "", 'permissions': [] , 'type':type});
 					}					
 
                 }
             
             }).get(); 
         }
-		
+			console.log(designTeam_stakeholders);
+        console.log(projectManager_stakeholders);
+        console.log(contractor_stakeholders);
+        console.log(client_stakeholders);
 		renderStakeholderGrid();
     }
     
@@ -722,7 +1057,23 @@ function map_user_type(type){
     }
 
     // Toggle visibility of Create User Modal
+    let model_type =  '';
+    let model_index = '';
+    // Toggle visibility of Create User Modal
     function openCreateUserModal(type , length) {
+        $('#model_user_title').html('Create New User ');
+        document.getElementById("email").value = '';
+        document.getElementById("user_id").value = '';
+        document.getElementById("first_name").value = '';
+        document.getElementById("last_name").value = '';
+        document.getElementById("phone").value = '';
+        document.getElementById("specialty").value = '';
+        document.getElementById("office_phone").value = '';
+        document.getElementById("user_company").value = '';
+        //document.getElementById("profile_image").src = "{{ asset('images/depositphotos_133351928-stock-illustration-default-placeholder-man-and-woman.webp') }}";
+
+        model_type = type;
+        model_index = length;
         $('#user_type').val(type);
         $('#user_index').val(length);
         document.getElementById("createUserModal").classList.remove("hidden");
@@ -731,45 +1082,77 @@ function map_user_type(type){
     function closeCreateUserModal() {
         $('#user_type').val('');
         $('#user_index').val('');
+        //alert(`${model_type}.${model_index}`);
+        let option  = document.getElementById(`${model_type}.${model_index}`).options[document.getElementById(`${model_type}.${model_index}`).selectedIndex];
+        let specialty = option.getAttribute('specialty');
+        let company = option.getAttribute('company');
+        let office_phone = option.getAttribute('office_phone');
+        console.log(specialty+'///////////');
+        if(specialty == null || company == null || office_phone == null){
+            document.getElementById(`${model_type}.${model_index}`).value = '';
+        }
+        
         document.getElementById("createUserModal").classList.add("hidden");
     }
-
     // Add a new stakeholder to the respective section
     function addStakeholder(type) {
-        const clients = {!! json_encode($clients) !!};
-        const contractors = {!! json_encode($contractors) !!};
-        const design_teams = {!! json_encode($design_teams) !!};
-        const project_managers = {!! json_encode($project_managers) !!};
+    
         const companies = {!! json_encode($companies) !!}
         //console.log(contractors);
+        const users = {!! json_encode($users) !!};
+
         var client_html = ``;
-        for (let x in clients) {
-            client_html+=`<option value="${clients[x].id}" company="${clients[x].user.company_id ? companies[clients[x].user.company_id].name : ''}"  uuid="${clients[x].user.id}">${clients[x].user_name}</option>`;           
+        for (let x in users) {
+            if(users[x].is_admin == 0){
+                client_html+=`<option value="${users[x].id}"  image="${users[x].profile_photo_path}" name="${users[x].name}" email="${users[x].email}" phone="${users[x].mobile_phone}"   uuid="${users[x].id}">${users[x].name}</option>`;           
+
+
+            }
         }
 
         var contractor_html = ``;
-        for (let x in contractors) {
-            contractor_html+=`<option value="${contractors[x].id}" company="${contractors[x].user.company_id ? companies[contractors[x].user.company_id].name : ''}" uuid="${contractors[x].user.id}">${contractors[x].user_name}</option>`;
-        
+        for (let x in users) {
+            if(users[x].is_admin == 0){
+                contractor_html+=`<option value="${users[x].id}"  image="${users[x].profile_photo_path}" name="${users[x].name}" email="${users[x].email}" phone="${users[x].mobile_phone}"   uuid="${users[x].id}">${users[x].name}</option>`;           
+            }
         }
 
         var designTeam_html = ``;
-        for (let x in design_teams) {
-            designTeam_html+=`<option value="${design_teams[x].id}" company="${design_teams[x].user.company_id ? companies[design_teams[x].user.company_id].name : ''}" uuid="${design_teams[x].user.id}">${design_teams[x].user_name}</option>`;
-        }   
+        for (let x in users) {
+            if(users[x].is_admin == 0){
+                designTeam_html+=`<option value="${users[x].id}"  image="${users[x].profile_photo_path}" name="${users[x].name}" email="${users[x].email}" phone="${users[x].mobile_phone}"   uuid="${users[x].id}">${users[x].name}</option>`;           
         
+            }   
+        }
 
         var projectManager_html = ``;
-        for (let x in project_managers) {
-            projectManager_html+=`<option value="${project_managers[x].id}" company="${project_managers[x].user.company_id ? companies[project_managers[x].user.company_id].name : ''}" uuid="${project_managers[x].user.id}">${project_managers[x].user_name}</option>`;
+        for (let x in users) {
+            if(users[x].is_admin == 0){
+                projectManager_html+=`<option value="${users[x].id}"  image="${users[x].profile_photo_path}" name="${users[x].name}" email="${users[x].email}" phone="${users[x].mobile_phone}"   uuid="${users[x].id}">${users[x].name}</option>`;           
+        
+            }
         }
+
 
         const listElement = document.getElementById(`${type}List`);
         const newStakeholder = document.createElement("div");
-        newStakeholder.classList.add("flex", "items-center", "mb-2");
+        //(document.getElementById(type+"List").childElementCount);
         const length = document.getElementById(type+"List").childElementCount;
+       if(document.getElementById(type+"List").childElementCount == 0){
+            newStakeholder.index = `0`;
+           // var length = 0;
+        }else{
+            console.log(document.getElementById(type+"List").lastElementChild.index);
+            //var length = parseInt(document.getElementById(type+"List").lastElementChild.index) + 1;
+                newStakeholder.index = length;
+        }
+
+       // alert(length);
+
+        newStakeholder.classList.add("flex", "items-center", "mb-2",`${type}${length}`);
+        //const length = document.getElementById(type+"List").childElementCount;
         var html = `
-            <select onchange="map_user_type('${type}')" name="${type}[]" id="${type}.${length}" index="${length}" class="block w-96 px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200 mr-2">
+            <select onchange="add_others_data_to_selected_user(this, '${type}', ${length});" name="${type}[]"  id="${type}.${length}" index="${length}" class="block w-96 px-4 py-2 border  dark:bg-gray-700 dark:text-gray-200 mr-2">
                 <option value="" disabled selected>Select ${type.charAt(0).toUpperCase() + type.slice(1)}</option>`;
                 if(type == 'client'){
                     html+=client_html;

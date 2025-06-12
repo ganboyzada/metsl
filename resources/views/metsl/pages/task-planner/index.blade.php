@@ -183,7 +183,12 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', () => {
-		assignees_obj = populateChoices2('assignees', [], true);		
+        if(localStorage.getItem("project_tool") == 'task_planner'){
+            assignees_obj = populateChoices2('assignees', [], true);	
+            get_groups();
+            get_tasks();
+        }		
+	
     }); 
 
     async function set_projectID_tasks(){
@@ -192,9 +197,7 @@
         // let url = `/project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
 
         // let fetchRes = await fetch(url);
-        get_groups();
-            get_tasks();		
-
+ 
     }
 
     // $(".projectButton").on('click',function(event) {
@@ -610,7 +613,7 @@
         var st = checkboxElement.checked ? 1 : 0;
         $('.error').hide(); 
         $('.success').hide();
-		let url =`project/tasks/change-status/${id}/${st}`;		
+		let url =`/project/tasks/change-status/${id}/${st}`;		
 		let fetchRes = await fetch(url);
         if(fetchRes.status != 200){
             $('.error').show();

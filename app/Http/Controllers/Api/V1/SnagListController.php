@@ -49,8 +49,7 @@ class SnagListController extends Controller
         }
         
         if($permission == 'reply' && isset($punch_list->id)){
-            if(checkIfUserHasThisPermission($project_id ,'responsible_punch_list') ||
-            checkIfUserHasThisPermission($project_id ,'distribution_members_punch_list') ||
+            if(checkIfUserHasThisPermission($project_id ,'responsible_punch_list')  ||
             $punch_list->created_by == auth()->user()->id
             ){
                 return $this->sendResponse(['status' => true], "You are allowed to add reply.");
@@ -60,8 +59,7 @@ class SnagListController extends Controller
 
         }
         else if($permission == 'update'  && isset($punch_list->id)){
-            if(checkIfUserHasThisPermission($project_id ,'responsible_punch_list') ||
-            checkIfUserHasThisPermission($project_id ,'distribution_members_punch_list') ||
+            if(checkIfUserHasThisPermission($project_id ,'responsible_punch_list')  ||
             $punch_list->created_by == auth()->user()->id
             ){
                 return $this->sendResponse(['status' => true], "You are allowed to update.");

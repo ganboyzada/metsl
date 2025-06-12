@@ -8,6 +8,7 @@ use App\Http\Requests\CorrespondenceRequest;
 use App\Http\Requests\DocumentRequest;
 use App\Http\Requests\PackageRequest;
 
+use App\Http\Requests\SubFolderRequest;
 use App\Services\ClientService;
 use App\Services\ContractorService;
 use App\Services\DesignTeamService;
@@ -100,6 +101,65 @@ class DocumentController extends Controller
 		});	
 			
         return $documents;
+    }
+
+    public function ProjectDocumentsPackages(Request $request){
+        $id = Session::get('projectID');
+        $packages = $this->documentService->getAllProjectDocumentsPackages($id , $request); 
+		$packages->map(function($row){
+			$startDate = Carbon::parse($row->created_at);
+            $endDate = Carbon::now(); // أفضل من date('Y-m-d') لأنه يضمن تنسيق Carbon
+
+            if ($startDate->diffInDays($endDate) > 0) {
+                $daysAgo = $startDate->diffInDays($endDate);
+                return  $row->created_date = (int)$daysAgo . ' days ago';
+            }
+			
+		});	
+			
+        return $packages;  
+    }
+
+    public function ProjectDocumentsPackage(Request $request , $id){
+        $package_detail = $this->documentService->getPackage($id , $request);
+       // return $package;
+        	$package_detail->subFolders->map(function($row){
+			$startDate = Carbon::parse($row->created_at);
+            $endDate = Carbon::now(); // أفضل من date('Y-m-d') لأنه يضمن تنسيق Carbon
+
+            if ($startDate->diffInDays($endDate) > 0) {
+                $daysAgo = $startDate->diffInDays($endDate);
+                return  $row->created_date = (int)$daysAgo . ' days ago';
+            }
+			
+		});	
+        //return $package;
+        return view('metsl.pages.documents.package', compact('package_detail'));
+    }
+
+    public function ProjectDocumentsPackageSubfolder(Request $request , $id){
+        $package_subfolder = $this->documentService->getSubFolder($id , $request);
+        $package_detail = $this->documentService->getPackage($package_subfolder->id , $request);
+        //return $package_subfolder;
+        return view('metsl.pages.documents.package_subfolder', compact('package_subfolder','package_detail'));
+    }
+
+
+        public function ProjectDocumentsPackageSubfolders(Request $request , $id){
+        $package = $this->documentService->getPackage($id , $request);
+       // return $package;
+        	$package->subFolders->map(function($row){
+			$startDate = Carbon::parse($row->created_at);
+            $endDate = Carbon::now(); // أفضل من date('Y-m-d') لأنه يضمن تنسيق Carbon
+
+            if ($startDate->diffInDays($endDate) > 0) {
+                $daysAgo = $startDate->diffInDays($endDate);
+                return  $row->created_date = (int)$daysAgo . ' days ago';
+            }
+			
+		});	
+        //return $package;
+        return $package->subFolders;
     }
 
     public function ProjectDocumentsAssigned(Request $request){
@@ -195,7 +255,24 @@ class DocumentController extends Controller
             return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$package]);
 
         }
-    } 
+    }
+    
+    public function store_subfolder(SubFolderRequest  $request){
+       if($request->validated()){
+            \DB::beginTransaction();
+            try{
+                $all_data = request()->all();
+                $package = \App\Models\PackageSubFolders::create($all_data);  
+            \DB::commit();            
+            } catch (\Exception $e) {
+                \DB::rollback();
+                return response()->json(['error' => $e->getMessage()]);
+            }
+        
+            return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$package]);
+
+        }
+    }
     
     public function update_status(Request $request){
         return $this->documentService->updateStatus($request->id , $request->status);

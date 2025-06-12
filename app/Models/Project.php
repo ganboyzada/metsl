@@ -32,7 +32,7 @@ class Project extends Model
     public  static function boot(){
         parent::boot();
         static::pivotSynced(function ($model, $relationName, $changes) {
-            
+           // dd($changes);
             if(count($changes['attached']) > 0){
                 
                 foreach($changes['attached'] as $stakholder_id){
@@ -70,7 +70,30 @@ class Project extends Model
         });    
     
         static::pivotAttached(function ($model, $relationName, $pivotIds, $pivotIdsAttributes) {
-      
+            
+            
+            if(count($pivotIdsAttributes) > 0){
+                
+                foreach($pivotIdsAttributes as $key=>$row){
+                    $user = User::find($key); 
+                    $job_title = $row['type'];
+             
+                    if($user->send_email_before == 0){
+                        $pass = str()->random(8);
+                        $user->password = Hash::make($pass);
+                        $user->save();
+                    }else{
+                        $pass = '';;
+                    }
+                    
+                    //dd($user);
+                    $project_name = $model->name;
+                    $m = \Mail::to($user->email)->send(new StakholderEmail($project_name , $job_title , $user->email ,$pass )); 
+                    $user->send_email_before = 1;
+                        $user->save();
+                }
+            }
+
         });
         
         static::pivotUpdated(function ($model, $relationName, $pivotIds, $pivotIdsAttributes) {
@@ -120,7 +143,8 @@ class Project extends Model
 
     public function stakholders(): BelongsToMany
     {
-        return $this->belongsToMany(User::class, 'projects_users', 'project_id', 'user_id');
+        return $this->belongsToMany(User::class, 'projects_users', 'project_id', 'user_id')
+        ->withPivot(['company_id','type','specialty','office_phone']);
     }  
 
 	public function clients(): BelongsToMany

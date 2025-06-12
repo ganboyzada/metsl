@@ -4,15 +4,14 @@
 <div class="flex flex-wrap items-end justify-between gap-4 mb-6 relative z-10">
 
 	<div class="flex flex-wrap lg:flex-nowrap gap-2 w-full md:w-auto">
-		<div class="relative flex items-center w-full sm:w-1/2 md:w-full">
-            <input type="text" id="searchDocuments" placeholder="Search by Doc.No" oninput="get_documents()"
-                class="w-full pl-10 pr-4 py-2 border-0 bg-gray-200 dark:bg-gray-800 dark:text-gray-200" />
-            <i data-feather="search" class="absolute left-2 top-2"></i>
-        </div>
+
 		@php
 
 			$packages = \App\Models\Package::where('project_id',Session::get('projectID'))->get();
-			if(!auth()->user()->is_admin){
+			if(checkIfUserHasThisPermission(Session::get('projectID') ,'modify_package')){
+				$packages2 = $packages;
+			}
+			else if(!auth()->user()->is_admin){
 				$packages2 = \App\Models\Package::join('package_assignees', 'packages.id', '=', 'package_assignees.package_id')
 				->where('project_id',Session::get('projectID'))->where('user_id',auth()->user()->id)->select('packages.*')->get();
 
@@ -35,7 +34,7 @@
 					
 					@if ($packages->count() > 0)
 						@foreach ($packages as $package)
-							<button class="p-3 hover:bg-gray/75" onclick="set_package_id('{{ $package->id }}', '{{ $package->name }}'); get_documents('{{ $package->id }}')">
+							<button class="p-3 hover:bg-gray/75" onclick="set_package_id('{{ $package->id }}', '{{ $package->name }}');">
 								<i class="mr-1 text-gray-500 dark:text-gray-400" data-feather="folder"></i>
 								{{ $package->name }}
 							</button>
@@ -64,33 +63,7 @@
 	
     <!-- Order By and Filter -->
     <div class="flex items-end gap-4">
-        <div>
-            <label for="order-by" class="text-sm font-medium dark:text-gray-400">Order by:</label>
-			<div class="flex items-center">
-				<select id="order-by" class="w-24 md:w-auto px-3 py-2 border-none bg-gray-200 dark:bg-gray-800 dark:text-gray-200">
-					<option value="number">Name</option>
-					<option value="created_date">Initial Upload Date</option>
-					<option value="size">Size</option>
-					<option value="upload_date">Last Revision Date</option>
-				</select>
-				<select id="order-direction" class="ml-2 border-none bg-gray-200 ps-3 pe-7 py-2 dark:bg-gray-800 dark:text-gray-200">
-					<option value="desc">Desc.</option>
-					<option value="asc">Asc.</option>
-				</select>
-			</div>
-            
-        </div>
 
-        <!-- Filter By You -->
-		<div>
-			<label for="filter-by" class="text-sm font-medium dark:text-gray-400 mr-2">Filter:</label>
-			<div class="flex items-center">
-				<select id="filter-by" class="px-3 py-2 border-none bg-gray-200 dark:bg-gray-800 dark:text-gray-200">
-					<option>All</option>
-					<option>By You</option>
-				</select>
-			</div>
-		</div>
         
 		@if(checkIfUserHasThisPermission(Session::get('projectID') ,'add_documents'))
 		<button onclick="reset_model();" data-modal="uploader-modal" class="modal-toggler bg-blue-500 h-full text-white px-3 py-2 hover:bg-blue-600 flex gap-1 items-center transition duration-200">
@@ -101,7 +74,7 @@
 </div>
 
 <!-- File Manager Grid -->
-<div id="documents_list" class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
+<div id="packages_list" class="grid grid-cols-1 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
 
 
 </div>
@@ -109,6 +82,22 @@
 @include('metsl.pages.documents.uploader')
 
 <script>
+
+    async function getSubfolders(package_id){
+        let url = `/project/documents/package/subfolders/${package_id}`;
+        let fetchRes = await fetch(url);
+        let response = await fetchRes.json();
+        let html = `<option value="">select subfolder</option>`;
+		if(response.length > 0){
+			for(var i=0;i<response.length;i++){
+				html+=`<option value="${response[i].id}">${response[i].name}</option>`;
+			}
+
+		}
+
+		$('#subfolder_id').html(html);
+		
+    }
 	
 	async function set_projectID_docs(){
         var projectId = $('#selected_project_id').val();
@@ -116,7 +105,8 @@
         // let url = `/project/storeIdSession?projectID=${projectId}&projectName=${projectName}`;
 
         // let fetchRes = await fetch(url);
-        get_documents();
+        //get_documents();
+		get_packages();
     }
 
 	// $(".projectButton").on('click',function(event) {
@@ -124,12 +114,12 @@
 	// 		set_projectID_docs();
 	// 	}
 	// });
-	$("#order-by , #order-direction").on('change',function(event) {
-		loadedRows = 0;
-		if(localStorage.getItem("project_tool") == 'documents'){
-			get_documents();
-		}
-	});	
+	// $("#order-by , #order-direction").on('change',function(event) {
+	// 	loadedRows = 0;
+	// 	if(localStorage.getItem("project_tool") == 'documents'){
+	// 		get_documents();
+	// 	}
+	// });	
 	function reset_model(){
 		$('#document_id').val(0);
 		$('#document-number').val('');
@@ -138,88 +128,104 @@
 		$('.file-list').html('');		
 	}
 	
-	async function get_files(id){
-		current_document_id = id;
-		$('.error').hide();
-		$('.success').hide();
-		$('.err-msg').hide();
-		$(".error").html("");
-		$(".success").html("");
+	// async function get_files(id){
+	// 	current_document_id = id;
+	// 	$('.error').hide();
+	// 	$('.success').hide();
+	// 	$('.err-msg').hide();
+	// 	$(".error").html("");
+	// 	$(".success").html("");
 	
-		//$('#error_div').hide();
-		$('#success_div').hide();
-		//$("#error_div").html("");
-		$("#success_div").html("");
-		let url = 	`{{url('project/documents/edit/${id}')}}`	;
-		let fetchRes = await fetch(url);
-		let detail = await fetchRes.json();
-		$('#document_id').val(detail.id);
-		$('#document-number').val(detail.number);
-		$('#title').val(detail.title);
+	// 	//$('#error_div').hide();
+	// 	$('#success_div').hide();
+	// 	//$("#error_div").html("");
+	// 	$("#success_div").html("");
+	// 	let url = 	`{{url('project/documents/edit/${id}')}}`	;
+	// 	let fetchRes = await fetch(url);
+	// 	let detail = await fetchRes.json();
+	// 	$('#document_id').val(detail.id);
+	// 	$('#document-number').val(detail.number);
+	// 	$('#title').val(detail.title);
 		
-		let reviewers_selected = detail.reviewers.map(function(item) {
-		  return item.id;
-		})	;
-		let all_reviewers_with_selected = doc_reviewers.map(function(item) {
-			item.selected = reviewers_selected.includes(item.value) ? true : false
-			return item;
-		});
-		//console.log(doc_reviewers);
-		reviewers_obj.clearStore();
-		reviewers_obj.setChoices(all_reviewers_with_selected);	
-		var html = ``;
-		if(detail.files.length > 0){
-			html+=``;
-			for(var i=0;i<detail.files.length;i++){
-				var file_url = 	`{{asset('storage/project${detail.project_id}/documents${detail.id}/${detail.files[i].file}')}}`;	
-				html+=`<li  class="flex justify-between" id="li${i}">
-				<a target="_blank" href="${file_url}">${detail.files[i].file}(${(detail.files[i].size /1024 ).toFixed(2) } KB)</a>
+	// 	let reviewers_selected = detail.reviewers.map(function(item) {
+	// 	  return item.id;
+	// 	})	;
+	// 	let all_reviewers_with_selected = doc_reviewers.map(function(item) {
+	// 		item.selected = reviewers_selected.includes(item.value) ? true : false
+	// 		return item;
+	// 	});
+	// 	//console.log(doc_reviewers);
+	// 	reviewers_obj.clearStore();
+	// 	reviewers_obj.setChoices(all_reviewers_with_selected);	
+	// 	var html = ``;
+	// 	if(detail.files.length > 0){
+	// 		html+=``;
+	// 		for(var i=0;i<detail.files.length;i++){
+	// 			var file_url = 	`{{asset('storage/project${detail.project_id}/documents${detail.id}/${detail.files[i].file}')}}`;	
+	// 			html+=`<li  class="flex justify-between" id="li${i}">
+	// 			<a target="_blank" href="${file_url}">${detail.files[i].file}(${(detail.files[i].size /1024 ).toFixed(2) } KB)</a>
 				
-				<a onclick="delete_file(${i} , ${detail.files[i].id})" href="#" class="text-red-500 dark:text-red-400 hover:text-red-300">
-					<i data-feather="delete" class="w-5 h-5"></i>
-				</a>
+	// 			<a onclick="delete_file(${i} , ${detail.files[i].id})" href="#" class="text-red-500 dark:text-red-400 hover:text-red-300">
+	// 				<i data-feather="delete" class="w-5 h-5"></i>
+	// 			</a>
 				
-				</li>`;
+	// 			</li>`;
 	
-			}
-			html+=``;
-		}
+	// 		}
+	// 		html+=``;
+	// 	}
 			
-		$('.file-list').append(html);	
-		feather.replace({ 'stroke-width': 1 });
-	}	
-	async function delete_file(i , id){
-        $('.error').hide(); 
-        $('.success').hide();
-		let url =`project/documents/delete_file/${id}`;		
-		let fetchRes = await fetch(url);
-        if(fetchRes.status != 200){
-            $('.error').show();
-            $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
-        }else{
-			$('#li'+i).remove();
-            $('.success').show();
-            $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
-        }		
+	// 	$('.file-list').append(html);	
+	// 	feather.replace({ 'stroke-width': 1 });
+	// }	
+	// async function delete_file(i , id){
+    //     $('.error').hide(); 
+    //     $('.success').hide();
+	// 	let url =`/project/documents/delete_file/${id}`;		
+	// 	let fetchRes = await fetch(url);
+    //     if(fetchRes.status != 200){
+    //         $('.error').show();
+    //         $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
+    //     }else{
+	// 		$('#li'+i).remove();
+    //         $('.success').show();
+    //         $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
+    //     }		
 		
-	}
+	// }
 	
-	async function delete_doc(i , id){
-        $('.error').hide(); 
-        $('.success').hide();
-		let url =`/project/documents/delete/${id}`;		
-		let fetchRes = await fetch(url);
-        if(fetchRes.status != 200){
-            $('.error').show();
-            $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
-        }else{
-			$('#doc'+i).remove();
-            $('.success').show();
-            $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
-        }		
+	// async function delete_doc(i , id){
+    //     $('.error').hide(); 
+    //     $('.success').hide();
+	// 	let url =`/project/documents/delete/${id}`;		
+	// 	let fetchRes = await fetch(url);
+    //     if(fetchRes.status != 200){
+    //         $('.error').show();
+    //         $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+fetchRes.statusText+'</div>');
+    //     }else{
+	// 		$('#doc'+i).remove();
+    //         $('.success').show();
+    //         $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold"> Item Deleted Successfully</div>');
+    //     }		
 		
-	}	
+	// }	
 
+	// async  function get_reviewers(){
+	// 	let fetchRes = await fetch(`{{url('project/documents/reviewers')}}`);
+	// 	const all_users = await fetchRes.json();
+	
+
+    //     const accessibles = all_users.accessibles.map(function(item) {
+	// 	  return {'value' : item.id , 'label' : item.name};
+	// 	});
+
+	// 		accessibles_obj.clearStore();
+	// 		accessibles_obj.setChoices(accessibles);
+
+   
+	// }
+			
+    // get_reviewers();
 	async function get_revisions(id , number){
 		$('#revisions-title').html('Revisions for '+number);
 		current_document_id = id;
@@ -228,9 +234,7 @@
 		$(".error").html("");
 		$(".success").html("");
 	
-		//$('#error_div').hide();
 		$('#success_div').hide();
-		//$("#error_div").html("");
 		$("#success_div").html("");
 		let html = ``;
 		let url = 	`{{url('project/documents/edit/${id}')}}`	;
@@ -247,7 +251,7 @@
 			
 				html+=`<tr class="group hover:bg-gray-100 dark:hover:bg-gray-700" ${i==0 ? 'style="background-color: #ffd70026;"' : ''}>
                     <td class="py-2 px-4">${i + 1}</td>
-					<td class="py-2 px-4"><a href="${preview_image}" target="_blank"><img src="${preview_image}" style="width:60%;"/></a></td>
+					<td class="py-2 px-4"><a href="${preview_image}" target="_blank"><img src="${preview_image}" style="width:25%;"/></a></td>
                     <td class="py-2 px-4">${ detail.title == null ? '-' : detail.title}</td>
                     <td class="py-2 px-4">${ detail.user.name}</td>
                     <td class="py-2 px-4">${ detail.created_date}</td>
@@ -266,25 +270,34 @@
 				html+=`</td>
                     <td class="py-2 px-4 flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
                        `;
+
+					   if(revisions.length == 0){
 						
 						if($('#accept_reject_document').val() == 1){
-							if(detail.status ==0 || detail.status == 2){
-								html+=`<button onclick="update_doc_status(${detail.id} , 1)" class="text-green-500 hover:text-green-700">
+							if(detail.status ==0){
+								html+=`<button onclick="update_doc_status(${detail.id} , 1 , '${detail.number}' , ${detail.files[i].id})" class="text-green-500 hover:text-green-700">
 									<i data-feather="check" stroke-width="2" class="w-5 h-5"></i>
 								</button>`;
 								
 							}
-							if(detail.status ==0 || detail.status == 1){
+							if(detail.status ==0 ){
 							
-							html+=`<button  onclick="update_doc_status(${detail.id} , 2)" class="text-red-500 hover:text-red-700">
+							html+=`<button  onclick="update_doc_status(${detail.id} , 2 , '${detail.number}' , ${detail.files[i].id})" class="text-red-500 hover:text-red-700">
 								<i data-feather="x-circle" stroke-width="2" class="w-5 h-5"></i>
 							</button>`;
 							}
 						}
 
+						if($('#comments_permission').val() == 1){
+							html+=`<button class="text-yellow-500 hover:text-yellow-700 comment-button" onclick="show_comment(${detail.files[i].id} , 'file',${detail.id})">
+								<i data-feather="message-circle" stroke-width="2" class="w-5 h-5"></i>
+							</button>`;
+						}
+
 							   html+=`<a target="_blank" href="${ file_url }" class="text-blue-500 hover:text-blue-700">
 								<i data-feather="download" stroke-width="2" class="w-5 h-5"></i>
 							</a>`;
+						}
 					   
 						
                    
@@ -304,7 +317,7 @@
 				html+=`<tr class="group hover:bg-gray-100 dark:hover:bg-gray-700">
 
                     <td class="py-2 px-4">${z++}</td>
-					<td class="py-2 px-4"><a href="${revisions[i].preview_image }" target="_blank"><img src="${revisions[i].preview_image }" style="width:60%;"/></a></td>
+					<td class="py-2 px-4"><a href="${revisions[i].preview_image }" target="_blank"><img src="${revisions[i].preview_image }" style="width:25%;"/></a></td>
 
                     <td class="py-2 px-4">${ revisions[i].title}</td>
                     <td class="py-2 px-4">${ revisions[i].user.name}</td>
@@ -312,33 +325,36 @@
                     <td class="py-2 px-4">${ revisions[i].status_text}</td>
                     <td class="py-2 px-4 flex items-center space-x-2 opacity-0 group-hover:opacity-100 transition-opacity">
                        `;
-						if(revisions[i].file != null){
-							   html+=`<a target="_blank" href="${ revisions[i].file }" class="text-blue-500 hover:text-blue-700">
-								<i data-feather="download" stroke-width="2" class="w-5 h-5"></i>
-							</a>`;
-					   
-						}
-						if($('#comments_permission').val() == 1){
-							html+=`<button class="text-yellow-500 hover:text-yellow-700 comment-button" onclick="show_comment(${revisions[i].id})">
-								<i data-feather="message-circle" stroke-width="2" class="w-5 h-5"></i>
-							</button>`;
-						}
+
+					
 
 						if($('#accept_reject_document').val() == 1){
-						if(revisions[i].status ==0 || revisions[i].status == 2){
-							html+=`<button onclick="update_status(${revisions[i].id} , 1)" class="text-green-500 hover:text-green-700">
+						if(revisions[i].status ==0){
+							html+=`<button onclick="update_status(${revisions[i].id} , 1 , '${detail.number}',${detail.id})" class="text-green-500 hover:text-green-700">
 								<i data-feather="check" stroke-width="2" class="w-5 h-5"></i>
 							</button>`;
 							
 						}
 						
-						if(revisions[i].status ==0 || revisions[i].status == 1){
+						if(revisions[i].status ==0){
 						
-							html+=`<button  onclick="update_status(${revisions[i].id} , 2)" class="text-red-500 hover:text-red-700">
+							html+=`<button  onclick="update_status(${revisions[i].id} , 2 , '${detail.number}',${detail.id})" class="text-red-500 hover:text-red-700">
 								<i data-feather="x-circle" stroke-width="2" class="w-5 h-5"></i>
 							</button>`;
 						}
 						}
+
+						if($('#comments_permission').val() == 1){
+							html+=`<button class="text-yellow-500 hover:text-yellow-700 comment-button" onclick="show_comment(${revisions[i].id},'revision',${detail.id})">
+								<i data-feather="message-circle" stroke-width="2" class="w-5 h-5"></i>
+							</button>`;
+						}
+						if(revisions[i].file != null){
+							   html+=`<a target="_blank" href="${ revisions[i].file }" class="text-blue-500 hover:text-blue-700">
+								<i data-feather="download" stroke-width="2" class="w-5 h-5"></i>
+							</a>`;
+					   
+						}	
 							
                 
                     html+=`</td>
@@ -353,10 +369,46 @@
 	let all_documents = {};
 	let current_document_id = 0;
 	let package_id = 0;
-	get_documents();
+	//get_documents();
+	get_packages();
 	function set_package_id(id, text){
 		package_id = id;
-		$('#current-doc-package').text(text);
+		//$('#current-doc-package').text(text);
+		window.location.href = '/project/documents/package/'+id;
+	}
+
+	async function get_packages(){
+		let url = 	`/project/documents/packages/all`;
+
+		
+		let newurl = url.replace('amp;','');
+		let fetchRes = await fetch(newurl);
+		all_packages = await fetchRes.json();
+		let html = ``;
+		if(all_packages.length > 0){
+			for(let i=0; i<all_packages.length; i++){
+				html+=`<a href="{{ url('project/documents/package/${all_packages[i].id}') }}"><div id="package${i}" class="relative h-36 p-4 bg-gray-100 dark:bg-gray-800 rounded-lg shadow-md group transition transform hover:scale-105">
+					<h3 class="text-sm font-medium dark:text-gray-400 mb-2 truncate">${all_packages[i].name}</h3>
+
+					<span class="flex absolute bottom-10 right-4 text-xs font-semibold text-blue-500 dark:text-blue-300">
+						${all_packages[i].created_date}
+					
+					</span>
+					
+						<i data-feather="file-text" class="w-12 h-12  text-blue-500  dark:text-blue-300"></i>
+					
+					
+				
+					<span class="absolute bottom-2 right-2 flex items-center text-xs font-semibold bg-blue-900 text-white rounded-full px-2 py-1">
+						<i data-feather="refresh-cw" class="w-4 h-4 mr-1"></i>${all_packages[i].documents_count}
+					</span>
+					
+				</div></a>`;
+			}
+		}
+		$('#packages_list').html(html);
+		feather.replace({ 'stroke-width': 1 });
+		
 	}
 
 	async function get_documents(page = 1){
@@ -367,7 +419,7 @@
 				const orderDirection = $('#order-direction').val();
 				const DocNo = $('#searchDocuments').val();
 
-				let url = 	`/project/documents/all?package_id=${package_id}&DocNO=${DocNo}&orderBy=${orderBy}&orderDirection=${orderDirection}`;
+				let url = 	`/project/documents/all`;
 
 				
 				let newurl = url.replace('amp;','');

@@ -101,7 +101,7 @@
                 const startDate = $('#start-date').val();
                 const endDate = $('#end-date').val();
                 
-                let url =`project/meetings/all?page=${page}&search=${search}&start_date=${startDate}&end_date=${endDate}`;
+                let url =`/project/meetings/all?page=${page}&search=${search}&start_date=${startDate}&end_date=${endDate}`;
 
 
                 let fetchRes = await fetch(url);
@@ -179,7 +179,7 @@
     async function deleteMeetingPlaning(id){
         $('.error').hide(); 
         $('.success').hide();
-		let url =`project/meetings/destroy/${id}`;		
+		let url =`/project/meetings/destroy/${id}`;		
 		let fetchRes = await fetch(url);
         if(fetchRes.status != 200){
             $('.error').show();

@@ -8,9 +8,9 @@
                 <tr>
                     <th class="px-4 py-2 font-light">Meeting Type</th>
                     <th class="px-4 py-2 font-light">Planned Date</th>
-                    <th class="px-4 py-2 font-light">Status</th>
                     <th class="px-4 py-2 font-light">Planned Start</th>
-                    <th class="px-4 py-2 font-light">Participants</th>
+                    <th class="px-4 py-2 font-light">notes</th>
+                    <th class="px-4 py-2 font-light">Deadline</th>
                 </tr>
             </thead>
             <tbody id="widget-meetings-table">
@@ -34,11 +34,10 @@ function loadWidgetMeetings() {
                 html+=`<tr class="border-b dark:border-gray-800">
                         <td class="px-4 py-2"><a  class="underline" target="_blank" href="${url}">${mettingsData[i].name}</a></td>
                         <td class="px-4 py-2">${mettingsData[i].planned_date}</td>
-                        <td class="px-4 py-2">
-                            <span class="px-3 py-1 rounded-full text-xs ${mettingsData[i].color} text-white">${mettingsData[i].status_text}</span>
-                        </td>
+               
                         <td class="px-4 py-2">${mettingsData[i].start_time}</td>
-                        <td class="px-4 py-2">${mettingsData[i].users}</td>
+                        <td class="px-4 py-2">${mettingsData[i].note}</td>
+                        <td class="px-4 py-2">${mettingsData[i].deadline}</td>
                     
                 
                         </tr>`;

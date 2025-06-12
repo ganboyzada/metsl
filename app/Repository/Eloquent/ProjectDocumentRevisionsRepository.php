@@ -3,12 +3,13 @@
 namespace App\Repository\Eloquent;
 
 use App\Model\User;
+use App\Models\ProjectDocumentFiles;
 use App\Models\ProjectDocumentRevisions;
 use App\Repository\CorrespondenceFileRepositoryInterface;
 use App\Repository\ProjectDocumentRevisionsRepositoryInterface;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
-use Illuminate\Database\Eloquent\Builder;
 
 class ProjectDocumentRevisionsRepository extends BaseRepository implements ProjectDocumentRevisionsRepositoryInterface
 {
@@ -17,10 +18,11 @@ class ProjectDocumentRevisionsRepository extends BaseRepository implements Proje
     * UserRepository constructor.
     *
     * @param ProjectDocumentRevisions $model
+    * @param ProjectDocumentFiles $model2
     */
-   public function __construct(ProjectDocumentRevisions $model)
+   public function __construct(ProjectDocumentRevisions $model , ProjectDocumentFiles $model2)
    {
-       parent::__construct($model);
+       parent::__construct($model , $model2);
    }
     /**
     * @param int $document_id
@@ -50,16 +52,47 @@ class ProjectDocumentRevisionsRepository extends BaseRepository implements Proje
     public function create_comment($data): bool
     {
        // dd($data);
-       unset($data['_token']);
+       if($data['file_type'] == 'revision'){
+        unset($data['_token'],$data['file_type'],$data['project_id'],$data['number']);
         return $this->model->comments()->insert($data);
+
+       }else{
+        unset($data['_token'],$data['file_type'],$data['project_id'],$data['number']);
+        return $this->model2->comments()->insert($data);
+
+       }
+       
     }
 
     /**
     * @param int $id
+    * @param string $type
     * @return Model
     */
-    public function get_revision_comments($id): Model{
-         return $this->model->with(['comments:revision_id,user_id,comment', 'comments.user:id,name'])->find($id);
+    public function get_revision_comments($id,$type): Model{
+        if($type == 'revision'){
+   
+             return $this->model->with([
+                'comments' => function ($query): void {
+                    $query->select('revision_id', 'user_id', 'comment', 'image', 'project_document_id', 'type', 'id')
+                        ->orderBy('id', 'desc');
+                },
+                'comments.user:id,name'
+            ])->find($id);
+
+        }else{
+            //return $this->model2->with(['comments:file_id,user_id,comment,image,project_document_id,type', 'comments.user:id,name'])->find($id);
+
+            return $this->model2->with([
+            'comments' => function ($query) {
+                $query->select('id', 'file_id', 'user_id', 'comment', 'image', 'project_document_id', 'type', 'id')
+                    ->orderBy('id', 'desc');
+            },
+            'comments.user:id,name'
+        ])->find($id);
+
+        }
+        
          
     }
 
