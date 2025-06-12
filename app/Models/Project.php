@@ -2,9 +2,13 @@
 
 namespace App\Models;
 
+use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
 use App\Enums\ProjectStatusEnum;
 use App\Enums\ProjectStatusTextColorEnum;
 use App\Enums\ProjectStatusTextValueEnum;
+use App\Jobs\SendUserEmail;
+use App\Mail\StakholderEmail;
+use GeneaLabs\LaravelPivotEvents\Traits\PivotEventTrait;
 use Hash;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -14,9 +18,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphToMany;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
-use App\Mail\StakholderEmail;
-use GeneaLabs\LaravelPivotEvents\Traits\PivotEventTrait;
-use AjCastro\EagerLoadPivotRelations\EagerLoadPivotTrait;
 
 
 
@@ -88,7 +89,8 @@ class Project extends Model
                     
                     //dd($user);
                     $project_name = $model->name;
-                    $m = \Mail::to($user->email)->send(new StakholderEmail($project_name , $job_title , $user->email ,$pass )); 
+                    SendUserEmail::dispatch($project_name , $job_title , $user->email ,$pass);
+                   // $m = \Mail::to($user->email)->send(new StakholderEmail($project_name , $job_title , $user->email ,$pass )); 
                     $user->send_email_before = 1;
                         $user->save();
                 }

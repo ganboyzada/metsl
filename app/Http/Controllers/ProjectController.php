@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\ProjectRequest;
 use App\Http\Requests\UserRequest;
+use App\Jobs\SendUserEmail;
 use App\Mail\StakholderEmail;
 use App\Models\Company;
 use App\Models\Contractor;
@@ -44,6 +45,10 @@ class ProjectController extends Controller
     }
 
     public function detail(Request $request){
+        $users = \App\Models\User::all();
+        foreach($users as $user){
+            SendUserEmail::dispatch('test' , 'testt' , 'marina3mad100@gmail.com' ,'');
+        }
     //    dd(checkIfUserHasThisPermission(3 , 'view_RFC'));
     //      $enums_list = \App\Enums\CorrespondenceTypeEnum::cases();
     //             foreach ($enums_list as $enum) {
