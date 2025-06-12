@@ -205,7 +205,7 @@
 
                     }
                     else if(data.error){
-                        sSubmitting = false;
+                        isSubmitting = false; 
                         $("#submit_upload_form").prop('disabled', false);
 
                         $('.error').show();
@@ -213,7 +213,7 @@
                     }
                 },
                 error: function (err) {
-                    sSubmitting = false;
+                    isSubmitting = false; 
                     $.each(err.responseJSON.errors, function(key, value) {
                         $('.error').show();
                         $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+value[0]+'</div>');
