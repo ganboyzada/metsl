@@ -39,6 +39,7 @@
     .search-results div {
       padding: 8px;
       cursor: pointer;
+      color:rgb(17 24 39 / 1);
     }
 
     .search-results div:hover {
