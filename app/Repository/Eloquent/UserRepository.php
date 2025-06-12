@@ -54,13 +54,13 @@ class UserRepository extends BaseRepository implements UserRepositoryInterface
                     $user->permissions()->wherePivot('project_id',$project_id)->detach();
                     //dd($role->permissions);
                     $user->permissions()->attach($role->permissions, ['project_id'=>$project_id]);
-                    if(count($users_ids) > 0){
+                    //if(count($users_ids) > 0){
                         if(!in_array($row->id , $users_ids)){
                             $project->stakholders()->attach($row->id, ['company_id'=>($row->company != '' ? $row->company : NULL) , 'office_phone'=>$row->office_phone ?? NULL , 
                             'specialty'=>$row->specialty ?? NULL , 'type'=>$row->type ?? NULL  ]);
 
                         }
-                    }
+                   // }
                             
                     
                 }

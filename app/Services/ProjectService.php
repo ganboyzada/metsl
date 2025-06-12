@@ -86,7 +86,7 @@ class ProjectService
             if(isset($data['docs'])){
                 $this->projectFileService->createBulkFiles($model->id , $data);
             }
-            dd($data['all_stakholders']);
+            
             (isset($data['all_stakholders']) && count($data['all_stakholders']) > 0) ? $this->userService->createRolePermissionsOfUser($model->id , $data['all_stakholders']) : '';
              
             
