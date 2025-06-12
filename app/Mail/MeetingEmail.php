@@ -32,7 +32,7 @@ class MeetingEmail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: 'Invitaion From Metsl',
+            subject: 'Meeting Invitaion From Metsl',
         );
     }
 
