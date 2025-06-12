@@ -19,7 +19,7 @@ class SendUserEmail implements ShouldQueue
     protected $job_title;
     protected $pass;
 
-    public function __construct($email, $project_name, $job_title, $pass)
+    public function __construct($project_name, $job_title ,$email,  $pass)
     {
         $this->email = $email;
         $this->project_name = $project_name;
@@ -29,6 +29,6 @@ class SendUserEmail implements ShouldQueue
 
     public function handle()
     {
-        Mail::to('marina3mad100@gmail.com')->send(new StakholderEmail($this->project_name , $this->job_title , $this->email ,$this->pass));
+        Mail::to($this->email)->send(new StakholderEmail($this->project_name , $this->job_title , $this->email ,$this->pass));
     }
 }

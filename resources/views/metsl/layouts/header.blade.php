@@ -113,10 +113,10 @@
                     </div>   
                 </button>
                 <!-- User Dropdown Menu -->
-                <div id="userDropdown" class="hidden absolute  left-0 mt-2 w-max bg-gray-800 rounded-lg  text-gray-200 shadow-lg">
+                <div id="userDropdown" class="hidden absolute  right-0 mt-2 w-max bg-gray-800 rounded-lg  text-gray-200 shadow-lg">
                     <a href="{{ route('profile') }}" class="flex items-center px-4 py-2 hover:bg-gray-100/25"><i data-feather="user" class="mr-3"></i>Profile</a>
-                    @if(checkIfUserHasThisPermission(Session::get('projectID') ,'modify_presets') || 
-                    checkIfUserHasThisPermission(Session::get('projectID') ,'create_projects')
+                    @if(checkIfUserHasThisPermission(Session::get('projectID') ,'modify_presets') 
+                    //|| checkIfUserHasThisPermission(Session::get('projectID') ,'create_projects')
                     )
                     <a href="{{ route('roles') }}" class="flex items-center px-4 py-2 hover:bg-gray-200/25">
                         <i data-feather="git-pull-request" class="mr-3"></i>
@@ -124,8 +124,9 @@
                         <i data-feather="lock" class="ml-auto w-4 h-4 text-blue-400"></i>
                     </a>
 					@endif
-					@if(checkIfUserHasThisPermission(Session::get('projectID') ,'modify_companies') || 
-                    checkIfUserHasThisPermission(Session::get('projectID') ,'create_projects'))
+					@if(checkIfUserHasThisPermission(Session::get('projectID') ,'modify_companies')
+                    // || checkIfUserHasThisPermission(Session::get('projectID') ,'create_projects')
+                    )
                     <a href="{{ route('work_packages') }}" class="flex items-center px-4 py-2 hover:bg-gray-200/25">
                         <i data-feather="list" class="mr-3"></i>
                         Work Packages
