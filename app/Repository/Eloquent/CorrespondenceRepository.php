@@ -297,12 +297,12 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
         ->where('status','!=',CorrespondenceStatusEnum::CLOSED->value)
         ->where(function($q)use ($project_id){
             if(!auth()->user()->is_admin){
-                $q->where(function($query)use ($project_id){
-                    $query->where('changed_by', '!=',NULL);
-                    $query->where('created_by', auth()->user()->id);
-                });
+                // $q->where(function($query)use ($project_id){
+                //     $query->where('changed_by', '!=',NULL);
+                //     $query->where('created_by', auth()->user()->id);
+                // });
 
-                $q->orwhere(function($query)use ($project_id){
+                $q->where(function($query)use ($project_id){
                     $query->whereNotIn('id', function($query) use ($project_id) {
                     $query->select('reply_child_correspondence_id')
                     ->from('correspondences')
@@ -312,11 +312,11 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
                 });
 
             }else{
-                $q->where(function($query)use ($project_id){
-                    $query->where('changed_by', '!=',NULL);
-                });
+                // $q->where(function($query)use ($project_id){
+                //     $query->where('changed_by', '!=',NULL);
+                // });
 
-                $q->orwhere(function($query)use ($project_id){
+                $q->where(function($query)use ($project_id){
                     $query->whereNotIn('id', function($query) use ($project_id) {
                     $query->select('reply_child_correspondence_id')
                     ->from('correspondences')
