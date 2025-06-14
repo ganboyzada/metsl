@@ -107,6 +107,7 @@ class CorrespondenceController extends Controller
                     $old = $this->correspondenceService->edit($all_data['reply_correspondence_id']);
                     $all_data['number'] =  'Replying to '.$old->number??'';
                     $all_data['status'] =  $old->status;
+                    $all_data['changed_by'] = $old->changed_by??NULL;
                     $all_data['due_days'] =  $old->due_days??5;
                     $all_data['due_date'] =  $old->due_date??NULL;
                     $all_data['assignees'] = $old->assignees()->pluck('users.id')->toArray();
