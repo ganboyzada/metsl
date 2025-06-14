@@ -76,7 +76,7 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
         try{
             return $this->model->where(function($q)use($id){
                 $q->where('id',$id);
-                //$q->orWhere('reply_correspondence_id',$id);
+                $q->orWhere('reply_correspondence_id',$id);
             })
             
             ->update(['status'=>CorrespondenceStatusEnum::ACCEPTED->value , 'changed_by'=>auth()->user()->id]);
@@ -94,7 +94,7 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
         try{
             return $this->model->where(function($q)use($id){
                 $q->where('id',$id);
-                //$q->orWhere('reply_correspondence_id',$id);
+                $q->orWhere('reply_correspondence_id',$id);
             })
             
             ->update(['status'=>CorrespondenceStatusEnum::REJECTED->value , 'changed_by'=>auth()->user()->id]);
