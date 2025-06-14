@@ -34,6 +34,7 @@
             @endif
 
             @if (checkIfUserHasThisPermission(Session::get('projectID') ,'reply_'.$correspondece->type->value) 
+            && $correspondece->reply_correspondence_id == NULL
             && $correspondece->type->value == App\Enums\CorrespondenceTypeEnum::RFC->value && $correspondece->created_by != \Auth::user()->id) 
                 @if ($correspondece->status == App\Enums\CorrespondenceStatusEnum::OPEN->value)
                     <a onclick="accept_correspondence({{ $correspondece->id }}  , '{{ $correspondece->number }}')"  href="#" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Accept</a>
@@ -45,6 +46,7 @@
 
 
             @if (checkIfUserHasThisPermission(Session::get('projectID') ,'reply_'.$correspondece->type->value) 
+            && $correspondece->reply_correspondence_id == NULL
             && $correspondece->type->value == App\Enums\CorrespondenceTypeEnum::INS->value && $correspondece->created_by != \Auth::user()->id) 
                 @if ($correspondece->status == App\Enums\CorrespondenceStatusEnum::OPEN->value)
                     <a onclick="accept_correspondence({{ $correspondece->id }}  , '{{ $correspondece->number }}')"  
