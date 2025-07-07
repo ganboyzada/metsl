@@ -127,6 +127,7 @@
                                     <i data-feather="clock" class="inline mr-2 w-5 h-5"></i>
                                     Deadline
                                 </th>
+                                <th class="px-2 py-1 font-light">status</th>
                             </tr>
                         </thead>
                         <tbody>    
@@ -159,6 +160,22 @@
                                         <!-- Will SHOW only when TYPE is ACTION -->
                                         <input type="date" name="deadline[]" value="{{ $note->deadline }}" class="deadline {{ $note->type == 'note' ? 'hidden' : '' }} text-sm rounded-full ps-3 pe-5 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white">
                                     </td>
+                                    <td class="px-2 py-2">
+                                        @if ($note->type == 'action')
+                                            @if ($note->closed == 1)
+                                            <span class="bg-green-500 text-white px-2 py-1 text-sm font-semibold">Closed</span>
+                                            @else
+                                            <div id="action{{ $note->id }}">
+                                            
+                                            </div>
+                                            <button type="button" id="button{{ $note->id }}" onclick="close_action({{ $note->id }})" 
+                                            class="px-3 py-1  text-xs font-bold bg-red-500 text-white">close Action</button>
+                                                
+                                            @endif
+                                        @endif
+                                        
+
+                                    </td>
                                 </tr>
                                 @endforeach
                             @else
@@ -189,6 +206,7 @@
                                     <!-- Will SHOW only when TYPE is ACTION -->
                                     <input type="date" name="deadline[]" class="deadline hidden text-sm rounded-full ps-3 pe-5 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white">
                                 </td>
+                                <td class="px-2 py-2"></td>
                             </tr>  
                             @endif
 
@@ -241,7 +259,17 @@
 
 @push('js')
 <script>
+async function close_action(id){
+    let url = "{{ route('projects.meetings.close', [':id']) }}".replace(':id', id);
+    let response = await fetch(url);
+    if(response.status == 200){
+        $('#action'+id).html('<span class="bg-green-500 text-white px-2 py-1 text-sm font-semibold">Closed</span>');
+        $('#button'+id).remove();
+        $('.success').show();
+        $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">Closed Successfully</div>');  
+    }
 
+}
     function changeNoteType(event){
         let meeting_note = $(event.target).closest('tr');
         console.log('RESPONSE: ' + event.target.value);
@@ -387,6 +415,8 @@ function addNote(){
             <td class="px-2 py-2">
                 <!-- Will SHOW only when TYPE is ACTION -->
                 <input type="date" name="deadline[]" class="deadline hidden text-sm rounded-full ps-3 pe-5 py-1 border-none bg-gray-200 dark:bg-gray-700 dark:text-white">
+            </td>
+            <td class="px-2 py-2">
             </td>
         </tr>
     `;
