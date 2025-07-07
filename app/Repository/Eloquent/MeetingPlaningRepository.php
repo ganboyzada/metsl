@@ -75,23 +75,23 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
         //     return $meetingPlanings;
         // }
         // else
-         if(!auth()->user()->is_admin){
+         //if(!auth()->user()->is_admin){
 
-               $meetingPlanings = $meetingPlanings->where(function($q){
-                    $q->whereHas('users', function ($query) {
-                        $query->where('user_id', auth()->user()->id);
-                    });
-
-                   // $q->orwhere('created_by', auth()->user()->id);
-                   
+            $meetingPlanings = $meetingPlanings->where(function($q){
+                $q->whereHas('users', function ($query) {
+                    $query->where('user_id', auth()->user()->id);
                 });
+
+                // $q->orwhere('created_by', auth()->user()->id);
+                
+            });
             
             $meetingPlanings = $meetingPlanings->with(['users:id,name'])->paginate(10);
 
             return $meetingPlanings;  
             
 
-        }
+       // }
     }
 
 
