@@ -48,7 +48,7 @@ async function loadWidgetPlannedMeetings(page=1) {
                
                         <td class="px-4 py-2">${mettingsData[i].start_time}</td>
                         <td class="px-4 py-2">${mettingsData[i].duration}</td>
-                        <td class="px-4 py-2">${mettingsData[i].purpose}</td>
+                        <td class="px-4 py-2">${mettingsData[i].purpose.substring(0, 50)}</td>
                         <td class="px-4 py-2">${mettingsData[i].location}</td>
                     
                 

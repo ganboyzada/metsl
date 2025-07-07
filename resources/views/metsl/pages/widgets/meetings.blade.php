@@ -37,7 +37,7 @@ function loadWidgetMeetings() {
                         <td class="px-4 py-2">${mettingsData[i].planned_date}</td>
                
                         <td class="px-4 py-2">${mettingsData[i].start_time}</td>
-                        <td class="px-4 py-2">${mettingsData[i].note}</td>
+                        <td class="px-4 py-2">${mettingsData[i].note.substring(0, 50)}</td>
                         <td class="px-4 py-2">${mettingsData[i].deadline}</td>
                         <td><button type="button" onclick="close_action(${mettingsData[i].note_id})" 
                             class="px-3 py-1  text-xs font-bold bg-red-500 text-white">close Action</button></td>
