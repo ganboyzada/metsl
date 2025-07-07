@@ -69,7 +69,7 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
 
         ->select('meeting_plans.*');
 
-        if(auth()->user()->is_admin){
+        if(auth()->user()->is_admin || checkIfUserHasThisPermission($project_id , 'view_all_meeting_planing')){
             $meetingPlanings = $meetingPlanings->with(['users:id,name'])->paginate(10);
 
             return $meetingPlanings;
@@ -110,7 +110,7 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
         
         ->select('meeting_plans.*','meeting_plan_notes.note', 'meeting_plan_notes.deadline', 'meeting_plan_notes.id as note_id');
 
-          if(auth()->user()->is_admin){
+          if(auth()->user()->is_admin || checkIfUserHasThisPermission($project_id , 'view_all_meeting_planing')){
             $meetingPlanings = $meetingPlanings->with(['users:id,name'])->paginate(10);
 
             return $meetingPlanings;
