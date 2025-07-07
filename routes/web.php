@@ -210,13 +210,13 @@ Route::middleware([
 
 
     Route::get('/clear-cache', function() {
-        Artisan::call('cache:clear');
-        Artisan::call('config:clear');
-        Artisan::call('view:clear');
-        Artisan::call('route:clear'); // Avoid caching if using closures
-        Artisan::call('config:cache');
+        // Artisan::call('cache:clear');
+        // Artisan::call('config:clear');
+        // Artisan::call('view:clear');
+        // Artisan::call('route:clear'); // Avoid caching if using closures
+        // Artisan::call('config:cache');
         // 
-        //Artisan::call('optimize');
+        Artisan::call('optimize');
         
   
         // phpinfo();
