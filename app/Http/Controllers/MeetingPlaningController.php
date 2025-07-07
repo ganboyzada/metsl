@@ -241,6 +241,42 @@ class MeetingPlaningController extends Controller
 
 
 
+    public function ProjectMeeetingsPlanned(Request $request){
+        $id = Session::get('projectID');
+        $meetingPlanings = $this->meetingPlaningService->getAllProjectMeetingPlanned($id , $request);
+        $meetingPlanings->map(function($row){
+
+            $planned_date = $row->planned_date;
+            $start_time = $row->start_time;
+            $duration_minutes = (int)$row->duration; // Duration as an integer
+    
+            $meeting_start = Carbon::createFromFormat('Y-m-d H:i:s', $planned_date.' '.$start_time);
+            $meeting_end = $meeting_start->copy()->addMinutes($duration_minutes);
+            $now = Carbon::now();
+    
+            //dd($meeting_start.'-'.$meeting_end.'-'.$now);
+            // Determine meeting status dynamically
+            $meeting_status = NULL;
+
+    
+            if ($now->lessThan($meeting_start) && $row->status->value == MeetingPlanStatusEnum::PLANNED->value) {
+                $meeting_status = MeetingPlanStatusEnum::PLANNED;
+            } elseif ($now->between($meeting_start, $meeting_end) && $row->status->value == MeetingPlanStatusEnum::PLANNED->value) {
+                $meeting_status = MeetingPlanStatusEnum::ONGOING;
+            } elseif ($row->status->value == MeetingPlanStatusEnum::PUBLISHED->value) {
+                $meeting_status = MeetingPlanStatusEnum::PUBLISHED;
+            }  
+            $row->status_text = ($meeting_status == NULL )? ' Ready To '.MeetingPlanStatusEnum::PUBLISHED->text() : $meeting_status->text();
+            $row->color = ($meeting_status != NULL)? $meeting_status->color() : 'bg-red-500';
+
+            $row->status = $meeting_status ;
+            return $row;
+        });
+     
+        return response()->json($meetingPlanings);
+    }
+
+    
     public function ProjectMeeetingsHasActions(Request $request){
         $id = Session::get('projectID');
         $meetingPlanings = $this->meetingPlaningService->getAllProjectMeetingActions($id , $request);
@@ -305,6 +341,14 @@ class MeetingPlaningController extends Controller
         }
     }  
 
+    public function closeAction($id){
+        $meeting = \App\Models\MeetingPlanNotes::find($id);
+        $meeting->closed = 1;
+        $meeting->save();
+
+        return \App\Models\MeetingPlanNotes::find($id);
+
+    }
     public function store_notes(){
 
         $data = request()->all();

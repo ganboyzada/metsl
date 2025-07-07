@@ -151,6 +151,8 @@ Route::middleware([
 
 
 	Route::get('/project/meetings/all',  [MeetingPlaningController::class, "ProjectMeeetings"])->name('projects.meetings.all');
+    Route::get('/project/meetings/all_planned',  [MeetingPlaningController::class, "ProjectMeeetingsPlanned"])->name('projects.meetings.all_planned');
+    
     Route::get('/project/meetings/all_actions',  [MeetingPlaningController::class, "ProjectMeeetingsHasActions"])->name('projects.meetings.all_actions');
 	Route::get('/project/meetings/create',  [MeetingPlaningController::class, "create"])->name(name: 'projects.meetings.create');	
     Route::get('/project/meetings/participates',  [MeetingPlaningController::class, "getParticipates"])->name('projects.meetings.participates');	
@@ -158,6 +160,7 @@ Route::middleware([
     Route::view('/project/meetings/view/{id}', 'metsl.pages.meeting-minutes.meeting_minutes')->name('projects.meetings.view');
     Route::get('/project/meetings/edit/{id}', [MeetingPlaningController::class, "edit"])->name('projects.meetings.edit');
     Route::get('/project/meetings/download/{id}', [MeetingPlaningController::class, "downloadPdf"])->name('projects.meetings.downloadPdf');
+    Route::get('/project/meetings/close/{id}', [MeetingPlaningController::class, "closeAction"])->name('projects.meetings.close');
 
 
 

@@ -22,6 +22,7 @@ return new class extends Migration
                 ->on('users');	
 
             $table->date('deadline')->nullable();    
+			$table->boolean('closed')->default(0);
             $table->unsignedBiginteger('meeting_id')->unsigned();
             $table->foreign('meeting_id')->references('id')
                 ->on('meeting_plans')->onDelete('cascade');	

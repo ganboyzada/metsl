@@ -56,6 +56,46 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
         return $this->model->where('project_id',$projectID)->count();
     } 
 
+        /**
+    * @param int $project_id 
+    * @param \Request $request
+    * @return LengthAwarePaginator
+    * 
+    */
+    public function get_all_project_meeting_planing_Planned($project_id , $request): LengthAwarePaginator{
+
+        $meetingPlanings =  $this->model->where('project_id',$project_id)
+        ->where('status',MeetingPlanStatusEnum::PLANNED->value)
+
+        ->select('meeting_plans.*');
+
+        if(auth()->user()->is_admin){
+            $meetingPlanings = $meetingPlanings->with(['users:id,name'])->paginate(10);
+
+            return $meetingPlanings;
+        }
+        else if(!auth()->user()->is_admin){
+
+               $meetingPlanings = $meetingPlanings->where(function($q){
+                    $q->whereHas('users', function ($query) {
+                        $query->where('user_id', auth()->user()->id);
+                    });
+
+                    $q->orwhere('created_by', auth()->user()->id);
+                   
+                });
+            
+            $meetingPlanings = $meetingPlanings->with(['users:id,name'])->paginate(10);
+
+            return $meetingPlanings;  
+            
+
+        }
+    }
+
+
+
+
     /**
     * @param int $project_id 
     * @param \Request $request
@@ -65,9 +105,10 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
     public function get_all_project_meeting_planing_has_action_to_user($project_id , $request): LengthAwarePaginator{
         $meetingPlanings =  $this->model->join('meeting_plan_notes','meeting_plan_notes.meeting_id','=','meeting_plans.id')
         ->where('project_id',$project_id)->where('meeting_plan_notes.type','action')
+        ->where('closed',0)
         //->where('status',MeetingPlanStatusEnum::PLANNED->value)
         
-        ->select('meeting_plans.*','meeting_plan_notes.note', 'meeting_plan_notes.deadline');
+        ->select('meeting_plans.*','meeting_plan_notes.note', 'meeting_plan_notes.deadline', 'meeting_plan_notes.id as note_id');
 
           if(auth()->user()->is_admin){
             $meetingPlanings = $meetingPlanings->with(['users:id,name'])->paginate(10);
@@ -76,10 +117,14 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
         }
         else if(!auth()->user()->is_admin){
 
-            $meetingPlanings = $meetingPlanings->where('assign_user_id',auth()->user()->id);
+                $meetingPlanings = $meetingPlanings->where(function($q){
+                    $q->where('assign_user_id',auth()->user()->id);
+                    $q->orwhere('created_by', auth()->user()->id);
+                   
+                });   
             
 
-            
+            $meetingPlanings = $meetingPlanings->orwhere('created_by', auth()->user()->id);         
             
             $meetingPlanings = $meetingPlanings->with(['users:id,name'])->paginate(10);
 

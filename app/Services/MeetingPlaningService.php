@@ -99,6 +99,10 @@ class MeetingPlaningService
 
     }
 
+    public function getAllProjectMeetingPlanned($project_id , $request){
+        return $this->meetingPlaningRepository->get_all_project_meeting_planing_Planned($project_id , $request);
+
+    }
 
     public function getAllProjectMeetingActions($project_id , $request){
         return $this->meetingPlaningRepository->get_all_project_meeting_planing_has_action_to_user($project_id , $request);

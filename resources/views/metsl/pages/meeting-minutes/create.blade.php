@@ -194,8 +194,10 @@
     function check_type(element){
         if(element.value == 0){
             $('#new-meeting-type').removeClass('hidden');
+            $('[name="new-meeting-type"]').prop('required', true);
         }else{
             $('#new-meeting-type').addClass('hidden');
+            $('[name="new-meeting-type"]').prop('required', false);
         }
         // element.value = '';
     }

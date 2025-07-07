@@ -1,6 +1,6 @@
-<div class="widget" id="widget-meetings">
+<div class="widget" id="widget-planned-meetings">
     <h2 class="bg-red-500 text-md inline-flex uppercase text-white font-semibold px-4 py-2 rounded-t-lg w-fit">
-        <i data-feather="list" class="me-2 text-red-700"></i>Meetings Published
+        <i data-feather="list" class="me-2 text-red-700"></i>Meetings Planned
     </h2>
     <div class="overflow-x-auto border border-blue-500 rounded-tl-none rounded-xl">
         <table class="rounded-tl-none min-w-full">
@@ -9,23 +9,33 @@
                     <th class="px-4 py-2 font-light">Meeting Type</th>
                     <th class="px-4 py-2 font-light">Planned Date</th>
                     <th class="px-4 py-2 font-light">Planned Start</th>
+                    <th class="px-4 py-2 font-light">duration</th>
                     <th class="px-4 py-2 font-light">notes</th>
-                    <th class="px-4 py-2 font-light">Deadline</th>
-                    <th class="px-4 py-2 font-light">action</th>
+                    <th class="px-4 py-2 font-light">location</th>
                 </tr>
             </thead>
-            <tbody id="widget-meetings-table">
+            <tbody id="widget-planned-meetings-table">
                 <!-- Rows will be dynamically loaded -->
             </tbody>
         </table>
-        <div id="pagination_meetings_widget" class="flex gap-2 mt-4"></div>
+        <div id="pagination_Planned_meetings_widget" class="flex gap-2 mt-4"></div>
     </div>
 </div>
 
 <script>
+loadWidgetPlannedMeetings();
+async function loadWidgetPlannedMeetings(page=1) {
+        let url = `project/meetings/all_planned?page=${page}`;
 
-function loadWidgetMeetings() {
+        let fetchRes = await fetch(url);
+        const response = await fetchRes.json(); // full paginated response
+        const all_meetings = response.data;
 
+        mettingsData = all_meetings.map(function(item) {
+        let namesString = item.users.map((user) => `${user.name}`).join(", ");
+        item.users = namesString;
+        return item;
+        });
 
         let html =``;
         if(mettingsData.length > 0){
@@ -37,18 +47,18 @@ function loadWidgetMeetings() {
                         <td class="px-4 py-2">${mettingsData[i].planned_date}</td>
                
                         <td class="px-4 py-2">${mettingsData[i].start_time}</td>
-                        <td class="px-4 py-2">${mettingsData[i].note}</td>
-                        <td class="px-4 py-2">${mettingsData[i].deadline}</td>
-                        <td><button type="button" onclick="close_action(${mettingsData[i].note_id})" 
-                            class="px-3 py-1  text-xs font-bold bg-red-500 text-white">close Action</button></td>
+                        <td class="px-4 py-2">${mettingsData[i].duration}</td>
+                        <td class="px-4 py-2">${mettingsData[i].purpose}</td>
+                        <td class="px-4 py-2">${mettingsData[i].location}</td>
                     
                 
                         </tr>`;
             }
             
         }
-        $('#widget-meetings-table').html(html);
+        $('#widget-planned-meetings-table').html(html);
         feather.replace();
+        renderPaginationPlannedMeetingsWidget(response);
 
 
 
@@ -56,7 +66,7 @@ function loadWidgetMeetings() {
 }
 
 
-function renderPaginationMeetingsWidget(data) {
+function renderPaginationPlannedMeetingsWidget(data) {
     let html = '';
     if (data.last_page > 1) {
         for (let i = 1; i <= data.last_page; i++) {
@@ -65,18 +75,7 @@ function renderPaginationMeetingsWidget(data) {
                     </button>`;
         }
     }
-    $('#pagination_meetings_widget').html(html);
+    $('#pagination_Planned_meetings_widget').html(html);
 }
 
-
-async function close_action(id){
-    let url = "{{ route('projects.meetings.close', [':id']) }}".replace(':id', id);
-    let response = await fetch(url);
-    if(response.status == 200){
-        $('.success').show();
-        $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">Closed Successfully</div>');  
-        get_meeting_planing();
-    }
-
-}
 </script>

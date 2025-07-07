@@ -4,6 +4,9 @@
 	<input type="hidden" id="comments_permission" value="{{ checkIfUserHasThisPermission(Session::get('projectID') , 'review_documents') }}"/>
 
     @include('metsl.pages.widgets.correspondence')
+        @include('metsl.pages.widgets.documents')
+    @include('metsl.pages.widgets.meetings_planned')
+
     @include('metsl.pages.widgets.meetings')
     @include('metsl.pages.widgets.documents')
     @include('metsl.pages.widgets.punchlist')
