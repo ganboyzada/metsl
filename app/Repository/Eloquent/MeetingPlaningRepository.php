@@ -119,7 +119,7 @@ class MeetingPlaningRepository extends BaseRepository implements MeetingPlaningR
 
                 $meetingPlanings = $meetingPlanings->where(function($q){
                     $q->where('assign_user_id',auth()->user()->id);
-                    $q->orwhere('created_by', auth()->user()->id);
+                    $q->orwhere('meeting_plans.created_by', auth()->user()->id);
                    
                 });   
             

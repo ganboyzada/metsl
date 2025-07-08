@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Enums\CorrespondenceStatusEnum;
+use App\Http\Requests\CorrespondenceReject;
 use App\Http\Requests\CorrespondenceRequest;
 use App\Http\Requests\ProjectRequest;
 use App\Http\Requests\UserRequest;
@@ -146,8 +147,9 @@ class CorrespondenceController extends Controller
     public function accept($id){
         $correspondece = $this->correspondenceService->accept($id);
     }
-    public function reject($id){
-        $correspondece = $this->correspondenceService->reject($id);
+    public function reject(CorrespondenceReject  $request){
+       $correspondece = $this->correspondenceService->reject($request);
+       return response()->json(['success' => 'Form submitted successfully.' , 'data'=>$this->correspondenceService->edit($request->id)]);
     }
 
     public function delay(Request $request){

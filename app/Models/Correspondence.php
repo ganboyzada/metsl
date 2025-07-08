@@ -75,6 +75,19 @@ class Correspondence extends Model
         'correspondence_id', 'revision_id')
         ->using(CorrespondenceLinkedDocuments::class);
     } 
+    public function replies()
+    {
+        return $this->hasMany(Correspondence::class, 'reply_correspondence_id');
+    }
+    public function parent(): belongsTo
+    {
+        return $this->belongsTo(Correspondence::class, 'reply_correspondence_id', 'id');
+    }
+
+    public function replyon(): belongsTo
+    {
+        return $this->belongsTo(Correspondence::class, 'reply_child_correspondence_id', 'id');
+    }
 
     public  function relatedCorrespondences(): BelongsToMany{
         return $this->belongsToMany(Correspondence::class, 'correspondence_related_correspondences', 'correspondence_id', 'related_id');

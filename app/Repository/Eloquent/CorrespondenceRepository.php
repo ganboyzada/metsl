@@ -285,56 +285,18 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
     * @return LengthAwarePaginator
     * 
     */
-    public function get_all_project_correspondence_open($project_id , $request): LengthAwarePaginator{
-        // $sub = \DB::raw('(select  reply_correspondence_id as replyCorespondenceId  , MAX(created_date) as last_upload_date
-        //  from correspondences where reply_correspondence_id is not null group by reply_correspondence_id)last_upload_table');
 
-        $modal =  $this->model->where('project_id',$project_id)
-        //->where('reply_correspondence_id',NULL)
-        // ->leftjoin($sub,function($join){
-        //     $join->on('last_upload_table.replyCorespondenceId','=','id');       
-        // })
-        ->where('status','!=',CorrespondenceStatusEnum::CLOSED->value)
-        ->where(function($q)use ($project_id){
-            if(!auth()->user()->is_admin){
-                // $q->where(function($query)use ($project_id){
-                //     $query->where('changed_by', '!=',NULL);
-                //     $query->where('created_by', auth()->user()->id);
-                // });
 
-                $q->where(function($query)use ($project_id){
-                    $query->whereNotIn('id', function($query) use ($project_id) {
-                    $query->select('reply_child_correspondence_id')
-                    ->from('correspondences')
-                    ->whereNotNull('reply_child_correspondence_id')
-                    ->where('project_id', $project_id);
-                    })->where('created_by','!=', auth()->user()->id);
+ public function get_all_project_correspondence_open($project_id , $request): LengthAwarePaginator{
+       
+        $modal =  $this->model->where('project_id',$project_id)->whereNull('reply_correspondence_id')->where('status',CorrespondenceStatusEnum::OPEN->value)
+                ->where(function ($query)  {
+                    // الحالة 1: لا توجد ردود ومُسند إليك
+                    $query->whereDoesntHave('replies');
+
+                    // أو الحالة 2: الردود موجودة ولكن ليس لها reply_child_correspondence_id
+                    $query->orWhereHas('replies', fn($q) => $q->whereNull('reply_child_correspondence_id')->where('created_by','!=', auth()->user()->id));
                 });
-
-            }else{
-                // $q->where(function($query)use ($project_id){
-                //     $query->where('changed_by', '!=',NULL);
-                // });
-
-                $q->where(function($query)use ($project_id){
-                    $query->whereNotIn('id', function($query) use ($project_id) {
-                    $query->select('reply_child_correspondence_id')
-                    ->from('correspondences')
-                    ->whereNotNull('reply_child_correspondence_id')
-                    ->where('project_id', $project_id);
-                    });
-                });
-
-            }
-
-
-            
-
-            // $q->orWhereHas('distributionMembers', function ($query) {
-            //         $query->where('user_id', auth()->user()->id);
-            //     });
-        });
-        
          
 
         if(!auth()->user()->is_admin){
@@ -355,20 +317,9 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
 
 
                   $q->orwhere(function($query)use($project_id){
-                      $query->where('changed_by', '!=',NULL);
+                     // $query->where('changed_by', '!=',NULL);
                     $query->where('created_by', auth()->user()->id);
                   });
-
-
-                // $enums_list = \App\Enums\CorrespondenceTypeEnum::cases();
-                // foreach ($enums_list as $enum) {
-                //     if(checkIfUserHasThisPermission($project_id , 'view_'.$enum->value)){
-                //         $q = $q->orwhere('type' , $enum->value);
-    
-                //     }
-                // }
-
-
 
 
             });
@@ -388,6 +339,110 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
         
 
     }
+
+    // public function get_all_project_correspondence_open($project_id , $request): LengthAwarePaginator{
+    //     // $sub = \DB::raw('(select  reply_correspondence_id as replyCorespondenceId  , MAX(created_date) as last_upload_date
+    //     //  from correspondences where reply_correspondence_id is not null group by reply_correspondence_id)last_upload_table');
+
+    //     $modal =  $this->model->where('project_id',$project_id)
+    //     //->where('reply_correspondence_id',NULL)
+    //     // ->leftjoin($sub,function($join){
+    //     //     $join->on('last_upload_table.replyCorespondenceId','=','id');       
+    //     // })
+    //     ->where('status','!=',CorrespondenceStatusEnum::CLOSED->value)
+    //     ->where(function($q)use ($project_id){
+    //         if(!auth()->user()->is_admin){
+    //             // $q->where(function($query)use ($project_id){
+    //             //     $query->where('changed_by', '!=',NULL);
+    //             //     $query->where('created_by', auth()->user()->id);
+    //             // });
+
+    //             $q->where(function($query)use ($project_id){
+    //                 $query->whereNotIn('id', function($query) use ($project_id) {
+    //                 $query->select('reply_child_correspondence_id')
+    //                 ->from('correspondences')
+    //                 ->whereNotNull('reply_child_correspondence_id')
+    //                 ->where('project_id', $project_id);
+    //                 })->where('created_by','!=', auth()->user()->id);
+    //             });
+
+    //         }else{
+    //             // $q->where(function($query)use ($project_id){
+    //             //     $query->where('changed_by', '!=',NULL);
+    //             // });
+
+    //             $q->where(function($query)use ($project_id){
+    //                 $query->whereNotIn('id', function($query) use ($project_id) {
+    //                 $query->select('reply_child_correspondence_id')
+    //                 ->from('correspondences')
+    //                 ->whereNotNull('reply_child_correspondence_id')
+    //                 ->where('project_id', $project_id);
+    //                 });
+    //             });
+
+    //         }
+
+
+            
+
+    //         // $q->orWhereHas('distributionMembers', function ($query) {
+    //         //         $query->where('user_id', auth()->user()->id);
+    //         //     });
+    //     });
+        
+         
+
+    //     if(!auth()->user()->is_admin){
+
+    //         $modal = $modal->where(function($q)use($project_id){
+    //             $q->whereHas('assignees', function ($query) {
+    //                 $query->where('user_id', auth()->user()->id);
+    //             });
+
+    //             $q->orWhereHas('distributionMembers', function ($query) {
+    //                 $query->where('user_id', auth()->user()->id);
+    //             });
+                
+    //             $q->orWhereHas('forwards', function ($query) {
+    //                 $query->where('user_id', auth()->user()->id);
+                    
+    //             });
+
+
+    //               $q->orwhere(function($query)use($project_id){
+    //                   $query->where('changed_by', '!=',NULL);
+    //                 $query->where('created_by', auth()->user()->id);
+    //               });
+
+
+    //             // $enums_list = \App\Enums\CorrespondenceTypeEnum::cases();
+    //             // foreach ($enums_list as $enum) {
+    //             //     if(checkIfUserHasThisPermission($project_id , 'view_'.$enum->value)){
+    //             //         $q = $q->orwhere('type' , $enum->value);
+    
+    //             //     }
+    //             // }
+
+
+
+
+    //         });
+            
+
+
+
+    //         $modal = $modal->orderBy('id', 'desc')->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name'])->paginate(10);
+
+    //         return $modal;           
+
+    //     }else{
+    //         $modal = $modal->orderBy('id', 'desc')->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name'])->paginate(10);
+
+    //         return $modal;
+    //     }
+        
+
+    // }
     
     /**
     * @param int $project_id

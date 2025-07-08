@@ -264,9 +264,18 @@ h1{
     background-color: rgb(156 163 175 / var(--tw-bg-opacity));
 }
 
+.bg-yellow-300 {
+    --tw-bg-opacity: 1;
+    background-color: rgb(255 198 21);
+    
+}
+
+
 .bg-yellow-500 {
     --tw-bg-opacity: 1;
     background-color: rgb(234 179 8 / var(--tw-bg-opacity));
+
+        
 }
 .rounded-full {
     border-radius: 9999px;

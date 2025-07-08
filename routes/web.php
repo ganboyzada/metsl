@@ -87,7 +87,7 @@ Route::middleware([
     Route::get('/project/correspondence/destroy-file/{id}',  [CorrespondenceController::class, "destroyFile"])->name(name: 'projects.correspondence.destroy-file');	
     Route::get('/project/correspondence/close/{id}',  [CorrespondenceController::class, "close"])->name(name: 'projects.correspondence.close');	
     Route::get('/project/correspondence/accept/{id}',  [CorrespondenceController::class, "accept"])->name(name: 'projects.correspondence.accept');	
-    Route::get('/project/correspondence/reject/{id}',  [CorrespondenceController::class, "reject"])->name(name: 'projects.correspondence.reject');	
+    Route::POST('/project/correspondence/reject',  [CorrespondenceController::class, "reject"])->name(name: 'projects.correspondence.reject');	
     Route::post('/project/correspondence/delay',  [CorrespondenceController::class, "delay"])->name(name: 'projects.correspondence.delay');	
     
     Route::view('/project/documents', 'metsl.pages.documents.index')->name('projects.documents');

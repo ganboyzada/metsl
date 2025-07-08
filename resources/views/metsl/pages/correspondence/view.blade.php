@@ -20,10 +20,29 @@
         <div
             class="dropdown absolute right-0 mt-2 w-48 bg-gray-800 text-gray-200  shadow-lg"
         >
-            @if($correspondece->created_by == \Auth::user()->id 
-            || checkIfUserHasThisPermission(Session::get('projectID') ,'reply_'.$correspondece->type->value))
-            <a href="{{ url('project/correspondence/create?type='.$correspondece->type->value.'&correspondece='.$correspondece->id) }}" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Reply</a>
+
+            @if( ($correspondece->type->value == App\Enums\CorrespondenceTypeEnum::NCR->value 
+                    
+                    && $correspondece->reply_correspondence_id == NULL)
+                || ($correspondece->type->value == App\Enums\CorrespondenceTypeEnum::RFI->value 
+                    
+                    && $correspondece->reply_correspondence_id == NULL)    
+
+                ||  ($correspondece->type->value == App\Enums\CorrespondenceTypeEnum::RFC->value
+                    && checkIfUserHasThisPermission(Session::get('projectID') ,'reply_'.$correspondece->type->value)
+                    && $correspondece->reply_correspondence_id == NULL && $correspondece->created_by != \Auth::user()->id)
+            
+            )
+
+                @if ($correspondece->status != App\Enums\CorrespondenceStatusEnum::CLOSED->value )
+                    <a href="{{ url('project/correspondence/create?type='.$correspondece->type->value.'&correspondece='.$correspondece->id) }}" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Reply</a>
+                
+                @endif
             @endif
+
+
+
+{{-- 
 
             @if($correspondece->created_by == \Auth::user()->id )
                 @if ($correspondece->reply_correspondence_id == NULL)
@@ -31,15 +50,45 @@
             
                 @endif
 
+            @endif --}}
+
+
+            @if (($correspondece->type->value == App\Enums\CorrespondenceTypeEnum::RFI->value
+                     && $correspondece->created_by == \Auth::user()->id
+                    &&$correspondece->status == App\Enums\CorrespondenceStatusEnum::OPEN->value)
+                    
+                    )
+
+                    <a onclick="accept_correspondence({{ $correspondece->id }}  , '{{ $correspondece->number }}')"  href="#" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Accept</a>
+                    <a onclick="close_correspondence({{ $correspondece->id }}  , '{{ $correspondece->number }}')"  href="#" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Closed</a>
+
+                
             @endif
 
-            @if (checkIfUserHasThisPermission(Session::get('projectID') ,'reply_'.$correspondece->type->value) 
-            && $correspondece->reply_correspondence_id == NULL
-            && $correspondece->type->value == App\Enums\CorrespondenceTypeEnum::RFC->value && $correspondece->created_by != \Auth::user()->id) 
+            @if(($correspondece->type->value == App\Enums\CorrespondenceTypeEnum::NCR->value 
+                    && $correspondece->created_by == \Auth::user()->id 
+                    && $correspondece->reply_correspondence_id == NULL)
+
+                ||  ($correspondece->type->value == App\Enums\CorrespondenceTypeEnum::RFC->value
+                    && checkIfUserHasThisPermission(Session::get('projectID') ,'reply_'.$correspondece->type->value)
+                    && $correspondece->created_by != \Auth::user()->id
+                    && $correspondece->reply_correspondence_id == NULL)
+            
+            )
+
                 @if ($correspondece->status == App\Enums\CorrespondenceStatusEnum::OPEN->value)
+
                     <a onclick="accept_correspondence({{ $correspondece->id }}  , '{{ $correspondece->number }}')"  href="#" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Accept</a>
-                    <a onclick="reject_correspondence({{ $correspondece->id }}  , '{{ $correspondece->number }}')"  href="#" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Reject</a>
-                   
+               
+                    @if ($correspondece->type->value == App\Enums\CorrespondenceTypeEnum::RFC->value)
+                        <button type="button" class="modal-toggler   w-full text-left px-4 py-2 hover:bg-gray-700" data-modal="correspondence-reject-modal">
+                        <i data-feather="corner-up-left" class="mr-2"></i>Reject
+                        </button>
+                        
+                    @endif
+                    
+                    <a onclick="close_correspondence({{ $correspondece->id }}  , '{{ $correspondece->number }}')"  href="#" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Closed</a>
+
                 @endif
             
             @endif
@@ -51,6 +100,11 @@
                 @if ($correspondece->status == App\Enums\CorrespondenceStatusEnum::OPEN->value)
                     <a onclick="accept_correspondence({{ $correspondece->id }}  , '{{ $correspondece->number }}')"  
                         href="#" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Accept</a>
+
+
+
+                    {{-- <a onclick="close_correspondence({{ $correspondece->id }}  , '{{ $correspondece->number }}')"  href="#" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Closed</a> --}}
+    
                    
                 @endif
             
@@ -59,7 +113,7 @@
 
             @if($correspondece->created_by == \Auth::user()->id && $correspondece->reply_correspondence_id == NULL
             && $correspondece->status != App\Enums\CorrespondenceStatusEnum::CLOSED->value)
-                <button type="button" class="modal-toggler  px-4 py-2 hover:bg-gray-700" data-modal="delay-modal">
+                <button type="button" class="modal-toggler  w-full text-left  px-4 py-2 hover:bg-gray-700" data-modal="delay-modal">
                     <i data-feather="corner-up-left" class="mr-2"></i>delay
                 </button>
             @endif
@@ -230,6 +284,26 @@
                 @endif
                 </div>
             </div>
+
+
+            @if ($correspondece->reject_reason != NULL)
+                   <div>
+                    <h3 class="text-sm font-medium dark:text-gray-400 mb-1">Reject Reason</h3>
+                    <p class="text-lg dark:text-gray-200">{!! $correspondece->reject_reason   !!}.</p>
+                </div>   
+            @endif      
+            @if ($correspondece->reject_file != NULL)
+                        <div class="bg-gray-100 dark:bg-gray-800 p-4  flex items-center justify-between">
+                            <div class="flex items-center">
+                                <i data-feather="file" class="w-6 h-6 mr-3 dark:text-gray-400"></i>
+                                <p class="text-sm dark:text-gray-200">{{$correspondece->reject_file}}</p>
+                            </div>
+                            <a target="_blank" href="{{Storage::url('project'.$correspondece->project_id.'/correspondence'.$correspondece->id.'/'.$correspondece->reject_file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
+                        </div>
+
+            @endif
+
+
         </div>
     </div>
 
@@ -341,7 +415,143 @@
     </div>
 </div>
 
+
+<div id="correspondence-reject-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div class="bg-white dark:bg-gray-800  shadow-lg max-w-3xl w-full p-6">
+        <!-- Modal Header -->
+        <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-semibold dark:text-gray-200"> Reject</h2>
+            <button data-modal="correspondence-reject-modal" class="modal-toggler   text-gray-500 hover:text-gray-800 dark:hover:text-gray-300 transition">
+                <i data-feather="x" class="w-5 h-5"></i>
+            </button>
+        </div>
+
+        <!-- Upload Form -->
+        <form id="upload-form-correspondence-reject"  method="POST" enctype="multipart/form-data">
+			@csrf
+			<input type="hidden" value="{{\Session::get('projectID')}}" name="project_id"/>
+            <input type="hidden" value="{{$correspondece->id}}" name="id"/>
+
+            <!-- Title -->
+            <div>
+                <label class="block mb-1">Attachment</label>
+                <div id="drop-zone" class="flex flex-col items-center justify-center w-full h-40 border-2 border-dashed  dark:bg-gray-800 dark:border-gray-700 border-gray-300">
+                    <div class="flex flex-col items-center justify-center">
+                        <i data-feather="upload" class="w-10 h-10 text-gray-500"></i>
+                        <p class="text-sm text-gray-500">Click to upload or drag and drop</p>
+                        <p class="text-xs text-gray-500">PDF only (max. 5MB)</p>
+                    </div>
+                    <input id="reject_file"  name="reject_file" type="file" class="" accept=".pdf">
+                </div>
+				<ul class="file-list" class="mt-4 space-y-2">
+				</ul>
+                <ul id="file-list" class="mt-4 space-y-2">
+                    <!-- Uploaded files will appear here -->
+                </ul>
+            </div>
+
+              <!-- Description -->
+            <div class="mb-4">
+                <label for="reject_reason" class="block text-sm mb-2 dark:text-gray-200">Description *</label>
+                <textarea 
+                    id="reject_reason" name="reject_reason" 
+                    class="w-full px-4 py-2 dark:bg-gray-800 dark:text-gray-200"
+                    rows="4"
+                    placeholder="Enter description"
+                ></textarea>
+            </div>         
+
+            <!-- Submit Button -->
+
+            <button
+                type="submit" id="submit_upload_form_correspondence-reject"
+                class="flex gap-x-2 bg-blue-500 text-white px-4 py-2  hover:bg-blue-600 transition"
+            >   <i data-feather="upload"></i>
+                Save
+            </button>
+        </form>
+    </div>
+</div>
+
 <script>
+   // alert(tinyMCE.get('reject_file').getContent());
+    $("#upload-form-correspondence-reject").on("submit", function(event) {
+        const form = document.getElementById("upload-form-correspondence-reject");
+        const formData = new FormData(form); 
+		formData.append('reject_reason',tinyMCE.get('reject_reason').getContent());
+            $('.error').hide();
+            $('.success').hide();
+            $('.err-msg').hide();
+            $(".error").html("");
+            $(".success").html("");
+            event.preventDefault();  
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
+                }
+            });
+            $.ajax({
+                url: "{{ route('projects.correspondence.reject') }}" ,
+                type: "POST",
+                data: formData,
+                dataType: 'json',
+                contentType: false,
+                processData: false,
+                cache: false,
+                beforeSend: function() {
+                    $("#submit_upload_form_correspondence-reject").prop('disabled', true);
+                },
+                success: function(data) {
+                    if (data.success) {
+                         
+                        $("#submit_upload_form_correspondence-reject").prop('disabled', false);
+                        
+                        //$("#upload-form-delay")[0].reset();
+						
+						window.scrollTo(0,0);
+						document.getElementById("correspondence-reject-modal").classList.add("hidden");
+
+                        $('.success').show();
+                        $('.success').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.success+'</div>');  
+						
+
+                        setInterval(function() {
+							location.reload();
+							}, 3000); 
+						
+
+
+                    }
+                    else if(data.error){
+                        $("#submit_upload_form_correspondence-reject").prop('disabled', false);
+
+                        $('.error').show();
+                        $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+data.error+'</div>');
+                    }
+                },
+                error: function (err) {
+                    $.each(err.responseJSON.errors, function(key, value) {
+                            $('.error').show();
+                            $('.error').html('<div class= "text-white-500  px-2 py-1 text-sm font-semibold">'+value[0]+'</div>');
+                            var el = $(document).find(`[name="${key=='reviewers' ? 'reviewers[]' : key}"]`);
+							el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">' + value[0] + '</div>'));
+                            if(el.length == 0){
+                                el = $(document).find('#file-upload');
+								el.after($('<div class= "err-msg text-red-500  px-2 py-1 text-sm font-semibold">the documents must be pdf </div>'));
+								
+                            }
+                            
+                        });
+
+                        $("#submit_upload_form_correspondence-reject").prop('disabled', false);
+
+
+                }
+            });
+    
+      });
+
+
      $("#upload-form-delay").on("submit", function(event) {
         const form = document.getElementById("upload-form-delay");
         const formData = new FormData(form); 

@@ -198,6 +198,7 @@
 </div>
 
 <script>
+   // alert(tinyMCE.get('description').getContent());
  $("#correspondence-form").on("submit", function(event) {
         const form = document.getElementById("correspondence-form");
         const formData = new FormData(form); 

@@ -131,10 +131,33 @@ class CorrespondenceService
         }
     }
 
-    public function reject($id)
+    public function reject($request)
     {
         try{
-            return $this->correspondenceRepository->reject($id);
+            $data = $request->all();
+            $correspondence = $this->edit($request->id);
+
+            $correspondence->reject_reason = $data['reject_reason'];
+
+
+            $path = Storage::url('/project'.$correspondence->project_id.'/correspondence'.$correspondence->id);
+            
+            \File::makeDirectory($path, $mode = 0777, true, true); 
+            
+            if(isset($data['reject_file']) && $data['reject_file'] != NULL){
+                $file = $data['reject_file'];
+                $fileName = time().'_'.$file->getClientOriginalName();
+ 
+    
+                Storage::disk('public')->putFileAs( 'project'.$correspondence->project_id.'/correspondence'.$correspondence->id, $file, $fileName);
+            
+                $correspondence->reject_file = $fileName;
+            } 
+
+            $correspondence->save();
+
+
+            return $this->correspondenceRepository->reject($request->id);
         }catch (\Exception $e) {
             throw new \Exception($e->getMessage());
         }
