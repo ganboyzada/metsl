@@ -291,15 +291,23 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
        
         $modal =  $this->model->where('project_id',$project_id)->whereNull('reply_correspondence_id')
         ->where('status','!=',CorrespondenceStatusEnum::CLOSED->value)
-                ->where(function ($query)  {
+                ->where(function ($query)use ($project_id)  {
                     // الحالة 1: لا توجد ردود ومُسند إليك
-                    $query->whereDoesntHave('replies');
+                    $query->whereDoesntHave('replies')->where('created_by','!=', auth()->user()->id);
 
                     // أو الحالة 2: الردود موجودة ولكن ليس لها reply_child_correspondence_id
-                    $query->orWhereHas('replies', fn($q) => $q->whereNull('reply_child_correspondence_id')->where('created_by','!=', auth()->user()->id));
-                });
+                    $query->orWhereHas('replies', fn($q) => $q->where(function($query)use ($project_id){
+                    $query->whereNotIn('id', function($query) use ($project_id) {
+                    $query->select('reply_child_correspondence_id')
+                    ->from('correspondences')
+                    ->whereNotNull('reply_child_correspondence_id')
+                    ->where('project_id', $project_id);
+                    })->where('created_by','!=', auth()->user()->id);
+                })
+                );
+            });
          
-
+            //dd($modal->get());
         if(!auth()->user()->is_admin){
 
             $modal = $modal->where(function($q)use($project_id){

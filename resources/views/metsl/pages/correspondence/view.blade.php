@@ -55,13 +55,15 @@
 
             @if (($correspondece->type->value == App\Enums\CorrespondenceTypeEnum::RFI->value
                      && $correspondece->created_by == \Auth::user()->id
-                    &&$correspondece->status == App\Enums\CorrespondenceStatusEnum::OPEN->value)
+                    )
                     
                     )
-
+                    @if ($correspondece->status == App\Enums\CorrespondenceStatusEnum::OPEN->value)
                     <a onclick="accept_correspondence({{ $correspondece->id }}  , '{{ $correspondece->number }}')"  href="#" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Accept</a>
+                    @endif
+                    @if ($correspondece->status != App\Enums\CorrespondenceStatusEnum::CLOSED->value)
                     <a onclick="close_correspondence({{ $correspondece->id }}  , '{{ $correspondece->number }}')"  href="#" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Closed</a>
-
+                    @endif
                 
             @endif
 
@@ -87,10 +89,16 @@
                         
                     @endif
                     
-                    <a onclick="close_correspondence({{ $correspondece->id }}  , '{{ $correspondece->number }}')"  href="#" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Closed</a>
 
                 @endif
-            
+
+
+
+
+            @if ($correspondece->status != App\Enums\CorrespondenceStatusEnum::CLOSED->value)           
+                <a onclick="close_correspondence({{ $correspondece->id }}  , '{{ $correspondece->number }}')"  href="#" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Closed</a>
+
+            @endif
             @endif
 
 
@@ -98,12 +106,12 @@
             && $correspondece->reply_correspondence_id == NULL
             && $correspondece->type->value == App\Enums\CorrespondenceTypeEnum::INS->value && $correspondece->created_by != \Auth::user()->id) 
                 @if ($correspondece->status == App\Enums\CorrespondenceStatusEnum::OPEN->value)
-                    <a onclick="accept_correspondence({{ $correspondece->id }}  , '{{ $correspondece->number }}')"  
-                        href="#" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Accept</a>
+                    {{-- <a onclick="accept_correspondence({{ $correspondece->id }}  , '{{ $correspondece->number }}')"  
+                        href="#" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Accept</a> --}}
 
 
 
-                    {{-- <a onclick="close_correspondence({{ $correspondece->id }}  , '{{ $correspondece->number }}')"  href="#" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Closed</a> --}}
+                    <a onclick="close_correspondence({{ $correspondece->id }}  , '{{ $correspondece->number }}')"  href="#" class="flex px-4 py-2 hover:bg-gray-700"><i data-feather="corner-up-left" class="mr-2"></i>Closed</a>
     
                    
                 @endif
@@ -293,6 +301,8 @@
                 </div>   
             @endif      
             @if ($correspondece->reject_file != NULL)
+                <div>
+                    <h3 class="text-sm font-medium dark:text-gray-400 mb-1">Reject File</h3>
                         <div class="bg-gray-100 dark:bg-gray-800 p-4  flex items-center justify-between">
                             <div class="flex items-center">
                                 <i data-feather="file" class="w-6 h-6 mr-3 dark:text-gray-400"></i>
@@ -300,6 +310,7 @@
                             </div>
                             <a target="_blank" href="{{Storage::url('project'.$correspondece->project_id.'/correspondence'.$correspondece->id.'/'.$correspondece->reject_file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
                         </div>
+                </div>        
 
             @endif
 
