@@ -289,7 +289,8 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
 
  public function get_all_project_correspondence_open($project_id , $request): LengthAwarePaginator{
        
-        $modal =  $this->model->where('project_id',$project_id)->whereNull('reply_correspondence_id')->where('status',CorrespondenceStatusEnum::OPEN->value)
+        $modal =  $this->model->where('project_id',$project_id)->whereNull('reply_correspondence_id')
+        ->where('status','!=',CorrespondenceStatusEnum::CLOSED->value)
                 ->where(function ($query)  {
                     // الحالة 1: لا توجد ردود ومُسند إليك
                     $query->whereDoesntHave('replies');
