@@ -147,6 +147,8 @@ function getLocalStorage(){
             $('.tab-content#documents').removeClass('hidden')
             $("[data-tab='documents']").addClass("active")
             try {
+                		
+                get_reviewers();
                 get_packages()
             } catch (error) {
                 console.log(error)

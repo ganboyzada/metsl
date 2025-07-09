@@ -371,6 +371,7 @@
 	let package_id = 0;
 	//get_documents();
 	get_packages();
+	//get_reviewers();
 	function set_package_id(id, text){
 		package_id = id;
 		//$('#current-doc-package').text(text);

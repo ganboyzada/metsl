@@ -251,6 +251,9 @@
 	// });
 		
 	async  function get_reviewers(){
+        reviewers_obj = populateChoices2('reviewers', [], true);
+        accessibles_obj = populateChoices2('accessibles', [], true);
+
 		let fetchRes = await fetch(`{{url('project/documents/reviewers')}}`);
 		const all_users = await fetchRes.json();
 		const reviewers = all_users.users.map(function(item) {
@@ -278,9 +281,9 @@
 
 	document.addEventListener('DOMContentLoaded', () => {
         if(localStorage.getItem("project_tool") == 'documents'){
-		reviewers_obj = populateChoices2('reviewers', [], true);
-        accessibles_obj = populateChoices2('accessibles', [], true);
-        get_reviewers();
+		// reviewers_obj = populateChoices2('reviewers', [], true);
+        // accessibles_obj = populateChoices2('accessibles', [], true);
+        //get_reviewers();
         }
 
        // assignees_obj = populateChoices2('assignees', [], true);
