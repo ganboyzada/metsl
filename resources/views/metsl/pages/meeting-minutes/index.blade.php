@@ -192,5 +192,5 @@
         }
     }
 
-	get_meeting_planing();
+	//get_meeting_planing();
 </script>

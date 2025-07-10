@@ -34,10 +34,14 @@
 					
 					@if ($packages->count() > 0)
 						@foreach ($packages as $package)
-							<button class="p-3 hover:bg-gray/75" onclick="set_package_id('{{ $package->id }}', '{{ $package->name }}');">
+						@if (in_array($package->id , auth()->user()->packages()->pluck('packages.id')->toArray()))
+						<button class="p-3 hover:bg-gray/75" onclick="set_package_id('{{ $package->id }}', '{{ $package->name }}');">
 								<i class="mr-1 text-gray-500 dark:text-gray-400" data-feather="folder"></i>
 								{{ $package->name }}
 							</button>
+							
+						@endif
+							
 						@endforeach
 					@endif
 
@@ -370,7 +374,7 @@
 	let current_document_id = 0;
 	let package_id = 0;
 	//get_documents();
-	get_packages();
+	//get_packages();
 	//get_reviewers();
 	function set_package_id(id, text){
 		package_id = id;

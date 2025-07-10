@@ -8,7 +8,6 @@
     @include('metsl.pages.widgets.meetings_planned')
 
     @include('metsl.pages.widgets.meetings')
-    @include('metsl.pages.widgets.documents')
     @include('metsl.pages.widgets.punchlist')
 
     @include('metsl.pages.documents.comments')

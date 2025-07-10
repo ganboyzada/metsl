@@ -201,8 +201,8 @@
         }		
 	}			
 
-	getAllParticipates();
-    getAllStatusPeriority();
+	// getAllParticipates();
+    // getAllStatusPeriority();
     let reviewers = {};
 	let priority = {};
     let packages = {};

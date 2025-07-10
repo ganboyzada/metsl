@@ -23,7 +23,7 @@
 </div>
 
 <script>
-loadWidgetPlannedMeetings();
+
 async function loadWidgetPlannedMeetings(page=1) {
         let url = `project/meetings/all_planned?page=${page}`;
 

@@ -147,9 +147,9 @@ function getLocalStorage(){
             $('.tab-content#documents').removeClass('hidden')
             $("[data-tab='documents']").addClass("active")
             try {
-                		
-                get_reviewers();
-                get_packages()
+                 get_packages()	
+               get_reviewers()
+               
             } catch (error) {
                 console.log(error)
             }
@@ -183,6 +183,7 @@ function getLocalStorage(){
             try {
                 get_punch_list();
                 getAllStatusPeriority();
+                getAllParticipates();
             } catch (error) {
                 console.log(error)
             }
@@ -220,6 +221,7 @@ function getLocalStorage(){
                 get_punch_list()
                 get_meeting_planing()
 				get_documents()
+                loadWidgetPlannedMeetings();
             } catch (error) {
                 console.log(error)
             }
