@@ -463,7 +463,8 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
     public function get_correspondence_replies($project_id , $corespondence_id): Collection{
         return $this->model->where('project_id',$project_id)->where('reply_correspondence_id',$corespondence_id)
         
-        ->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name'])->get();
+        ->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name' , 'files:id,correspondence_id,file,size',
+         'documentFiles'])->get();
     }  
 
   

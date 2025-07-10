@@ -212,7 +212,7 @@ function getLocalStorage(){
 
             break;
         case 'activities':
-            $('.current-selected').html('Activities');
+            $('.current-selected').html('Dashboard');
             $('.tab-content#activities').removeClass('hidden');
             $("[data-tab='activities']").addClass("active");
             try {

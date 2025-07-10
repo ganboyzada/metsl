@@ -217,10 +217,34 @@ class CorrespondenceController extends Controller
         $id = session('projectID');
         //dd(session('projectID'));
         $correspondeces = $this->correspondenceService->getAllProjectCorrespondence($id , $request);
+        // $correspondeces->map(function($row){
+        //     return $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];
+        // });
         $correspondeces->map(function($row){
-            return $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];
-        });
-     
+           // $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];
+        
+               $dueDate = Carbon::parse($row->due_date); // example due date
+            $today = Carbon::today();
+
+            // Compare dates
+            if ($today->greaterThan($dueDate)) {
+                $diff = $today->diffInDays($dueDate);
+                $row->label = "<span class='px-3 py-1 rounded-full text-xs font-bold bg-red-500 text-white'>Overdue  ".abs($diff)." days</span>";
+            } else {
+                $diff = $today->diffInDays($dueDate);
+                if($diff == 0){
+                    $diff = $today->diffInDays($dueDate);
+                    $row->label = "<span class='px-3 py-1 rounded-full text-xs font-bold bg-orange-500 text-white'>  ".$diff." days</span>";
+
+                }else{
+                    $diff = $today->diffInDays($dueDate);
+                    $row->label = "<span class='px-3 py-1 rounded-full text-xs font-bold bg-green-500 text-white'>Remain  ".abs($diff)." days</span>";
+
+                }
+                
+            }
+            return $row;
+        });     
         return $correspondeces;
     }
 
@@ -237,10 +261,19 @@ class CorrespondenceController extends Controller
             // Compare dates
             if ($today->greaterThan($dueDate)) {
                 $diff = $today->diffInDays($dueDate);
-                $row->label = "Overdue by $diff days";
+                $row->label = "<span class='px-3 py-1 rounded-full text-xs font-bold bg-red-500 text-white'>Overdue  ".abs($diff)." days</span>";
             } else {
                 $diff = $today->diffInDays($dueDate);
-                 $row->label = "Remain $diff days";
+                if($diff == 0){
+                    $diff = $today->diffInDays($dueDate);
+                    $row->label = "<span class='px-3 py-1 rounded-full text-xs font-bold bg-orange-500 text-white'>  ".$diff." days</span>";
+
+                }else{
+                    $diff = $today->diffInDays($dueDate);
+                    $row->label = "<span class='px-3 py-1 rounded-full text-xs font-bold bg-green-500 text-white'>Remain  ".abs($diff)." days</span>";
+
+                }
+                
             }
             return $row;
         });

@@ -58,6 +58,7 @@
                     <th class="px-6 py-3 font-light">Assignees</th>
                     <th class="px-6 py-3 font-light">Created by</th>
                     <th class="px-6 py-3 font-light">Created at</th>
+                    <th class="px-6 py-3 font-light">due date</th>
                     <th class="px-6 py-3 font-light">Status</th>
                 </tr>
             </thead>
@@ -189,12 +190,10 @@
                     <td class="px-6 py-3">${row.assignees}</td>
                     <td class="px-6 py-3">${(row.created_by != null) ? row.created_by.name : ''}</td>
                     <td class="px-6 py-3">${row.created_date}</td>
+                    <td class="px-6 py-3">${row.due_date}</td>
                     <td class="px-6 py-3">
-                        <span class="px-3 py-1 rounded-full text-xs font-bold ${row.status_color[1]}">${row.status_color[0]}</span>`;
-                        if(row.changed_by != null){
-                             html+=`</br><small class="text-xs font-semibold">by ${row.changed_by.name}</small>`;
-                        }
-                     html+=`</td></tr>
+                        ${row.label}
+                    </td></tr>
                 `;
 
 			}
