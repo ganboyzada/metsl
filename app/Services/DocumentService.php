@@ -70,7 +70,7 @@ class DocumentService
                 foreach($news as $file_new){
                    
                     $document =  $this->documentRepository->create($data);
-                     dd($document);
+                     //dd($document);
                     $path = Storage::url('/project'.$data['project_id'].'/documents'.$document->id);
                     
                     \File::makeDirectory($path, $mode = 0777, true, true);  
