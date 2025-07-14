@@ -68,8 +68,9 @@ class DocumentService
             if(count($news) > 0){
 
                 foreach($news as $file_new){
-                    dd($data);
+                   
                     $document =  $this->documentRepository->create($data);
+                     dd($document);
                     $path = Storage::url('/project'.$data['project_id'].'/documents'.$document->id);
                     
                     \File::makeDirectory($path, $mode = 0777, true, true);  
