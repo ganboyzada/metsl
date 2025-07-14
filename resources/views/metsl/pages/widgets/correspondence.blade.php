@@ -35,13 +35,14 @@ function loadWidgetCorrespondence() {
 
                 html+=`<tr>
                     <td class="px-6 py-3">${row.number}
-					${row.label}
+					
 					</td>
                     <td class="px-6 py-3"><a class="underline" href="${url}">${row.subject}</a></td>
 
                     <td class="px-6 py-3">${(row.created_by != null) ? row.created_by.name : ''}</td>
                     <td class="px-6 py-3">${row.created_date}</td>
                     <td class="px-6 py-3">
+                        ${row.label} / 
                         <span class="px-3 py-1 rounded-full text-xs font-bold ${row.status_color[1]}">${row.status_color[0]}</span>
                     </td></tr>
                 `;

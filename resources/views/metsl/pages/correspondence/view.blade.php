@@ -23,10 +23,18 @@
 
             @if( ($correspondece->type->value == App\Enums\CorrespondenceTypeEnum::NCR->value 
                     
-                    && $correspondece->reply_correspondence_id == NULL)
+                    && $correspondece->reply_correspondence_id == NULL
+                    && (checkIfUserHasThisPermission(Session::get('projectID') ,'reply_'.$correspondece->type->value)
+                         || $correspondece->created_by == \Auth::user()->id)
+                    )
+
+
                 || ($correspondece->type->value == App\Enums\CorrespondenceTypeEnum::RFI->value 
                     
-                    && $correspondece->reply_correspondence_id == NULL)    
+                    && $correspondece->reply_correspondence_id == NULL 
+                    && (checkIfUserHasThisPermission(Session::get('projectID') ,'reply_'.$correspondece->type->value)
+                         || $correspondece->created_by == \Auth::user()->id)
+                    )    
 
                 ||  ($correspondece->type->value == App\Enums\CorrespondenceTypeEnum::RFC->value
                     && checkIfUserHasThisPermission(Session::get('projectID') ,'reply_'.$correspondece->type->value)
@@ -121,13 +129,13 @@
             @endif
 
 
-            @if($correspondece->created_by == \Auth::user()->id && $correspondece->reply_correspondence_id == NULL
+            {{-- @if($correspondece->created_by == \Auth::user()->id && $correspondece->reply_correspondence_id == NULL
                 && $correspondece->status != App\Enums\CorrespondenceStatusEnum::CLOSED->value
                 && $correspondece->status != App\Enums\CorrespondenceStatusEnum::ACCEPTED->value)
                 <button type="button" class="modal-toggler  w-full text-left  px-4 py-2 hover:bg-gray-700" data-modal="delay-modal">
                     <i data-feather="corner-up-left" class="mr-2"></i>delay
                 </button>
-            @endif
+            @endif --}}
 
         </div>
     </div>

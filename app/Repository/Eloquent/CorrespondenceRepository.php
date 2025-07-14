@@ -292,6 +292,7 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
        
         $modal =  $this->model->where('project_id',$project_id)->whereNull('reply_correspondence_id')
         ->where('status','!=',CorrespondenceStatusEnum::CLOSED->value)
+        ->where('status','!=',CorrespondenceStatusEnum::ACCEPTED->value)
                 ->where(function ($query)use ($project_id)  {
                     // الحالة 1: لا توجد ردود ومُسند إليك
                     $query->whereDoesntHave('replies')->where('created_by','!=', auth()->user()->id);

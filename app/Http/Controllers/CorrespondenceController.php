@@ -243,6 +243,9 @@ class CorrespondenceController extends Controller
                 }
                 
             }
+            if($row->status == CorrespondenceStatusEnum::CLOSED->value){
+                $row->label = "<span class='px-3 py-1 rounded-full text-xs font-bold bg-blue-500 text-white'>Closed</span>";
+            }
             return $row;
         });     
         return $correspondeces;
@@ -274,6 +277,9 @@ class CorrespondenceController extends Controller
 
                 }
                 
+            }
+            if($row->status == CorrespondenceStatusEnum::CLOSED->value){
+                $row->label = "<span class='px-3 py-1 rounded-full text-xs font-bold bg-blue-500 text-white'>Closed</span>";
             }
             return $row;
         });

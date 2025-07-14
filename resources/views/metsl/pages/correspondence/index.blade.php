@@ -7,13 +7,13 @@
             <div class="relative">
                 <i data-feather="search" stroke-width=2 class="absolute left-2 top-2"></i>
                 <input
-                    type="text" oninput="search()"
+                    type="text"
                     placeholder="Search"
 					name="search"
                     class="pl-10 pr-4 py-2 border-0 bg-gray-200 dark:bg-gray-700 dark:text-gray-200"
                 />
             </div>
-            <button class="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-200" >Add Filter</button>
+            <button  onclick="search()" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-gray-200" >Add Filter</button>
         </div>
         <!-- Create Button with Dropdown -->
         <div class="has-dropdown relative">
