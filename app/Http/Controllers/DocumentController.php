@@ -54,7 +54,7 @@ class DocumentController extends Controller
             try{
                 
                 $all_data = request()->all();
-                dd($all_data);
+                
                 $all_data['created_by'] = \Auth::user()->id;
 
                 $all_data['created_date'] = date('Y-m-d');

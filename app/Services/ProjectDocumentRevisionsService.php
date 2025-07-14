@@ -58,6 +58,7 @@ class ProjectDocumentRevisionsService
 
             }   
             $data['preview_image'] = $preview_image;
+            dd($data);
             $modal =  $this->projectDocumentRevisionsRepository->create($data);
             \DB::commit();
         } catch (\Exception $e) {
