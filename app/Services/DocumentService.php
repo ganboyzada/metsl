@@ -68,7 +68,7 @@ class DocumentService
             if(count($news) > 0){
 
                 foreach($news as $file_new){
-                    dd($data);
+                   // dd($data);
                     $document =  $this->documentRepository->create($data);
                     $path = Storage::url('/project'.$data['project_id'].'/documents'.$document->id);
                     
