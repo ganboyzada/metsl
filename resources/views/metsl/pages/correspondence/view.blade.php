@@ -336,133 +336,139 @@
 
     <h3 class="font-medium mb-2 w-full bg-blue-500 text-white p-2">REPLIES</h3>
 
+    <table class="w-full ">
+        <thead class="w-full bg-green-500 bg-opacity-50">
+            <tr>
+                <th style="width:60%">Response</th>
+                <th>Date</th>
+                <th>BY</th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @if ($others_correspondeces_realated->count() > 0)
+                @foreach ($others_correspondeces_realated as $correspondece_row)  
+                  <tr  class="px-6 py-3">
+                    <td>
+                        <div class="bg-gray-100 dark:bg-gray-600 p-4 mb-4">
+
+                            
+
+
+                                <div>
+                                        <p class="text-lg dark:text-gray-200">{!! $correspondece_row->description   !!}.</p>
+                                </div>
+
+                                    
+                           
+
+                            <!-- Description -->
+                            <div class="mb-6">
+                                <div class="grid">
+                        
+                                    @if($correspondece_row->files->count() > 0)
+                                    <div>
+                                        <h3 class="text-sm font-medium dark:text-gray-400 mb-2">Attached Files</h3>
+                                        <div class="grid grid-cols-2 gap-4">
+                                        
+                                            @foreach($correspondece_row->files as $file)
+                                                <div class="bg-gray-300 dark:bg-gray-800 p-4  flex items-center justify-between">
+                                                    <div class="flex items-center">
+                                                        <i data-feather="file" class="w-6 h-6 mr-3 dark:text-gray-400"></i>
+                                                        <p class="text-sm dark:text-gray-200">{{$file->file}}</p>
+                                                    </div>
+                                                    <a target="_blank" href="{{Storage::url('project'.$correspondece_row->project_id.'/correspondence'.$correspondece_row->id.'/'.$file->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
+                                                </div>            
+                                            @endforeach
+                                        
+                                        </div>
+                                    </div>
+                                    @endif
+
+
+                                    @if($correspondece_row->relatedCorrespondences->count() > 0)
+                                    <div>
+                                        <h3 class="text-sm font-medium dark:text-gray-400 mb-2">Related Correspondences</h3>
+                                        <div class="grid grid-cols-2 gap-4">
+                                        
+                                            @foreach($correspondece_row->relatedCorrespondences as $row)
+                                                <div class="bg-gray-300 dark:bg-gray-800 p-4  flex items-center justify-between">
+                                                    <div class="flex items-center">
+                                                        <p class="text-sm dark:text-gray-200">
+                                                            
+                                                        <a target="_blank" href="{{ route('projects.correspondence.view',$row->id) }}"
+                                                            class="text-blue-500 hover:underline">{{ $row->number }} / {{ $row->subject }}</a>
+
+                                                        </p>
+                                                    </div>
+                                                    
+                                                </div>
+                                    
+                                        
+                                            @endforeach
+                                            
+                                        
+                                        
+                                        </div>
+                                    </div>
+                                    @endif
+
+
+                                    
+                                    @if($correspondece_row->documentFiles->count() > 0)
+                                    <div>
+                                        <h3 class="text-sm font-medium dark:text-gray-400 mb-2">Linked Documents</h3>
+                                        <div class="grid grid-cols-2 gap-4">
+                                        
+                                            @foreach($correspondece_row->documentFiles as $file)
+                                                <div class="bg-gray-300 dark:bg-gray-800 p-4  flex items-center justify-between">
+                                                    <div class="flex items-center">
+                                                        <i data-feather="file" class="w-6 h-6 mr-3 dark:text-gray-400"></i>
+                                                        <p class="text-sm dark:text-gray-200">{{$file->file}}</p>
+                                                    </div>
+                                                    @if($file->pivot->revision_id == NULL || $file->pivot->revision_id == 0)
+                                                        <a target="_blank" href="{{Storage::url('project'.$correspondece_row->project_id.'/documents'.$file->project_document_id.'/'.$file->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
+                                                
+                                                    @else
+                                                    <a target="_blank" href="{{Storage::url('project'.$correspondece_row->project_id.'/documents'.$file->project_document_id.'/revisions/'.$file->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
+
+                                                    @endif
+                                                </div>
+                                    
+                                        
+                                            @endforeach
+                                            
+                                        
+                                    
+                                        </div>
+                                    </div>
+                                    @endif
+
+
+
+
+                                </div>
+                            </div>
+                        </div>  
+
+
+                    </td>
+
+                    <td class="px-6 py-3">{{$correspondece_row->created_date}}</td>
+                    <td class="px-6 py-3">{{ ($correspondece_row->createdBy != null) ?$correspondece_row->createdBy->name : ''}}</td>
+               
+                  </tr>
+
+                @endforeach
+            @endif        
+        </tbody>
+
+    </table>
+
                 @if ($others_correspondeces_realated->count() > 0)
                     @foreach ($others_correspondeces_realated as $correspondece_row)   
 
-                    <div class="bg-gray-100 dark:bg-gray-600 p-4 mb-4">
-
-                        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6 mb-6">
-                            <!-- Number -->
-                            <div>
-                                <h3 class="text-sm font-medium dark:text-gray-400">Number</h3>
-                                <p class="text-lg font-semibold dark:text-gray-200">{{$correspondece_row->number}}</p>
-                            </div>
-
-                            <!-- Subject -->
-                            <div>
-                                <h3 class="text-sm font-medium dark:text-gray-400">Subject</h3>
-                                <p class="text-lg font-semibold dark:text-gray-200">{{$correspondece_row->subject}}</p>
-                            </div>
-
-                        
-
-                            <!-- Programme Impact -->
-                            <div>
-                                <h3 class="text-sm font-medium dark:text-gray-400">Programme Impact</h3>
-                                <p class="text-lg font-semibold dark:text-gray-200">{{$correspondece_row->program_impact}}</p>
-                            </div>
-
-                            <!-- Cost Impact -->
-                            <div>
-                                <h3 class="text-sm font-medium dark:text-gray-400">Cost Impact</h3>
-                                <p class="text-lg font-semibold dark:text-gray-200">{{$correspondece_row->cost_impact}}</p>
-                            </div>
-
-                                
-                        </div>
-
-                        <!-- Description -->
-                        <div class="mb-6">
-                            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    
-                                @if($correspondece_row->files->count() > 0)
-                                <div>
-                                    <h3 class="text-sm font-medium dark:text-gray-400 mb-2">Attached Files</h3>
-                                    <div class="grid grid-cols-2 gap-4">
-                                    
-                                        @foreach($correspondece_row->files as $file)
-                                            <div class="bg-gray-300 dark:bg-gray-800 p-4  flex items-center justify-between">
-                                                <div class="flex items-center">
-                                                    <i data-feather="file" class="w-6 h-6 mr-3 dark:text-gray-400"></i>
-                                                    <p class="text-sm dark:text-gray-200">{{$file->file}}</p>
-                                                </div>
-                                                <a target="_blank" href="{{Storage::url('project'.$correspondece_row->project_id.'/correspondence'.$correspondece_row->id.'/'.$file->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
-                                            </div>            
-                                        @endforeach
-                                    
-                                    </div>
-                                </div>
-                                @endif
-
-
-                                @if($correspondece_row->relatedCorrespondences->count() > 0)
-                                <div>
-                                    <h3 class="text-sm font-medium dark:text-gray-400 mb-2">Related Correspondences</h3>
-                                    <div class="grid grid-cols-2 gap-4">
-                                    
-                                        @foreach($correspondece_row->relatedCorrespondences as $row)
-                                            <div class="bg-gray-300 dark:bg-gray-800 p-4  flex items-center justify-between">
-                                                <div class="flex items-center">
-                                                    <p class="text-sm dark:text-gray-200">
-                                                        
-                                                    <a target="_blank" href="{{ route('projects.correspondence.view',$row->id) }}"
-                                                        class="text-blue-500 hover:underline">{{ $row->number }} / {{ $row->subject }}</a>
-
-                                                    </p>
-                                                </div>
-                                                
-                                            </div>
-                                
-                                    
-                                        @endforeach
-                                        
-                                    
-                                    
-                                    </div>
-                                </div>
-                                @endif
-
-
-                                <div>
-                                    <h3 class="text-sm font-medium dark:text-gray-400 mb-1">Description</h3>
-                                    <p class="text-lg dark:text-gray-200">{!! $correspondece_row->description   !!}.</p>
-                                </div>
-                                @if($correspondece_row->documentFiles->count() > 0)
-                                <div>
-                                    <h3 class="text-sm font-medium dark:text-gray-400 mb-2">Linked Documents</h3>
-                                    <div class="grid grid-cols-2 gap-4">
-                                    
-                                        @foreach($correspondece_row->documentFiles as $file)
-                                            <div class="bg-gray-300 dark:bg-gray-800 p-4  flex items-center justify-between">
-                                                <div class="flex items-center">
-                                                    <i data-feather="file" class="w-6 h-6 mr-3 dark:text-gray-400"></i>
-                                                    <p class="text-sm dark:text-gray-200">{{$file->file}}</p>
-                                                </div>
-                                                @if($file->pivot->revision_id == NULL || $file->pivot->revision_id == 0)
-                                                    <a target="_blank" href="{{Storage::url('project'.$correspondece_row->project_id.'/documents'.$file->project_document_id.'/'.$file->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
-                                            
-                                                @else
-                                                <a target="_blank" href="{{Storage::url('project'.$correspondece_row->project_id.'/documents'.$file->project_document_id.'/revisions/'.$file->file)}}" class="text-blue-500 hover:underline"><i data-feather="arrow-down-circle"></i></a>
-
-                                                @endif
-                                            </div>
-                                
-                                    
-                                        @endforeach
-                                        
-                                    
-                                
-                                    </div>
-                                </div>
-                                @endif
-
-
-
-
-                            </div>
-                        </div>
-                        <hr class="my-6 dark:border-gray-700">
-                    </div>    
+  
                     @endforeach
                 @endif
   

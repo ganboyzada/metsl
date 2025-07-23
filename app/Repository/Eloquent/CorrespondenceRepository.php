@@ -292,7 +292,7 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
                 $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name'])->orderBy($orderBy, $sortDirection);
             }
 
-            $modal = $modal->paginate(10);
+            $modal = $modal->distinct()->paginate(10);
 
             return $modal;           
 
@@ -318,7 +318,7 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
                 $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name'])->orderBy($orderBy, $sortDirection);
             }
 
-            $modal = $modal->paginate(10);
+            $modal = $modal->distinct()->paginate(10);
 
             return $modal;   
         }
