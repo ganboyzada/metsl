@@ -335,7 +335,7 @@
     </div>
 
     <h3 class="font-medium mb-2 w-full bg-blue-500 text-white p-2">REPLIES</h3>
-
+    @if ($others_correspondeces_realated->count() > 0)
     <table class="w-full ">
         <thead class="w-full bg-green-500 bg-opacity-50">
             <tr>
@@ -346,7 +346,7 @@
 
         </thead>
         <tbody>
-            @if ($others_correspondeces_realated->count() > 0)
+            
                 @foreach ($others_correspondeces_realated as $correspondece_row)  
                   <tr  class="px-6 py-3">
                     <td>
@@ -460,10 +460,11 @@
                   </tr>
 
                 @endforeach
-            @endif        
+                  
         </tbody>
 
     </table>
+    @endif  
 
                 @if ($others_correspondeces_realated->count() > 0)
                     @foreach ($others_correspondeces_realated as $correspondece_row)   
