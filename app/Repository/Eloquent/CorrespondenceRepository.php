@@ -190,6 +190,11 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
     * 
     */
     public function get_all_project_correspondence($project_id , $request): LengthAwarePaginator{
+
+        $orderBy = $request->get('orderBy', 'id'); // العمود الافتراضي
+        $sortDirection = $request->get('sortDirection', 'desc'); // الاتجاه الافتراضي
+
+
         $sub = \DB::raw('(select  reply_correspondence_id as replyCorespondenceId  , MAX(created_date) as last_upload_date
          from correspondences where reply_correspondence_id is not null group by reply_correspondence_id)last_upload_table');
 
@@ -266,16 +271,56 @@ class CorrespondenceRepository extends BaseRepository implements CorrespondenceR
             });
             
 
+            if ($orderBy === 'created_by') {
+                $modal = $modal->leftJoin('users as creators', 'creators.id', '=', 'correspondences.created_by')
+                            ->orderBy('creators.name', $sortDirection)
+                            ->select('correspondences.*','replyCorespondenceId','last_upload_date')
+                            ->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name']); // نحتاج نرجع فقط أعمدة الجدول الأصلي
+            } 
 
+            elseif ($orderBy === 'assignees') {
+                $modal = $modal->leftJoin('correspondence_assignees as cu', 'cu.correspondence_id', '=', 'correspondences.id')
+                    ->leftJoin('users as assignees', 'assignees.id', '=', 'cu.user_id')
+                            ->orderBy('assignees.name', $sortDirection)
+                            ->select('correspondences.*','replyCorespondenceId','last_upload_date')
+                            ->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name']); // نحتاج نرجع فقط أعمدة الجدول الأصلي
 
-            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name'])->paginate(10);
+            }
+            
+            
+            else {
+                $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name'])->orderBy($orderBy, $sortDirection);
+            }
+
+            $modal = $modal->paginate(10);
 
             return $modal;           
 
         }else{
-            $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name'])->paginate(10);
+            if ($orderBy === 'created_by') {
+                $modal = $modal->leftJoin('users as creators', 'creators.id', '=', 'correspondences.created_by')
+                            ->orderBy('creators.name', $sortDirection)
+                            ->select('correspondences.*','replyCorespondenceId','last_upload_date')
+                            ->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name']); // نحتاج نرجع فقط أعمدة الجدول الأصلي
+            } 
 
-            return $modal;
+            elseif ($orderBy === 'assignees') {
+                $modal = $modal->leftJoin('correspondence_assignees as cu', 'cu.correspondence_id', '=', 'correspondences.id')
+                    ->leftJoin('users as assignees', 'assignees.id', '=', 'cu.user_id')
+                            ->orderBy('assignees.name', $sortDirection)
+                            ->select('correspondences.*','replyCorespondenceId','last_upload_date')
+                            ->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name']); // نحتاج نرجع فقط أعمدة الجدول الأصلي
+
+            }
+            
+            
+            else {
+                $modal = $modal->with(['assignees:id,name' , 'CreatedBy:id,name' , 'ChangedBy:id,name'])->orderBy($orderBy, $sortDirection);
+            }
+
+            $modal = $modal->paginate(10);
+
+            return $modal;   
         }
         
 

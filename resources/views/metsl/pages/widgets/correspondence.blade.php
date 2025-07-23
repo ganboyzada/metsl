@@ -6,10 +6,13 @@
         <table class="rounded-tl-none min-w-full">
             <thead class="bg-blue-200 dark:bg-blue-500/25 text-sm text-left">
                 <tr>
-                    <th class="px-2 py-2 lg:px-4 lg:py-2 font-light">Number</th>
-                    <th class="px-2 py-2 lg:px-4 lg:py-2 font-light">Subject</th>
                     <th class="px-2 py-2 lg:px-4 lg:py-2 font-light">Created by</th>
-                    <th class="px-2 py-2 lg:px-4 lg:py-2 font-light">Created at</th>
+                    <th class="px-2 py-2 lg:px-4 lg:py-2 font-light">Issed On</th>
+                    <th class="px-2 py-2 lg:px-4 lg:py-2 font-light">Due Date</th>
+                    <th class="px-2 py-2 lg:px-4 lg:py-2 font-light">Number</th>
+
+
+                    <th class="px-2 py-2 lg:px-4 lg:py-2 font-light">Days Remaining</th>
                     <th class="px-2 py-2 lg:px-4 lg:py-2 font-light">Status</th>
                 </tr>
             </thead>
@@ -34,17 +37,23 @@ function loadWidgetCorrespondence() {
                 let url2 = "{{ route('projects.correspondence.edit', [':id']) }}".replace(':id', row.id);
 
                 html+=`<tr>
-                    <td class="px-6 py-3">${row.number}
-					
-					</td>
-                    <td class="px-6 py-3"><a class="underline" href="${url}">${row.subject}</a></td>
 
                     <td class="px-6 py-3">${(row.created_by != null) ? row.created_by.name : ''}</td>
                     <td class="px-6 py-3">${row.created_date}</td>
+                    <td class="px-6 py-3">${row.due_date}</td>
+
+
+                    <td class="px-6 py-3"><a class="underline" href="${url}">${row.number}</a></td>
+
+                      <td class="px-6 py-3">
+                        ${row.label}
+                    </td>                  
+                    
                     <td class="px-6 py-3">
-                        ${row.label} / 
-                        <span class="px-3 py-1 rounded-full text-xs font-bold ${row.status_color[1]}">${row.status_color[0]}</span>
-                    </td></tr>
+                        ${row.label2}
+                    </td>
+                    
+                    </tr>
                 `;
 
 			}

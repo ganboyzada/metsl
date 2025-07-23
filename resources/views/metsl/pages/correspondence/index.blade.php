@@ -52,14 +52,30 @@
         <table class="min-w-full border-collapse border dark:border-gray-800">
             <thead class="bg-gray-100 dark:bg-gray-800 text-sm text-left">
                 <tr>
-                    <th class="px-6 py-3 font-light">Number</th>
-                    <th class="px-6 py-3 font-light">Subject</th>
-                    <th class="px-6 py-3 font-light">Last Activity</th>
-                    <th class="px-6 py-3 font-light">Assignees</th>
-                    <th class="px-6 py-3 font-light">Created by</th>
-                    <th class="px-6 py-3 font-light">Created at</th>
-                    <th class="px-6 py-3 font-light">due date</th>
-                    <th class="px-6 py-3 font-light">Status</th>
+                    <th  onclick="sortTable('number')"  data-column="number"  class="sortable cursor-pointer px-6 py-3 font-light">Number <svg class="sort-icon w-3 h-3 transition-all text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentcolor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="" />
+                    </svg></th>
+                    <th onclick="sortTable('subject')"   data-column="subject" class="sortable cursor-pointer px-6 py-3 font-light">Subject <svg class="sort-icon w-3 h-3 transition-all text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentcolor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="" />
+                    </svg></th>
+                    <th onclick="sortTable('last_upload_date')" data-column="last_upload_date"  class="sortable cursor-pointer px-6 py-3 font-light">Last Activity <svg class="sort-icon w-3 h-3 transition-all text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentcolor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="" />
+                    </svg></th>
+                    <th onclick="sortTable('assignees')" data-column="assignees"  class="sortable cursor-pointer px-6 py-3 font-light">Assignees <svg class="sort-icon w-3 h-3 transition-all text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentcolor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="" />
+                    </svg></th>
+                    <th onclick="sortTable('created_by')" data-column="created_by"  class="sortable cursor-pointer px-6 py-3 font-light">Created by <svg class="sort-icon w-3 h-3 transition-all text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentcolor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="" />
+                    </svg></th>
+                    <th onclick="sortTable('created_date')" data-column="created_date"  class="sortable cursor-pointer px-6 py-3 font-light">Created at <svg class="sort-icon w-3 h-3 transition-all text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentcolor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="" />
+                    </svg></th>
+                    <th onclick="sortTable('due_date')" data-column="due_date"  class="sortable cursor-pointer px-6 py-3 font-light">due date <svg class="sort-icon w-3 h-3 transition-all text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentcolor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="" />
+                    </svg></th>
+                    <th onclick="sortTable('status')" data-column="status"  class="sortable cursor-pointer px-6 py-3 font-light">Status <svg class="sort-icon w-3 h-3 transition-all text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentcolor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="" />
+                    </svg></th>
                 </tr>
             </thead>
             <tbody id="table-body-correspondence">
@@ -113,7 +129,49 @@
         feather.replace();	
 
 	}
-    
+    	let correspondenceData = [];
+
+    let currentSortColumn = 'id';
+    let currentSortDirection = 'desc';
+
+    function sortTable(column) {
+        if (currentSortColumn === column) {
+            // عكس الاتجاه لو تم الضغط مرتين على نفس العمود
+            currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
+        } else {
+            currentSortColumn = column;
+            currentSortDirection = 'asc';
+        }
+
+
+        
+        get_correspondences(1, currentSortColumn, currentSortDirection);
+        updateTableHeaders();
+    }
+
+
+    function updateTableHeaders() {
+    const headers = document.querySelectorAll("th.sortable");
+    headers.forEach((th) => {
+        const column = th.getAttribute("data-column");
+        const svg = th.querySelector(".sort-icon");
+        const path = svg.querySelector("path");
+
+        if (column === currentSortColumn) {
+            svg.classList.add("text-blue-500");
+            if (currentSortDirection === "asc") {
+                path.setAttribute("d", "M5 15l7-7 7 7"); // سهم للأعلى
+            } else {
+                path.setAttribute("d", "M19 9l-7 7-7-7"); // سهم للأسفل
+            }
+        } else {
+            path.setAttribute("d", "");
+            svg.classList.remove("text-blue-500");
+        }
+    });
+    }
+
+
 
     function renderPaginationCorrespondence(data) {
     let html = '';
@@ -127,16 +185,15 @@
     $('#pagination_correspondence').html(html);
 }
     // Populate Assignees, Distribution Members, and Received From
-	let correspondenceData = [];
 
-	async function get_correspondences(page = 1){
+	async function get_correspondences(page = 1, orderBy = 'id', sortDirection = 'desc'){
         let tool_temp = localStorage.getItem("project_tool");
 		if(tool_temp == 'correspondence' || tool_temp == 'activities'){
 
             if(tool_temp == 'correspondence'){
                 const type = $('[name="type"]').val();
+                let url = `project/correspondence/all?page=${page}&orderBy=${orderBy}&sortDirection=${sortDirection}`;
 
-                let url = `project/correspondence/all?page=${page}`;
 
                 let fetchRes = await fetch(url);
                 const response = await fetchRes.json(); // full paginated response
@@ -192,7 +249,7 @@
                     <td class="px-6 py-3">${row.created_date}</td>
                     <td class="px-6 py-3">${row.due_date}</td>
                     <td class="px-6 py-3">
-                        ${row.label}
+                        ${row.label2}  
                     </td></tr>
                 `;
 
