@@ -120,6 +120,15 @@ class CorrespondenceController extends Controller
                 }
                // dd($all_data);
                 $model = $this->correspondenceService->create($all_data);
+                if($all_data['reply_correspondence_id'] != NULL){
+                    $old->first_reply_date = Carbon::now()->toDateString();
+                    $old->save();
+                }
+
+
+
+
+
                 // if($all_data['reply_correspondence_id'] != NULL){
                 //     $new_data['id'] = $all_data['reply_correspondence_id'];
                 //     $new_data['status'] = $all_data['status'];
@@ -222,33 +231,36 @@ class CorrespondenceController extends Controller
         // });
 
             $correspondeces->map(function($row){
-            $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->color()];
+            $row->status_color = [CorrespondenceStatusEnum::from($row->status) , CorrespondenceStatusEnum::from($row->status)->text_color()];
             $status_value = $row->status_color[0]->value;
             $dueDate = Carbon::parse($row->due_date); // example due date
-            $today = Carbon::today();
-
+            $first_reply_date = Carbon::parse($row->first_reply_date)??Carbon::now();
+                
             // Compare dates
-            if ($today->greaterThan($dueDate)) {
-                $diff = $today->diffInDays($dueDate);
-                $row->label = "<span class='px-3 py-1 rounded-full text-xs font-bold bg-red-500 text-white'>  ".($diff)." </span>";
+            if ($first_reply_date != NULL &&$first_reply_date->greaterThan($dueDate)) {
+                $diff = $first_reply_date->diffInDays($dueDate);
+                $st = $row->first_reply_date == NULL ? '(NO Replies)' : '' ;
+
+                $row->label = "<span class='text-xs font-bold text-red-500 '>  ".(INT)($diff)."  ".$st." </span>";
                 if($row->status == CorrespondenceStatusEnum::OPEN->value){
-                    $row->label2 = "<span class='px-3 py-1 rounded-full text-xs font-bold bg-red-500 text-white'>Open</span>";
+                    $row->label2 = "<span class=' text-xs font-bold text-red-500 '>Open</span>";
                 }else{
-                    $row->label2 = "<span class='px-3 py-1 rounded-full text-xs font-bold ".$row->status_color[1]."  '>".$row->status_color[0]->value."</span>";
+                    $row->label2 = "<span class=' text-xs font-bold ".$row->status_color[1]."  '>".$row->status_color[0]->value."</span>";
 
                 }
-            } else {
-                $diff = $today->diffInDays($dueDate);
+            } else if($first_reply_date != NULL) {
+                $diff = $first_reply_date->diffInDays($dueDate);
+                $st = $row->first_reply_date == NULL ? '(NO Replies)' : '' ;
                 if($diff == 0){
-                    $diff = $today->diffInDays($dueDate);
-                    $row->label = "<span class='px-3 py-1 rounded-full text-xs font-bold bg-orange-500 text-white'>  ".$diff." </span>";
-                    $row->label2 = "<span class='px-3 py-1 rounded-full text-xs font-bold ".$row->status_color[1]."  '>".$row->status_color[0]->value."</span>";
+                    $diff = $first_reply_date->diffInDays($dueDate);
+                    $row->label = "<span class=' text-xs font-bold text-orange-500'>  ".(INT)$diff."  ".$st."  </span>";
+                    $row->label2 = "<span class=' text-xs font-bold ".$row->status_color[1]."  '>".$row->status_color[0]->value."</span>";
 
 
                 }else{
-                    $diff = $today->diffInDays($dueDate);
-                    $row->label = "<span class='px-3 py-1 rounded-full text-xs font-bold bg-green-500 text-white'>  ".($diff)." </span>";
-                    $row->label2 = "<span class='px-3 py-1 rounded-full text-xs font-bold  ".$row->status_color[1]."  '>".$row->status_color[0]->value."</span>";
+                    $diff = $first_reply_date->diffInDays($dueDate);
+                    $row->label = "<span class='text-xs font-bold text-green-500'>  ".(INT)($diff)."  ".$st."  </span>";
+                    $row->label2 = "<span class=' text-xs font-bold  ".$row->status_color[1]."  '>".$row->status_color[0]->value."</span>";
 
 
                 }

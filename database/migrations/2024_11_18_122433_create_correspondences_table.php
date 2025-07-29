@@ -41,6 +41,7 @@ return new class extends Migration
 
             $table->integer('reply_correspondence_id')->nullable();    
             $table->integer('reply_child_correspondence_id')->nullable();    
+            $table->date('first_reply_date')->nullable();    
 
 
 
