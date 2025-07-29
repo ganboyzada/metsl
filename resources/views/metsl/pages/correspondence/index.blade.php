@@ -61,13 +61,15 @@
                     <th onclick="sortTable('last_upload_date')" data-column="last_upload_date"  class="sortable cursor-pointer px-6 py-3 font-light">Last Activity <svg class="sort-icon w-3 h-3 transition-all text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentcolor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="" />
                     </svg></th>
-                    <th onclick="sortTable('assignees')" data-column="assignees"  class="sortable cursor-pointer px-6 py-3 font-light">Assignees <svg class="sort-icon w-3 h-3 transition-all text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentcolor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="" />
-                    </svg></th>
+
                     <th onclick="sortTable('created_by')" data-column="created_by"  class="sortable cursor-pointer px-6 py-3 font-light">Created by <svg class="sort-icon w-3 h-3 transition-all text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentcolor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="" />
                     </svg></th>
-                    <th onclick="sortTable('created_date')" data-column="created_date"  class="sortable cursor-pointer px-6 py-3 font-light">Created at <svg class="sort-icon w-3 h-3 transition-all text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentcolor">
+                    <th onclick="sortTable('assignees')" data-column="assignees"  class="sortable cursor-pointer px-6 py-3 font-light">Assignees <svg class="sort-icon w-3 h-3 transition-all text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentcolor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="" />
+                    </svg></th>
+                    
+                    <th onclick="sortTable('created_date')" data-column="created_date"  class="sortable cursor-pointer px-6 py-3 font-light">Issued On <svg class="sort-icon w-3 h-3 transition-all text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentcolor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="" />
                     </svg></th>
                     <th onclick="sortTable('due_date')" data-column="due_date"  class="sortable cursor-pointer px-6 py-3 font-light">due date <svg class="sort-icon w-3 h-3 transition-all text-gray-400" xmlns="http://www.w3.org/2000/svg" fill="none" viewbox="0 0 24 24" stroke="currentcolor">
@@ -250,8 +252,9 @@
                     <td class="px-6 py-3">${row.number}</td>
                     <td class="px-6 py-3"><a class="underline" href="${url}">${row.subject}</a></td>
                     <td class="px-6 py-3">${(row.last_upload_date != null) ? row.last_upload_date : ''}</td>
-                    <td class="px-6 py-3">${row.assignees}</td>
                     <td class="px-6 py-3">${(row.created_by != null) ? row.created_by.name : ''}</td>
+                    <td class="px-6 py-3">${row.assignees}</td>
+                    
                     <td class="px-6 py-3">${row.created_date}</td>
                     <td class="px-6 py-3">${row.due_date}</td>
                     <td class="px-6 py-3">
