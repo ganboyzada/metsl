@@ -120,7 +120,7 @@ class CorrespondenceController extends Controller
                 }
                // dd($all_data);
                 $model = $this->correspondenceService->create($all_data);
-                if($all_data['reply_correspondence_id'] != NULL){
+                if($all_data['reply_correspondence_id'] != NULL && $old->first_reply_date == NULL){
                     $old->first_reply_date = Carbon::now()->toDateString();
                     $old->save();
                 }
