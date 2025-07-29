@@ -28,7 +28,7 @@ class Correspondence extends Model
         ];
     }
 
-    protected $fillable = ['reply_correspondence_id','reply_child_correspondence_id','due_days','due_date','changed_by','created_date','created_by','project_id','number', 'subject','type','status' ,'program_impact','cost_impact','description'];
+    protected $fillable = ['reply_correspondence_id','reply_child_correspondence_id','first_reply_date','due_days','due_date','changed_by','created_date','created_by','project_id','number', 'subject','type','status' ,'program_impact','cost_impact','description'];
 
     public function files(): HasMany
     {
