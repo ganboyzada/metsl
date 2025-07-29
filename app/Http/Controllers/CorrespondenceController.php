@@ -241,7 +241,7 @@ class CorrespondenceController extends Controller
                 $diff = $first_reply_date->diffInDays($dueDate);
                 $st = $row->first_reply_date == NULL ? '(NO Replies)' : '' ;
 
-                $row->label = "<span class='text-xs font-bold text-red-500 '>  ".(INT)($diff)."  ".$st." </span>";
+                $row->label = "<span class='text-xs font-bold text-red-500 '>  ".(INT)($diff)." </span>";
                 if($row->status == CorrespondenceStatusEnum::OPEN->value){
                     $row->label2 = "<span class=' text-xs font-bold text-red-500 '>Open</span>";
                 }else{
@@ -253,13 +253,13 @@ class CorrespondenceController extends Controller
                 $st = $row->first_reply_date == NULL ? '(NO Replies)' : '' ;
                 if($diff == 0){
                     $diff = $first_reply_date->diffInDays($dueDate);
-                    $row->label = "<span class=' text-xs font-bold text-orange-500'>  ".(INT)$diff."  ".$st."  </span>";
+                    $row->label = "<span class=' text-xs font-bold text-orange-500'>  ".(INT)$diff."  </span>";
                     $row->label2 = "<span class=' text-xs font-bold ".$row->status_color[1]."  '>".$row->status_color[0]->value."</span>";
 
 
                 }else{
                     $diff = $first_reply_date->diffInDays($dueDate);
-                    $row->label = "<span class='text-xs font-bold text-green-500'>  ".(INT)($diff)."  ".$st."  </span>";
+                    $row->label = "<span class='text-xs font-bold text-green-500'>  ".(INT)($diff)."  </span>";
                     $row->label2 = "<span class=' text-xs font-bold  ".$row->status_color[1]."  '>".$row->status_color[0]->value."</span>";
 
 
